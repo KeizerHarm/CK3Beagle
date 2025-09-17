@@ -8,12 +8,6 @@ namespace AnalysingTests
 {
     public class InconsistentIndentationDetectorTests
     {
-        //public static IEnumerable<object[]> ParserTypesUnderTest =>
-        //[
-        //    ["antlr"],
-        //   // new object[]{ "fast" }
-        //];
-
         [Theory]
         [InlineData("ConsistentTabs", IndentationType.Tab)]
         [InlineData("ConsistentFourSpaces", IndentationType.FourSpaces)]
@@ -38,8 +32,32 @@ namespace AnalysingTests
             visitor.Visit(testcase);
 
             //assert
-            logger.LogEntries.Single();
-            logger.LogEntries.Single(x => x.Severity == Severity.Debug && x.Message.Contains(expectedDetectedType.ToString()));
+            Assert.Single(logger.LogEntries);
+            Assert.Single(logger.LogEntries, x => x.Severity == Severity.Debug && x.Message.Contains(expectedDetectedType.ToString()));
+        }
+
+        [Fact]
+        public void LogsUnexpectedType()
+        {
+            //arrange
+            var logger = new Logger();
+            var settings = new InconsistentIndentationDetector.Settings
+            {
+                Severity_Inconsistency = Severity.Info,
+                Severity_UnexpectedType = Severity.Warning,
+                DisregardBracketsInComments = true,
+                ExpectedIndentationType = IndentationType.FourSpaces
+            };
+            var visitor = GetDetector(settings, logger);
+
+            ScriptFile testcase = GetTestCase("ConsistentTabs");
+
+            //act
+            visitor.Visit(testcase);
+
+            //assert
+            Assert.Single(logger.LogEntries, x => x.Severity == Severity.Warning);
+            Assert.Single(logger.LogEntries, x => x.Severity == Severity.Warning && x.Message.Contains(IndentationType.Tab.ToString()));
         }
 
         private ScriptFile GetTestCase(string caseName)
