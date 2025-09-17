@@ -1,0 +1,16 @@
+﻿aaa = {
+	123
+}
+
+bbb = {
+	456
+}
+
+ccc = {
+	789
+}
+
+#vanilla addition
+ddd = {
+	123
+}
