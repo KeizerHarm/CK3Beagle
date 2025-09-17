@@ -1,0 +1,475 @@
+{
+  "Version": 1,
+  "WorkspaceRootPath": "C:\\Users\\Harm\\source\\repos\\CK3Analyser\\",
+  "Documents": [
+    {
+      "AbsoluteMoniker": "D:0:0:{966CF34F-C7C6-4227-B58F-A72C7A994ED0}|Analysing\\Analysing.csproj|c:\\users\\harm\\source\\repos\\ck3analyser\\analysing\\detectors\\overcomplicatedbooleandetector.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{966CF34F-C7C6-4227-B58F-A72C7A994ED0}|Analysing\\Analysing.csproj|solutionrelative:analysing\\detectors\\overcomplicatedbooleandetector.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{7D1E2EDC-0A3F-4372-A394-DE7F48B3896C}|Core\\Core.csproj|c:\\users\\harm\\source\\repos\\ck3analyser\\core\\antlr\\domainlistener.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{7D1E2EDC-0A3F-4372-A394-DE7F48B3896C}|Core\\Core.csproj|solutionrelative:core\\antlr\\domainlistener.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A402CC9A-CAC7-4E70-B739-0858C88FD302}|CLI\\CLI.csproj|c:\\users\\harm\\source\\repos\\ck3analyser\\cli\\cli.csproj||{FA3CD31E-987B-443A-9B81-186104E8DAC1}|",
+      "RelativeMoniker": "D:0:0:{A402CC9A-CAC7-4E70-B739-0858C88FD302}|CLI\\CLI.csproj|solutionrelative:cli\\cli.csproj||{FA3CD31E-987B-443A-9B81-186104E8DAC1}|"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{73191EC5-7019-4FB1-817E-9F63FE76551C}|AnalysingTests\\AnalysingTests.csproj|c:\\users\\harm\\source\\repos\\ck3analyser\\analysingtests\\analysingtests.csproj||{FA3CD31E-987B-443A-9B81-186104E8DAC1}|",
+      "RelativeMoniker": "D:0:0:{73191EC5-7019-4FB1-817E-9F63FE76551C}|AnalysingTests\\AnalysingTests.csproj|solutionrelative:analysingtests\\analysingtests.csproj||{FA3CD31E-987B-443A-9B81-186104E8DAC1}|"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{966CF34F-C7C6-4227-B58F-A72C7A994ED0}|Analysing\\Analysing.csproj|c:\\users\\harm\\source\\repos\\ck3analyser\\analysing\\analysing.csproj||{FA3CD31E-987B-443A-9B81-186104E8DAC1}|",
+      "RelativeMoniker": "D:0:0:{966CF34F-C7C6-4227-B58F-A72C7A994ED0}|Analysing\\Analysing.csproj|solutionrelative:analysing\\analysing.csproj||{FA3CD31E-987B-443A-9B81-186104E8DAC1}|"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{00A82CEF-8A97-4D7A-ACE2-18643C62796F}|RebasingTests\\RebasingTests.csproj|c:\\users\\harm\\source\\repos\\ck3analyser\\rebasingtests\\rebasingtests.csproj||{FA3CD31E-987B-443A-9B81-186104E8DAC1}|",
+      "RelativeMoniker": "D:0:0:{00A82CEF-8A97-4D7A-ACE2-18643C62796F}|RebasingTests\\RebasingTests.csproj|solutionrelative:rebasingtests\\rebasingtests.csproj||{FA3CD31E-987B-443A-9B81-186104E8DAC1}|"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{F7124A41-ECB7-4BFF-B1F4-E6F879A4F05D}|Rebasing\\Rebasing.csproj|c:\\users\\harm\\source\\repos\\ck3analyser\\rebasing\\rebasing.csproj||{FA3CD31E-987B-443A-9B81-186104E8DAC1}|",
+      "RelativeMoniker": "D:0:0:{F7124A41-ECB7-4BFF-B1F4-E6F879A4F05D}|Rebasing\\Rebasing.csproj|solutionrelative:rebasing\\rebasing.csproj||{FA3CD31E-987B-443A-9B81-186104E8DAC1}|"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{9BD0B431-5B8C-4DD3-895A-D16335EB413E}|CoreTests\\CoreTests.csproj|c:\\users\\harm\\source\\repos\\ck3analyser\\coretests\\coretests.csproj||{FA3CD31E-987B-443A-9B81-186104E8DAC1}|",
+      "RelativeMoniker": "D:0:0:{9BD0B431-5B8C-4DD3-895A-D16335EB413E}|CoreTests\\CoreTests.csproj|solutionrelative:coretests\\coretests.csproj||{FA3CD31E-987B-443A-9B81-186104E8DAC1}|"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{9BD0B431-5B8C-4DD3-895A-D16335EB413E}|CoreTests\\CoreTests.csproj|c:\\users\\harm\\source\\repos\\ck3analyser\\coretests\\parsertests.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{9BD0B431-5B8C-4DD3-895A-D16335EB413E}|CoreTests\\CoreTests.csproj|solutionrelative:coretests\\parsertests.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A402CC9A-CAC7-4E70-B739-0858C88FD302}|CLI\\CLI.csproj|c:\\users\\harm\\source\\repos\\ck3analyser\\cli\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{A402CC9A-CAC7-4E70-B739-0858C88FD302}|CLI\\CLI.csproj|solutionrelative:cli\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{73191EC5-7019-4FB1-817E-9F63FE76551C}|AnalysingTests\\AnalysingTests.csproj|c:\\users\\harm\\source\\repos\\ck3analyser\\analysingtests\\unittest1.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{73191EC5-7019-4FB1-817E-9F63FE76551C}|AnalysingTests\\AnalysingTests.csproj|solutionrelative:analysingtests\\unittest1.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{F7124A41-ECB7-4BFF-B1F4-E6F879A4F05D}|Rebasing\\Rebasing.csproj|c:\\users\\harm\\source\\repos\\ck3analyser\\rebasing\\rebaser.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{F7124A41-ECB7-4BFF-B1F4-E6F879A4F05D}|Rebasing\\Rebasing.csproj|solutionrelative:rebasing\\rebaser.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Users\\Harm\\source\\repos\\CK3AnalyserAntlr\\Parsing\\Antlr\\DomainVisitor.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Users\\Harm\\source\\repos\\CK3AnalyserAntlr\\Parsing\\Fast\\FastParser.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Users\\Harm\\source\\repos\\CK3AnalyserAntlr\\Parsing\\Antlr\\DomainListener.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Users\\Harm\\source\\repos\\CK3AnalyserAntlr\\Parsing\\Core.csproj||{FA3CD31E-987B-443A-9B81-186104E8DAC1}|"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Users\\Harm\\source\\repos\\CK3AnalyserAntlr\\Analysis\\Analysing.csproj||{FA3CD31E-987B-443A-9B81-186104E8DAC1}|"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Users\\Harm\\source\\repos\\CK3AnalyserAntlr\\Parsing\\Domain\\NamedBlock.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Users\\Harm\\source\\repos\\CK3AnalyserAntlr\\Parsing\\Domain\\KeyValuePair.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Users\\Harm\\source\\repos\\CK3AnalyserAntlr\\Parsing\\Domain\\IAnalysisVisitor.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Users\\Harm\\source\\repos\\CK3AnalyserAntlr\\Parsing\\Domain\\Declaration.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Users\\Harm\\source\\repos\\CK3AnalyserAntlr\\Parsing\\Domain\\Comment.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Users\\Harm\\source\\repos\\CK3AnalyserAntlr\\Parsing\\Domain\\Block.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Users\\Harm\\source\\repos\\CK3AnalyserAntlr\\Parsing\\Antlr\\AntlrParser.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Users\\Harm\\source\\repos\\CK3AnalyserAntlr\\Analysis\\AnalysisVisitor.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Users\\Harm\\source\\repos\\CK3AnalyserAntlr\\Parsing\\Domain\\Node.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Users\\Harm\\source\\repos\\CK3AnalyserAntlr\\Parsing\\ICk3Parser.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Users\\Harm\\source\\repos\\CK3AnalyserAntlr\\Analysis\\Analyser.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Users\\Harm\\source\\repos\\CK3AnalyserAntlr\\Parsing\\Domain\\ScriptFile.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    }
+  ],
+  "DocumentGroupContainers": [
+    {
+      "Orientation": 0,
+      "VerticalTabListWidth": 256,
+      "DocumentGroups": [
+        {
+          "DockedWidth": 200,
+          "SelectedChildIndex": 0,
+          "Children": [
+            {
+              "$type": "Document",
+              "DocumentIndex": 0,
+              "Title": "OvercomplicatedBooleanDetector.cs",
+              "DocumentMoniker": "C:\\Users\\Harm\\source\\repos\\CK3Analyser\\Analysing\\Detectors\\OvercomplicatedBooleanDetector.cs",
+              "RelativeDocumentMoniker": "Analysing\\Detectors\\OvercomplicatedBooleanDetector.cs",
+              "ToolTip": "C:\\Users\\Harm\\source\\repos\\CK3Analyser\\Analysing\\Detectors\\OvercomplicatedBooleanDetector.cs",
+              "RelativeToolTip": "Analysing\\Detectors\\OvercomplicatedBooleanDetector.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAgAAAA+AAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-09-17T12:32:59.749Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
+              "Title": "DomainListener.cs",
+              "DocumentMoniker": "C:\\Users\\Harm\\source\\repos\\CK3Analyser\\Core\\Antlr\\DomainListener.cs",
+              "RelativeDocumentMoniker": "Core\\Antlr\\DomainListener.cs",
+              "ToolTip": "C:\\Users\\Harm\\source\\repos\\CK3Analyser\\Core\\Antlr\\DomainListener.cs",
+              "RelativeToolTip": "Core\\Antlr\\DomainListener.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAHwAAAA+AAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-09-17T12:31:23.021Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 4,
+              "Title": "Analysing",
+              "DocumentMoniker": "C:\\Users\\Harm\\source\\repos\\CK3Analyser\\Analysing\\Analysing.csproj",
+              "RelativeDocumentMoniker": "Analysing\\Analysing.csproj",
+              "ToolTip": "C:\\Users\\Harm\\source\\repos\\CK3Analyser\\Analysing\\Analysing.csproj",
+              "RelativeToolTip": "Analysing\\Analysing.csproj",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAgAAAAmAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000758|",
+              "WhenOpened": "2025-09-17T12:31:09.915Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 8,
+              "Title": "ParserTests.cs",
+              "DocumentMoniker": "C:\\Users\\Harm\\source\\repos\\CK3Analyser\\CoreTests\\ParserTests.cs",
+              "RelativeDocumentMoniker": "CoreTests\\ParserTests.cs",
+              "ToolTip": "C:\\Users\\Harm\\source\\repos\\CK3Analyser\\CoreTests\\ParserTests.cs",
+              "RelativeToolTip": "CoreTests\\ParserTests.cs",
+              "ViewState": "AgIAABUAAAAAAAAAAAAowCMAAAA5AAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-09-17T12:23:31.872Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 3,
+              "Title": "AnalysingTests.csproj",
+              "DocumentMoniker": "C:\\Users\\Harm\\source\\repos\\CK3Analyser\\AnalysingTests\\AnalysingTests.csproj",
+              "RelativeDocumentMoniker": "AnalysingTests\\AnalysingTests.csproj",
+              "ToolTip": "C:\\Users\\Harm\\source\\repos\\CK3Analyser\\AnalysingTests\\AnalysingTests.csproj",
+              "RelativeToolTip": "AnalysingTests\\AnalysingTests.csproj",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAcAAAA4AAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000758|",
+              "WhenOpened": "2025-09-17T12:22:33.308Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 10,
+              "Title": "UnitTest1.cs",
+              "DocumentMoniker": "C:\\Users\\Harm\\source\\repos\\CK3Analyser\\AnalysingTests\\UnitTest1.cs",
+              "RelativeDocumentMoniker": "AnalysingTests\\UnitTest1.cs",
+              "ToolTip": "C:\\Users\\Harm\\source\\repos\\CK3Analyser\\AnalysingTests\\UnitTest1.cs",
+              "RelativeToolTip": "AnalysingTests\\UnitTest1.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-09-17T12:22:14.647Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 5,
+              "Title": "RebasingTests.csproj",
+              "DocumentMoniker": "C:\\Users\\Harm\\source\\repos\\CK3Analyser\\RebasingTests\\RebasingTests.csproj",
+              "RelativeDocumentMoniker": "RebasingTests\\RebasingTests.csproj",
+              "ToolTip": "C:\\Users\\Harm\\source\\repos\\CK3Analyser\\RebasingTests\\RebasingTests.csproj",
+              "RelativeToolTip": "RebasingTests\\RebasingTests.csproj",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAcAAAA3AAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000758|",
+              "WhenOpened": "2025-09-17T12:21:40.178Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 7,
+              "Title": "CoreTests.csproj",
+              "DocumentMoniker": "C:\\Users\\Harm\\source\\repos\\CK3Analyser\\CoreTests\\CoreTests.csproj",
+              "RelativeDocumentMoniker": "CoreTests\\CoreTests.csproj",
+              "ToolTip": "C:\\Users\\Harm\\source\\repos\\CK3Analyser\\CoreTests\\CoreTests.csproj",
+              "RelativeToolTip": "CoreTests\\CoreTests.csproj",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAABIAAAAmAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000758|",
+              "WhenOpened": "2025-09-17T12:20:55.408Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 11,
+              "Title": "Rebaser.cs",
+              "DocumentMoniker": "C:\\Users\\Harm\\source\\repos\\CK3Analyser\\Rebasing\\Rebaser.cs",
+              "RelativeDocumentMoniker": "Rebasing\\Rebaser.cs",
+              "ToolTip": "C:\\Users\\Harm\\source\\repos\\CK3Analyser\\Rebasing\\Rebaser.cs",
+              "RelativeToolTip": "Rebasing\\Rebaser.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAwAAABYAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-09-17T12:17:15.291Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 13,
+              "Title": "FastParser.cs",
+              "DocumentMoniker": "C:\\Users\\Harm\\source\\repos\\CK3AnalyserAntlr\\Parsing\\Fast\\FastParser.cs",
+              "RelativeDocumentMoniker": "..\\CK3AnalyserAntlr\\Parsing\\Fast\\FastParser.cs",
+              "ToolTip": "C:\\Users\\Harm\\source\\repos\\CK3AnalyserAntlr\\Parsing\\Fast\\FastParser.cs",
+              "RelativeToolTip": "..\\CK3AnalyserAntlr\\Parsing\\Fast\\FastParser.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-09-17T12:17:02.311Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 14,
+              "Title": "DomainListener.cs",
+              "DocumentMoniker": "C:\\Users\\Harm\\source\\repos\\CK3AnalyserAntlr\\Parsing\\Antlr\\DomainListener.cs",
+              "RelativeDocumentMoniker": "..\\CK3AnalyserAntlr\\Parsing\\Antlr\\DomainListener.cs",
+              "ToolTip": "C:\\Users\\Harm\\source\\repos\\CK3AnalyserAntlr\\Parsing\\Antlr\\DomainListener.cs",
+              "RelativeToolTip": "..\\CK3AnalyserAntlr\\Parsing\\Antlr\\DomainListener.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAcAAAAtAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-09-17T12:16:23.952Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 15,
+              "Title": "Core.csproj",
+              "DocumentMoniker": "C:\\Users\\Harm\\source\\repos\\CK3AnalyserAntlr\\Parsing\\Core.csproj",
+              "RelativeDocumentMoniker": "..\\CK3AnalyserAntlr\\Parsing\\Core.csproj",
+              "ToolTip": "C:\\Users\\Harm\\source\\repos\\CK3AnalyserAntlr\\Parsing\\Core.csproj",
+              "RelativeToolTip": "..\\CK3AnalyserAntlr\\Parsing\\Core.csproj",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAQAAAAjAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000758|",
+              "WhenOpened": "2025-09-17T12:07:48.434Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 2,
+              "Title": "CLI.csproj",
+              "DocumentMoniker": "C:\\Users\\Harm\\source\\repos\\CK3Analyser\\CLI\\CLI.csproj",
+              "RelativeDocumentMoniker": "CLI\\CLI.csproj",
+              "ToolTip": "C:\\Users\\Harm\\source\\repos\\CK3Analyser\\CLI\\CLI.csproj",
+              "RelativeToolTip": "CLI\\CLI.csproj",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAkAAAArAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000758|",
+              "WhenOpened": "2025-09-17T12:07:09.889Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 6,
+              "Title": "Rebasing.csproj",
+              "DocumentMoniker": "C:\\Users\\Harm\\source\\repos\\CK3Analyser\\Rebasing\\Rebasing.csproj",
+              "RelativeDocumentMoniker": "Rebasing\\Rebasing.csproj",
+              "ToolTip": "C:\\Users\\Harm\\source\\repos\\CK3Analyser\\Rebasing\\Rebasing.csproj",
+              "RelativeToolTip": "Rebasing\\Rebasing.csproj",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAgAAAAmAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000758|",
+              "WhenOpened": "2025-09-17T12:08:26.937Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 12,
+              "Title": "DomainVisitor.cs",
+              "DocumentMoniker": "C:\\Users\\Harm\\source\\repos\\CK3AnalyserAntlr\\Parsing\\Antlr\\DomainVisitor.cs",
+              "RelativeDocumentMoniker": "..\\CK3AnalyserAntlr\\Parsing\\Antlr\\DomainVisitor.cs",
+              "ToolTip": "C:\\Users\\Harm\\source\\repos\\CK3AnalyserAntlr\\Parsing\\Antlr\\DomainVisitor.cs",
+              "RelativeToolTip": "..\\CK3AnalyserAntlr\\Parsing\\Antlr\\DomainVisitor.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAADQAAABIAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-09-17T12:24:50.76Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 16,
+              "Title": "Analysing.csproj",
+              "DocumentMoniker": "C:\\Users\\Harm\\source\\repos\\CK3AnalyserAntlr\\Analysis\\Analysing.csproj",
+              "RelativeDocumentMoniker": "..\\CK3AnalyserAntlr\\Analysis\\Analysing.csproj",
+              "ToolTip": "C:\\Users\\Harm\\source\\repos\\CK3AnalyserAntlr\\Analysis\\Analysing.csproj",
+              "RelativeToolTip": "..\\CK3AnalyserAntlr\\Analysis\\Analysing.csproj",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAQAAAAoAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000758|",
+              "WhenOpened": "2025-09-17T12:08:16.501Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 17,
+              "Title": "NamedBlock.cs",
+              "DocumentMoniker": "C:\\Users\\Harm\\source\\repos\\CK3AnalyserAntlr\\Parsing\\Domain\\NamedBlock.cs",
+              "RelativeDocumentMoniker": "..\\CK3AnalyserAntlr\\Parsing\\Domain\\NamedBlock.cs",
+              "ToolTip": "C:\\Users\\Harm\\source\\repos\\CK3AnalyserAntlr\\Parsing\\Domain\\NamedBlock.cs",
+              "RelativeToolTip": "..\\CK3AnalyserAntlr\\Parsing\\Domain\\NamedBlock.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-09-17T12:11:32.35Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 18,
+              "Title": "KeyValuePair.cs",
+              "DocumentMoniker": "C:\\Users\\Harm\\source\\repos\\CK3AnalyserAntlr\\Parsing\\Domain\\KeyValuePair.cs",
+              "RelativeDocumentMoniker": "..\\CK3AnalyserAntlr\\Parsing\\Domain\\KeyValuePair.cs",
+              "ToolTip": "C:\\Users\\Harm\\source\\repos\\CK3AnalyserAntlr\\Parsing\\Domain\\KeyValuePair.cs",
+              "RelativeToolTip": "..\\CK3AnalyserAntlr\\Parsing\\Domain\\KeyValuePair.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-09-17T12:11:25.061Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 19,
+              "Title": "IAnalysisVisitor.cs",
+              "DocumentMoniker": "C:\\Users\\Harm\\source\\repos\\CK3AnalyserAntlr\\Parsing\\Domain\\IAnalysisVisitor.cs",
+              "RelativeDocumentMoniker": "..\\CK3AnalyserAntlr\\Parsing\\Domain\\IAnalysisVisitor.cs",
+              "ToolTip": "C:\\Users\\Harm\\source\\repos\\CK3AnalyserAntlr\\Parsing\\Domain\\IAnalysisVisitor.cs",
+              "RelativeToolTip": "..\\CK3AnalyserAntlr\\Parsing\\Domain\\IAnalysisVisitor.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAQAAAAgAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-09-17T12:10:28.406Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 9,
+              "Title": "Program.cs",
+              "DocumentMoniker": "C:\\Users\\Harm\\source\\repos\\CK3Analyser\\CLI\\Program.cs",
+              "RelativeDocumentMoniker": "CLI\\Program.cs",
+              "ToolTip": "C:\\Users\\Harm\\source\\repos\\CK3Analyser\\CLI\\Program.cs",
+              "RelativeToolTip": "CLI\\Program.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAsAAAAZAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-09-17T12:06:20.35Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 20,
+              "Title": "Declaration.cs",
+              "DocumentMoniker": "C:\\Users\\Harm\\source\\repos\\CK3AnalyserAntlr\\Parsing\\Domain\\Declaration.cs",
+              "RelativeDocumentMoniker": "..\\CK3AnalyserAntlr\\Parsing\\Domain\\Declaration.cs",
+              "ToolTip": "C:\\Users\\Harm\\source\\repos\\CK3AnalyserAntlr\\Parsing\\Domain\\Declaration.cs",
+              "RelativeToolTip": "..\\CK3AnalyserAntlr\\Parsing\\Domain\\Declaration.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-09-17T12:11:10.834Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 21,
+              "Title": "Comment.cs",
+              "DocumentMoniker": "C:\\Users\\Harm\\source\\repos\\CK3AnalyserAntlr\\Parsing\\Domain\\Comment.cs",
+              "RelativeDocumentMoniker": "..\\CK3AnalyserAntlr\\Parsing\\Domain\\Comment.cs",
+              "ToolTip": "C:\\Users\\Harm\\source\\repos\\CK3AnalyserAntlr\\Parsing\\Domain\\Comment.cs",
+              "RelativeToolTip": "..\\CK3AnalyserAntlr\\Parsing\\Domain\\Comment.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-09-17T12:11:01.199Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 22,
+              "Title": "Block.cs",
+              "DocumentMoniker": "C:\\Users\\Harm\\source\\repos\\CK3AnalyserAntlr\\Parsing\\Domain\\Block.cs",
+              "RelativeDocumentMoniker": "..\\CK3AnalyserAntlr\\Parsing\\Domain\\Block.cs",
+              "ToolTip": "C:\\Users\\Harm\\source\\repos\\CK3AnalyserAntlr\\Parsing\\Domain\\Block.cs",
+              "RelativeToolTip": "..\\CK3AnalyserAntlr\\Parsing\\Domain\\Block.cs",
+              "ViewState": "AgIAAAcAAAAAAAAAAAA1wAcAAAA/AAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-09-17T12:09:58.503Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 23,
+              "Title": "AntlrParser.cs",
+              "DocumentMoniker": "C:\\Users\\Harm\\source\\repos\\CK3AnalyserAntlr\\Parsing\\Antlr\\AntlrParser.cs",
+              "RelativeDocumentMoniker": "..\\CK3AnalyserAntlr\\Parsing\\Antlr\\AntlrParser.cs",
+              "ToolTip": "C:\\Users\\Harm\\source\\repos\\CK3AnalyserAntlr\\Parsing\\Antlr\\AntlrParser.cs",
+              "RelativeToolTip": "..\\CK3AnalyserAntlr\\Parsing\\Antlr\\AntlrParser.cs",
+              "ViewState": "AgIAAA0AAAAAAAAAAAAgwBQAAAAhAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-09-17T12:13:56.425Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 24,
+              "Title": "AnalysisVisitor.cs",
+              "DocumentMoniker": "C:\\Users\\Harm\\source\\repos\\CK3AnalyserAntlr\\Analysis\\AnalysisVisitor.cs",
+              "RelativeDocumentMoniker": "..\\CK3AnalyserAntlr\\Analysis\\AnalysisVisitor.cs",
+              "ToolTip": "C:\\Users\\Harm\\source\\repos\\CK3AnalyserAntlr\\Analysis\\AnalysisVisitor.cs",
+              "RelativeToolTip": "..\\CK3AnalyserAntlr\\Analysis\\AnalysisVisitor.cs",
+              "ViewState": "AgIAADkAAAAAAAAAAAAmwCkAAAAjAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-09-17T12:15:01.42Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 25,
+              "Title": "Node.cs",
+              "DocumentMoniker": "C:\\Users\\Harm\\source\\repos\\CK3AnalyserAntlr\\Parsing\\Domain\\Node.cs",
+              "RelativeDocumentMoniker": "..\\CK3AnalyserAntlr\\Parsing\\Domain\\Node.cs",
+              "ToolTip": "C:\\Users\\Harm\\source\\repos\\CK3AnalyserAntlr\\Parsing\\Domain\\Node.cs",
+              "RelativeToolTip": "..\\CK3AnalyserAntlr\\Parsing\\Domain\\Node.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-09-17T12:11:37.911Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 26,
+              "Title": "ICk3Parser.cs",
+              "DocumentMoniker": "C:\\Users\\Harm\\source\\repos\\CK3AnalyserAntlr\\Parsing\\ICk3Parser.cs",
+              "RelativeDocumentMoniker": "..\\CK3AnalyserAntlr\\Parsing\\ICk3Parser.cs",
+              "ToolTip": "C:\\Users\\Harm\\source\\repos\\CK3AnalyserAntlr\\Parsing\\ICk3Parser.cs",
+              "RelativeToolTip": "..\\CK3AnalyserAntlr\\Parsing\\ICk3Parser.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAoAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-09-17T12:09:45.676Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 27,
+              "Title": "Analyser.cs",
+              "DocumentMoniker": "C:\\Users\\Harm\\source\\repos\\CK3AnalyserAntlr\\Analysis\\Analyser.cs",
+              "RelativeDocumentMoniker": "..\\CK3AnalyserAntlr\\Analysis\\Analyser.cs",
+              "ToolTip": "C:\\Users\\Harm\\source\\repos\\CK3AnalyserAntlr\\Analysis\\Analyser.cs",
+              "RelativeToolTip": "..\\CK3AnalyserAntlr\\Analysis\\Analyser.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAA8AAAA5AAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-09-17T12:14:49.51Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 28,
+              "Title": "ScriptFile.cs",
+              "DocumentMoniker": "C:\\Users\\Harm\\source\\repos\\CK3AnalyserAntlr\\Parsing\\Domain\\ScriptFile.cs",
+              "RelativeDocumentMoniker": "..\\CK3AnalyserAntlr\\Parsing\\Domain\\ScriptFile.cs",
+              "ToolTip": "C:\\Users\\Harm\\source\\repos\\CK3AnalyserAntlr\\Parsing\\Domain\\ScriptFile.cs",
+              "RelativeToolTip": "..\\CK3AnalyserAntlr\\Parsing\\Domain\\ScriptFile.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAhAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-09-17T12:11:42.522Z"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

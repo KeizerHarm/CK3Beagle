@@ -1,0 +1,13 @@
+﻿aaa = {
+	#mod change
+	#123
+}
+
+bbb = {
+	456
+}
+
+ccc = {
+	#vanilla change
+	#789
+}

@@ -1,0 +1,23 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net9.0</TargetFramework>
+    <RootNamespace>CK3Analyser.Core</RootNamespace>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <None Remove="Antlr\Grammar\CK3.g4" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Antlr4 Include="Antlr\Grammar\CK3.g4">
+      <Package>CK3Analyser.Core</Package>
+    </Antlr4>
+  </ItemGroup>
+  
+  <ItemGroup>
+    <PackageReference Include="Antlr4.Runtime.Standard" Version="4.11.1" />
+    <PackageReference Include="Antlr4BuildTasks" Version="12.2" PrivateAssets="all" />
+  </ItemGroup>
+
+</Project>
