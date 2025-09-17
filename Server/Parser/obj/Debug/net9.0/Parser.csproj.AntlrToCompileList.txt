@@ -1,6 +1,0 @@
-C:/Users/Harm/source/repos/CK3AnalyserAntlr/Parser/obj/Debug/net9.0/CK3BaseListener.cs
-C:/Users/Harm/source/repos/CK3AnalyserAntlr/Parser/obj/Debug/net9.0/CK3BaseVisitor.cs
-C:/Users/Harm/source/repos/CK3AnalyserAntlr/Parser/obj/Debug/net9.0/CK3Lexer.cs
-C:/Users/Harm/source/repos/CK3AnalyserAntlr/Parser/obj/Debug/net9.0/CK3Listener.cs
-C:/Users/Harm/source/repos/CK3AnalyserAntlr/Parser/obj/Debug/net9.0/CK3Parser.cs
-C:/Users/Harm/source/repos/CK3AnalyserAntlr/Parser/obj/Debug/net9.0/CK3Visitor.cs
