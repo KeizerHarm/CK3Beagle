@@ -18,11 +18,13 @@ namespace CK3Analyser.Analysis.Detectors
             Depth = 0;
             LeadingSpaces = 0;
             LeadingTabs = 0;
+            CharacterCountBeforeThisLine = 0;
         }
 
         public int Depth { get; set; }
         public int LeadingTabs { get; set; }
         public int LeadingSpaces { get; set; }
+        public int CharacterCountBeforeThisLine { get; set; }
 
 
         public readonly bool IndentationTypeWorks(IndentationType type)
@@ -78,7 +80,8 @@ namespace CK3Analyser.Analysis.Detectors
                 {
                     Location = scriptFile.GetIdentifier(),
                     Severity = _settings.Severity_UnexpectedType,
-                    Message = $"File uses indentation type {detectedIndentationType} instead of {_settings.ExpectedIndentationType}"
+                    Message = $"File uses indentation type {detectedIndentationType} instead of {_settings.ExpectedIndentationType}",
+                    Smell = Smell.InconsistentIndentation_UnexpectedType
                 });
             }
 
@@ -96,7 +99,8 @@ namespace CK3Analyser.Analysis.Detectors
                 {
                     Location = scriptFile.GetIdentifier(),
                     Severity = _settings.Severity_Inconsistency,
-                    Message = $"File is detected to use {detectedIndentationType} but it has {abberatingIndentedLines} lines that don't"
+                    Message = $"File is detected to use {detectedIndentationType} but it has {abberatingIndentedLines} lines that don't",
+                    Smell = Smell.InconclusiveIndentation_Inconsistency
                 });
             }
         }

@@ -1,0 +1,23 @@
+﻿aaaa = {
+bb = {
+c = { a = b }
+}
+bb = {
+c = { a = b }
+}
+bb = {
+c = { a = b }
+}
+#Test test
+
+#Comment with brackets {
+
+1 = {
+2 = {
+3 = {
+#Comment
+}
+}
+}
+#}
+}

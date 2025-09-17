@@ -57,7 +57,70 @@ namespace AnalysingTests
 
             //assert
             Assert.Single(logger.LogEntries, x => x.Severity == Severity.Warning);
-            Assert.Single(logger.LogEntries, x => x.Severity == Severity.Warning && x.Message.Contains(IndentationType.Tab.ToString()));
+            Assert.Single(logger.LogEntries, x => 
+                    x.Severity == Severity.Warning 
+                 && x.Message.Contains(IndentationType.Tab.ToString())
+                 && x.Smell == Smell.InconsistentIndentation_UnexpectedType);
+        }
+
+        [Theory]
+        [InlineData("ConsistentTabs", true, false)]
+        [InlineData("ConsistentTabs", false, true)]
+        [InlineData("ConsistentTabs_SpacedWithBracket", false, false)]
+        [InlineData("ConsistentTabs_SpacedWithBracket", true, true)]
+        public void RepectsSettingDisregardBracketsInComments(string testcase, bool disregardBracketsInComments, bool shouldError)
+        {
+            //arrange
+            var logger = new Logger();
+            var settings = new InconsistentIndentationDetector.Settings
+            {
+                Severity_Inconsistency = Severity.Info,
+                Severity_UnexpectedType = Severity.Warning,
+                DisregardBracketsInComments = disregardBracketsInComments,
+                ExpectedIndentationType = IndentationType.Tab
+            };
+            var visitor = GetDetector(settings, logger);
+
+            ScriptFile file = GetTestCase(testcase);
+
+            //act
+            visitor.Visit(file);
+
+            //assert
+            if (shouldError)
+            {
+                Assert.Single(logger.LogEntries, x => x.Smell == Smell.InconclusiveIndentation_Inconsistency);
+            }
+            else
+            {
+                Assert.DoesNotContain(logger.LogEntries, x => x.Smell == Smell.InconclusiveIndentation_Inconsistency);
+            }
+        }
+
+        [Fact]
+        public void DetectsInconsistency()
+        {
+            //arrange
+            var logger = new Logger();
+            var settings = new InconsistentIndentationDetector.Settings
+            {
+                Severity_Inconsistency = Severity.Info,
+                Severity_UnexpectedType = Severity.Warning,
+                DisregardBracketsInComments = true,
+                ExpectedIndentationType = IndentationType.FourSpaces
+            };
+            var visitor = GetDetector(settings, logger);
+
+            ScriptFile testcase = GetTestCase("InconsistentTabs");
+
+            //act
+            visitor.Visit(testcase);
+
+            //assert
+            Assert.Single(logger.LogEntries, x => x.Severity == Severity.Warning);
+            Assert.Single(logger.LogEntries, x =>
+                    x.Severity == Severity.Info
+                 && x.Smell == Smell.InconclusiveIndentation_Inconsistency);
         }
 
         private ScriptFile GetTestCase(string caseName)

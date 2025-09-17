@@ -2,6 +2,12 @@
   bb = {
     c = { a = b }
   }
+  bb = {
+    c = { a = b }
+  }
+  bb = {
+    c = { a = b }
+  }
   #Test test
 
   #Comment with brackets {
@@ -13,4 +19,5 @@
       }
     }
   }
+  #}
 }

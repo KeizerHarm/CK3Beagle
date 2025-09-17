@@ -1,23 +1,23 @@
 ﻿aaaa = {
-   bb = {
+    bb = {
       c = { a = b }
-   }
-   bb = {
+  }
+    bb = {
       c = { a = b }
-   }
-   bb = {
+  }
+    bb = {
       c = { a = b }
-   }
+  }
    #Test test
 
    #Comment with brackets {
 
-   1 = {
-      2 = {
-         3 = {
-            #Comment
-         }
+    1 = {
+          2 = {
+               3 = {
+     		#Comment
+		  }
       }
-   }
-   #}
+ }
+#}
 }

@@ -12,12 +12,12 @@
 
 	#Comment with brackets {
 
-	1 = {
-		2 = {
-			3 = {
-				#Comment
+		1 = {
+			2 = {
+				3 = {
+					#Comment
+				}
 			}
 		}
-	}
 	#}
 }

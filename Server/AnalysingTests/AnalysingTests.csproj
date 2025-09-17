@@ -24,7 +24,19 @@
   </ItemGroup>
 
   <ItemGroup>
+    <None Update="Testcases\InconsistentIndentation\NoIndentation.txt">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="Testcases\InconsistentIndentation\ScrambledIndentation.txt">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
     <None Update="Testcases\InconsistentIndentation\ConsistentFourSpaces.txt">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="Testcases\InconsistentIndentation\InconsistentTabs.txt">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="Testcases\InconsistentIndentation\ConsistentTabs_SpacedWithBracket.txt">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <None Update="Testcases\InconsistentIndentation\ConsistentTabs.txt">
