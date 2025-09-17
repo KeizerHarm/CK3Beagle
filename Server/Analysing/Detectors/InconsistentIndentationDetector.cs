@@ -11,7 +11,7 @@ namespace CK3Analyser.Analysis.Detectors
         Tab, TwoSpaces, ThreeSpaces, FourSpaces, Inconclusive
     }
 
-    public struct Line
+    internal struct Line
     {
         public Line()
         {
@@ -25,7 +25,6 @@ namespace CK3Analyser.Analysis.Detectors
         public int LeadingSpaces { get; set; }
 
 
-
         public readonly bool IndentationTypeWorks(IndentationType type)
         {
             switch (type)
@@ -33,11 +32,11 @@ namespace CK3Analyser.Analysis.Detectors
                 case IndentationType.Tab:
                     return Depth == LeadingTabs;
                 case IndentationType.TwoSpaces:
-                    return Depth == LeadingSpaces * 2;
+                    return Depth * 2 == LeadingSpaces;
                 case IndentationType.ThreeSpaces:
-                    return Depth == LeadingSpaces * 3;
+                    return Depth * 3 == LeadingSpaces;
                 case IndentationType.FourSpaces:
-                    return Depth == LeadingSpaces * 4;
+                    return Depth * 4 == LeadingSpaces;
                 default:
                     return false;
             }
@@ -46,26 +45,41 @@ namespace CK3Analyser.Analysis.Detectors
 
     public class InconsistentIndentationDetector : BaseDetector
     {
-        public InconsistentIndentationDetector(Action<LogEntry> logFunc) : base(logFunc)
+        public struct Settings
         {
+            public IndentationType ExpectedIndentationType { get; set; }
+            public Severity Severity_UnexpectedType { get; set; }
+            public bool DisregardBracketsInComments { get; set; }
+            public Severity Severity_Inconsistency { get; set; }
+        }
+
+        private Settings _settings;
+
+        public InconsistentIndentationDetector(Action<LogEntry> logFunc, Settings settings) : base(logFunc)
+        {
+            _settings = settings;
         }
 
         public override void AnalyseScriptFile(ScriptFile scriptFile)
         {
-            (var detectedIndentationType, var lines) = DetectIndentation(scriptFile);
-            var expectedIndentationType = IndentationType.Tab;
-
             if (string.IsNullOrWhiteSpace(scriptFile.Raw)) return;
 
-            if (detectedIndentationType != expectedIndentationType)
+            (var detectedIndentationType, var lines) = DetectIndentation(scriptFile);
+            LogFunc(new LogEntry
             {
-                var logEntry = new LogEntry
+                Location = scriptFile.GetIdentifier(),
+                Severity = Severity.Debug,
+                Message = "Detected indentation type " + detectedIndentationType
+            });
+
+            if (detectedIndentationType != _settings.ExpectedIndentationType)
+            {
+                LogFunc(new LogEntry
                 {
                     Location = scriptFile.GetIdentifier(),
-                    Severity = Severity.Info,
-                    Message = $"File uses indentation type {detectedIndentationType} instead of {expectedIndentationType}"
-                };
-                LogFunc(logEntry);
+                    Severity = _settings.Severity_UnexpectedType,
+                    Message = $"File uses indentation type {detectedIndentationType} instead of {_settings.ExpectedIndentationType}"
+                });
             }
 
             if (detectedIndentationType == IndentationType.Inconclusive)
@@ -78,17 +92,16 @@ namespace CK3Analyser.Analysis.Detectors
             }
             if (abberatingIndentedLines > 0)
             {
-                var logEntry = new LogEntry
+                LogFunc(new LogEntry
                 {
                     Location = scriptFile.GetIdentifier(),
-                    Severity = Severity.Warning,
+                    Severity = _settings.Severity_Inconsistency,
                     Message = $"File is detected to use {detectedIndentationType} but it has {abberatingIndentedLines} lines that don't"
-                };
-                LogFunc(logEntry);
+                });
             }
         }
 
-        private static (IndentationType detectedIndentationType, IEnumerable<Line> lines) DetectIndentation(ScriptFile scriptFile)
+        private (IndentationType detectedIndentationType, IEnumerable<Line> lines) DetectIndentation(ScriptFile scriptFile)
         {
             int currentDepth = 0;
             var lines = new List<Line>();
@@ -110,7 +123,7 @@ namespace CK3Analyser.Analysis.Detectors
                     {
                         if (!char.IsWhiteSpace(charac)) isInLeadingWhitespace = false;
 
-                        if (charac == '#') continue;
+                        if (charac == '#' && _settings.DisregardBracketsInComments) break; ;
                         if (charac == ' ' && isInLeadingWhitespace) lineObj.LeadingSpaces++;
                         if (charac == '\t' && isInLeadingWhitespace) lineObj.LeadingTabs++;
                         if (charac == '{') localBracketBalance++;

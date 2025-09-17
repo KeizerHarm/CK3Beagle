@@ -8,12 +8,13 @@ namespace CK3Analyser.Analysis
     {
         public void Analyse(Context context)
         {
-            var logFunc = Logger.Log;
+            var logger = new Logger();
+            var logFunc = logger.Log;
             var visitor = new AnalysisVisitor();
             //visitor.Detectors.Add(new LargeFileDetector(logFunc));
             //visitor.Detectors.Add(new LargeUnitDetector(logFunc));
             //visitor.Detectors.Add(new OvercomplicatedBooleanDetector(logFunc));
-            visitor.Detectors.Add(new InconsistentIndentationDetector(logFunc));
+            //visitor.Detectors.Add(new InconsistentIndentationDetector(logFunc));
             foreach (var file in context.Files)
             {
                 file.Value.Accept(visitor);

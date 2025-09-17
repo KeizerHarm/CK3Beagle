@@ -16,7 +16,26 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\Analysing\Analysing.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
     <Using Include="Xunit" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Update="Testcases\InconsistentIndentation\ConsistentFourSpaces.txt">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="Testcases\InconsistentIndentation\ConsistentTabs.txt">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="Testcases\InconsistentIndentation\ConsistentThreeSpaces.txt">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="Testcases\InconsistentIndentation\ConsistentTwoSpaces.txt">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
   </ItemGroup>
 
 </Project>

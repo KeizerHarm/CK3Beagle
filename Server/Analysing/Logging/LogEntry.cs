@@ -2,7 +2,7 @@
 {
     public enum Severity
     {
-        Info, Warning, Critical
+        Debug, Info, Warning, Critical
     }
     public struct LogEntry
     {

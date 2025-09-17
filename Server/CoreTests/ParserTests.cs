@@ -8,11 +8,10 @@ namespace CK3Analyser.Parser
     public class ParserTests
     {
         public static IEnumerable<object[]> ParserTypesUnderTest =>
-        new List<object[]>
-        {
-            new object[]{ "antlr" },
+        [
+            ["antlr"],
            // new object[]{ "fast" }
-        };
+        ];
 
 
         [Theory]

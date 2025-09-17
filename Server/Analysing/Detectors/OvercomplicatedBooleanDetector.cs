@@ -13,8 +13,23 @@ namespace CK3Analyser.Analysis.Detectors
             "AND", "OR", "NOT", "NOR", "NAND"
         ];
 
-        public OvercomplicatedBooleanDetector(Action<LogEntry> logFunc) : base(logFunc)
+
+        public struct Settings
         {
+            public Severity Severity_DoubleNegation { get; set; }
+            public Severity Severity_DoubleAndOr { get; set; }
+            public Severity Severity_Distributivity { get; set; }
+            public Severity Severity_RepeatedTriggers { get; set; }
+            public Severity Severity_ComplementaryTriggers { get; set; }
+            public Severity Severity_NotWithMultipleChildren { get; set; }
+
+        }
+
+        private Settings _settings;
+
+        public OvercomplicatedBooleanDetector(Action<LogEntry> logFunc, Settings settings) : base(logFunc)
+        {
+            _settings = settings;
         }
 
         public override void AnalyseDeclaration(Declaration declaration)
@@ -50,7 +65,7 @@ namespace CK3Analyser.Analysis.Detectors
                     {
                         Location = namedBlock.GetIdentifier(),
                         Message = "AND containing AND",
-                        Severity = Severity.Info
+                        Severity = _settings.Severity_DoubleAndOr
                     };
                     LogFunc(entry);
                 }
@@ -62,7 +77,7 @@ namespace CK3Analyser.Analysis.Detectors
                     {
                         Location = namedBlock.GetIdentifier(),
                         Message = "AND with ORs that share a trigger",
-                        Severity = Severity.Info
+                        Severity = _settings.Severity_Distributivity
                     };
                     LogFunc(entry);
                 }
@@ -76,7 +91,7 @@ namespace CK3Analyser.Analysis.Detectors
                     {
                         Location = namedBlock.GetIdentifier(),
                         Message = "OR containing OR",
-                        Severity = Severity.Info
+                        Severity = _settings.Severity_DoubleAndOr
                     };
                     LogFunc(entry);
                 }
@@ -88,7 +103,7 @@ namespace CK3Analyser.Analysis.Detectors
                     {
                         Location = namedBlock.GetIdentifier(),
                         Message = "OR with ANDs that share a trigger",
-                        Severity = Severity.Info
+                        Severity = _settings.Severity_Distributivity
                     };
                     LogFunc(entry);
                 }
@@ -104,7 +119,7 @@ namespace CK3Analyser.Analysis.Detectors
                     {
                         Location = namedBlock.GetIdentifier(),
                         Message = $"Duplicate trigger: {item.Raw}",
-                        Severity = Severity.Info
+                        Severity = _settings.Severity_RepeatedTriggers
                     };
                     LogFunc(entry);
                     continue;
@@ -116,7 +131,7 @@ namespace CK3Analyser.Analysis.Detectors
                     {
                         Location = namedBlock.GetIdentifier(),
                         Message = $"Duplicate triggers: {item.Raw}",
-                        Severity = Severity.Info
+                        Severity = _settings.Severity_ComplementaryTriggers
                     };
                     LogFunc(entry);
                 }
@@ -130,7 +145,7 @@ namespace CK3Analyser.Analysis.Detectors
                     {
                         Location = namedBlock.GetIdentifier(),
                         Message = $"NOT containing multiple elements",
-                        Severity = Severity.Warning
+                        Severity = _settings.Severity_NotWithMultipleChildren
                     };
                     LogFunc(entry);
                 }
@@ -141,7 +156,7 @@ namespace CK3Analyser.Analysis.Detectors
                     {
                         Location = namedBlock.GetIdentifier(),
                         Message = $"Double negation - NOT contains NOT",
-                        Severity = Severity.Info
+                        Severity = _settings.Severity_DoubleNegation
                     };
                     LogFunc(entry);
                 }
@@ -152,7 +167,7 @@ namespace CK3Analyser.Analysis.Detectors
                     {
                         Location = namedBlock.GetIdentifier(),
                         Message = $"Double negation - NOT contains trigger = no",
-                        Severity = Severity.Info
+                        Severity = _settings.Severity_DoubleNegation
                     };
                     LogFunc(entry);
                 }
@@ -163,7 +178,7 @@ namespace CK3Analyser.Analysis.Detectors
                     {
                         Location = namedBlock.GetIdentifier(),
                         Message = $"Double negation - NOT contains NOR",
-                        Severity = Severity.Info
+                        Severity = _settings.Severity_DoubleNegation
                     };
                     LogFunc(entry);
                 }
@@ -174,7 +189,7 @@ namespace CK3Analyser.Analysis.Detectors
                     {
                         Location = namedBlock.GetIdentifier(),
                         Message = $"Double negation - NOT contains NAND",
-                        Severity = Severity.Info
+                        Severity = _settings.Severity_DoubleNegation
                     };
                     LogFunc(entry);
                 }
