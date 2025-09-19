@@ -67,7 +67,7 @@ namespace CK3Analyser.Core.Antlr
         public override void EnterAnonymousBlock([NotNull] CK3Parser.AnonymousBlockContext context)
         {
             var raw = GetRawContents(context);
-            var block = new Block()
+            var block = new AnonymousBlock()
             {
                 Raw = raw
             };
@@ -98,16 +98,16 @@ namespace CK3Analyser.Core.Antlr
         }
 
 
-        public override void EnterKeyValuePair([NotNull] CK3Parser.KeyValuePairContext context)
+        public override void EnterBinaryExpression([NotNull] CK3Parser.BinaryExpressionContext context)
         {
             var raw = GetRawContents(context);
             var key = GetRawContents(context.token(0));
             var value = GetRawContents(context.token(1));
             var scoper = context.SCOPER().ToString();
-            var keyValuePair = new Domain.KeyValuePair(key, scoper, value) { Raw = raw };
-            thisBlock.Peek().AddChild(keyValuePair);
+            var binaryExpression = new BinaryExpression(key, scoper, value) { Raw = raw };
+            thisBlock.Peek().AddChild(binaryExpression);
         }
-        public override void ExitKeyValuePair([NotNull] CK3Parser.KeyValuePairContext context)
+        public override void ExitBinaryExpression([NotNull] CK3Parser.BinaryExpressionContext context)
         {
             //No-op
         }

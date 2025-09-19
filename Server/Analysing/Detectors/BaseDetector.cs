@@ -15,7 +15,7 @@ namespace CK3Analyser.Analysis.Detectors
         public virtual void AnalyseBlock(Block block) { }
         public virtual void AnalyseComment(Comment comment) { }
         public virtual void AnalyseDeclaration(Declaration declaration) { }
-        public virtual void AnalyseKeyValuePair(KeyValuePair keyValuePair) { }
+        public virtual void AnalyseBinaryExpression(BinaryExpression binaryExpression) { }
         public virtual void AnalyseNamedBlock(NamedBlock namedBlock) { }
         public virtual void AnalyseNode(Node node) { }
         public virtual void AnalyseScriptFile(ScriptFile scriptFile) { }

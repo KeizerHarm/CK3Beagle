@@ -3,7 +3,7 @@ using System.Linq;
 
 namespace CK3Analyser.Core.Domain
 {
-    public class Block : Node
+    public abstract class Block : Node
     {
         public List<Node> Children { get; } = new List<Node>();
 

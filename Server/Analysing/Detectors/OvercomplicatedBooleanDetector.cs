@@ -58,8 +58,8 @@ namespace CK3Analyser.Analysis.Detectors
 
             var childNamedBlocks = namedBlock.Children.OfType<NamedBlock>();
             var childBlockKeys = childNamedBlocks.Select(x => x.Key.ToUpper());
-            var childKeyValuePairs = namedBlock.Children.OfType<Core.Domain.KeyValuePair>();
-            var childKeyValuePairKeys = childKeyValuePairs.Select(x => x.Key.ToLower());
+            var childBinaryExpressions = namedBlock.Children.OfType<BinaryExpression>();
+            var childBinaryExpressionKeys = childBinaryExpressions.Select(x => x.Key.ToLower());
 
             if (key == "AND")
             {
@@ -73,7 +73,7 @@ namespace CK3Analyser.Analysis.Detectors
                 }
 
                 var ORchildren = childNamedBlocks.Where(x => x.Key == "OR");
-                if (HasRepeatedString(ORchildren.Select(x => x.Children.OfType<Core.Domain.KeyValuePair>().Select(y => y.Raw))))
+                if (HasRepeatedString(ORchildren.Select(x => x.Children.OfType<BinaryExpression>().Select(y => y.Raw))))
                 {
                     logger.Log(
                         Smell.OvercomplicatedBoolean_Distributivity,
@@ -86,8 +86,8 @@ namespace CK3Analyser.Analysis.Detectors
                 {
                     foreach (var orChild in childNamedBlocks.Where(x => x.Key == "OR"))
                     {
-                        if (HasRepeatedString(childKeyValuePairs.Select(x => x.Raw),
-                            orChild.Children.OfType<Core.Domain.KeyValuePair>().Select(x => x.Raw)))
+                        if (HasRepeatedString(childBinaryExpressions.Select(x => x.Raw),
+                            orChild.Children.OfType<BinaryExpression>().Select(x => x.Raw)))
                         {
                             logger.Log(
                                 Smell.OvercomplicatedBoolean_Absorption,
@@ -111,7 +111,7 @@ namespace CK3Analyser.Analysis.Detectors
                 }
 
                 var ANDchildren = childNamedBlocks.Where(x => x.Key == "AND");
-                if (HasRepeatedString(ANDchildren.Select(x => x.Children.OfType<Core.Domain.KeyValuePair>().Select(y => y.Raw))))
+                if (HasRepeatedString(ANDchildren.Select(x => x.Children.OfType<BinaryExpression>().Select(y => y.Raw))))
                 {
                     logger.Log(
                         Smell.OvercomplicatedBoolean_Distributivity,
@@ -124,8 +124,8 @@ namespace CK3Analyser.Analysis.Detectors
                 {
                     foreach (var andChild in childNamedBlocks.Where(x => x.Key == "AND"))
                     {
-                        if (HasRepeatedString(childKeyValuePairs.Select(x => x.Raw),
-                            andChild.Children.OfType<Core.Domain.KeyValuePair>().Select(x => x.Raw)))
+                        if (HasRepeatedString(childBinaryExpressions.Select(x => x.Raw),
+                            andChild.Children.OfType<BinaryExpression>().Select(x => x.Raw)))
                         {
                             logger.Log(
                                 Smell.OvercomplicatedBoolean_Absorption,
@@ -139,7 +139,7 @@ namespace CK3Analyser.Analysis.Detectors
 
             var seenKeys = new HashSet<string>();
             var seenRaws = new HashSet<string>();
-            foreach (var item in namedBlock.Children.OfType<Core.Domain.KeyValuePair>())
+            foreach (var item in namedBlock.Children.OfType<BinaryExpression>())
             {
                 if (!seenRaws.Add(item.Raw))
                 {
@@ -187,7 +187,7 @@ namespace CK3Analyser.Analysis.Detectors
 
             if (key == "NOT")
             {
-                if (childBlockKeys.Count() + childKeyValuePairKeys.Count() > 1)
+                if (childBlockKeys.Count() + childBinaryExpressionKeys.Count() > 1)
                 {
                     logger.Log(
                         Smell.NotIsNotNor,
@@ -228,11 +228,11 @@ namespace CK3Analyser.Analysis.Detectors
         private bool AllChildrenAreNegated(NamedBlock namedBlock)
         {
             var blockChildrenToConsider = namedBlock.Children.OfType<NamedBlock>();
-            var keyValuePairChildrenToConsider = namedBlock.Children.OfType<Core.Domain.KeyValuePair>();
+            var binaryExpressionChildrenToConsider = namedBlock.Children.OfType<BinaryExpression>();
 
             return blockChildrenToConsider.All(x => x.Key.ToUpper() == "NOT" || x.Key.ToUpper() == "NOR" || x.Key.ToUpper() == "NAND")
-                && keyValuePairChildrenToConsider.All(x => (x.Value.ToLower() == "no") || x.Scoper == "!=")
-                && blockChildrenToConsider.Count() + keyValuePairChildrenToConsider.Count() > 0;
+                && binaryExpressionChildrenToConsider.All(x => (x.Value.ToLower() == "no") || x.Scoper == "!=")
+                && blockChildrenToConsider.Count() + binaryExpressionChildrenToConsider.Count() > 0;
         }
 
         static bool HasRepeatedString(IEnumerable<string> list1, IEnumerable<string> list2)

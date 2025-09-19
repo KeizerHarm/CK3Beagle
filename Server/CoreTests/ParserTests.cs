@@ -1,9 +1,8 @@
-﻿using CK3Analyser.Core;
-using CK3Analyser.Core.Antlr;
+﻿using CK3Analyser.Core.Antlr;
 using CK3Analyser.Core.Domain;
 using CK3Analyser.Core.Fast;
 
-namespace CK3Analyser.Parser
+namespace CK3Analyser.Core
 {
     public class ParserTests
     {
@@ -52,11 +51,11 @@ namespace CK3Analyser.Parser
             {
                 Raw = stringToParse
             };
-            var expectedKeyValuePair = new Core.Domain.KeyValuePair("b", "=", "c")
+            var expectedBinaryExpression = new BinaryExpression("b", "=", "c")
             {
                 Raw = "b = c"
             };
-            expectedDecl.AddChild(expectedKeyValuePair);
+            expectedDecl.AddChild(expectedBinaryExpression);
 
             expectedScriptFile.AddDeclaration(expectedDecl);
 
@@ -85,11 +84,11 @@ namespace CK3Analyser.Parser
             {
                 Raw = "aaa = { b = c }"
             };
-            var expectedKeyValuePair = new Core.Domain.KeyValuePair("b", "=", "c")
+            var expectedBinaryExpression = new BinaryExpression("b", "=", "c")
             {
                 Raw = "b = c"
             };
-            expectedDecl.AddChild(expectedKeyValuePair);
+            expectedDecl.AddChild(expectedBinaryExpression);
 
             expectedScriptFile.AddDeclaration(expectedDecl);
             var expectedComment = new Comment()
@@ -130,13 +129,13 @@ namespace CK3Analyser.Parser
                 AssertCommentsEqual((Comment)expected, (Comment)actual);
             }
 
-            if (expected.GetType().IsAssignableTo(typeof(Core.Domain.KeyValuePair)))
+            if (expected.GetType().IsAssignableTo(typeof(BinaryExpression)))
             {
-                AssertKeyValuePairsEqual((Core.Domain.KeyValuePair)expected, (Core.Domain.KeyValuePair)actual);
+                AssertBinaryExpressionsEqual((BinaryExpression)expected, (BinaryExpression)actual);
             }
         }
 
-        private void AssertKeyValuePairsEqual(Core.Domain.KeyValuePair expected, Core.Domain.KeyValuePair actual)
+        private void AssertBinaryExpressionsEqual(BinaryExpression expected, BinaryExpression actual)
         {
             Assert.Equal(expected.Key, actual.Key);
             Assert.Equal(expected.Scoper, actual.Scoper);
@@ -194,10 +193,6 @@ namespace CK3Analyser.Parser
         {
             Assert.Equal(expected.EntityType, actual.EntityType);
         }
-
-
-
-
 
         private static ICk3Parser GetParser(string parserType)
         {

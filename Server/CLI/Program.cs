@@ -7,7 +7,6 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
-using System.Xml.Linq;
 
 namespace CK3Analyser.CLI
 {
@@ -16,10 +15,9 @@ namespace CK3Analyser.CLI
     {
         static void Main(string[] args)
         {
-            new Program();
+            _ = new Program();
         }
-
-
+        
         private static string OldVanillaPath = @"C:\Program Files (x86)\Steam\steamapps\common\Crusader Kings III Beta\game";
         private static string ModdedPath = @"C:\Program Files (x86)\Steam\steamapps\common\Crusader Kings III\game";
         private static string NewVanillaPath = @"C:\Program Files (x86)\Steam\steamapps\common\Crusader Kings III\game";

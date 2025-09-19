@@ -22,6 +22,19 @@ namespace CK3Analyser.Analysis
             }
         }
 
+        public void Visit(AnonymousBlock anonymousBlock)
+        {
+            foreach (var detector in Detectors)
+            {
+                detector.AnalyseBlock(anonymousBlock);
+            }
+
+            foreach (var child in anonymousBlock.Children)
+            {
+                child.Accept(this);
+            }
+        }
+
         public void Visit(Comment comment)
         {
             foreach (var detector in Detectors)
@@ -43,11 +56,11 @@ namespace CK3Analyser.Analysis
             }
         }
 
-        public void Visit(Core.Domain.KeyValuePair keyValuePair)
+        public void Visit(BinaryExpression binaryExpression)
         {
             foreach (var detector in Detectors)
             {
-                detector.AnalyseKeyValuePair(keyValuePair);
+                detector.AnalyseBinaryExpression(binaryExpression);
             }
         }
 

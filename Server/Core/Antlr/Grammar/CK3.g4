@@ -4,13 +4,13 @@ file : script EOF;
 script : ( 
     namedBlock
     | anonymousBlock 
-    | keyValuePair
+    | binaryExpression
     | anonymousToken
     | comment ) + ;
 
 namedBlock : token SCOPER '{' script? '}';
 anonymousBlock : '{' script? '}';
-keyValuePair : token SCOPER token;
+binaryExpression : token SCOPER token;
 anonymousToken : token;
 token : TOKEN ( ( '.' | '|' ) TOKEN)*;
 comment: COMMENT;
