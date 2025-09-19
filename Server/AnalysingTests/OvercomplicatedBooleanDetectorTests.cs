@@ -120,6 +120,22 @@ namespace CK3Analyser.Analysing
             Assert.Equal(2, logger.LogEntries.Where(x => x.Severity == Severity.Critical && x.Smell == Smell.OvercomplicatedBoolean_Absorption).Count());
         }
 
+        [Fact]
+        public void DetectsDistributivity()
+        {
+            //arrange
+            var logger = new Logger();
+            var detector = GetDetector(logger, severity_Distributivity: Severity.Critical, severity_Associativity: Severity.Debug);
+            var file = GetTestCase("OvercomplicatedBoolean/Distributivity", EntityType.ScriptedTrigger);
+
+            //act
+            detector.Visit(file);
+
+            //assert
+            Assert.Equal(2, logger.LogEntries.Where(x => x.Severity > Severity.Debug).Count());
+            Assert.Equal(2, logger.LogEntries.Where(x => x.Severity == Severity.Critical && x.Smell == Smell.OvercomplicatedBoolean_Distributivity).Count());
+        }
+
         private static AnalysisVisitor GetDetector(Logger logger, 
             Severity severity_DoubleNegation = Severity.Warning,
             Severity severity_Associativity = Severity.Warning,

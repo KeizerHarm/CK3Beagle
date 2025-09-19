@@ -1,0 +1,51 @@
+dummytrigger = {
+	#Should contain 2 cases
+
+	#1
+	AND = {
+		OR = {
+			aaa = yes
+			bbb = no
+		}
+		OR = {
+			aaa = yes
+			ccc = no
+		}
+	}
+
+	#Not an example
+	AND = {
+		OR = {
+			aaa = yes
+			bbb = no
+		}
+		OR = {
+			aaa = no
+			ccc = no
+		}
+	}
+
+	#2
+	OR = {
+		AND = {
+			aaa = yes
+			bbb = no
+		}
+		AND = {
+			aaa = yes
+			ccc = no
+		}
+	}
+
+	#Not an example
+	OR = {
+		AND = {
+			aaa = yes
+			bbb = no
+		}
+		AND = {
+			aaa = no
+			ccc = no
+		}
+	}
+}
