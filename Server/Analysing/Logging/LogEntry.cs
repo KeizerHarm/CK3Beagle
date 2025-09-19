@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace CK3Analyser.Analysis.Logging
+﻿namespace CK3Analyser.Analysis.Logging
 {
     public enum Severity
     {
@@ -27,7 +25,7 @@ namespace CK3Analyser.Analysis.Logging
 
         public readonly string Print()
         {
-            return $"{Severity.ToString().ToUpper()}: {Smell.GetCode()} - {Message} at {Location}";
+            return $"{Severity.ToString().ToUpper()}: {Smell.GetCode()} - \"{Message}\" at {Location}";
         }
     }
 }
