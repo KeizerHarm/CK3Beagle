@@ -29,7 +29,7 @@ namespace CK3Analyser.Analysing
         }
 
         [Fact]
-        public void LogsUnexpectedType()
+        public void DetectsUnexpectedType()
         {
             //arrange
             var logger = new Logger();

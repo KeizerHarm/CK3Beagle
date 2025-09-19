@@ -1,0 +1,43 @@
+dummytrigger = {
+	#Should contain 2 cases
+
+	#1
+	AND = {
+		aaa = yes
+		OR = {
+			aaa = yes
+			bbb = no
+		}
+		ccc = yes
+	}
+
+	#Counterexample
+	AND = {
+		aaa = yes
+		OR = {
+			aaa = no
+			bbb = no
+		}
+		ccc = yes
+	}
+
+	#2
+	OR = {
+		aaa = yes
+		AND = {
+			aaa = yes
+			bbb = no
+		}
+		ccc = yes
+	}
+
+	#Counterexample
+	OR = {
+		aaa = yes
+		AND = {
+			aaa = no
+			bbb = no
+		}
+		ccc = yes
+	}
+}

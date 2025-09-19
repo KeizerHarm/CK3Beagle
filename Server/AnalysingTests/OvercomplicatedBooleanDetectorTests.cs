@@ -104,6 +104,22 @@ namespace CK3Analyser.Analysing
             Assert.DoesNotContain(logger.LogEntries, x => x.Severity > Severity.Debug);
         }
 
+        [Fact]
+        public void DetectsAbsorption()
+        {
+            //arrange
+            var logger = new Logger();
+            var detector = GetDetector(logger, severity_Absorption: Severity.Critical, severity_Associativity: Severity.Debug, severity_Distributivity: Severity.Debug);
+            var file = GetTestCase("OvercomplicatedBoolean/Absorption", EntityType.ScriptedTrigger);
+
+            //act
+            detector.Visit(file);
+
+            //assert
+            Assert.Equal(2, logger.LogEntries.Where(x => x.Severity > Severity.Debug).Count());
+            Assert.Equal(2, logger.LogEntries.Where(x => x.Severity == Severity.Critical && x.Smell == Smell.OvercomplicatedBoolean_Absorption).Count());
+        }
+
         private static AnalysisVisitor GetDetector(Logger logger, 
             Severity severity_DoubleNegation = Severity.Warning,
             Severity severity_Associativity = Severity.Warning,
