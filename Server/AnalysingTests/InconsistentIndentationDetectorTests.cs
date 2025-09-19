@@ -1,30 +1,22 @@
 ﻿using CK3Analyser.Analysis;
 using CK3Analyser.Analysis.Detectors;
 using CK3Analyser.Analysis.Logging;
-using CK3Analyser.Core.Antlr;
 using CK3Analyser.Core.Domain;
 
-namespace AnalysingTests
+namespace CK3Analyser.Analysing
 {
-    public class InconsistentIndentationDetectorTests
+    public class InconsistentIndentationDetectorTests : BaseTest
     {
         [Theory]
-        [InlineData("ConsistentTabs", IndentationType.Tab)]
-        [InlineData("ConsistentFourSpaces", IndentationType.FourSpaces)]
-        [InlineData("ConsistentThreeSpaces", IndentationType.ThreeSpaces)]
-        [InlineData("ConsistentTwoSpaces", IndentationType.TwoSpaces)]
+        [InlineData("InconsistentIndentation/ConsistentTabs", IndentationType.Tab)]
+        [InlineData("InconsistentIndentation/ConsistentFourSpaces", IndentationType.FourSpaces)]
+        [InlineData("InconsistentIndentation/ConsistentThreeSpaces", IndentationType.ThreeSpaces)]
+        [InlineData("InconsistentIndentation/ConsistentTwoSpaces", IndentationType.TwoSpaces)]
         public void DetectsUsedType(string file, IndentationType expectedDetectedType)
         {
             //arrange
             var logger = new Logger();
-            var settings = new InconsistentIndentationDetector.Settings
-            {
-                Severity_Inconsistency = Severity.Info,
-                Severity_UnexpectedType = Severity.Warning,
-                DisregardBracketsInComments = true,
-                ExpectedIndentationType = expectedDetectedType
-            };
-            var visitor = GetDetector(settings, logger);
+            var visitor = GetDetector(logger, expectedIndentationType: expectedDetectedType);
 
             ScriptFile testcase = GetTestCase(file);
 
@@ -41,45 +33,31 @@ namespace AnalysingTests
         {
             //arrange
             var logger = new Logger();
-            var settings = new InconsistentIndentationDetector.Settings
-            {
-                Severity_Inconsistency = Severity.Info,
-                Severity_UnexpectedType = Severity.Warning,
-                DisregardBracketsInComments = true,
-                ExpectedIndentationType = IndentationType.FourSpaces
-            };
-            var visitor = GetDetector(settings, logger);
+            var visitor = GetDetector(logger, expectedIndentationType: IndentationType.FourSpaces, severity_UnexpectedType: Severity.Critical);
 
-            ScriptFile testcase = GetTestCase("ConsistentTabs");
+            ScriptFile testcase = GetTestCase("InconsistentIndentation/ConsistentTabs");
 
             //act
             visitor.Visit(testcase);
 
             //assert
-            Assert.Single(logger.LogEntries, x => x.Severity == Severity.Warning);
+            Assert.Single(logger.LogEntries, x => x.Severity == Severity.Critical);
             Assert.Single(logger.LogEntries, x => 
-                    x.Severity == Severity.Warning 
+                    x.Severity == Severity.Critical
                  && x.Message.Contains(IndentationType.Tab.ToString())
                  && x.Smell == Smell.InconsistentIndentation_UnexpectedType);
         }
 
         [Theory]
-        [InlineData("ConsistentTabs", true, false)]
-        [InlineData("ConsistentTabs", false, true)]
-        [InlineData("ConsistentTabs_SpacedWithBracket", false, false)]
-        [InlineData("ConsistentTabs_SpacedWithBracket", true, true)]
+        [InlineData("InconsistentIndentation/ConsistentTabs", true, false)]
+        [InlineData("InconsistentIndentation/ConsistentTabs", false, true)]
+        [InlineData("InconsistentIndentation/ConsistentTabs_SpacedWithBracket", false, false)]
+        [InlineData("InconsistentIndentation/ConsistentTabs_SpacedWithBracket", true, true)]
         public void RepectsSettingDisregardBracketsInComments(string testcase, bool disregardBracketsInComments, bool shouldError)
         {
             //arrange
             var logger = new Logger();
-            var settings = new InconsistentIndentationDetector.Settings
-            {
-                Severity_Inconsistency = Severity.Info,
-                Severity_UnexpectedType = Severity.Warning,
-                DisregardBracketsInComments = disregardBracketsInComments,
-                ExpectedIndentationType = IndentationType.Tab
-            };
-            var visitor = GetDetector(settings, logger);
+            var visitor = GetDetector(logger, disregardCommentedBracket: disregardBracketsInComments);
 
             ScriptFile file = GetTestCase(testcase);
 
@@ -102,40 +80,35 @@ namespace AnalysingTests
         {
             //arrange
             var logger = new Logger();
-            var settings = new InconsistentIndentationDetector.Settings
-            {
-                Severity_Inconsistency = Severity.Info,
-                Severity_UnexpectedType = Severity.Warning,
-                DisregardBracketsInComments = true,
-                ExpectedIndentationType = IndentationType.FourSpaces
-            };
-            var visitor = GetDetector(settings, logger);
+            var visitor = GetDetector(logger, severity_Inconsistency: Severity.Critical, expectedIndentationType: IndentationType.FourSpaces);
 
-            ScriptFile testcase = GetTestCase("InconsistentTabs");
+            ScriptFile testcase = GetTestCase("InconsistentIndentation/InconsistentTabs");
 
             //act
             visitor.Visit(testcase);
 
             //assert
-            Assert.Single(logger.LogEntries, x => x.Severity == Severity.Warning);
+            Assert.Single(logger.LogEntries, x => x.Severity == Severity.Critical);
             Assert.Single(logger.LogEntries, x =>
-                    x.Severity == Severity.Info
+                    x.Severity == Severity.Critical
                  && x.Smell == Smell.InconclusiveIndentation_Inconsistency);
         }
 
-        private ScriptFile GetTestCase(string caseName)
+        private static AnalysisVisitor GetDetector(
+            Logger logger,
+            Severity severity_Inconsistency = Severity.Warning,
+            Severity severity_UnexpectedType = Severity.Warning, 
+            bool disregardCommentedBracket = true, 
+            IndentationType expectedIndentationType = IndentationType.Tab)
         {
-            var stringToParse = File.ReadAllText(Path.Combine(AppContext.BaseDirectory, "Testcases/InconsistentIndentation", caseName + ".txt"));
+            var settings = new InconsistentIndentationDetector.Settings
+            {
+                Severity_Inconsistency = severity_Inconsistency,
+                Severity_UnexpectedType = severity_UnexpectedType,
+                DisregardBracketsInComments = disregardCommentedBracket,
+                ExpectedIndentationType = expectedIndentationType
+            };
 
-            var context = new Context("", ContextType.Old);
-            var expectedEntityType = EntityType.Root;
-            var parser = new AntlrParser();
-            var parsed = parser.ParseText(stringToParse, "", context, expectedEntityType);
-            return parsed;
-        }
-
-        private static AnalysisVisitor GetDetector(InconsistentIndentationDetector.Settings settings, Logger logger)
-        {
             var visitor = new AnalysisVisitor();
             var detector = new InconsistentIndentationDetector(logger, settings);
             visitor.Detectors.Add(detector);

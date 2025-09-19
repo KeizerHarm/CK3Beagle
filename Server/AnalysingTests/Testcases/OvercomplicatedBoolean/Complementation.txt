@@ -1,0 +1,4 @@
+dummytrigger = {
+	aaa = yes
+	aaa = no
+}

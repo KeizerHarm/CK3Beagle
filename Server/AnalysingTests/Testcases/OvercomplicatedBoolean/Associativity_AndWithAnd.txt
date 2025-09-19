@@ -1,0 +1,6 @@
+dummytrigger = {
+	aaa = yes
+	AND = {
+		bbb = no
+	}
+}

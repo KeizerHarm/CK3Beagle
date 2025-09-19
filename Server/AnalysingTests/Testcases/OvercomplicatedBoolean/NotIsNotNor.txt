@@ -1,0 +1,16 @@
+dummytrigger = {
+	NOT = {
+		#Comment child should not count
+		aa = yes
+	}
+
+	NOR = { #Proper version, NOR
+		aaa = yes
+		bbb = no
+	}
+
+	NOT = { #>1 children, smell
+		aaa = yes
+		bbb = yes
+	}
+}

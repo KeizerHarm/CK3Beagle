@@ -1,0 +1,8 @@
+dummytrigger = {
+	OR = {
+		aaa = yes
+		OR = {
+			bbb = no
+		}
+	}
+}

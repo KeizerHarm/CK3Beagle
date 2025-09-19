@@ -187,7 +187,7 @@ namespace CK3Analyser.Analysis.Detectors
 
             if (key == "NOT")
             {
-                if (childBlockKeys.Count() > 1)
+                if (childBlockKeys.Count() + childKeyValuePairKeys.Count() > 1)
                 {
                     logger.Log(
                         Smell.NotIsNotNor,
@@ -205,13 +205,12 @@ namespace CK3Analyser.Analysis.Detectors
                         namedBlock.GetIdentifier());
                 }
 
-                if (childKeyValuePairs.Any(x => x.Value.Equals("no", StringComparison.OrdinalIgnoreCase)))
+                if (AllChildrenAreNegated(namedBlock))
                 {
-                    var negatedTrigger = childKeyValuePairs.First(x => x.Value.Equals("no", StringComparison.OrdinalIgnoreCase));
                     logger.Log(
                         Smell.OvercomplicatedBoolean_DoubleNegation,
                         _settings.Severity_DoubleNegation,
-                        $"NOT contains {negatedTrigger}",
+                        $"All children of NOT are negated themselves",
                         namedBlock.GetIdentifier());
                 }
 
