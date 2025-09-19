@@ -1,0 +1,81 @@
+dummytrigger = {
+	#Should contain 13 cases
+	#1
+	NOT = {
+		aaa = no
+	}
+
+	#2
+	NOT = {
+		aaa != flag:test
+	}
+
+	#3
+	NOT = {
+		NOT = {
+			aaa = yes
+		}
+	}
+
+	#4
+	NOR = {
+		NOT = {
+			aaa = yes
+		}
+	}
+	
+	#5
+	NOR = {
+		NOR = {
+			aaa = yes
+		}
+	}
+	
+	#6
+	NOR = {
+		NAND = {
+			aaa = yes
+		}
+	}
+	
+	#7
+	NOR = {
+		aaa = no
+	}
+	
+	#8
+	NOR = {
+		aaa != flag:test
+	}
+
+	#9
+	NAND = {
+		NOT = {
+			aaa = yes
+		}
+	}
+	
+	#10
+	NAND = {
+		NOR = {
+			aaa = yes
+		}
+	}
+	
+	#11
+	NAND = {
+		NAND = {
+			aaa = yes
+		}
+	}
+	
+	#12
+	NAND = {
+		aaa = no
+	}
+	
+	#13
+	NAND = {
+		aaa != flag:test
+	}
+}

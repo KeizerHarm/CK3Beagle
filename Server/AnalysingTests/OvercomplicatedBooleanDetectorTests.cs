@@ -73,6 +73,37 @@ namespace CK3Analyser.Analysing
             Assert.Single(logger.LogEntries, x => x.Severity == Severity.Critical && x.Smell == Smell.NotIsNotNor);
         }
 
+        [Fact]
+        public void DetectsDoubleNegation()
+        {
+            //arrange
+            var logger = new Logger();
+            var detector = GetDetector(logger, severity_DoubleNegation: Severity.Critical, severity_NotIsNotNor: Severity.Debug);
+            var file = GetTestCase("OvercomplicatedBoolean/DoubleNegation", EntityType.ScriptedTrigger);
+
+            //act
+            detector.Visit(file);
+
+            //assert
+            Assert.Equal(13, logger.LogEntries.Count);
+            Assert.Equal(13, logger.LogEntries.Where(x => x.Severity == Severity.Critical && x.Smell == Smell.OvercomplicatedBoolean_DoubleNegation).Count());
+        }
+
+        [Fact]
+        public void DetectsDoubleNegation_NoCounterexamples()
+        {
+            //arrange
+            var logger = new Logger();
+            var detector = GetDetector(logger, severity_DoubleNegation: Severity.Critical, severity_NotIsNotNor: Severity.Debug);
+            var file = GetTestCase("OvercomplicatedBoolean/DoubleNegation_Counterexamples", EntityType.ScriptedTrigger);
+
+            //act
+            detector.Visit(file);
+
+            //assert
+            Assert.DoesNotContain(logger.LogEntries, x => x.Severity > Severity.Debug);
+        }
+
         private static AnalysisVisitor GetDetector(Logger logger, 
             Severity severity_DoubleNegation = Severity.Warning,
             Severity severity_Associativity = Severity.Warning,

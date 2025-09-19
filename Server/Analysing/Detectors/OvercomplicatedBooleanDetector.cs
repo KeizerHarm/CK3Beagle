@@ -196,15 +196,6 @@ namespace CK3Analyser.Analysis.Detectors
                         namedBlock.GetIdentifier());
                 }
 
-                if (childBlockKeys.Contains("NOT"))
-                {
-                    logger.Log(
-                        Smell.OvercomplicatedBoolean_DoubleNegation,
-                        _settings.Severity_DoubleNegation,
-                        "NOT contains NOT",
-                        namedBlock.GetIdentifier());
-                }
-
                 if (AllChildrenAreNegated(namedBlock))
                 {
                     logger.Log(

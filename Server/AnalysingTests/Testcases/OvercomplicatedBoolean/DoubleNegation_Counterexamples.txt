@@ -1,0 +1,78 @@
+dummytrigger = {
+	NOT = {
+		aaa = yes
+	}
+
+
+	NOT = {
+		aaa = flag:test
+	}
+
+
+	NOT = {
+		NOT = {
+			aaa = yes
+		}
+		bbb = yes
+	}
+
+
+	NOR = {
+		NOT = {
+			aaa = yes
+		}
+		bbb = yes
+	}
+	
+
+	NOR = {
+		NOR = {
+			aaa = yes
+		}
+		bbb = yes
+	}
+	
+
+	NOR = {
+		NAND = {
+			aaa = yes
+		}
+		bbb = yes
+	}
+	
+
+	NOR = {
+		aaa = no
+		bbb = yes
+	}
+
+
+	NAND = {
+		NOT = {
+			aaa = yes
+		}
+		bbb = yes
+	}
+	
+
+	NAND = {
+		NOR = {
+			aaa = yes
+		}
+		bbb = yes
+	}
+	
+
+	NAND = {
+		NAND = {
+			aaa = yes
+		}
+		bbb = yes
+	}
+	
+
+	NAND = {
+		aaa = no
+		bbb = yes
+	}
+}
