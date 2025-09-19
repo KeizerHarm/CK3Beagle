@@ -14,7 +14,7 @@ namespace CK3Analyser.Analysis.Detectors
 
         private Settings _settings;
 
-        public LargeUnitDetector(Action<LogEntry> logFunc, Settings settings) : base(logFunc)
+        public LargeUnitDetector(ILogger logger, Settings settings) : base(logger)
         {
             _settings = settings;
         }
@@ -24,13 +24,11 @@ namespace CK3Analyser.Analysis.Detectors
             var length = declaration.Raw.Split('\n').Length;
             if (length > _settings.MaxSize)
             {
-                var entry = new LogEntry
-                {
-                    Location = declaration.GetIdentifier(),
-                    Message = $"Large declaration detected: {length} lines",
-                    Severity = _settings.Severity
-                };
-                LogFunc(entry);
+                logger.Log(
+                    Smell.LargeUnit,
+                    _settings.Severity,
+                    $"Large declaration detected: {length} lines",
+                    declaration.GetIdentifier());
             }
         }
     }

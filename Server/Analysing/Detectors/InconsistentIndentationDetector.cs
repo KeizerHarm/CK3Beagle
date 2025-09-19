@@ -57,7 +57,7 @@ namespace CK3Analyser.Analysis.Detectors
 
         private Settings _settings;
 
-        public InconsistentIndentationDetector(Action<LogEntry> logFunc, Settings settings) : base(logFunc)
+        public InconsistentIndentationDetector(ILogger logger, Settings settings) : base(logger)
         {
             _settings = settings;
         }
@@ -67,22 +67,15 @@ namespace CK3Analyser.Analysis.Detectors
             if (string.IsNullOrWhiteSpace(scriptFile.Raw)) return;
 
             (var detectedIndentationType, var lines) = DetectIndentation(scriptFile);
-            LogFunc(new LogEntry
-            {
-                Location = scriptFile.GetIdentifier(),
-                Severity = Severity.Debug,
-                Message = "Detected indentation type " + detectedIndentationType
-            });
+            logger.Log(Smell.None, Severity.Debug, "Detected indentation type " + detectedIndentationType, scriptFile.GetIdentifier());
 
             if (detectedIndentationType != _settings.ExpectedIndentationType)
             {
-                LogFunc(new LogEntry
-                {
-                    Location = scriptFile.GetIdentifier(),
-                    Severity = _settings.Severity_UnexpectedType,
-                    Message = $"File uses indentation type {detectedIndentationType} instead of {_settings.ExpectedIndentationType}",
-                    Smell = Smell.InconsistentIndentation_UnexpectedType
-                });
+                logger.Log(
+                    Smell.InconsistentIndentation_UnexpectedType,
+                    _settings.Severity_UnexpectedType, 
+                    $"File uses indentation type {detectedIndentationType} instead of {_settings.ExpectedIndentationType}", 
+                    scriptFile.GetIdentifier());
             }
 
             if (detectedIndentationType == IndentationType.Inconclusive)
@@ -95,13 +88,11 @@ namespace CK3Analyser.Analysis.Detectors
             }
             if (abberatingIndentedLines > 0)
             {
-                LogFunc(new LogEntry
-                {
-                    Location = scriptFile.GetIdentifier(),
-                    Severity = _settings.Severity_Inconsistency,
-                    Message = $"File is detected to use {detectedIndentationType} but it has {abberatingIndentedLines} lines that don't",
-                    Smell = Smell.InconclusiveIndentation_Inconsistency
-                });
+                logger.Log(
+                    Smell.InconclusiveIndentation_Inconsistency,
+                    _settings.Severity_Inconsistency,
+                    $"File is detected to use {detectedIndentationType} but it has {abberatingIndentedLines} lines that don't",
+                    scriptFile.GetIdentifier());
             }
         }
 

@@ -13,21 +13,20 @@ namespace CK3Analyser.Analysis.Detectors
             "AND", "OR", "NOT", "NOR", "NAND"
         ];
 
-
         public struct Settings
         {
             public Severity Severity_DoubleNegation { get; set; }
-            public Severity Severity_DoubleAndOr { get; set; }
+            public Severity Severity_Associativity { get; set; }
             public Severity Severity_Distributivity { get; set; }
-            public Severity Severity_RepeatedTriggers { get; set; }
-            public Severity Severity_ComplementaryTriggers { get; set; }
-            public Severity Severity_NotWithMultipleChildren { get; set; }
-
+            public Severity Severity_Idempotency { get; set; }
+            public Severity Severity_Complementation { get; set; }
+            public Severity Severity_NotIsNotNor { get; set; }
+            public Severity Severity_Absorption { get; set; }
         }
 
         private Settings _settings;
 
-        public OvercomplicatedBooleanDetector(Action<LogEntry> logFunc, Settings settings) : base(logFunc)
+        public OvercomplicatedBooleanDetector(ILogger logger, Settings settings) : base(logger)
         {
             _settings = settings;
         }
@@ -44,6 +43,11 @@ namespace CK3Analyser.Analysis.Detectors
         {
             var key = namedBlock.Key.ToUpper();
 
+            if (key == "limit" || key == "trigger")
+            {
+                key = "AND";
+            }
+
             if (!Operators.Contains(key))
                 return;
 
@@ -52,34 +56,46 @@ namespace CK3Analyser.Analysis.Detectors
 
         public void AnalyseAsTriggerBlock(NamedBlock namedBlock, string key) { 
 
-            var namedBlockChildren = namedBlock.Children.OfType<NamedBlock>();
-            var childBlockKeys = namedBlockChildren.Select(x => x.Key.ToUpper());
-            var keyValuePairChildren = namedBlock.Children.OfType<Core.Domain.KeyValuePair>();
-            var childKeyValuePairKeys = keyValuePairChildren.Select(x => x.Key.ToLower());
+            var childNamedBlocks = namedBlock.Children.OfType<NamedBlock>();
+            var childBlockKeys = childNamedBlocks.Select(x => x.Key.ToUpper());
+            var childKeyValuePairs = namedBlock.Children.OfType<Core.Domain.KeyValuePair>();
+            var childKeyValuePairKeys = childKeyValuePairs.Select(x => x.Key.ToLower());
 
             if (key == "AND")
             {
                 if (childBlockKeys.Contains("AND"))
                 {
-                    var entry = new LogEntry
-                    {
-                        Location = namedBlock.GetIdentifier(),
-                        Message = "AND containing AND",
-                        Severity = _settings.Severity_DoubleAndOr
-                    };
-                    LogFunc(entry);
+                    logger.Log(
+                        Smell.OvercomplicatedBoolean_Associativity,
+                        _settings.Severity_Associativity,
+                        "AND containing AND",
+                        namedBlock.GetIdentifier());
                 }
 
-                var ORchildren = namedBlockChildren.Where(x => x.Key == "OR");
+                var ORchildren = childNamedBlocks.Where(x => x.Key == "OR");
                 if (HasRepeatedString(ORchildren.Select(x => x.Children.OfType<Core.Domain.KeyValuePair>().Select(y => y.Raw))))
                 {
-                    var entry = new LogEntry
+                    logger.Log(
+                        Smell.OvercomplicatedBoolean_Distributivity,
+                        _settings.Severity_Distributivity,
+                        "AND with ORs that share a trigger",
+                        namedBlock.GetIdentifier());
+                }
+
+                if (childBlockKeys.Contains("OR"))
+                {
+                    foreach (var orChild in childNamedBlocks.Where(x => x.Key == "OR"))
                     {
-                        Location = namedBlock.GetIdentifier(),
-                        Message = "AND with ORs that share a trigger",
-                        Severity = _settings.Severity_Distributivity
-                    };
-                    LogFunc(entry);
+                        if (HasRepeatedString(childKeyValuePairs.Select(x => x.Raw),
+                            orChild.Children.OfType<Core.Domain.KeyValuePair>().Select(x => x.Raw)))
+                        {
+                            logger.Log(
+                                Smell.OvercomplicatedBoolean_Absorption,
+                                _settings.Severity_Absorption,
+                                "AND with OR that includes a trigger in the parent AND",
+                                namedBlock.GetIdentifier());
+                        }
+                    }
                 }
             }
 
@@ -87,25 +103,37 @@ namespace CK3Analyser.Analysis.Detectors
             {
                 if (childBlockKeys.Contains("OR"))
                 {
-                    var entry = new LogEntry
-                    {
-                        Location = namedBlock.GetIdentifier(),
-                        Message = "OR containing OR",
-                        Severity = _settings.Severity_DoubleAndOr
-                    };
-                    LogFunc(entry);
+                    logger.Log(
+                        Smell.OvercomplicatedBoolean_Associativity,
+                        _settings.Severity_Associativity,
+                        "OR containing OR",
+                        namedBlock.GetIdentifier());
                 }
 
-                var ANDchildren = namedBlockChildren.Where(x => x.Key == "AND");
+                var ANDchildren = childNamedBlocks.Where(x => x.Key == "AND");
                 if (HasRepeatedString(ANDchildren.Select(x => x.Children.OfType<Core.Domain.KeyValuePair>().Select(y => y.Raw))))
                 {
-                    var entry = new LogEntry
+                    logger.Log(
+                        Smell.OvercomplicatedBoolean_Distributivity,
+                        _settings.Severity_Distributivity,
+                        "OR with ANDs that share a trigger",
+                        namedBlock.GetIdentifier());
+                }
+
+                if (childBlockKeys.Contains("AND"))
+                {
+                    foreach (var andChild in childNamedBlocks.Where(x => x.Key == "AND"))
                     {
-                        Location = namedBlock.GetIdentifier(),
-                        Message = "OR with ANDs that share a trigger",
-                        Severity = _settings.Severity_Distributivity
-                    };
-                    LogFunc(entry);
+                        if (HasRepeatedString(childKeyValuePairs.Select(x => x.Raw),
+                            andChild.Children.OfType<Core.Domain.KeyValuePair>().Select(x => x.Raw)))
+                        {
+                            logger.Log(
+                                Smell.OvercomplicatedBoolean_Absorption,
+                                _settings.Severity_Absorption,
+                                "OR with AND that includes a trigger in the parent OR",
+                                namedBlock.GetIdentifier());
+                        }
+                    }
                 }
             }
 
@@ -115,25 +143,45 @@ namespace CK3Analyser.Analysis.Detectors
             {
                 if (!seenRaws.Add(item.Raw))
                 {
-                    var entry = new LogEntry
-                    {
-                        Location = namedBlock.GetIdentifier(),
-                        Message = $"Duplicate trigger: {item.Raw}",
-                        Severity = _settings.Severity_RepeatedTriggers
-                    };
-                    LogFunc(entry);
+                    logger.Log(
+                        Smell.OvercomplicatedBoolean_Idempotency,
+                        _settings.Severity_Idempotency,
+                        $"Duplicate trigger: {item.Raw}",
+                        namedBlock.GetIdentifier());
                     continue;
                 }
 
                 if (!seenKeys.Add(item.Key) && (item.Value.Equals("yes", StringComparison.OrdinalIgnoreCase) || item.Value.Equals("no", StringComparison.OrdinalIgnoreCase)))
                 {
-                    var entry = new LogEntry
-                    {
-                        Location = namedBlock.GetIdentifier(),
-                        Message = $"Duplicate triggers: {item.Raw}",
-                        Severity = _settings.Severity_ComplementaryTriggers
-                    };
-                    LogFunc(entry);
+                    logger.Log(
+                        Smell.OvercomplicatedBoolean_Complementation,
+                        _settings.Severity_Complementation,
+                        $"Complementary triggers: {item.Raw} and its inverse",
+                        namedBlock.GetIdentifier());
+                }
+            }
+
+            if (key == "NOR")
+            {
+                if (AllChildrenAreNegated(namedBlock))
+                {
+                    logger.Log(
+                        Smell.OvercomplicatedBoolean_DoubleNegation,
+                        _settings.Severity_DoubleNegation,
+                        "All children of NOR are negated themselves",
+                        namedBlock.GetIdentifier());
+                }
+            }
+
+            if (key == "NAND")
+            {
+                if (AllChildrenAreNegated(namedBlock))
+                {
+                    logger.Log(
+                        Smell.OvercomplicatedBoolean_DoubleNegation,
+                        _settings.Severity_DoubleNegation,
+                        "All children of NAND are negated themselves",
+                        namedBlock.GetIdentifier());
                 }
             }
 
@@ -141,66 +189,81 @@ namespace CK3Analyser.Analysis.Detectors
             {
                 if (childBlockKeys.Count() > 1)
                 {
-                    var entry = new LogEntry
-                    {
-                        Location = namedBlock.GetIdentifier(),
-                        Message = $"NOT containing multiple elements",
-                        Severity = _settings.Severity_NotWithMultipleChildren
-                    };
-                    LogFunc(entry);
+                    logger.Log(
+                        Smell.NotIsNotNor,
+                        _settings.Severity_NotIsNotNor,
+                        "NOT containing multiple elements",
+                        namedBlock.GetIdentifier());
                 }
 
                 if (childBlockKeys.Contains("NOT"))
                 {
-                    var entry = new LogEntry
-                    {
-                        Location = namedBlock.GetIdentifier(),
-                        Message = $"Double negation - NOT contains NOT",
-                        Severity = _settings.Severity_DoubleNegation
-                    };
-                    LogFunc(entry);
+                    logger.Log(
+                        Smell.OvercomplicatedBoolean_DoubleNegation,
+                        _settings.Severity_DoubleNegation,
+                        "NOT contains NOT",
+                        namedBlock.GetIdentifier());
                 }
 
-                if (keyValuePairChildren.Any(x => x.Value.Equals("no", StringComparison.OrdinalIgnoreCase)))
+                if (childKeyValuePairs.Any(x => x.Value.Equals("no", StringComparison.OrdinalIgnoreCase)))
                 {
-                    var entry = new LogEntry
-                    {
-                        Location = namedBlock.GetIdentifier(),
-                        Message = $"Double negation - NOT contains trigger = no",
-                        Severity = _settings.Severity_DoubleNegation
-                    };
-                    LogFunc(entry);
+                    var negatedTrigger = childKeyValuePairs.First(x => x.Value.Equals("no", StringComparison.OrdinalIgnoreCase));
+                    logger.Log(
+                        Smell.OvercomplicatedBoolean_DoubleNegation,
+                        _settings.Severity_DoubleNegation,
+                        $"NOT contains {negatedTrigger}",
+                        namedBlock.GetIdentifier());
                 }
 
                 if (childBlockKeys.Contains("NOR"))
                 {
-                    var entry = new LogEntry
-                    {
-                        Location = namedBlock.GetIdentifier(),
-                        Message = $"Double negation - NOT contains NOR",
-                        Severity = _settings.Severity_DoubleNegation
-                    };
-                    LogFunc(entry);
+                    logger.Log(
+                        Smell.OvercomplicatedBoolean_DoubleNegation,
+                        _settings.Severity_DoubleNegation,
+                        "NOT contains NOR",
+                        namedBlock.GetIdentifier());
                 }
 
                 if (childBlockKeys.Contains("NAND"))
                 {
-                    var entry = new LogEntry
-                    {
-                        Location = namedBlock.GetIdentifier(),
-                        Message = $"Double negation - NOT contains NAND",
-                        Severity = _settings.Severity_DoubleNegation
-                    };
-                    LogFunc(entry);
+                    logger.Log(
+                        Smell.OvercomplicatedBoolean_DoubleNegation,
+                        _settings.Severity_DoubleNegation,
+                        "NOT contains NAND",
+                        namedBlock.GetIdentifier());
                 }
             }
         }
 
+        private bool AllChildrenAreNegated(NamedBlock namedBlock)
+        {
+            var blockChildrenToConsider = namedBlock.Children.OfType<NamedBlock>();
+            var keyValuePairChildrenToConsider = namedBlock.Children.OfType<Core.Domain.KeyValuePair>();
+
+            return blockChildrenToConsider.All(x => x.Key.ToUpper() == "NOT" || x.Key.ToUpper() == "NOR" || x.Key.ToUpper() == "NAND")
+                && keyValuePairChildrenToConsider.All(x => (x.Value.ToLower() == "no") || x.Scoper == "!=")
+                && blockChildrenToConsider.Count() + keyValuePairChildrenToConsider.Count() > 0;
+        }
+
+        static bool HasRepeatedString(IEnumerable<string> list1, IEnumerable<string> list2)
+        {
+            var seen = new HashSet<string>(list1);
+            foreach (var str in list2)
+            {
+                if (seen.Contains(str))
+                {
+                    return true;
+                }
+            }
+            return false;
+        }
+
+
         static bool HasRepeatedString(IEnumerable<IEnumerable<string>> listOfLists)
         {
+            var seen = new HashSet<string>();
             foreach (var sublist in listOfLists)
             {
-                var seen = new HashSet<string>();
                 foreach (var str in sublist)
                 {
                     if (!seen.Add(str))
@@ -209,7 +272,7 @@ namespace CK3Analyser.Analysis.Detectors
                     }
                 }
             }
-            return false; // No repeats found
+            return false;
         }
     }
 }

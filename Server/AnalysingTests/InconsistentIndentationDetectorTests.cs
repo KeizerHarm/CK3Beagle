@@ -136,9 +136,8 @@ namespace AnalysingTests
 
         private static AnalysisVisitor GetDetector(InconsistentIndentationDetector.Settings settings, Logger logger)
         {
-            var logFunc = logger.Log;
             var visitor = new AnalysisVisitor();
-            var detector = new InconsistentIndentationDetector(logFunc, settings);
+            var detector = new InconsistentIndentationDetector(logger, settings);
             visitor.Detectors.Add(detector);
             return visitor;
         }

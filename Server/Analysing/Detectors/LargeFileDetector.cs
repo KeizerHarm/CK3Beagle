@@ -14,7 +14,7 @@ namespace CK3Analyser.Analysis.Detectors
 
         private Settings _settings;
 
-        public LargeFileDetector(Action<LogEntry> logFunc, Settings settings) : base(logFunc)
+        public LargeFileDetector(ILogger logger, Settings settings) : base(logger)
         {
             _settings = settings;
         }
@@ -23,13 +23,11 @@ namespace CK3Analyser.Analysis.Detectors
             var length = scriptFile.Raw.Split('\n').Length;
             if (length > _settings.MaxSize)
             {
-                var entry = new LogEntry
-                {
-                    Location = scriptFile.GetIdentifier(),
-                    Message = $"Large file detected: {length} lines",
-                    Severity = _settings.Severity
-                };
-                LogFunc(entry);
+                logger.Log(
+                    Smell.LargeFile, 
+                    _settings.Severity,
+                    $"Large file detected: {length} lines",
+                    scriptFile.GetIdentifier());
             }
         }
     }

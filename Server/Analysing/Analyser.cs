@@ -9,11 +9,20 @@ namespace CK3Analyser.Analysis
         public void Analyse(Context context)
         {
             var logger = new Logger();
-            var logFunc = logger.Log;
             var visitor = new AnalysisVisitor();
             //visitor.Detectors.Add(new LargeFileDetector(logFunc));
             //visitor.Detectors.Add(new LargeUnitDetector(logFunc));
-            //visitor.Detectors.Add(new OvercomplicatedBooleanDetector(logFunc));
+            visitor.Detectors.Add(new OvercomplicatedBooleanDetector(logger,
+                new OvercomplicatedBooleanDetector.Settings
+                {
+                    Severity_Absorption = Severity.Critical,
+                    Severity_Associativity = Severity.Critical,
+                    Severity_Complementation = Severity.Critical,
+                    Severity_Distributivity = Severity.Critical,
+                    Severity_DoubleNegation = Severity.Critical,
+                    Severity_Idempotency = Severity.Critical,
+                    Severity_NotIsNotNor = Severity.Critical
+                }));
             //visitor.Detectors.Add(new InconsistentIndentationDetector(logFunc));
             foreach (var file in context.Files)
             {

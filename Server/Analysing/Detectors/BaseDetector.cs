@@ -1,16 +1,15 @@
 ﻿using CK3Analyser.Analysis.Logging;
 using CK3Analyser.Core.Domain;
-using System;
 
 namespace CK3Analyser.Analysis.Detectors
 {
     public abstract class BaseDetector
     {
-        protected Action<LogEntry> LogFunc;
+        protected ILogger logger;
 
-        public BaseDetector(Action<LogEntry> logFunc)
+        public BaseDetector(ILogger logger)
         {
-            LogFunc = logFunc;
+            this.logger = logger;
         }
 
         public virtual void AnalyseBlock(Block block) { }

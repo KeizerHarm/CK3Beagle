@@ -6,26 +6,6 @@ namespace CK3Analyser.Analysis.Logging
     {
         Debug, Info, Warning, Critical
     }
-    public enum Smell
-    {
-        InconsistentIndentation_UnexpectedType,
-        InconclusiveIndentation_Inconsistency
-    }
-    public static class SmellExtensions
-    {
-        public static string GetCode(this Smell smell)
-        {
-            switch (smell)
-            {
-                case Smell.InconsistentIndentation_UnexpectedType:
-                    return "II.1";
-                case Smell.InconclusiveIndentation_Inconsistency:
-                    return "II.2";
-                default:
-                    throw new ArgumentException();
-            }
-        }
-    }
     public struct LogEntry
     {
         public Severity Severity { get; set; }
@@ -33,6 +13,21 @@ namespace CK3Analyser.Analysis.Logging
         public string Location { get; set; }
         public int AffectedAreaStart { get; set; }
         public int AffectedAreaEnd { get; set; }
-        public Smell? Smell { get; set; }
+        public Smell Smell { get; set; }
+
+        public LogEntry(Smell smell, Severity severity, string message, string location, int affectedAreaStart = 0, int affectedAreaEnd = 0) : this()
+        {
+            Severity = severity;
+            Message = message;
+            Location = location;
+            Smell = smell;
+            AffectedAreaStart = affectedAreaStart;
+            AffectedAreaEnd = affectedAreaEnd;
+        }
+
+        public readonly string Print()
+        {
+            return $"{Severity.ToString().ToUpper()}: {Smell.GetCode()} - {Message} at {Location}";
+        }
     }
 }
