@@ -77,10 +77,10 @@ namespace CK3Analyser.Rebasing
                 foreach (var decl in moddedFile.Declarations)
                 {
                     var moddedDecl = decl.Value;
-                    if (old_Relevant.Declarations[(int)moddedDecl.EntityType].ContainsKey(decl.Key))
+                    if (old_Relevant.Declarations[(int)moddedDecl.DeclarationType].ContainsKey(decl.Key))
                     {
-                        var oldDecl = old_Relevant.Declarations[(int)moddedDecl.EntityType][decl.Key];
-                        var newDecl = new_Relevant.Declarations[(int)moddedDecl.EntityType][decl.Key];
+                        var oldDecl = old_Relevant.Declarations[(int)moddedDecl.DeclarationType][decl.Key];
+                        var newDecl = new_Relevant.Declarations[(int)moddedDecl.DeclarationType][decl.Key];
 
                         if (oldDecl.Raw == newDecl.Raw)
                         {

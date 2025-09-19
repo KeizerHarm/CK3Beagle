@@ -1,6 +1,7 @@
 ﻿using Antlr4.Runtime;
 using Antlr4.Runtime.Misc;
 using CK3Analyser.Core.Domain;
+using CK3Analyser.Core.Domain.Entities;
 using System.Linq;
 
 namespace CK3Analyser.Core.Antlr
@@ -10,14 +11,14 @@ namespace CK3Analyser.Core.Antlr
         private readonly string rawFile;
         private readonly Context domainContext;
         private readonly string relativePath;
-        private readonly EntityType expectedEntityType;
+        private readonly DeclarationType expectedDeclarationType;
 
-        public DomainVisitor(string rawFile, Context context, string relativePath, EntityType expectedEntityType)
+        public DomainVisitor(string rawFile, Context context, string relativePath, DeclarationType expectedDeclarationType)
         {
             this.rawFile = rawFile;
             domainContext = context;
             this.relativePath = relativePath;
-            this.expectedEntityType = expectedEntityType;
+            this.expectedDeclarationType = expectedDeclarationType;
         }
 
         private string GetRawContents(ParserRuleContext context)
@@ -34,7 +35,7 @@ namespace CK3Analyser.Core.Antlr
         {
             if (string.IsNullOrWhiteSpace(rawFile))
             {
-                var file = new ScriptFile(domainContext, relativePath, expectedEntityType, rawFile);
+                var file = new ScriptFile(domainContext, relativePath, expectedDeclarationType, rawFile);
                 file.Raw = "";
             }
 
@@ -43,7 +44,7 @@ namespace CK3Analyser.Core.Antlr
 
         public override ScriptFile VisitScript([NotNull] CK3Parser.ScriptContext context)
         {
-            var file = new ScriptFile(domainContext, relativePath, expectedEntityType, rawFile);
+            var file = new ScriptFile(domainContext, relativePath, expectedDeclarationType, rawFile);
             file.Raw = GetRawContents(context);
 
             HandleNamedBlocks(context, file);
@@ -59,9 +60,9 @@ namespace CK3Analyser.Core.Antlr
             foreach (var namedBlock in namedBlocks)
             {
                 var key = namedBlock.token().GetText();
-                var entityType = file.ExpectedEntityType;
+                var declarationType = file.ExpectedDeclarationType;
 
-                var declaration = new Declaration(key, entityType);
+                var declaration = new Declaration(key, declarationType);
                 declaration.Raw = namedBlock.ToString();
                 file.AddDeclaration(declaration);
             }

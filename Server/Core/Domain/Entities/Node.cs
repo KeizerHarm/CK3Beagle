@@ -1,7 +1,7 @@
 ﻿using System.Linq;
 using System.Text;
 
-namespace CK3Analyser.Core.Domain
+namespace CK3Analyser.Core.Domain.Entities
 {
     public class Node
     {

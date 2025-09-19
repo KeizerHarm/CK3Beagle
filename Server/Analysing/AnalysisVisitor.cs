@@ -1,5 +1,6 @@
 ﻿using CK3Analyser.Analysis.Detectors;
 using CK3Analyser.Core.Domain;
+using CK3Analyser.Core.Domain.Entities;
 using System.Collections.Generic;
 
 namespace CK3Analyser.Analysis

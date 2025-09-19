@@ -1,5 +1,6 @@
 ﻿using CK3Analyser.Core.Antlr;
 using CK3Analyser.Core.Domain;
+using CK3Analyser.Core.Domain.Entities;
 using CK3Analyser.Core.Fast;
 
 namespace CK3Analyser.Core
@@ -22,13 +23,13 @@ namespace CK3Analyser.Core
 
             var relativePath = "";
             var context = new Context("", ContextType.Old);
-            var expectedEntityType = EntityType.Root;
+            var expectedDeclarationType = DeclarationType.Debug;
             var parser = GetParser(parserType);
 
-            var expectedScriptFile = new ScriptFile(context, relativePath, expectedEntityType, stringToParse);
+            var expectedScriptFile = new ScriptFile(context, relativePath, expectedDeclarationType, stringToParse);
 
             //act
-            var parsed = parser.ParseText(stringToParse, relativePath, context, expectedEntityType);
+            var parsed = parser.ParseText(stringToParse, relativePath, context, expectedDeclarationType);
 
             //assert
             AssertNodesEqual(expectedScriptFile, parsed);
@@ -43,11 +44,11 @@ namespace CK3Analyser.Core
 
             var relativePath = "";
             var context = new Context("", ContextType.Old);
-            var expectedEntityType = EntityType.Root;
+            var expectedDeclarationType = DeclarationType.Debug;
             var parser = GetParser(parserType);
 
-            var expectedScriptFile = new ScriptFile(context, relativePath, expectedEntityType, stringToParse);
-            var expectedDecl = new Declaration("aaa", expectedEntityType)
+            var expectedScriptFile = new ScriptFile(context, relativePath, expectedDeclarationType, stringToParse);
+            var expectedDecl = new Declaration("aaa", expectedDeclarationType)
             {
                 Raw = stringToParse
             };
@@ -60,7 +61,7 @@ namespace CK3Analyser.Core
             expectedScriptFile.AddDeclaration(expectedDecl);
 
             //act
-            var parsed = parser.ParseText(stringToParse, relativePath, context, expectedEntityType);
+            var parsed = parser.ParseText(stringToParse, relativePath, context, expectedDeclarationType);
 
             //assert
             AssertNodesEqual(expectedScriptFile, parsed);
@@ -76,11 +77,11 @@ namespace CK3Analyser.Core
 
             var relativePath = "";
             var context = new Context("", ContextType.Old);
-            var expectedEntityType = EntityType.Root;
+            var expectedDeclarationType = DeclarationType.Debug;
             var parser = GetParser(parserType);
 
-            var expectedScriptFile = new ScriptFile(context, relativePath, expectedEntityType, stringToParse);
-            var expectedDecl = new Declaration("aaa", expectedEntityType)
+            var expectedScriptFile = new ScriptFile(context, relativePath, expectedDeclarationType, stringToParse);
+            var expectedDecl = new Declaration("aaa", expectedDeclarationType)
             {
                 Raw = "aaa = { b = c }"
             };
@@ -99,7 +100,7 @@ namespace CK3Analyser.Core
             expectedScriptFile.AddChild(expectedComment);
 
             //act
-            var parsed = parser.ParseText(stringToParse, relativePath, context, expectedEntityType);
+            var parsed = parser.ParseText(stringToParse, relativePath, context, expectedDeclarationType);
 
             //assert
             AssertNodesEqual(expectedScriptFile, parsed);
@@ -119,7 +120,7 @@ namespace CK3Analyser.Core
                 Assert.Equal(actual.PrevSibling.NextSibling, actual);
             }
 
-            if (expected.GetType().IsAssignableTo(typeof(Block)))
+            if (expected.GetType().IsAssignableFrom(typeof(Block)))
             {
                 AssertBlocksEqual((Block)expected, (Block)actual);
             }
@@ -175,7 +176,7 @@ namespace CK3Analyser.Core
         private void AssertScriptFilesEqual(ScriptFile expected, ScriptFile actual)
         {
             Assert.Equal(expected.RelativePath, actual.RelativePath);
-            Assert.Equal(expected.ExpectedEntityType, actual.ExpectedEntityType);
+            Assert.Equal(expected.ExpectedDeclarationType, actual.ExpectedDeclarationType);
             Assert.Equal(expected.Context, actual.Context);
             Assert.Equal(expected.Declarations.Count, actual.Declarations.Count);
         }
@@ -191,7 +192,7 @@ namespace CK3Analyser.Core
         }
         private void AssertDeclarationsEqual(Declaration expected, Declaration actual)
         {
-            Assert.Equal(expected.EntityType, actual.EntityType);
+            Assert.Equal(expected.DeclarationType, actual.DeclarationType);
         }
 
         private static ICk3Parser GetParser(string parserType)

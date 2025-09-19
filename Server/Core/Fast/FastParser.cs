@@ -1,4 +1,5 @@
 ﻿using CK3Analyser.Core.Domain;
+using CK3Analyser.Core.Domain.Entities;
 using System;
 using System.IO;
 
@@ -6,16 +7,16 @@ namespace CK3Analyser.Core.Fast
 {
     public class FastParser : ICk3Parser
     {
-        public ScriptFile ParseFile(string path, Context context, EntityType expectedEntityType)
+        public ScriptFile ParseFile(string path, Context context, DeclarationType expectedDeclarationType)
         {
             var relativePath = Path.GetRelativePath(context.Path, path);
             var input = File.ReadAllText(path);
-            return ParseText(input, relativePath, context, expectedEntityType);
+            return ParseText(input, relativePath, context, expectedDeclarationType);
         }
 
-        public ScriptFile ParseText(string input, string relativePath, Context context, EntityType expectedEntityType)
+        public ScriptFile ParseText(string input, string relativePath, Context context, DeclarationType expectedDeclarationType)
         {
-            var file = new ScriptFile(context, relativePath, expectedEntityType, input);
+            var file = new ScriptFile(context, relativePath, expectedDeclarationType, input);
             GatherDeclarations(file);
             return file;
         }
@@ -64,7 +65,7 @@ namespace CK3Analyser.Core.Fast
                             var raw = text.Substring(currentDeclarationStartIndex, index - currentDeclarationStartIndex + 1);
                             var preambleLength = Math.Max(0, currentDeclarationStartIndex - prevDeclarationEndIndex - 1);
                             var preamble = text.Substring(prevDeclarationEndIndex + 1, preambleLength);
-                            var decl = new Declaration(currentDeclarationToken, file.ExpectedEntityType)
+                            var decl = new Declaration(currentDeclarationToken, file.ExpectedDeclarationType)
                             {
                                 Raw = preamble + raw
                             };
@@ -81,7 +82,7 @@ namespace CK3Analyser.Core.Fast
                 var raw = text.Substring(currentDeclarationStartIndex, length - currentDeclarationStartIndex - 1);
                 var preambleLength = Math.Max(0, currentDeclarationStartIndex - prevDeclarationEndIndex - 1);
                 var preamble = text.Substring(prevDeclarationEndIndex + 1, preambleLength);
-                var decl = new Declaration(currentDeclarationToken, file.ExpectedEntityType)
+                var decl = new Declaration(currentDeclarationToken, file.ExpectedDeclarationType)
                 {
                     Raw = preamble + raw
                 };

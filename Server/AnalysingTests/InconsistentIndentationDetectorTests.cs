@@ -1,7 +1,7 @@
 ﻿using CK3Analyser.Analysis;
 using CK3Analyser.Analysis.Detectors;
 using CK3Analyser.Analysis.Logging;
-using CK3Analyser.Core.Domain;
+using CK3Analyser.Core.Domain.Entities;
 
 namespace CK3Analyser.Analysing
 {

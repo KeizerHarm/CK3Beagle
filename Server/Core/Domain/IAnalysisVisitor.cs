@@ -1,4 +1,6 @@
-﻿namespace CK3Analyser.Core.Domain
+﻿using CK3Analyser.Core.Domain.Entities;
+
+namespace CK3Analyser.Core.Domain
 {
     public interface IAnalysisVisitor
     {

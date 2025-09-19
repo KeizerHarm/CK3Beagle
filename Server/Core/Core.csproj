@@ -10,14 +10,28 @@
   </ItemGroup>
 
   <ItemGroup>
+    <AdditionalFiles Include="Schemas\Building.yml" />
+    <AdditionalFiles Include="Schemas\CharacterInteraction.yml" />
+    <AdditionalFiles Include="Schemas\ScriptedEffect.yml" />
+  </ItemGroup>
+
+  <ItemGroup>
     <Antlr4 Include="Antlr\Grammar\CK3.g4">
       <Package>CK3Analyser.Core</Package>
     </Antlr4>
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Generation\Generation.csproj" OutputItemType="Analyzer" ReferenceOutputAssembly="false" />
   </ItemGroup>
   
   <ItemGroup>
     <PackageReference Include="Antlr4.Runtime.Standard" Version="4.11.1" />
     <PackageReference Include="Antlr4BuildTasks" Version="12.2" PrivateAssets="all" />
+  </ItemGroup>
+  
+  <ItemGroup>
+    <Folder Include="Generated\" />
   </ItemGroup>
 
 </Project>

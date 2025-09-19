@@ -15,7 +15,7 @@ namespace CK3Analyser.Analysing
             //arrange
             var logger = new Logger();
             var detector = GetDetector(logger, severity_Associativity: Severity.Critical);
-            var file = GetTestCase(testcase, EntityType.ScriptedTrigger);
+            var file = GetTestCase(testcase, DeclarationType.ScriptedTrigger);
 
             //act
             detector.Visit(file);
@@ -31,7 +31,7 @@ namespace CK3Analyser.Analysing
             //arrange
             var logger = new Logger();
             var detector = GetDetector(logger, severity_Idempotency: Severity.Critical);
-            var file = GetTestCase("OvercomplicatedBoolean/Idempotency", EntityType.ScriptedTrigger);
+            var file = GetTestCase("OvercomplicatedBoolean/Idempotency", DeclarationType.ScriptedTrigger);
 
             //act
             detector.Visit(file);
@@ -47,7 +47,7 @@ namespace CK3Analyser.Analysing
             //arrange
             var logger = new Logger();
             var detector = GetDetector(logger, severity_Complementation: Severity.Critical);
-            var file = GetTestCase("OvercomplicatedBoolean/Complementation", EntityType.ScriptedTrigger);
+            var file = GetTestCase("OvercomplicatedBoolean/Complementation", DeclarationType.ScriptedTrigger);
 
             //act
             detector.Visit(file);
@@ -63,7 +63,7 @@ namespace CK3Analyser.Analysing
             //arrange
             var logger = new Logger();
             var detector = GetDetector(logger, severity_NotIsNotNor: Severity.Critical);
-            var file = GetTestCase("OvercomplicatedBoolean/NotIsNotNor", EntityType.ScriptedTrigger);
+            var file = GetTestCase("OvercomplicatedBoolean/NotIsNotNor", DeclarationType.ScriptedTrigger);
 
             //act
             detector.Visit(file);
@@ -79,7 +79,7 @@ namespace CK3Analyser.Analysing
             //arrange
             var logger = new Logger();
             var detector = GetDetector(logger, severity_DoubleNegation: Severity.Critical, severity_NotIsNotNor: Severity.Debug);
-            var file = GetTestCase("OvercomplicatedBoolean/DoubleNegation", EntityType.ScriptedTrigger);
+            var file = GetTestCase("OvercomplicatedBoolean/DoubleNegation", DeclarationType.ScriptedTrigger);
 
             //act
             detector.Visit(file);
@@ -95,7 +95,7 @@ namespace CK3Analyser.Analysing
             //arrange
             var logger = new Logger();
             var detector = GetDetector(logger, severity_DoubleNegation: Severity.Critical, severity_NotIsNotNor: Severity.Debug);
-            var file = GetTestCase("OvercomplicatedBoolean/DoubleNegation_Counterexamples", EntityType.ScriptedTrigger);
+            var file = GetTestCase("OvercomplicatedBoolean/DoubleNegation_Counterexamples", DeclarationType.ScriptedTrigger);
 
             //act
             detector.Visit(file);
@@ -110,7 +110,7 @@ namespace CK3Analyser.Analysing
             //arrange
             var logger = new Logger();
             var detector = GetDetector(logger, severity_Absorption: Severity.Critical, severity_Associativity: Severity.Debug, severity_Distributivity: Severity.Debug);
-            var file = GetTestCase("OvercomplicatedBoolean/Absorption", EntityType.ScriptedTrigger);
+            var file = GetTestCase("OvercomplicatedBoolean/Absorption", DeclarationType.ScriptedTrigger);
 
             //act
             detector.Visit(file);
@@ -126,7 +126,7 @@ namespace CK3Analyser.Analysing
             //arrange
             var logger = new Logger();
             var detector = GetDetector(logger, severity_Distributivity: Severity.Critical, severity_Associativity: Severity.Debug);
-            var file = GetTestCase("OvercomplicatedBoolean/Distributivity", EntityType.ScriptedTrigger);
+            var file = GetTestCase("OvercomplicatedBoolean/Distributivity", DeclarationType.ScriptedTrigger);
 
             //act
             detector.Visit(file);

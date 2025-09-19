@@ -1,4 +1,5 @@
-﻿using System;
+﻿using CK3Analyser.Core.Domain.Entities;
+using System;
 using System.Collections.Generic;
 
 namespace CK3Analyser.Core.Domain
@@ -24,8 +25,8 @@ namespace CK3Analyser.Core.Domain
             Type = type;
             Files =  new Dictionary<string, ScriptFile>();
 
-            Declarations = new Dictionary<string, Declaration>[Enum.GetValues<EntityType>().Length];
-            for (int i = 0; i < Enum.GetValues<EntityType>().Length; i++)
+            Declarations = new Dictionary<string, Declaration>[Enum.GetValues<DeclarationType>().Length];
+            for (int i = 0; i < Enum.GetValues<DeclarationType>().Length; i++)
             {
                 Declarations[i] = new Dictionary<string, Declaration>();
             }
@@ -37,7 +38,7 @@ namespace CK3Analyser.Core.Domain
 
             foreach (var declaration in file.Declarations)
             {
-                Declarations[(int)declaration.Value.EntityType].Add(declaration.Key, declaration.Value);
+                Declarations[(int)declaration.Value.DeclarationType].Add(declaration.Key, declaration.Value);
             }
         }
     }

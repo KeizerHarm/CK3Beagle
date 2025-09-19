@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace CK3Analyser.Core.Domain
+namespace CK3Analyser.Core.Domain.Entities
 {
     public class AnonymousBlock : Block
     {

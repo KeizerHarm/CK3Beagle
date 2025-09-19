@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace CK3Analyser.Core.Domain
+namespace CK3Analyser.Core.Domain.Entities
 {
     public class ScriptFile : Block
     {
@@ -8,14 +8,14 @@ namespace CK3Analyser.Core.Domain
         public string RelativePath { get; set; }
         public OrderedDictionary<string, Declaration> Declarations { get; private set; } = [];
 
-        public EntityType ExpectedEntityType { get; }
+        public DeclarationType ExpectedDeclarationType { get; }
 
-        public ScriptFile(Context context, string relativePath, EntityType expectedEntityType, string rawContent = null)
+        public ScriptFile(Context context, string relativePath, DeclarationType expectedDeclarationType, string rawContent = null)
         {
             Context = context;
             RelativePath = relativePath;
             Raw = rawContent;
-            ExpectedEntityType = expectedEntityType;
+            ExpectedDeclarationType = expectedDeclarationType;
         }
 
         public bool ContentsAndLocationMatch(ScriptFile other)
@@ -74,7 +74,7 @@ namespace CK3Analyser.Core.Domain
 
         public ScriptFile Clone()
         {
-            return new ScriptFile(Context, RelativePath, ExpectedEntityType, Raw)
+            return new ScriptFile(Context, RelativePath, ExpectedDeclarationType, Raw)
             {
                 Declarations = new OrderedDictionary<string, Declaration>(Declarations)
             };

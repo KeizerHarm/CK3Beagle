@@ -1,8 +1,13 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 
-namespace CK3Analyser.Core.Domain
+namespace CK3Analyser.Core.Domain.Entities
 {
+    public enum BlockType
+    {
+        Trigger, Effect, None
+    }
+
     public abstract class Block : Node
     {
         public List<Node> Children { get; } = new List<Node>();

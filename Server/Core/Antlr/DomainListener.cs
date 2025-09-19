@@ -1,6 +1,7 @@
 ﻿using Antlr4.Runtime;
 using Antlr4.Runtime.Misc;
 using CK3Analyser.Core.Domain;
+using CK3Analyser.Core.Domain.Entities;
 using System.Collections.Generic;
 
 namespace CK3Analyser.Core.Antlr
@@ -10,22 +11,22 @@ namespace CK3Analyser.Core.Antlr
         private readonly string rawFile;
         private readonly Context domainContext;
         private readonly string relativePath;
-        private readonly EntityType expectedEntityType;
+        private readonly DeclarationType expectedDeclarationType;
         public ScriptFile file;
         private Stack<Block> thisBlock;
 
-        public DomainListener(string rawFile, Context domainContext, string relativePath, EntityType expectedEntityType)
+        public DomainListener(string rawFile, Context domainContext, string relativePath, DeclarationType expectedDeclarationType)
         {
             this.rawFile = rawFile;
             this.domainContext = domainContext;
             this.relativePath = relativePath;
-            this.expectedEntityType = expectedEntityType;
+            this.expectedDeclarationType = expectedDeclarationType;
             thisBlock = new Stack<Block>();
         }
 
         public override void EnterFile([NotNull] CK3Parser.FileContext context)
         {
-            var file = new ScriptFile(domainContext, relativePath, expectedEntityType, rawFile);
+            var file = new ScriptFile(domainContext, relativePath, expectedDeclarationType, rawFile);
             this.file = file;
             thisBlock.Push(file);
         }
@@ -41,8 +42,8 @@ namespace CK3Analyser.Core.Antlr
             var raw = GetRawContents(context);
             if (thisBlock.Peek() == file)
             {
-                var entityType = file.ExpectedEntityType;
-                var declaration = new Declaration(key, entityType);
+                var declarationType = file.ExpectedDeclarationType;
+                var declaration = new Declaration(key, declarationType);
                 declaration.Raw = raw;
                 file.AddDeclaration(declaration);
                 thisBlock.Push(declaration);

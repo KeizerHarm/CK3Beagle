@@ -2,6 +2,7 @@
 using CK3Analyser.Core;
 using CK3Analyser.Core.Antlr;
 using CK3Analyser.Core.Domain;
+using CK3Analyser.Core.Domain.Entities;
 using CK3Analyser.Core.Fast;
 using System;
 using System.Collections.Generic;
@@ -46,7 +47,8 @@ namespace CK3Analyser.CLI
             //Console.WriteLine($"Elapsed (old vanilla): {stopwatch.Elapsed}");
 
             stopwatch.Start();
-            GatherDeclarations(antlrParser, Old);
+            GatherDeclarationsForDeclarationType(antlrParser, Old, DeclarationType.ScriptedTrigger);
+            //GatherDeclarations(antlrParser, Old);
 
             stopwatch.Stop();
             Console.WriteLine($"Parsing time: {stopwatch.Elapsed} ({Old.Files.Count} files)");
@@ -56,7 +58,6 @@ namespace CK3Analyser.CLI
             analyser.Analyse(Old);
             stopwatch.Stop();
             Console.WriteLine($"Analysis time: {stopwatch.Elapsed}");
-
 
             //stopwatch.Restart();
             //GatherDeclarations(fastParser, Modded);
@@ -72,20 +73,25 @@ namespace CK3Analyser.CLI
         public static void GatherDeclarations(ICk3Parser parser, Context context)
         {
             Console.WriteLine($"Now reading {context.Type.ToString()}");
-            foreach (var entityType in Enum.GetValues<EntityType>())
+            foreach (var declarationType in Enum.GetValues<DeclarationType>())
             {
-                var entityDeclarations = new Dictionary<string, Declaration>();
+                GatherDeclarationsForDeclarationType(parser, context, declarationType);
+            }
+        }
 
-                var entityHome = Path.Combine(context.Path, entityType.GetEntityHome());
-                if (Directory.Exists(entityHome))
+        public static void GatherDeclarationsForDeclarationType(ICk3Parser parser, Context context, DeclarationType declarationType)
+        {
+            var entityDeclarations = new Dictionary<string, Declaration>();
+
+            var entityHome = Path.Combine(context.Path, declarationType.GetEntityHome());
+            if (Directory.Exists(entityHome))
+            {
+                var files = Directory.GetFiles(entityHome, "*.txt", SearchOption.AllDirectories);
+                Console.WriteLine($"Found {files.Length} {declarationType.ToString()} files");
+                foreach (var file in files)
                 {
-                    var files = Directory.GetFiles(entityHome, "*.txt", SearchOption.AllDirectories);
-                    Console.WriteLine($"Found {files.Length} {entityType.ToString()} files");
-                    foreach (var file in files)
-                    {
-                        var scriptFile = parser.ParseFile(file, context, entityType);
-                        context.AddFile(scriptFile);
-                    }
+                    var scriptFile = parser.ParseFile(file, context, declarationType);
+                    context.AddFile(scriptFile);
                 }
             }
         }

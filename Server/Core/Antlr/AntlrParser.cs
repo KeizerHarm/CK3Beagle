@@ -1,21 +1,26 @@
 ﻿using Antlr4.Runtime;
 using Antlr4.Runtime.Tree;
 using CK3Analyser.Core.Domain;
+using CK3Analyser.Core.Domain.Entities;
+using CK3Analyser.Core.Generated;
+using System;
 using System.IO;
 
 namespace CK3Analyser.Core.Antlr
 {
     public class AntlrParser : ICk3Parser
     {
-        public ScriptFile ParseFile(string path, Context context, EntityType expectedEntityType)
+        public ScriptFile ParseFile(string path, Context context, DeclarationType expectedDeclarationType)
         {
+            new T_ScriptedEffect("");
+
             var relativePath = Path.GetRelativePath(context.Path, path);
 
             var input = File.ReadAllText(path);
-            return ParseText(input, relativePath, context, expectedEntityType);
+            return ParseText(input, relativePath, context, expectedDeclarationType);
         }
 
-        public ScriptFile ParseText(string input, string relativePath, Context context, EntityType expectedEntityType)
+        public ScriptFile ParseText(string input, string relativePath, Context context, DeclarationType expectedDeclarationType)
         {
             var str = new AntlrInputStream(input);
             var lexer = new CK3Lexer(str);
@@ -29,11 +34,11 @@ namespace CK3Analyser.Core.Antlr
             //parser.AddErrorListener(listener_parser);
             var tree = parser.file();
             var walker = new ParseTreeWalker();
-            var listener = new DomainListener(input, context, relativePath, expectedEntityType);
+            var listener = new DomainListener(input, context, relativePath, expectedDeclarationType);
             walker.Walk(listener, tree);
             var parsedFile = listener.file;
 
-            //var visitor = new DomainVisitor(input, context, relativePath, expectedEntityType);
+            //var visitor = new DomainVisitor(input, context, relativePath, expectedDeclarationType);
             //var parsedFile = visitor.VisitFile(tree);
 
             return parsedFile;

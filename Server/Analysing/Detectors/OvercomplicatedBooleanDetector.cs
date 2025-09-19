@@ -1,5 +1,6 @@
 ﻿using CK3Analyser.Analysis.Logging;
 using CK3Analyser.Core.Domain;
+using CK3Analyser.Core.Domain.Entities;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -33,7 +34,7 @@ namespace CK3Analyser.Analysis.Detectors
 
         public override void AnalyseDeclaration(Declaration declaration)
         {
-            if (declaration.EntityType != EntityType.ScriptedTrigger)
+            if (declaration.DeclarationType != DeclarationType.ScriptedTrigger)
                 return;
 
             AnalyseAsTriggerBlock(declaration, "AND");

@@ -1,0 +1,38 @@
+CharacterInteraction:
+ HOME: "common/character_interactions"
+ override_background*:
+  trigger: TRIGGERBLOCK
+ is_highlighted: TRIGGERBLOCK
+ use_diplomatic_range: TRIGGERBLOCK
+ should_use_extra_icon: TRIGGERBLOCK
+ ignore_recipient_recieve_cooldown: TRIGGERBLOCK
+ is_shown: TRIGGERBLOCK
+ is_valid_showing_failures_only: TRIGGERBLOCK
+ is_valid: TRIGGERBLOCK
+ has_valid_target_showing_failures_only: TRIGGERBLOCK
+ has_valid_target: TRIGGERBLOCK
+ can_be_picked: TRIGGERBLOCK
+ can_be_picked_title: TRIGGERBLOCK
+ can_be_picked_artifact: TRIGGERBLOCK
+ can_be_picked_regiment: TRIGGERBLOCK
+ auto_accept: TRIGGERBLOCK
+ can_send: TRIGGERBLOCK
+ can_be_blocked: TRIGGERBLOCK
+ redirect: EFFECTBLOCK
+ populate_actor_list: EFFECTBLOCK
+ populate_recipient_list: EFFECTBLOCK
+ send_option:
+  is_shown: TRIGGERBLOCK
+  is_valid: TRIGGERBLOCK
+  starts_enabled: TRIGGERBLOCK
+  can_be_changed: TRIGGERBLOCK
+ on_send: EFFECTBLOCK
+ on_accept: EFFECTBLOCK
+ on_decline: EFFECTBLOCK
+ on_blocked_effect: EFFECTBLOCK
+ pre_auto_accept: EFFECTBLOCK
+ on_auto_accept: EFFECTBLOCK
+ on_intermediary_accept: EFFECTBLOCK
+ on_intermediary_decline: EFFECTBLOCK
+ ai_set_target: EFFECTBLOCK
+ ai_potential: EFFECTBLOCK
