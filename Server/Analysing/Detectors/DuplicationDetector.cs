@@ -10,8 +10,17 @@ namespace CK3Analyser.Analysis.Detectors
 {
     public class DuplicationDetector : BaseDetector
     {
-        public DuplicationDetector(ILogger logger, Context context) : base(logger, context)
+        public struct Settings
         {
+            public Severity Severity { get; set; }
+            public int MinSize { get; set; }
+        }
+
+        private Settings _settings;
+
+        public DuplicationDetector(ILogger logger, Context context, Settings settings) : base(logger, context)
+        {
+            _settings = settings;
         }
 
         private readonly Dictionary<string, List<NamedBlock>> namedBlocksByKey = [];
@@ -19,6 +28,9 @@ namespace CK3Analyser.Analysis.Detectors
 
         public override void AnalyseBinaryExpression(BinaryExpression binaryExpression)
         {
+            if (binaryExpression.NodeType != NodeType.Statement)
+                return;
+
             if (!binaryExpressionsByKey.TryGetValue(binaryExpression.Key, out var list))
             {
                 list = new List<BinaryExpression>();
@@ -66,20 +78,12 @@ namespace CK3Analyser.Analysis.Detectors
 
             foreach (var list in binExpClonesFiltered)
             {
-                foreach (var binExp1 in list.Value)
+                for (int i = 0; i < list.Value.Count; i++)
                 {
-                    //if (blackList.Contains(binExp1.GetHashCode()))
-                    //    continue;
-
-                    foreach (var binExp2 in list.Value)
+                    BinaryExpression binExp1 = list.Value[i];
+                    for (int j = i + 1; j < list.Value.Count; j++)
                     {
-                        
-
-                        //if (blackList.Contains(binExp2.GetHashCode()))
-                        //    continue;
-
-                        if (binExp1 == binExp2)
-                            continue;
+                        BinaryExpression binExp2 = list.Value[j];
 
                         if (knownClones.GetValueOrDefault(binExp1.GetHashCode())?.Contains(binExp2.GetHashCode()) ?? false)
                             continue;
@@ -101,7 +105,6 @@ namespace CK3Analyser.Analysis.Detectors
                         var sequence1 = new List<BinaryExpression>() { binExp1 };
                         var sequence2 = new List<BinaryExpression>() { binExp2 };
                         AddToDictHashSet(knownClones, binExp1.GetHashCode(), binExp1.GetHashCode());
-                        //blackList.Add(binExp2.GetHashCode());
 
                         while (nextSib1 != null && nextSib2 != null)
                         {
@@ -110,7 +113,6 @@ namespace CK3Analyser.Analysis.Detectors
                                 sequence1.Add(nextSib1);
                                 sequence2.Add(nextSib2);
                                 AddToDictHashSet(knownClones, nextSib1.GetHashCode(), nextSib2.GetHashCode());
-                                //blackList.Add(nextSib2.GetHashCode());
                             }
 
                             if (nextSib1.NextSibling == null || nextSib2.NextSibling == null)
@@ -123,7 +125,7 @@ namespace CK3Analyser.Analysis.Detectors
                             nextSib2 = (BinaryExpression)nextSib2.NextSibling;
                         }
 
-                        if (sequence1.Count >= 5)
+                        if (sequence1.Count >= _settings.MinSize)
                         {
                             var sequenceClone = new Tuple<List<BinaryExpression>, List<BinaryExpression>>(sequence1, sequence2);
                             binExpClonedSequences.Add(sequenceClone);
@@ -134,16 +136,27 @@ namespace CK3Analyser.Analysis.Detectors
 
             foreach (var clonedSequence in binExpClonedSequences)
             {
-                Console.WriteLine($"Detected duplicated {clonedSequence.Item1.Count}-item sequences:");
-                Console.WriteLine("- " + clonedSequence.Item1.First().Parent.GetIdentifier());
-                Console.WriteLine("- " + clonedSequence.Item2.First().Parent.GetIdentifier());
+                logger.Log(Smell.Duplication,
+                    _settings.Severity,
+                    $"{clonedSequence.Item1.Count}-item sequence duplicates sequence in {clonedSequence.Item2.First().Parent.GetIdentifier()}",
+                    clonedSequence.Item1.First().Parent.GetIdentifier());
 
-                foreach (var dupe in clonedSequence.Item1)
-                {
-                    Console.WriteLine("  " + dupe.Raw);
-                }
-                Console.WriteLine();
+                logger.Log(Smell.Duplication,
+                    _settings.Severity,
+                    $"{clonedSequence.Item2.Count}-item sequence duplicates sequence in {clonedSequence.Item1.First().Parent.GetIdentifier()}",
+                    clonedSequence.Item2.First().Parent.GetIdentifier());
+
+                //Console.WriteLine($"Detected duplicated {clonedSequence.Item1.Count}-item sequences:");
+                //Console.WriteLine("- " + clonedSequence.Item1.First().Parent.GetIdentifier());
+                //Console.WriteLine("- " + clonedSequence.Item2.First().Parent.GetIdentifier());
+
+                //foreach (var dupe in clonedSequence.Item1)
+                //{
+                //    Console.WriteLine("  " + dupe.Raw);
+                //}
+                //Console.WriteLine();
             }
+            //Console.WriteLine("Found " + binExpClonedSequences.Count);
         }
 
         private static void AddToDictList<KEY, VALUE>(Dictionary<KEY, List<VALUE>> dict, VALUE obj, KEY key)

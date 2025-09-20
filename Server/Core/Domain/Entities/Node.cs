@@ -13,6 +13,8 @@ namespace CK3Analyser.Core.Domain.Entities
         public Node NextSibling { get; set; }
         public Node Parent { get; set; }
 
+        public NodeType NodeType { get; set; }
+
         public virtual void Accept(IDomainVisitor visitor) => visitor.Visit(this);
 
         public virtual string GetLoneIdentifier() => " ";

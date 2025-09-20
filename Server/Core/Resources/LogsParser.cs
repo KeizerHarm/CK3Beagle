@@ -10,10 +10,12 @@ namespace CK3Analyser.Core.Resources
 
         public static void ParseLogs(string path)
         {
-            string effectsLogPath = Path.Combine(path, "effects.txt");
+            string effectsLogPath = Path.Combine(path, "effects.log");
             GlobalResources.AddEffects(GenericParse(effectsLogPath));
-            string triggersLogPath = Path.Combine(path, "triggers.txt");
+            string triggersLogPath = Path.Combine(path, "triggers.log");
             GlobalResources.AddTriggers(GenericParse(triggersLogPath));
+            string eventTargetsPath = Path.Combine(path, "event_targets.log");
+            GlobalResources.AddEventTargets(GenericParse(eventTargetsPath));
         }
 
         public static HashSet<string> GenericParse(string logPath)

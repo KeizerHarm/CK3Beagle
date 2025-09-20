@@ -15,7 +15,8 @@ namespace CK3Analyser.Analysis
         OvercomplicatedBoolean_DoubleNegation,
         OvercomplicatedBoolean_Distributivity,
         OvercomplicatedBoolean_Absorption,
-        NotIsNotNor
+        NotIsNotNor,
+        Duplication
     }
     public static class SmellExtensions
     {
@@ -47,6 +48,8 @@ namespace CK3Analyser.Analysis
                     return "OB.6";
                 case Smell.NotIsNotNor:
                     return "NINR.1";
+                case Smell.Duplication:
+                    return "DU.1";
                 default:
                     throw new ArgumentException();
             }

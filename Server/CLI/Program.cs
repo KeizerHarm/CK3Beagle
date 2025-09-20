@@ -9,6 +9,7 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
+using CK3Analyser.Core.Parsing.SecondPass;
 
 namespace CK3Analyser.CLI
 {
@@ -23,11 +24,12 @@ namespace CK3Analyser.CLI
         private static string OldVanillaPath = @"C:\Program Files (x86)\Steam\steamapps\common\Crusader Kings III\game";
         private static string ModdedPath = @"C:\Program Files (x86)\Steam\steamapps\common\Crusader Kings III\game";
         private static string NewVanillaPath = @"C:\Program Files (x86)\Steam\steamapps\common\Crusader Kings III\game";
+        private static string LogsFolder = @"C:\Users\Harm\Documents\Paradox Interactive\Crusader Kings III\logs";
 
 
         public Program()
         {
-            LogsParser.ParseLogs(@"C:\Users\Harm\Documents\Paradox Interactive\Crusader Kings III\logs");
+            LogsParser.ParseLogs(LogsFolder);
 
             var inputDir = OldVanillaPath;
 
@@ -47,8 +49,8 @@ namespace CK3Analyser.CLI
             //Console.WriteLine($"Elapsed (old vanilla): {stopwatch.Elapsed}");
 
             stopwatch.Start();
-            GatherDeclarationsForDeclarationType(antlrParser, GlobalResources.Old, DeclarationType.ScriptedEffect);
-            //GatherDeclarations(antlrParser, Old);
+            //GatherDeclarationsForDeclarationType(antlrParser, GlobalResources.Old, DeclarationType.ScriptedTrigger);
+            GatherDeclarations(antlrParser, GlobalResources.Old);
 
             stopwatch.Stop();
             Console.WriteLine($"Parsing time: {stopwatch.Elapsed} ({GlobalResources.Old.Files.Count} files)");
@@ -77,6 +79,7 @@ namespace CK3Analyser.CLI
             {
                 GatherDeclarationsForDeclarationType(parser, context, declarationType);
             }
+            new SecondPassHandler().ExecuteSecondPass(context);
         }
 
         public static void GatherDeclarationsForDeclarationType(ICk3Parser parser, Context context, DeclarationType declarationType)
@@ -91,6 +94,14 @@ namespace CK3Analyser.CLI
                 foreach (var file in files)
                 {
                     var scriptFile = parser.ParseFile(file, context, declarationType);
+                    if (declarationType == DeclarationType.ScriptedEffect)
+                    {
+                        GlobalResources.AddEffects(scriptFile.Declarations.Keys);
+                    }
+                    if (declarationType == DeclarationType.ScriptedTrigger)
+                    {
+                        GlobalResources.AddTriggers(scriptFile.Declarations.Keys);
+                    }
                     context.AddFile(scriptFile);
                 }
             }

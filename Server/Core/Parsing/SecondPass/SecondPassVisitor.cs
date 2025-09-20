@@ -1,53 +1,50 @@
 ﻿using CK3Analyser.Core.Domain;
 using CK3Analyser.Core.Domain.Entities;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using CK3Analyser.Core.Resources;
 
 namespace CK3Analyser.Core.Parsing.SecondPass
 {
-    public class SecondPassVisitor : IDomainVisitor
+    public class SecondPassVisitor : BaseDomainVisitor
     {
-        public void Visit(Block block)
+        private static NodeType DeduceNodeType(Node node, string key)
         {
-            throw new NotImplementedException();
+            if (node.Parent != null && node.Parent is NamedBlock parentBlock)
+            {
+                var parentKey = parentBlock.Key;
+                if (parentBlock.NodeType == NodeType.Statement)
+                {
+                    if (!(parentKey.StartsWith("random") || parentKey.StartsWith("every") || parentKey.StartsWith("any")))
+                    {
+                        return NodeType.Other;
+                    }
+                }
+            }
+
+            if (key.Contains(':'))
+                return NodeType.Link;
+
+            if (GlobalResources.EFFECTKEYS.Contains(key))
+                return NodeType.Statement;
+            if (GlobalResources.TRIGGERKEYS.Contains(key))
+                return NodeType.Statement;
+            if (GlobalResources.EVENTTARGETS.Contains(key))
+                return NodeType.Link;
+
+
+            return NodeType.Other;
         }
 
-        public void Visit(Comment comment)
+
+        public override void Visit(BinaryExpression binaryExpression)
         {
-            throw new NotImplementedException();
+            binaryExpression.NodeType = DeduceNodeType(binaryExpression, binaryExpression.Key);
+            base.Visit(binaryExpression);
         }
 
-        public void Visit(Declaration declaration)
+        public override void Visit(NamedBlock namedBlock)
         {
-            throw new NotImplementedException();
-        }
-
-        public void Visit(BinaryExpression binaryExpression)
-        {
-            throw new NotImplementedException();
-        }
-
-        public void Visit(NamedBlock namedBlock)
-        {
-            throw new NotImplementedException();
-        }
-
-        public void Visit(Node node)
-        {
-            throw new NotImplementedException();
-        }
-
-        public void Visit(ScriptFile scriptFile)
-        {
-            throw new NotImplementedException();
-        }
-
-        public void Visit(AnonymousBlock anonymousBlock)
-        {
-            throw new NotImplementedException();
+            namedBlock.NodeType = DeduceNodeType(namedBlock, namedBlock.Key);
+            base.Visit(namedBlock);
         }
     }
 }
