@@ -4,7 +4,7 @@ using CK3Analyser.Core.Domain;
 using CK3Analyser.Core.Domain.Entities;
 using System.IO;
 
-namespace CK3Analyser.Core.Antlr
+namespace CK3Analyser.Core.Parsing.Antlr
 {
     public class AntlrParser : ICk3Parser
     {
@@ -30,7 +30,7 @@ namespace CK3Analyser.Core.Antlr
             //parser.AddErrorListener(listener_parser);
             var tree = parser.file();
             var walker = new ParseTreeWalker();
-            var listener = new DomainListener(input, context, relativePath, expectedDeclarationType);
+            var listener = new ParsingVisitor(input, context, relativePath, expectedDeclarationType);
             walker.Walk(listener, tree);
             var parsedFile = listener.file;
 

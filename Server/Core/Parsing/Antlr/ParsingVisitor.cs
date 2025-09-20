@@ -4,9 +4,9 @@ using CK3Analyser.Core.Domain;
 using CK3Analyser.Core.Domain.Entities;
 using System.Collections.Generic;
 
-namespace CK3Analyser.Core.Antlr
+namespace CK3Analyser.Core.Parsing.Antlr
 {
-    public class DomainListener : CK3BaseListener
+    public class ParsingVisitor : CK3BaseListener
     {
         private readonly string rawFile;
         private readonly Context domainContext;
@@ -15,7 +15,7 @@ namespace CK3Analyser.Core.Antlr
         public ScriptFile file;
         private Stack<Block> thisBlock;
 
-        public DomainListener(string rawFile, Context domainContext, string relativePath, DeclarationType expectedDeclarationType)
+        public ParsingVisitor(string rawFile, Context domainContext, string relativePath, DeclarationType expectedDeclarationType)
         {
             this.rawFile = rawFile;
             this.domainContext = domainContext;

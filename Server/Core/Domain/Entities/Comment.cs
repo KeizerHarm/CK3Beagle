@@ -3,6 +3,6 @@
     public class Comment : Node
     {
         public string RawWithoutHashtag { get; set; }
-        public override void Accept(IAnalysisVisitor visitor) => visitor.Visit(this);
+        public override void Accept(IDomainVisitor visitor) => visitor.Visit(this);
     }
 }

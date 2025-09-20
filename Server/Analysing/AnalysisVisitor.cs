@@ -5,98 +5,80 @@ using System.Collections.Generic;
 
 namespace CK3Analyser.Analysis
 {
-    public class AnalysisVisitor : IAnalysisVisitor
+    public class AnalysisVisitor : BaseDomainVisitor
     {
         public List<BaseDetector> Detectors { get; } = new List<BaseDetector>();
 
-
-        public void Visit(Block block)
+        public override void Visit(Block block)
         {
             foreach (var detector in Detectors)
             {
                 detector.AnalyseBlock(block);
             }
-
-            foreach (var child in block.Children)
-            {
-                child.Accept(this);
-            }
+            base.Visit(block);
         }
 
-        public void Visit(AnonymousBlock anonymousBlock)
+        public override void Visit(AnonymousBlock anonymousBlock)
         {
             foreach (var detector in Detectors)
             {
                 detector.AnalyseBlock(anonymousBlock);
             }
-
-            foreach (var child in anonymousBlock.Children)
-            {
-                child.Accept(this);
-            }
+            base.Visit(anonymousBlock);
         }
 
-        public void Visit(Comment comment)
+        public override void Visit(Comment comment)
         {
             foreach (var detector in Detectors)
             {
                 detector.AnalyseComment(comment);
             }
+            base.Visit(comment);
         }
 
-        public void Visit(Declaration declaration)
+        public override void Visit(Declaration declaration)
         {
             foreach (var detector in Detectors)
             {
                 detector.AnalyseDeclaration(declaration);
             }
-
-            foreach (var child in declaration.Children)
-            {
-                child.Accept(this);
-            }
+            base.Visit(declaration);
         }
 
-        public void Visit(BinaryExpression binaryExpression)
+        public override void Visit(BinaryExpression binaryExpression)
         {
             foreach (var detector in Detectors)
             {
                 detector.AnalyseBinaryExpression(binaryExpression);
             }
+            base.Visit(binaryExpression);
         }
 
-        public void Visit(NamedBlock namedBlock)
+        public override void Visit(NamedBlock namedBlock)
         {
             foreach (var detector in Detectors)
             {
                 detector.AnalyseNamedBlock(namedBlock);
             }
-
-            foreach (var child in namedBlock.Children)
-            {
-                child.Accept(this);
-            }
+            base.Visit(namedBlock);
         }
 
-        public void Visit(Node node)
+        public override void Visit(Node node)
         {
             foreach (var detector in Detectors)
             {
                 detector.AnalyseNode(node);
             }
+            base.Visit(node);
         }
 
-        public void Visit(ScriptFile scriptFile)
+        public override void Visit(ScriptFile scriptFile)
         {
             foreach (var detector in Detectors)
             {
                 detector.AnalyseScriptFile(scriptFile);
             }
-
-            foreach (var child in scriptFile.Children)
-            {
-                child.Accept(this);
-            }
+            base.Visit(scriptFile);
         }
 
         public void Finish()

@@ -44,7 +44,7 @@ namespace CK3Analyser.Analysis.Detectors
         {
             var key = namedBlock.Key.ToUpper();
 
-            if (key == "limit" || key == "trigger")
+            if (key == "limit" || key == "trigger" || key == "potential")
             {
                 key = "AND";
             }

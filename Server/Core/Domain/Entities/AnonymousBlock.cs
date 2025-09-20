@@ -8,7 +8,7 @@ namespace CK3Analyser.Core.Domain.Entities
 {
     public class AnonymousBlock : Block
     {
-        public override void Accept(IAnalysisVisitor visitor) => visitor.Visit(this);
+        public override void Accept(IDomainVisitor visitor) => visitor.Visit(this);
         public override string GetLoneIdentifier() => "<anonymous block>";
     }
 }

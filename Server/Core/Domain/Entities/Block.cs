@@ -65,6 +65,6 @@ namespace CK3Analyser.Core.Domain.Entities
             Children.Remove(original);
             Children.Insert(oldIndex, replacement);
         }
-        public override void Accept(IAnalysisVisitor visitor) => visitor.Visit(this);
+        public override void Accept(IDomainVisitor visitor) => visitor.Visit(this);
     }
 }

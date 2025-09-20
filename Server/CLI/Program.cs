@@ -1,9 +1,10 @@
 ﻿using CK3Analyser.Analysis;
 using CK3Analyser.Core;
-using CK3Analyser.Core.Antlr;
+using CK3Analyser.Core.Parsing.Antlr;
 using CK3Analyser.Core.Domain;
 using CK3Analyser.Core.Domain.Entities;
-using CK3Analyser.Core.Fast;
+using CK3Analyser.Core.Parsing.Fast;
+using CK3Analyser.Core.Resources;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -23,17 +24,16 @@ namespace CK3Analyser.CLI
         private static string ModdedPath = @"C:\Program Files (x86)\Steam\steamapps\common\Crusader Kings III\game";
         private static string NewVanillaPath = @"C:\Program Files (x86)\Steam\steamapps\common\Crusader Kings III\game";
 
-        public static Context Old;
-        public static Context Modded;
-        public static Context New;
 
         public Program()
         {
+            LogsParser.ParseLogs(@"C:\Users\Harm\Documents\Paradox Interactive\Crusader Kings III\logs");
+
             var inputDir = OldVanillaPath;
 
-            Old = new Context(OldVanillaPath, ContextType.Old);
-            Modded = new Context(ModdedPath, ContextType.Modded);
-            New = new Context(NewVanillaPath, ContextType.New);
+            GlobalResources.Old = new Context(OldVanillaPath, ContextType.Old);
+            GlobalResources.Modded = new Context(ModdedPath, ContextType.Modded);
+            GlobalResources.New = new Context(NewVanillaPath, ContextType.New);
 
             var stopwatch = new Stopwatch();
 
@@ -47,15 +47,15 @@ namespace CK3Analyser.CLI
             //Console.WriteLine($"Elapsed (old vanilla): {stopwatch.Elapsed}");
 
             stopwatch.Start();
-            GatherDeclarationsForDeclarationType(antlrParser, Old, DeclarationType.ScriptedEffect);
+            GatherDeclarationsForDeclarationType(antlrParser, GlobalResources.Old, DeclarationType.ScriptedEffect);
             //GatherDeclarations(antlrParser, Old);
 
             stopwatch.Stop();
-            Console.WriteLine($"Parsing time: {stopwatch.Elapsed} ({Old.Files.Count} files)");
+            Console.WriteLine($"Parsing time: {stopwatch.Elapsed} ({GlobalResources.Old.Files.Count} files)");
 
             stopwatch.Restart();
             var analyser = new Analyser();
-            analyser.Analyse(Old);
+            analyser.Analyse(GlobalResources.Old);
             stopwatch.Stop();
             Console.WriteLine($"Analysis time: {stopwatch.Elapsed}");
 

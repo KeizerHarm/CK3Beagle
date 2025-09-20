@@ -2,7 +2,7 @@
 
 namespace CK3Analyser.Core.Domain
 {
-    public interface IAnalysisVisitor
+    public interface IDomainVisitor
     {
         void Visit(Block block);
         void Visit(Comment comment);

@@ -14,7 +14,7 @@ namespace CK3Analyser.Core.Domain.Entities
             Scoper = scoper;
             Value = value;
         }
-        public override void Accept(IAnalysisVisitor visitor) => visitor.Visit(this);
+        public override void Accept(IDomainVisitor visitor) => visitor.Visit(this);
         public override string GetLoneIdentifier() => Key;
 
         public override bool Equals(object obj)

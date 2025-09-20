@@ -3,7 +3,7 @@ using CK3Analyser.Core.Domain.Entities;
 using System;
 using System.IO;
 
-namespace CK3Analyser.Core.Fast
+namespace CK3Analyser.Core.Parsing.Fast
 {
     public class FastParser : ICk3Parser
     {

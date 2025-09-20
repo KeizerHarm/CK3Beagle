@@ -4,7 +4,7 @@ using CK3Analyser.Core.Domain;
 using CK3Analyser.Core.Domain.Entities;
 using System.Linq;
 
-namespace CK3Analyser.Core.Antlr
+namespace CK3Analyser.Core.Parsing.Antlr
 {
     public class DomainVisitor : CK3BaseVisitor<Node>
     {

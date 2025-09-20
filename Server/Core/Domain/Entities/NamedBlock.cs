@@ -22,7 +22,7 @@
             Key = key;
         }
 
-        public override void Accept(IAnalysisVisitor visitor) => visitor.Visit(this);
+        public override void Accept(IDomainVisitor visitor) => visitor.Visit(this);
         public override string GetLoneIdentifier() => Key;
     }
 }

@@ -1,4 +1,4 @@
-﻿using CK3Analyser.Core.Antlr;
+﻿using CK3Analyser.Core.Parsing.Antlr;
 using CK3Analyser.Core.Domain;
 using CK3Analyser.Core.Domain.Entities;
 

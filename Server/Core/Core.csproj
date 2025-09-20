@@ -6,7 +6,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <None Remove="Antlr\Grammar\CK3.g4" />
+    <None Remove="Parsing\Antlr\Grammar\CK3.g4" />
     <None Remove="Schemas\Event.yml" />
   </ItemGroup>
 
@@ -18,7 +18,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Antlr4 Include="Antlr\Grammar\CK3.g4">
+    <Antlr4 Include="Parsing\Antlr\Grammar\CK3.g4">
       <Package>CK3Analyser.Core</Package>
     </Antlr4>
   </ItemGroup>
@@ -30,10 +30,6 @@
   <ItemGroup>
     <PackageReference Include="Antlr4.Runtime.Standard" Version="4.11.1" />
     <PackageReference Include="Antlr4BuildTasks" Version="12.2" PrivateAssets="all" />
-  </ItemGroup>
-  
-  <ItemGroup>
-    <Folder Include="Generated\" />
   </ItemGroup>
 
 </Project>
