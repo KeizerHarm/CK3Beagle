@@ -12,8 +12,6 @@ namespace CK3Analyser.Core.Antlr
     {
         public ScriptFile ParseFile(string path, Context context, DeclarationType expectedDeclarationType)
         {
-            new T_ScriptedEffect("");
-
             var relativePath = Path.GetRelativePath(context.Path, path);
 
             var input = File.ReadAllText(path);

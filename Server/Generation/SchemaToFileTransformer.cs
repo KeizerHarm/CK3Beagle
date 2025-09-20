@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.Immutable;
 using System.Text;
 
 namespace CK3Analyser.Generation
@@ -20,6 +21,7 @@ namespace CK3Analyser.Core.Generated
 }";
             return str;
         }
+
 
         private static string GetClass(Schema schema, int indent)
         {
@@ -69,6 +71,11 @@ namespace CK3Analyser.Core.Generated
 
 
             return str;
+        }
+
+        public static string SchemasToEntityFile(ImmutableArray<Schema> schemas)
+        {
+            throw new NotImplementedException();
         }
     }
 }

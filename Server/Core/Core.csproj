@@ -7,11 +7,13 @@
 
   <ItemGroup>
     <None Remove="Antlr\Grammar\CK3.g4" />
+    <None Remove="Schemas\Event.yml" />
   </ItemGroup>
 
   <ItemGroup>
     <AdditionalFiles Include="Schemas\Building.yml" />
     <AdditionalFiles Include="Schemas\CharacterInteraction.yml" />
+    <AdditionalFiles Include="Schemas\Event.yml" />
     <AdditionalFiles Include="Schemas\ScriptedEffect.yml" />
   </ItemGroup>
 

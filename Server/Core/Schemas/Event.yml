@@ -1,0 +1,71 @@
+Event:
+ HOME: "events"
+ left_portrait:
+  trigger: TRIGGERBLOCK
+  triggered_animation:
+   trigger: TRIGGERBLOCK
+  triggered_outfit:
+   trigger: TRIGGERBLOCK
+ right_portrait:
+  trigger: TRIGGERBLOCK
+  triggered_animation:
+   trigger: TRIGGERBLOCK
+  triggered_outfit:
+   trigger: TRIGGERBLOCK
+ center_portrait:
+  trigger: TRIGGERBLOCK
+  triggered_animation:
+   trigger: TRIGGERBLOCK
+  triggered_outfit:
+   trigger: TRIGGERBLOCK
+ lower_left_portrait:
+  trigger: TRIGGERBLOCK
+  triggered_animation:
+   trigger: TRIGGERBLOCK
+  triggered_outfit:
+   trigger: TRIGGERBLOCK
+ lower_center_portrait:
+  trigger: TRIGGERBLOCK
+  triggered_animation:
+   trigger: TRIGGERBLOCK
+  triggered_outfit:
+   trigger: TRIGGERBLOCK
+ lower_right_portrait:
+  trigger: TRIGGERBLOCK
+  triggered_animation:
+   trigger: TRIGGERBLOCK
+  triggered_outfit:
+   trigger: TRIGGERBLOCK
+ sender:
+  trigger: TRIGGERBLOCK
+  triggered_animation:
+   trigger: TRIGGERBLOCK
+  triggered_outfit:
+   trigger: TRIGGERBLOCK
+ artifact:
+  trigger: TRIGGERBLOCK
+ on_trigger_fail: EFFECTBLOCK
+ widgets:
+  widget*:
+   is_shown: TRIGGERBLOCK
+ option*:
+  CONTENTS: EFFECTBLOCK
+  trigger: TRIGGERBLOCK
+  show_as_unavailable: TRIGGERBLOCK
+  name:
+   text:
+    trigger: TRIGGERBLOCK
+ override_background*:
+  trigger: TRIGGERBLOCK
+ override_transition*:
+  trigger: TRIGGERBLOCK
+ override_effect_2d*:
+  trigger: TRIGGERBLOCK
+ override_icon*:
+  trigger: TRIGGERBLOCK
+ override_header_background*:
+  trigger: TRIGGERBLOCK
+ override_sound*:
+  trigger: TRIGGERBLOCK
+ immediate: EFFECTBLOCK
+ after: EFFECTBLOCK

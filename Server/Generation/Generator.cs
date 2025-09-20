@@ -10,8 +10,7 @@ namespace CK3Analyser.Generation
         {
             //Debugger.Launch();
 
-            var schemas =
-                context.AdditionalTextsProvider.Where(file => file.Path.EndsWith(".yml"))
+            var schemas = context.AdditionalTextsProvider.Where(file => file.Path.EndsWith(".yml"))
                         .Select((x, _) => YmlToSchemaConverter.YmlToSchema(x.GetText().Lines));
 
             context.RegisterSourceOutput(schemas, (spc, schema) =>
@@ -19,6 +18,14 @@ namespace CK3Analyser.Generation
                 var file = SchemaToFileTransformer.SchemaToFile(schema);
                 spc.AddSource(schema.Key + ".cs", file);
             });
+
+            //var allSchemas = schemas.Collect();
+
+            //context.RegisterSourceOutput(allSchemas, (spc, schemas) =>
+            //{
+            //    var file = SchemaToFileTransformer.SchemasToEntityFile(schemas);
+            //    spc.AddSource("EntityType.cs", file);
+            //});
         }
 
     }
