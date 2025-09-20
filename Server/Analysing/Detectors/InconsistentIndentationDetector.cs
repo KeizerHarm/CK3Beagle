@@ -1,4 +1,5 @@
 ﻿using CK3Analyser.Analysis.Logging;
+using CK3Analyser.Core.Domain;
 using CK3Analyser.Core.Domain.Entities;
 using System;
 using System.Collections.Generic;
@@ -9,40 +10,6 @@ namespace CK3Analyser.Analysis.Detectors
     public enum IndentationType
     {
         Tab, TwoSpaces, ThreeSpaces, FourSpaces, Inconclusive
-    }
-
-    internal struct Line
-    {
-        public Line()
-        {
-            Depth = 0;
-            LeadingSpaces = 0;
-            LeadingTabs = 0;
-            CharacterCountBeforeThisLine = 0;
-        }
-
-        public int Depth { get; set; }
-        public int LeadingTabs { get; set; }
-        public int LeadingSpaces { get; set; }
-        public int CharacterCountBeforeThisLine { get; set; }
-
-
-        public readonly bool IndentationTypeWorks(IndentationType type)
-        {
-            switch (type)
-            {
-                case IndentationType.Tab:
-                    return Depth == LeadingTabs;
-                case IndentationType.TwoSpaces:
-                    return Depth * 2 == LeadingSpaces;
-                case IndentationType.ThreeSpaces:
-                    return Depth * 3 == LeadingSpaces;
-                case IndentationType.FourSpaces:
-                    return Depth * 4 == LeadingSpaces;
-                default:
-                    return false;
-            }
-        }
     }
 
     public class InconsistentIndentationDetector : BaseDetector
@@ -57,7 +24,7 @@ namespace CK3Analyser.Analysis.Detectors
 
         private Settings _settings;
 
-        public InconsistentIndentationDetector(ILogger logger, Settings settings) : base(logger)
+        public InconsistentIndentationDetector(ILogger logger, Context context, Settings settings) : base(logger, context)
         {
             _settings = settings;
         }
@@ -151,5 +118,40 @@ namespace CK3Analyser.Analysis.Detectors
 
             return (detectedIndentationType, lines);
         }
+
+        internal struct Line
+        {
+            public Line()
+            {
+                Depth = 0;
+                LeadingSpaces = 0;
+                LeadingTabs = 0;
+                CharacterCountBeforeThisLine = 0;
+            }
+
+            public int Depth { get; set; }
+            public int LeadingTabs { get; set; }
+            public int LeadingSpaces { get; set; }
+            public int CharacterCountBeforeThisLine { get; set; }
+
+
+            public readonly bool IndentationTypeWorks(IndentationType type)
+            {
+                switch (type)
+                {
+                    case IndentationType.Tab:
+                        return Depth == LeadingTabs;
+                    case IndentationType.TwoSpaces:
+                        return Depth * 2 == LeadingSpaces;
+                    case IndentationType.ThreeSpaces:
+                        return Depth * 3 == LeadingSpaces;
+                    case IndentationType.FourSpaces:
+                        return Depth * 4 == LeadingSpaces;
+                    default:
+                        return false;
+                }
+            }
+        }
+
     }
 }

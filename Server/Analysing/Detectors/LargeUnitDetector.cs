@@ -1,4 +1,5 @@
 ﻿using CK3Analyser.Analysis.Logging;
+using CK3Analyser.Core.Domain;
 using CK3Analyser.Core.Domain.Entities;
 using System;
 
@@ -14,7 +15,7 @@ namespace CK3Analyser.Analysis.Detectors
 
         private Settings _settings;
 
-        public LargeUnitDetector(ILogger logger, Settings settings) : base(logger)
+        public LargeUnitDetector(ILogger logger, Context context, Settings settings) : base(logger, context)
         {
             _settings = settings;
         }

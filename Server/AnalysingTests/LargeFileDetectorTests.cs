@@ -1,6 +1,7 @@
 ﻿using CK3Analyser.Analysis;
 using CK3Analyser.Analysis.Detectors;
 using CK3Analyser.Analysis.Logging;
+using CK3Analyser.Core.Domain;
 using CK3Analyser.Core.Domain.Entities;
 
 namespace CK3Analyser.Analysing
@@ -20,9 +21,9 @@ namespace CK3Analyser.Analysing
         {
             //arrange
             var logger = new Logger();
-            var visitor = GetDetector(logger, severity: Severity.Critical, maxSize: maxSize);
-
             ScriptFile testcase = GetTestCase(file);
+            var visitor = GetDetector(logger, testcase.Context, severity: Severity.Critical, maxSize: maxSize);
+
 
             //act
             visitor.Visit(testcase);
@@ -41,6 +42,7 @@ namespace CK3Analyser.Analysing
 
         private static AnalysisVisitor GetDetector(
             Logger logger,
+            Context context,
             Severity severity = Severity.Warning,
             int maxSize = 40)
         {
@@ -51,7 +53,7 @@ namespace CK3Analyser.Analysing
             };
 
             var visitor = new AnalysisVisitor();
-            var detector = new LargeFileDetector(logger, settings);
+            var detector = new LargeFileDetector(logger, context, settings);
             visitor.Detectors.Add(detector);
             return visitor;
         }

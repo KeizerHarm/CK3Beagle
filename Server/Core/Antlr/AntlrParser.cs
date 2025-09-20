@@ -2,8 +2,6 @@
 using Antlr4.Runtime.Tree;
 using CK3Analyser.Core.Domain;
 using CK3Analyser.Core.Domain.Entities;
-using CK3Analyser.Core.Generated;
-using System;
 using System.IO;
 
 namespace CK3Analyser.Core.Antlr

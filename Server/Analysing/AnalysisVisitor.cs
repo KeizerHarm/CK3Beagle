@@ -77,6 +77,7 @@ namespace CK3Analyser.Analysis
                 child.Accept(this);
             }
         }
+
         public void Visit(Node node)
         {
             foreach (var detector in Detectors)
@@ -95,6 +96,14 @@ namespace CK3Analyser.Analysis
             foreach (var child in scriptFile.Children)
             {
                 child.Accept(this);
+            }
+        }
+
+        public void Finish()
+        {
+            foreach (var detector in Detectors)
+            {
+                detector.Finish();
             }
         }
     }

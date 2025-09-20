@@ -27,7 +27,7 @@ namespace CK3Analyser.Analysis.Detectors
 
         private Settings _settings;
 
-        public OvercomplicatedBooleanDetector(ILogger logger, Settings settings) : base(logger)
+        public OvercomplicatedBooleanDetector(ILogger logger, Context context, Settings settings) : base(logger, context)
         {
             _settings = settings;
         }

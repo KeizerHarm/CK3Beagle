@@ -1,6 +1,7 @@
 ﻿using CK3Analyser.Analysis;
 using CK3Analyser.Analysis.Detectors;
 using CK3Analyser.Analysis.Logging;
+using CK3Analyser.Core.Domain;
 using CK3Analyser.Core.Domain.Entities;
 
 namespace CK3Analyser.Analysing
@@ -16,9 +17,9 @@ namespace CK3Analyser.Analysing
         {
             //arrange
             var logger = new Logger();
-            var visitor = GetDetector(logger, expectedIndentationType: expectedDetectedType);
-
             ScriptFile testcase = GetTestCase(file);
+            var visitor = GetDetector(logger, testcase.Context, expectedIndentationType: expectedDetectedType);
+
 
             //act
             visitor.Visit(testcase);
@@ -33,9 +34,9 @@ namespace CK3Analyser.Analysing
         {
             //arrange
             var logger = new Logger();
-            var visitor = GetDetector(logger, expectedIndentationType: IndentationType.FourSpaces, severity_UnexpectedType: Severity.Critical);
-
             ScriptFile testcase = GetTestCase("InconsistentIndentation/ConsistentTabs");
+            var visitor = GetDetector(logger, testcase.Context, expectedIndentationType: IndentationType.FourSpaces, severity_UnexpectedType: Severity.Critical);
+
 
             //act
             visitor.Visit(testcase);
@@ -53,16 +54,16 @@ namespace CK3Analyser.Analysing
         [InlineData("InconsistentIndentation/ConsistentTabs", false, true)]
         [InlineData("InconsistentIndentation/ConsistentTabs_SpacedWithBracket", false, false)]
         [InlineData("InconsistentIndentation/ConsistentTabs_SpacedWithBracket", true, true)]
-        public void RepectsSettingDisregardBracketsInComments(string testcase, bool disregardBracketsInComments, bool shouldError)
+        public void RepectsSettingDisregardBracketsInComments(string file, bool disregardBracketsInComments, bool shouldError)
         {
             //arrange
             var logger = new Logger();
-            var visitor = GetDetector(logger, disregardCommentedBracket: disregardBracketsInComments);
+            ScriptFile testcase = GetTestCase(file);
+            var visitor = GetDetector(logger, testcase.Context, disregardCommentedBracket: disregardBracketsInComments);
 
-            ScriptFile file = GetTestCase(testcase);
 
             //act
-            visitor.Visit(file);
+            visitor.Visit(testcase);
 
             //assert
             if (shouldError)
@@ -80,9 +81,9 @@ namespace CK3Analyser.Analysing
         {
             //arrange
             var logger = new Logger();
-            var visitor = GetDetector(logger, severity_Inconsistency: Severity.Critical, expectedIndentationType: IndentationType.FourSpaces);
-
             ScriptFile testcase = GetTestCase("InconsistentIndentation/InconsistentTabs");
+            var visitor = GetDetector(logger, testcase.Context, severity_Inconsistency: Severity.Critical, expectedIndentationType: IndentationType.FourSpaces);
+
 
             //act
             visitor.Visit(testcase);
@@ -96,6 +97,7 @@ namespace CK3Analyser.Analysing
 
         private static AnalysisVisitor GetDetector(
             Logger logger,
+            Context context,
             Severity severity_Inconsistency = Severity.Warning,
             Severity severity_UnexpectedType = Severity.Warning, 
             bool disregardCommentedBracket = true, 
@@ -110,7 +112,7 @@ namespace CK3Analyser.Analysing
             };
 
             var visitor = new AnalysisVisitor();
-            var detector = new InconsistentIndentationDetector(logger, settings);
+            var detector = new InconsistentIndentationDetector(logger, context, settings);
             visitor.Detectors.Add(detector);
             return visitor;
         }
