@@ -19,7 +19,7 @@ namespace CK3Analyser.CLI
             _ = new Program();
         }
         
-        private static string OldVanillaPath = @"C:\Program Files (x86)\Steam\steamapps\common\Crusader Kings III Beta\game";
+        private static string OldVanillaPath = @"C:\Program Files (x86)\Steam\steamapps\common\Crusader Kings III\game";
         private static string ModdedPath = @"C:\Program Files (x86)\Steam\steamapps\common\Crusader Kings III\game";
         private static string NewVanillaPath = @"C:\Program Files (x86)\Steam\steamapps\common\Crusader Kings III\game";
 
@@ -47,7 +47,7 @@ namespace CK3Analyser.CLI
             //Console.WriteLine($"Elapsed (old vanilla): {stopwatch.Elapsed}");
 
             stopwatch.Start();
-            GatherDeclarationsForDeclarationType(antlrParser, Old, DeclarationType.ScriptedTrigger);
+            GatherDeclarationsForDeclarationType(antlrParser, Old, DeclarationType.ScriptedEffect);
             //GatherDeclarations(antlrParser, Old);
 
             stopwatch.Stop();

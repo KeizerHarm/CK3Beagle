@@ -1,4 +1,6 @@
-﻿namespace CK3Analyser.Core.Domain.Entities
+﻿using System;
+
+namespace CK3Analyser.Core.Domain.Entities
 {
     public class BinaryExpression : Node
     {
@@ -14,5 +16,18 @@
         }
         public override void Accept(IAnalysisVisitor visitor) => visitor.Visit(this);
         public override string GetLoneIdentifier() => Key;
+
+        public override bool Equals(object obj)
+        {
+            return obj is BinaryExpression expression &&
+                   Key == expression.Key &&
+                   Scoper == expression.Scoper &&
+                   Value == expression.Value;
+        }
+
+        public override int GetHashCode()
+        {
+            return HashCode.Combine(Key, Scoper, Value);
+        }
     }
 }
