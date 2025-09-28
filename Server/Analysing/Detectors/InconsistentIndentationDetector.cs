@@ -56,7 +56,7 @@ namespace CK3Analyser.Analysis.Detectors
             if (abberatingIndentedLines > 0)
             {
                 logger.Log(
-                    Smell.InconclusiveIndentation_Inconsistency,
+                    Smell.InconsistentIndentation_Inconsistency,
                     _settings.Severity_Inconsistency,
                     $"File is detected to use {detectedIndentationType} but it has {abberatingIndentedLines} lines that don't",
                     scriptFile.GetIdentifier());

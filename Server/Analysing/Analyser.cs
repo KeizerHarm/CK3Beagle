@@ -13,18 +13,16 @@ namespace CK3Analyser.Analysis
         {
             var logger = new Logger();
             var visitor = new AnalysisVisitor();
-            //visitor.Detectors.Add(
-            //    new LargeFileDetector(logger, context, new LargeFileDetector.Settings
-            //    {
-            //        Severity = Severity.Info,
-            //        MaxSize = 10000
-            //    }));
-            //visitor.Detectors.Add(new LargeUnitDetector(logger, context,
-            //    new LargeUnitDetector.Settings
-            //    {
-            //        Severity = Severity.Info,
-            //        MaxSize = 100
-            //    }));
+            visitor.Detectors.Add(new LargeUnitDetector(logger, context,
+                new LargeUnitDetector.Settings
+                {
+                    Severity_File = Severity.Info,
+                    MaxSize_File = 10000,
+                    Severity_Macro = Severity.Info,
+                    MaxSize_Macro = 50,
+                    Severity_NonMacroBlock = Severity.Info,
+                    MaxSize_NonMacroBlock = 20
+                }));
             //visitor.Detectors.Add(new OvercomplicatedBooleanDetector(logger, context,
             //    new OvercomplicatedBooleanDetector.Settings
             //    {
@@ -45,12 +43,12 @@ namespace CK3Analyser.Analysis
             //        ExpectedIndentationType = IndentationType.Tab
             //    }));
 
-            visitor.Detectors.Add(new DuplicationDetector(logger, context,
-                new DuplicationDetector.Settings
-                {
-                    Severity = Severity.Warning,
-                    MinSize = 5
-                }));
+            //visitor.Detectors.Add(new DuplicationDetector(logger, context,
+            //    new DuplicationDetector.Settings
+            //    {
+            //        Severity = Severity.Warning,
+            //        MinSize = 5
+            //    }));
 
             foreach (var file in context.Files)
             {

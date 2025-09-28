@@ -3,6 +3,7 @@ using Antlr4.Runtime.Misc;
 using CK3Analyser.Core.Domain;
 using CK3Analyser.Core.Domain.Entities;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace CK3Analyser.Core.Parsing.Antlr
 {
@@ -43,6 +44,17 @@ namespace CK3Analyser.Core.Parsing.Antlr
             if (thisBlock.Peek() == file)
             {
                 var declarationType = file.ExpectedDeclarationType;
+                if (file.ExpectedDeclarationType == DeclarationType.Event && thisBlock.Peek().Children.LastOrDefault()?.Raw == "scripted_trigger")
+                {
+                    declarationType = DeclarationType.ScriptedTrigger;
+                }
+                if (file.ExpectedDeclarationType == DeclarationType.Event && thisBlock.Peek().Children.LastOrDefault()?.Raw  == "scripted_effect")
+                {
+                    declarationType = DeclarationType.ScriptedEffect;
+                }
+
+
+                
                 var declaration = new Declaration(key, declarationType);
                 declaration.Raw = raw;
                 file.AddDeclaration(declaration);

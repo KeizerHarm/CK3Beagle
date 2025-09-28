@@ -21,5 +21,15 @@
                 _ => "",
             };
         }
+
+        public static bool IsMacroType(this DeclarationType declarationType)
+        {
+            return declarationType switch
+            {
+                DeclarationType.ScriptedEffect => true,
+                DeclarationType.ScriptedTrigger => true,
+                _ => false
+            };
+        }
     }
 }

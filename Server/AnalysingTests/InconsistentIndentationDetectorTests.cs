@@ -68,11 +68,11 @@ namespace CK3Analyser.Analysing
             //assert
             if (shouldError)
             {
-                Assert.Single(logger.LogEntries, x => x.Smell == Smell.InconclusiveIndentation_Inconsistency);
+                Assert.Single(logger.LogEntries, x => x.Smell == Smell.InconsistentIndentation_Inconsistency);
             }
             else
             {
-                Assert.DoesNotContain(logger.LogEntries, x => x.Smell == Smell.InconclusiveIndentation_Inconsistency);
+                Assert.DoesNotContain(logger.LogEntries, x => x.Smell == Smell.InconsistentIndentation_Inconsistency);
             }
         }
 
@@ -92,7 +92,7 @@ namespace CK3Analyser.Analysing
             Assert.Single(logger.LogEntries, x => x.Severity == Severity.Critical);
             Assert.Single(logger.LogEntries, x =>
                     x.Severity == Severity.Critical
-                 && x.Smell == Smell.InconclusiveIndentation_Inconsistency);
+                 && x.Smell == Smell.InconsistentIndentation_Inconsistency);
         }
 
         private static AnalysisVisitor GetDetector(

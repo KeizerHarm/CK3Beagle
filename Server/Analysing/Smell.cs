@@ -5,17 +5,23 @@ namespace CK3Analyser.Analysis
     public enum Smell
     {
         None,
+
         InconsistentIndentation_UnexpectedType,
-        InconclusiveIndentation_Inconsistency,
-        LargeFile,
-        LargeUnit,
+        InconsistentIndentation_Inconsistency,
+
+        LargeUnit_File,
+        LargeUnit_NonMacroBlock,
+        LargeUnit_Macro,
+
         OvercomplicatedBoolean_Associativity,
         OvercomplicatedBoolean_Idempotency,
         OvercomplicatedBoolean_Complementation,
         OvercomplicatedBoolean_DoubleNegation,
         OvercomplicatedBoolean_Distributivity,
         OvercomplicatedBoolean_Absorption,
+
         NotIsNotNor,
+
         Duplication
     }
     public static class SmellExtensions
@@ -26,14 +32,19 @@ namespace CK3Analyser.Analysis
             {
                 case Smell.None:
                     return "";
+
                 case Smell.InconsistentIndentation_UnexpectedType:
                     return "II.1";
-                case Smell.InconclusiveIndentation_Inconsistency:
+                case Smell.InconsistentIndentation_Inconsistency:
                     return "II.2";
-                case Smell.LargeFile:
-                    return "LF.1";
-                case Smell.LargeUnit:
+
+                case Smell.LargeUnit_File:
                     return "LU.1";
+                case Smell.LargeUnit_Macro:
+                    return "LU.2";
+                case Smell.LargeUnit_NonMacroBlock:
+                    return "LU.3";
+
                 case Smell.OvercomplicatedBoolean_Associativity:
                     return "OB.1";
                 case Smell.OvercomplicatedBoolean_Idempotency:
@@ -46,12 +57,15 @@ namespace CK3Analyser.Analysis
                     return "OB.5";
                 case Smell.OvercomplicatedBoolean_Absorption:
                     return "OB.6";
+
                 case Smell.NotIsNotNor:
                     return "NNR.1";
+
                 case Smell.Duplication:
                     return "DUP.1";
+
                 default:
-                    throw new ArgumentException();
+                    throw new ArgumentException("What is that smell...");
             }
         }
     }
