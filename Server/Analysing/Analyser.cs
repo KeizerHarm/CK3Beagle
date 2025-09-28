@@ -13,16 +13,16 @@ namespace CK3Analyser.Analysis
         {
             var logger = new Logger();
             var visitor = new AnalysisVisitor();
-            visitor.Detectors.Add(new LargeUnitDetector(logger, context,
-                new LargeUnitDetector.Settings
-                {
-                    Severity_File = Severity.Info,
-                    MaxSize_File = 10000,
-                    Severity_Macro = Severity.Info,
-                    MaxSize_Macro = 50,
-                    Severity_NonMacroBlock = Severity.Info,
-                    MaxSize_NonMacroBlock = 50
-                }));
+            //visitor.Detectors.Add(new LargeUnitDetector(logger, context,
+            //    new LargeUnitDetector.Settings
+            //    {
+            //        Severity_File = Severity.Info,
+            //        MaxSize_File = 10000,
+            //        Severity_Macro = Severity.Info,
+            //        MaxSize_Macro = 50,
+            //        Severity_NonMacroBlock = Severity.Info,
+            //        MaxSize_NonMacroBlock = 50
+            //    }));
             //visitor.Detectors.Add(new OvercomplicatedBooleanDetector(logger, context,
             //    new OvercomplicatedBooleanDetector.Settings
             //    {
@@ -49,6 +49,28 @@ namespace CK3Analyser.Analysis
             //        Severity = Severity.Warning,
             //        MinSize = 5
             //    }));
+
+            visitor.Detectors.Add(new HiddenDependenciesDetector(logger, context,
+                new HiddenDependenciesDetector.Settings
+                {
+                    Severity_UseOfPrev = Severity.Critical,
+                    Severity_UseOfRoot = Severity.Critical,
+                    Severity_UseOfSavedScope = Severity.Critical,
+                    Severity_UseOfVariable = Severity.Critical,
+                    UseOfPrev_IgnoreIfInComment = false,
+                    UseOfPrev_IgnoreIfInName = false,
+                    UseOfPrev_AllowInEventFile = true,
+                    UseOfRoot_IgnoreIfInComment = false,
+                    UseOfRoot_IgnoreIfInName = false,
+                    UseOfRoot_AllowInEventFile = true,
+                    UseOfSavedScope_IgnoreIfInComment = false,
+                    UseOfSavedScope_IgnoreIfInName = false,
+                    UseOfSavedScope_AllowInEventFile = true,
+                    UseOfVariable_IgnoreIfInComment = false,
+                    UseOfVariable_IgnoreIfInName = false,
+                    UseOfVariable_AllowInEventFile = true,
+                    VariablesWhitelist = []
+                }));
 
             foreach (var file in context.Files)
             {

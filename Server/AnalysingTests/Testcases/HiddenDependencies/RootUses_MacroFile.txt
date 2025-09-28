@@ -1,0 +1,21 @@
+# Declares in preceding comment
+# Root
+# More lines 
+macro_1 = {
+	root = { add_gold = 5 }
+}
+
+# Declares in name
+macro_2_with_root = {
+	root = { add_gold = 5 }
+}
+
+# Doesnt declare
+macro_3 = {
+	root = { add_gold = 5 }
+}
+
+# Doesnt use
+macro_4 = {
+	add_gold = 5
+}

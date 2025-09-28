@@ -22,7 +22,12 @@ namespace CK3Analyser.Analysis
 
         NotIsNotNor,
 
-        Duplication
+        Duplication,
+
+        HiddenDependencies_UseOfRoot,
+        HiddenDependencies_UseOfPrev,
+        HiddenDependencies_UseOfSavedScope,
+        HiddenDependencies_UseOfVariable
     }
     public static class SmellExtensions
     {
@@ -63,6 +68,15 @@ namespace CK3Analyser.Analysis
 
                 case Smell.Duplication:
                     return "DUP.1";
+
+                case Smell.HiddenDependencies_UseOfRoot:
+                    return "HD.1";
+                case Smell.HiddenDependencies_UseOfPrev:
+                    return "HD.2";
+                case Smell.HiddenDependencies_UseOfSavedScope:
+                    return "HD.3";
+                case Smell.HiddenDependencies_UseOfVariable:
+                    return "HD.4";
 
                 default:
                     throw new ArgumentException("What is that smell...");
