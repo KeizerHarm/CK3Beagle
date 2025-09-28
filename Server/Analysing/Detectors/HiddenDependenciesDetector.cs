@@ -106,7 +106,7 @@ namespace CK3Analyser.Analysis.Detectors
                 logger.Log(
                     Smell.HiddenDependencies_UseOfSavedScope,
                     _settings.Severity_UseOfSavedScope,
-                    "Declaration uses 'scope:" + scopeName + "'" + msg,
+                    "Declaration uses 'scope:" + scopeName + "'." + msg,
                     declaration.GetIdentifier()
                 );
             }
@@ -128,7 +128,7 @@ namespace CK3Analyser.Analysis.Detectors
                 logger.Log(
                     Smell.HiddenDependencies_UseOfSavedScope,
                     _settings.Severity_UseOfSavedScope,
-                    "Declaration uses 'var:" + varName + "'" + msg,
+                    "Declaration uses 'var:" + varName + "'." + msg,
                     declaration.GetIdentifier()
                 );
             }
@@ -148,7 +148,7 @@ namespace CK3Analyser.Analysis.Detectors
                 logger.Log(
                     Smell.HiddenDependencies_UseOfPrev,
                     _settings.Severity_UseOfPrev,
-                    "Declaration uses 'prev'" + msg,
+                    "Declaration uses 'prev' at the top level." + msg,
                     declaration.GetIdentifier()
                 );
             }
@@ -166,7 +166,7 @@ namespace CK3Analyser.Analysis.Detectors
                 logger.Log(
                     Smell.HiddenDependencies_UseOfRoot,
                     _settings.Severity_UseOfRoot,
-                    "Declaration uses 'root'" + msg,
+                    "Declaration uses 'root'." + msg,
                     declaration.GetIdentifier()
                 );
             }
