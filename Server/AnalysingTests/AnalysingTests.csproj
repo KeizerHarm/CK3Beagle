@@ -24,13 +24,9 @@
   </ItemGroup>
 
   <ItemGroup>
-    <None Update="Testcases\**">
+    <None Update="Detectors\Testcases\**">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-  </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="Testcases\MagicNumber\" />
   </ItemGroup>
 
 </Project>

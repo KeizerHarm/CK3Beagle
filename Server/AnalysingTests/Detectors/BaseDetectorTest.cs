@@ -10,7 +10,7 @@ namespace CK3Analyser.Analysing.Detectors
     {
         public static ScriptFile GetTestCase(string caseName, DeclarationType? expectedDeclarationType = null)
         {
-            var stringToParse = File.ReadAllText(Path.Combine(AppContext.BaseDirectory, "Testcases", caseName + ".txt"));
+            var stringToParse = File.ReadAllText(Path.Combine(AppContext.BaseDirectory, "Detectors/Testcases", caseName + ".txt"));
 
             GlobalResources.AddEffects(["add_gold"]);
             GlobalResources.AddTriggers(["has_gold"]);

@@ -186,7 +186,7 @@ namespace CK3Analyser.Analysis.Detectors
                     }
                     else
                     {
-                        msg = $"{totalSize}-statement sequence duplicates sequence in {firstOtherLoc.GetIdentifier()}";
+                        msg = $"{totalSize}-statement block duplicates block in {firstOtherLoc.GetIdentifier()}";
                     }
                     logger.Log(Smell.Duplication,
                         _settings.Severity,
