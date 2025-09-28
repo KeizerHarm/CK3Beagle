@@ -116,9 +116,10 @@ namespace CK3Analyser.Core.Parsing.Antlr
 
         public override void EnterAnonymousToken([NotNull] CK3Parser.AnonymousTokenContext context)
         {
-            var token = new Node
+            var token = new AnonymousToken
             {
-                Raw = GetRawContents(context)
+                Raw = GetRawContents(context),
+                Value = GetRawContents(context.token())
             };
             thisBlock.Peek().AddChild(token);
         }

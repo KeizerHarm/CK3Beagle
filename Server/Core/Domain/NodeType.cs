@@ -2,8 +2,8 @@
 {
     public enum NodeType
     {
+        Other,
         Statement,
-        Link,
-        Other
+        Link
     }
 }

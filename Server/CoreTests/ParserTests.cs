@@ -165,7 +165,7 @@ namespace CK3Analyser.Core
 
             var expectedChild = expected.Children.FirstOrDefault();
             var actualChild = actual.Children.FirstOrDefault();
-            while (expectedChild != null)
+            while (expectedChild != null && actualChild != null)
             {
                 Assert.NotNull(actual);
                 AssertNodesEqual(expectedChild, actualChild);
@@ -204,7 +204,7 @@ namespace CK3Analyser.Core
                 case "fast":
                     return new FastParser();
                 default:
-                    return null;
+                    throw new ArgumentException();
             }
         }
     }

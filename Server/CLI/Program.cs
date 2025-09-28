@@ -5,15 +5,15 @@ using CK3Analyser.Core.Domain;
 using CK3Analyser.Core.Domain.Entities;
 using CK3Analyser.Core.Parsing.Fast;
 using CK3Analyser.Core.Resources;
+using CK3Analyser.Core.Parsing.SecondPass;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
-using CK3Analyser.Core.Parsing.SecondPass;
+using System.Linq;
 
 namespace CK3Analyser.CLI
 {
-
     public class Program
     {
         static void Main(string[] args)
@@ -26,10 +26,11 @@ namespace CK3Analyser.CLI
         private static string NewVanillaPath = @"C:\Program Files (x86)\Steam\steamapps\common\Crusader Kings III\game";
         private static string LogsFolder = @"C:\Users\Harm\Documents\Paradox Interactive\Crusader Kings III\logs";
 
-
         public Program()
         {
+            Console.WriteLine("Let's go! Parsing logs");
             LogsParser.ParseLogs(LogsFolder);
+            Console.WriteLine($"Parsed logs; found {GlobalResources.EFFECTKEYS.Count} effects, {GlobalResources.TRIGGERKEYS.Count} triggers, {GlobalResources.EVENTTARGETS.Count} event targets ");
 
             var inputDir = OldVanillaPath;
 
@@ -37,7 +38,6 @@ namespace CK3Analyser.CLI
             GlobalResources.Modded = new Context(ModdedPath, ContextType.Modded);
             GlobalResources.New = new Context(NewVanillaPath, ContextType.New);
 
-            var stopwatch = new Stopwatch();
 
             var fastParser = new FastParser();
             var antlrParser = new AntlrParser();
@@ -48,18 +48,21 @@ namespace CK3Analyser.CLI
             //stopwatch.Stop();
             //Console.WriteLine($"Elapsed (old vanilla): {stopwatch.Elapsed}");
 
-            stopwatch.Start();
+            var parsingTimer = new Stopwatch();
+            parsingTimer.Start();
             //GatherDeclarationsForDeclarationType(antlrParser, GlobalResources.Old, DeclarationType.ScriptedTrigger);
             GatherDeclarations(antlrParser, GlobalResources.Old);
+            parsingTimer.Stop();
 
-            stopwatch.Stop();
-            Console.WriteLine($"Parsing time: {stopwatch.Elapsed} ({GlobalResources.Old.Files.Count} files)");
-
-            stopwatch.Restart();
+            var analysisTimer = new Stopwatch();
+            analysisTimer.Start();
             var analyser = new Analyser();
             analyser.Analyse(GlobalResources.Old);
-            stopwatch.Stop();
-            Console.WriteLine($"Analysis time: {stopwatch.Elapsed}");
+            analysisTimer.Stop();
+            Console.WriteLine($"Analysed a total of { GlobalResources.Old.Files.Count} files");
+            Console.WriteLine($"Found { analyser.LogEntries.Count()} issues");
+            Console.WriteLine($"Parsing time: {parsingTimer.Elapsed}");
+            Console.WriteLine($"Analysis time: {analysisTimer.Elapsed}");
 
             //stopwatch.Restart();
             //GatherDeclarations(fastParser, Modded);
@@ -69,17 +72,18 @@ namespace CK3Analyser.CLI
             //GatherDeclarations(fastParser, New);
             //stopwatch.Stop();
             //Console.WriteLine($"Elapsed (new vanilla): {stopwatch.Elapsed}");
-
         }
 
         public static void GatherDeclarations(ICk3Parser parser, Context context)
         {
-            Console.WriteLine($"Now reading {context.Type.ToString()}");
+            Console.WriteLine($"Now reading files from {context.Path}");
             foreach (var declarationType in Enum.GetValues<DeclarationType>())
             {
                 GatherDeclarationsForDeclarationType(parser, context, declarationType);
             }
+            Console.WriteLine("Done with first pass");
             new SecondPassHandler().ExecuteSecondPass(context);
+            Console.WriteLine("Done with second pass");
         }
 
         public static void GatherDeclarationsForDeclarationType(ICk3Parser parser, Context context, DeclarationType declarationType)

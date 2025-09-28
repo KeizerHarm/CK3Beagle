@@ -40,7 +40,7 @@ namespace CK3Analyser.Core.Domain.Entities
         {
             if (!Declarations.ContainsKey(prevSibling.Key))
             {
-                throw new System.Exception("Prev sibling not found upon insertion in ScriptFile!");
+                throw new Exception("Prev sibling not found upon insertion in ScriptFile!");
             }
 
             if (prevSibling.NextSibling != null) { 
@@ -86,9 +86,41 @@ namespace CK3Analyser.Core.Domain.Entities
         public override string GetLoneIdentifier() => RelativePath;
 
 
-        public override int GetHashCode()
+
+        #region hashing
+        private int _looseHashCode;
+        public override int GetLooseHashCode()
         {
-            return HashCode.Combine(RelativePath, Children.Where(x => x.GetType() != typeof(Comment)));
+            if (_looseHashCode == 0)
+            {
+                var hashCode = new HashCode();
+                hashCode.Add(RelativePath);
+                foreach (var relevantChild in Children.Where(x => x.GetType() != typeof(Comment)))
+                {
+                    hashCode.Add(relevantChild.GetLooseHashCode());
+                }
+                _looseHashCode = hashCode.ToHashCode();
+            }
+
+            return _looseHashCode;
         }
+
+        private int _strictHashCode;
+        public override int GetStrictHashCode()
+        {
+            if (_strictHashCode == 0)
+            {
+                var hashCode = new HashCode();
+                hashCode.Add(RelativePath);
+                foreach (var relevantChild in Children.Where(x => x.GetType() != typeof(Comment)))
+                {
+                    hashCode.Add(relevantChild.GetStrictHashCode());
+                }
+                _strictHashCode = hashCode.ToHashCode();
+            }
+
+            return _strictHashCode;
+        }
+        #endregion
     }
 }

@@ -1,14 +1,10 @@
 ﻿// Template generated code from Antlr4Templates v6.0
 namespace CK3Analyser.Core.Parsing.Antlr
 {
-	using Antlr4.Runtime;
-	using Antlr4.Runtime.Misc;
-	using System;
-	using System.Collections.Generic;
-	using System.IO;
-	using System.Linq;
+    using Antlr4.Runtime;
+    using System.IO;
 
-	public class ErrorListener<S> : ConsoleErrorListener<S>
+    public class ErrorListener<S> : ConsoleErrorListener<S>
 	{
 		public bool had_error;
 

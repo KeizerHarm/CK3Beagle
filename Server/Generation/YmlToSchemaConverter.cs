@@ -1,8 +1,6 @@
 ﻿using Microsoft.CodeAnalysis.Text;
-using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 
 namespace CK3Analyser.Generation
 {

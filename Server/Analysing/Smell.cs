@@ -47,9 +47,9 @@ namespace CK3Analyser.Analysis
                 case Smell.OvercomplicatedBoolean_Absorption:
                     return "OB.6";
                 case Smell.NotIsNotNor:
-                    return "NINR.1";
+                    return "NNR.1";
                 case Smell.Duplication:
-                    return "DU.1";
+                    return "DUP.1";
                 default:
                     throw new ArgumentException();
             }

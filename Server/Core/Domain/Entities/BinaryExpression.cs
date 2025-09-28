@@ -25,9 +25,38 @@ namespace CK3Analyser.Core.Domain.Entities
                    Value == expression.Value;
         }
 
-        public override int GetHashCode()
+        public override int GetHashCode() => GetStrictHashCode();
+
+
+        #region hashing
+        private int _looseHashCode;
+        public override int GetLooseHashCode()
         {
-            return HashCode.Combine(Key, Scoper, Value);
+            if (_looseHashCode == 0)
+            {
+                var hashCode = new HashCode();
+                hashCode.Add(Key);
+                hashCode.Add(Scoper);
+                _looseHashCode = hashCode.ToHashCode();
+            }
+
+            return _looseHashCode;
         }
+
+        private int _strictHashCode;
+        public override int GetStrictHashCode()
+        {
+            if (_strictHashCode == 0)
+            {
+                var hashCode = new HashCode();
+                hashCode.Add(Key);
+                hashCode.Add(Scoper);
+                hashCode.Add(Value);
+                _strictHashCode = hashCode.ToHashCode();
+            }
+
+            return _strictHashCode;
+        }
+        #endregion
     }
 }

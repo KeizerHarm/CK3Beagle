@@ -13,6 +13,7 @@ namespace CK3Analyser.Analysis.Logging
             if (logEntry.Severity >= Severity.Info)
             {
                 Console.WriteLine(logEntry.Print());
+                Console.WriteLine();
             }
         }
 

@@ -32,5 +32,42 @@ namespace CK3Analyser.Core.Domain.Entities
         {
             return HashCode.Combine(Key, Children.Where(x => x.GetType() != typeof(Comment)));
         }
+
+        #region hashing
+        private int _looseHashCode;
+        public override int GetLooseHashCode()
+        {
+            if (_looseHashCode == 0)
+            {
+                var hashCode = new HashCode();
+                hashCode.Add(Key);
+                foreach (var relevantChild in Children.Where(x => x.NodeType != NodeType.Other))
+                {
+                    hashCode.Add(relevantChild.GetLooseHashCode());
+                }
+                _looseHashCode = hashCode.ToHashCode();
+            }
+
+            return _looseHashCode;
+        }
+
+        private int _strictHashCode;
+
+        public override int GetStrictHashCode()
+        {
+            if (_strictHashCode == 0)
+            {
+                var hashCode = new HashCode();
+                hashCode.Add(Key);
+                foreach (var relevantChild in Children.Where(x => x.NodeType != NodeType.Other))
+                {
+                    hashCode.Add(relevantChild.GetStrictHashCode());
+                }
+                _strictHashCode = hashCode.ToHashCode();
+            }
+
+            return _strictHashCode;
+        }
+        #endregion
     }
 }

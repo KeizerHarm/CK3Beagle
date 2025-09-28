@@ -4,5 +4,17 @@
     {
         public string RawWithoutHashtag { get; set; }
         public override void Accept(IDomainVisitor visitor) => visitor.Visit(this);
+
+        public override int GetLooseHashCode()
+        {
+            //Should never be called for comments
+            return 1;
+        }
+
+        public override int GetStrictHashCode()
+        {
+            //Should never be called for comments
+            throw new System.InvalidOperationException();
+        }
     }
 }
