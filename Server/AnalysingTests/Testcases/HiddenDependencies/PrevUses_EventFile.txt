@@ -1,0 +1,30 @@
+# Declares in preceding comment
+# Prev
+# More lines 
+scripted_effect macro_1 = {
+	prev = { add_gold = 5 }
+}
+
+# Declares in name
+scripted_effect macro_2_with_prev = {
+	prev = { add_gold = 5 }
+}
+
+# Doesnt declare
+scripted_effect macro_3 = {
+	prev = { add_gold = 5 }
+}
+
+# Doesnt use
+scripted_effect macro_4 = {
+	add_gold = 5
+}
+
+# Doesnt use at top level
+scripted_effect macro_5 = {
+	father = {
+		prev = {
+			add_gold = 5
+		}
+	}
+}

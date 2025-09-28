@@ -1,0 +1,30 @@
+# Declares in preceding comment
+# Prev
+# More lines 
+macro_1 = {
+	prev = { add_gold = 5 }
+}
+
+# Declares in name
+macro_2_with_prev = {
+	prev = { add_gold = 5 }
+}
+
+# Doesnt declare
+macro_3 = {
+	prev = { add_gold = 5 }
+}
+
+# Doesnt use
+macro_4 = {
+	add_gold = 5
+}
+
+# Doesnt use at top level
+macro_5 = {
+	father = {
+		prev = {
+			add_gold = 5
+		}
+	}
+}

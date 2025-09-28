@@ -59,6 +59,57 @@ namespace CK3Analyser.Analysing
             Assert.Equal(numberOfExpectedErrors, logger.LogEntries.Where(x => x.Smell == Smell.HiddenDependencies_UseOfRoot).Count());
         }
 
+        [Theory]
+        [InlineData(false, false, 3)]
+        [InlineData(false, true, 2)]
+        [InlineData(true, false, 2)]
+        [InlineData(true, true, 1)]
+        public void HandlesPrevUses_MacroFile(bool ignoreIfInComment, bool ignoreIfInName, int numberOfExpectedErrors)
+        {
+            //arrange
+            var logger = new Logger();
+            ScriptFile testcase = GetTestCase("HiddenDependencies/PrevUses_MacroFile", DeclarationType.ScriptedEffect);
+            var visitor = GetDetector(logger, testcase.Context,
+                useOfPrev_IgnoreIfInComment: ignoreIfInComment,
+                useOfPrev_IgnoreIfInName: ignoreIfInName,
+                severity_UseOfPrev: Severity.Critical
+            );
+
+            //act
+            visitor.Visit(testcase);
+
+            //assert
+            Assert.Equal(numberOfExpectedErrors, logger.LogEntries.Where(x => x.Smell == Smell.HiddenDependencies_UseOfPrev).Count());
+        }
+
+        [Theory]
+        [InlineData(false, false, false, 3)]
+        [InlineData(false, false, true, 2)]
+        [InlineData(false, true, false, 2)]
+        [InlineData(false, true, true, 1)]
+        [InlineData(true, false, false, 0)]
+        [InlineData(true, false, true, 0)]
+        [InlineData(true, true, false, 0)]
+        [InlineData(true, true, true, 0)]
+        public void HandlesPrevUses_EventFile(bool allowInEventFile, bool ignoreIfInComment, bool ignoreIfInName, int numberOfExpectedErrors)
+        {
+            //arrange
+            var logger = new Logger();
+            ScriptFile testcase = GetTestCase("HiddenDependencies/PrevUses_EventFile", DeclarationType.Event);
+            var visitor = GetDetector(logger, testcase.Context,
+                useOfPrev_IgnoreIfInComment: ignoreIfInComment,
+                useOfPrev_IgnoreIfInName: ignoreIfInName,
+                useOfPrev_AllowInEventFile: allowInEventFile,
+                severity_UseOfPrev: Severity.Critical
+            );
+
+            //act
+            visitor.Visit(testcase);
+
+            //assert
+            Assert.Equal(numberOfExpectedErrors, logger.LogEntries.Where(x => x.Smell == Smell.HiddenDependencies_UseOfPrev).Count());
+        }
+
 
         private static AnalysisVisitor GetDetector(
             Logger logger,
