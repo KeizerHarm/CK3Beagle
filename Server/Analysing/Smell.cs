@@ -27,7 +27,9 @@ namespace CK3Analyser.Analysis
         HiddenDependencies_UseOfRoot,
         HiddenDependencies_UseOfPrev,
         HiddenDependencies_UseOfSavedScope,
-        HiddenDependencies_UseOfVariable
+        HiddenDependencies_UseOfVariable,
+
+        MagicNumber
     }
     public static class SmellExtensions
     {
@@ -77,6 +79,9 @@ namespace CK3Analyser.Analysis
                     return "HD.3";
                 case Smell.HiddenDependencies_UseOfVariable:
                     return "HD.4";
+
+                case Smell.MagicNumber:
+                    return "MG.1";
 
                 default:
                     throw new ArgumentException("What is that smell...");

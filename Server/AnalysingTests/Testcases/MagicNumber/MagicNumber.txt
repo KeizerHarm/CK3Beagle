@@ -1,0 +1,9 @@
+dummy_effect = {
+	random = {
+		chance = 25 #Not in the list of statements to consider, allowed
+
+		add_gold = script_value #Allowed
+		add_gold = @[10 * 10] #Allowed, out of necessity (parsing these is hard)
+		add_gold = 125 #Magic number, not allowed
+	}
+}

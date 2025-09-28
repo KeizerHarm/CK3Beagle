@@ -3,9 +3,9 @@ using CK3Analyser.Analysis.Detectors;
 using CK3Analyser.Analysis.Logging;
 using CK3Analyser.Core.Domain;
 
-namespace CK3Analyser.Analysing
+namespace CK3Analyser.Analysing.Detectors
 {
-    public class OvercomplicatedBooleanDetectorTests : BaseTest
+    public class OvercomplicatedBooleanDetectorTests : BaseDetectorTest
     {
         [Theory]
         [InlineData("OvercomplicatedBoolean/Associativity_AndWithAnd", "AND")]

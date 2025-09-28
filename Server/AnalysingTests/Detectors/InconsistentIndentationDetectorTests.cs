@@ -4,9 +4,9 @@ using CK3Analyser.Analysis.Logging;
 using CK3Analyser.Core.Domain;
 using CK3Analyser.Core.Domain.Entities;
 
-namespace CK3Analyser.Analysing
+namespace CK3Analyser.Analysing.Detectors
 {
-    public class InconsistentIndentationDetectorTests : BaseTest
+    public class InconsistentIndentationDetectorTests : BaseDetectorTest
     {
         [Theory]
         [InlineData("InconsistentIndentation/ConsistentTabs", IndentationType.Tab)]

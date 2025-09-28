@@ -13,6 +13,19 @@ namespace CK3Analyser.Analysis
         {
             var logger = new Logger();
             var visitor = new AnalysisVisitor();
+            SetDefaultDetectors(context, logger, visitor);
+
+            foreach (var file in context.Files)
+            {
+                file.Value.Accept(visitor);
+            }
+            visitor.Finish();
+
+            LogEntries = logger.LogEntries;
+        }
+
+        private static void SetDefaultDetectors(Context context, Logger logger, AnalysisVisitor visitor)
+        {
             //visitor.Detectors.Add(new LargeUnitDetector(logger, context,
             //    new LargeUnitDetector.Settings
             //    {
@@ -50,35 +63,33 @@ namespace CK3Analyser.Analysis
             //        MinSize = 5
             //    }));
 
-            visitor.Detectors.Add(new HiddenDependenciesDetector(logger, context,
-                new HiddenDependenciesDetector.Settings
+            //visitor.Detectors.Add(new HiddenDependenciesDetector(logger, context,
+            //    new HiddenDependenciesDetector.Settings
+            //    {
+            //        Severity_UseOfPrev = Severity.Warning,
+            //        Severity_UseOfRoot = Severity.Warning,
+            //        Severity_UseOfSavedScope = Severity.Warning,
+            //        Severity_UseOfVariable = Severity.Warning,
+            //        UseOfPrev_IgnoreIfInComment = true,
+            //        UseOfPrev_IgnoreIfInName = true,
+            //        UseOfPrev_AllowInEventFile = false,
+            //        UseOfRoot_IgnoreIfInComment = true,
+            //        UseOfRoot_IgnoreIfInName = true,
+            //        UseOfRoot_AllowInEventFile = false,
+            //        UseOfSavedScope_IgnoreIfInComment = true,
+            //        UseOfSavedScope_IgnoreIfInName = false,
+            //        UseOfSavedScope_AllowInEventFile = false,
+            //        UseOfVariable_IgnoreIfInComment = true,
+            //        UseOfVariable_IgnoreIfInName = false,
+            //        UseOfVariable_AllowInEventFile = false,
+            //        VariablesWhitelist = []
+            //    }));
+            visitor.Detectors.Add(new MagicNumberDetector(logger, context,
+                new MagicNumberDetector.Settings
                 {
-                    Severity_UseOfPrev = Severity.Critical,
-                    Severity_UseOfRoot = Severity.Critical,
-                    Severity_UseOfSavedScope = Severity.Critical,
-                    Severity_UseOfVariable = Severity.Critical,
-                    UseOfPrev_IgnoreIfInComment = false,
-                    UseOfPrev_IgnoreIfInName = false,
-                    UseOfPrev_AllowInEventFile = true,
-                    UseOfRoot_IgnoreIfInComment = false,
-                    UseOfRoot_IgnoreIfInName = false,
-                    UseOfRoot_AllowInEventFile = true,
-                    UseOfSavedScope_IgnoreIfInComment = false,
-                    UseOfSavedScope_IgnoreIfInName = false,
-                    UseOfSavedScope_AllowInEventFile = true,
-                    UseOfVariable_IgnoreIfInComment = false,
-                    UseOfVariable_IgnoreIfInName = false,
-                    UseOfVariable_AllowInEventFile = true,
-                    VariablesWhitelist = []
+                    Severity = Severity.Info,
+                    StatementKeysToConsider = ["add_gold"]
                 }));
-
-            foreach (var file in context.Files)
-            {
-                file.Value.Accept(visitor);
-            }
-            visitor.Finish();
-
-            LogEntries = logger.LogEntries;
         }
     }
 }
