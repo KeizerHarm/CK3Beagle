@@ -53,8 +53,6 @@ namespace CK3Analyser.Core.Parsing.Antlr
                     declarationType = DeclarationType.ScriptedEffect;
                 }
 
-
-                
                 var declaration = new Declaration(key, declarationType);
                 declaration.Raw = raw;
                 file.AddDeclaration(declaration);

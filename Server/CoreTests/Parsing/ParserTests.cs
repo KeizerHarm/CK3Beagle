@@ -3,7 +3,7 @@ using CK3Analyser.Core.Domain;
 using CK3Analyser.Core.Domain.Entities;
 using CK3Analyser.Core.Parsing.Fast;
 
-namespace CK3Analyser.Core
+namespace CK3Analyser.Core.Parsing
 {
     public class ParserTests
     {
