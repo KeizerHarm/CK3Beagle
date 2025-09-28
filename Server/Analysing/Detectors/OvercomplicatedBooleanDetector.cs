@@ -32,7 +32,7 @@ namespace CK3Analyser.Analysis.Detectors
             _settings = settings;
         }
 
-        public override void AnalyseDeclaration(Declaration declaration)
+        public override void EnterDeclaration(Declaration declaration)
         {
             if (declaration.DeclarationType != DeclarationType.ScriptedTrigger)
                 return;
@@ -40,7 +40,7 @@ namespace CK3Analyser.Analysis.Detectors
             AnalyseAsTriggerBlock(declaration, "AND");
         }
 
-        public override void AnalyseNamedBlock(NamedBlock namedBlock)
+        public override void EnterNamedBlock(NamedBlock namedBlock)
         {
             var key = namedBlock.Key.ToUpper();
 

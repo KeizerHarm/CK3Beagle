@@ -31,7 +31,7 @@ namespace CK3Analyser.Analysis.Detectors
         private readonly Dictionary<int, List<Node>> nodesByStrictHash = [];
         private readonly Dictionary<int, List<List<Node>>> sequencesByParentStrictHash = [];
 
-        public override void AnalyseBinaryExpression(BinaryExpression binaryExpression)
+        public override void VisitBinaryExpression(BinaryExpression binaryExpression)
         {
             //if (binaryExpression.NodeType != NodeType.Statement)
             //    return;
@@ -46,7 +46,7 @@ namespace CK3Analyser.Analysis.Detectors
 
         //private readonly Dictionary<int, List<NamedBlock>> namedBlocksByKeyHash = [];
         //private readonly Dictionary<int, List<NamedBlock>> namedBlocksByStrictHash = [];
-        public override void AnalyseNamedBlock(NamedBlock namedBlock)
+        public override void EnterNamedBlock(NamedBlock namedBlock)
         {
             //namedBlocksByKeyHash.AddToDictCollection(namedBlock, namedBlock.GetLooseHashCode());
             //namedBlocksByStrictHash.AddToDictCollection(namedBlock, namedBlock.GetStrictHashCode());

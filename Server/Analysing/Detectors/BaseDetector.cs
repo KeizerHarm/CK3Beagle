@@ -15,14 +15,18 @@ namespace CK3Analyser.Analysis.Detectors
             this.context = context;
         }
 
-        public virtual void AnalyseBlock(Block block) { }
-        public virtual void AnalyseComment(Comment comment) { }
-        public virtual void AnalyseDeclaration(Declaration declaration) { }
-        public virtual void AnalyseBinaryExpression(BinaryExpression binaryExpression) { }
-        public virtual void AnalyseNamedBlock(NamedBlock namedBlock) { }
-        public virtual void AnalyseNode(Node node) { }
-        public virtual void AnalyseScriptFile(ScriptFile scriptFile) { }
-
+        public virtual void EnterScriptFile(ScriptFile scriptFile) { }
+        public virtual void LeaveScriptFile(ScriptFile scriptFile) { }
+        public virtual void EnterDeclaration(Declaration declaration) { }
+        public virtual void LeaveDeclaration(Declaration declaration) { }
+        public virtual void EnterNamedBlock(NamedBlock namedBlock) { }
+        public virtual void LeaveNamedBlock(NamedBlock namedBlock) { }
+        public virtual void EnterAnonymousBlock(AnonymousBlock anonymousBlock) { }
+        public virtual void LeaveAnonymousBlock(AnonymousBlock anonymousBlock) { }
+        public virtual void VisitBinaryExpression(BinaryExpression binaryExpression) { }
+        public virtual void VisitAnonymousToken(AnonymousToken anonymousToken) { }
+        public virtual void VisitComment(Comment comment) { }
         public virtual void Finish() { }
+
     }
 }

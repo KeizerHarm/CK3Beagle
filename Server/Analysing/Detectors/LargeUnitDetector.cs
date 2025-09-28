@@ -23,7 +23,7 @@ namespace CK3Analyser.Analysis.Detectors
         {
             _settings = settings;
         }
-        public override void AnalyseScriptFile(ScriptFile scriptFile)
+        public override void EnterScriptFile(ScriptFile scriptFile)
         {
             var length = scriptFile.Raw.Split('\n').Length;
             if (length >= _settings.MaxSize_File)
@@ -36,7 +36,7 @@ namespace CK3Analyser.Analysis.Detectors
             }
         }
 
-        public override void AnalyseDeclaration(Declaration declaration)
+        public override void EnterDeclaration(Declaration declaration)
         {
             var size = declaration.GetSize();
             if (size >= _settings.MaxSize_Macro && declaration.DeclarationType.IsMacroType())

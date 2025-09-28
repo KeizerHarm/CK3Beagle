@@ -9,77 +9,84 @@ namespace CK3Analyser.Analysis
     {
         public List<BaseDetector> Detectors { get; } = new List<BaseDetector>();
 
-        public override void Visit(Block block)
+        public override void Visit(ScriptFile scriptFile)
         {
             foreach (var detector in Detectors)
             {
-                detector.AnalyseBlock(block);
+                detector.EnterScriptFile(scriptFile);
             }
-            base.Visit(block);
-        }
-
-        public override void Visit(AnonymousBlock anonymousBlock)
-        {
+            base.Visit(scriptFile);
             foreach (var detector in Detectors)
             {
-                detector.AnalyseBlock(anonymousBlock);
+                detector.LeaveScriptFile(scriptFile);
             }
-            base.Visit(anonymousBlock);
-        }
-
-        public override void Visit(Comment comment)
-        {
-            foreach (var detector in Detectors)
-            {
-                detector.AnalyseComment(comment);
-            }
-            base.Visit(comment);
         }
 
         public override void Visit(Declaration declaration)
         {
             foreach (var detector in Detectors)
             {
-                detector.AnalyseDeclaration(declaration);
+                detector.EnterDeclaration(declaration);
             }
             base.Visit(declaration);
+            foreach (var detector in Detectors)
+            {
+                detector.LeaveDeclaration(declaration);
+            }
         }
+
+        public override void Visit(AnonymousBlock anonymousBlock)
+        {
+            foreach (var detector in Detectors)
+            {
+                detector.EnterAnonymousBlock(anonymousBlock);
+            }
+            base.Visit(anonymousBlock);
+            foreach (var detector in Detectors)
+            {
+                detector.LeaveAnonymousBlock(anonymousBlock);
+            }
+        }
+        public override void Visit(NamedBlock namedBlock)
+        {
+            foreach (var detector in Detectors)
+            {
+                detector.EnterNamedBlock(namedBlock);
+            }
+            base.Visit(namedBlock);
+            foreach (var detector in Detectors)
+            {
+                detector.LeaveNamedBlock(namedBlock);
+            }
+        }
+
 
         public override void Visit(BinaryExpression binaryExpression)
         {
             foreach (var detector in Detectors)
             {
-                detector.AnalyseBinaryExpression(binaryExpression);
+                detector.VisitBinaryExpression(binaryExpression);
             }
             base.Visit(binaryExpression);
         }
 
-        public override void Visit(NamedBlock namedBlock)
+        public override void Visit(AnonymousToken anonymousToken)
         {
             foreach (var detector in Detectors)
             {
-                detector.AnalyseNamedBlock(namedBlock);
+                detector.VisitAnonymousToken(anonymousToken);
             }
-            base.Visit(namedBlock);
+            base.Visit(anonymousToken);
+        }
+        public override void Visit(Comment comment)
+        {
+            foreach (var detector in Detectors)
+            {
+                detector.VisitComment(comment);
+            }
+            base.Visit(comment);
         }
 
-        public override void Visit(Node node)
-        {
-            foreach (var detector in Detectors)
-            {
-                detector.AnalyseNode(node);
-            }
-            base.Visit(node);
-        }
-
-        public override void Visit(ScriptFile scriptFile)
-        {
-            foreach (var detector in Detectors)
-            {
-                detector.AnalyseScriptFile(scriptFile);
-            }
-            base.Visit(scriptFile);
-        }
 
         public void Finish()
         {

@@ -21,7 +21,7 @@ namespace CK3Analyser.Analysis
                     Severity_Macro = Severity.Info,
                     MaxSize_Macro = 50,
                     Severity_NonMacroBlock = Severity.Info,
-                    MaxSize_NonMacroBlock = 20
+                    MaxSize_NonMacroBlock = 50
                 }));
             //visitor.Detectors.Add(new OvercomplicatedBooleanDetector(logger, context,
             //    new OvercomplicatedBooleanDetector.Settings

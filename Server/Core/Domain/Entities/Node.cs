@@ -72,7 +72,7 @@ namespace CK3Analyser.Core.Domain.Entities
 
         public NodeType NodeType { get; set; }
 
-        public virtual void Accept(IDomainVisitor visitor) => visitor.Visit(this);
+        public abstract void Accept(IDomainVisitor visitor);
 
         public virtual string GetLoneIdentifier() => " ";
         public string GetIdentifier()

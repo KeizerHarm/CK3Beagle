@@ -29,7 +29,7 @@ namespace CK3Analyser.Analysis.Detectors
             _settings = settings;
         }
 
-        public override void AnalyseScriptFile(ScriptFile scriptFile)
+        public override void EnterScriptFile(ScriptFile scriptFile)
         {
             if (string.IsNullOrWhiteSpace(scriptFile.Raw)) return;
 

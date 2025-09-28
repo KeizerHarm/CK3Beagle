@@ -65,7 +65,6 @@ namespace CK3Analyser.Core.Domain.Entities
             Children.Remove(original);
             Children.Insert(oldIndex, replacement);
         }
-        public override void Accept(IDomainVisitor visitor) => visitor.Visit(this);
 
         private int _size = -1;
         public override int GetSize()
