@@ -7,13 +7,13 @@ namespace CK3Analyser.Analysis.Detectors
 {
     public class MagicNumberDetector : BaseDetector
     {
-        public struct Settings
+        public readonly struct Settings
         {
-            public Severity Severity { get; set; }
-            public HashSet<string> StatementKeysToConsider { get; set; }
+            public Severity Severity { get; init; }
+            public HashSet<string> StatementKeysToConsider { get; init; }
         }
 
-        private Settings _settings;
+        private readonly Settings _settings;
 
         public MagicNumberDetector(ILogger logger, Context context, Settings settings) : base(logger, context)
         {
@@ -25,7 +25,7 @@ namespace CK3Analyser.Analysis.Detectors
             if (!_settings.StatementKeysToConsider.Contains(binaryExpression.Key))
                 return;
 
-            if (int.TryParse(binaryExpression.Value, out int _))
+            if (IsNumeric(binaryExpression.Value))
             {
                 logger.Log(
                     Smell.MagicNumber,
@@ -33,6 +33,17 @@ namespace CK3Analyser.Analysis.Detectors
                     $"Use of literal number as an argument for '{binaryExpression.Key}'; use a script value instead!",
                     binaryExpression.GetIdentifier());
             }
+        }
+
+        private bool IsNumeric(string s)
+        {
+            if (s.Length == 0) return false;
+            int i = 0;
+            if (s[0] == '-' || s[0] == '+') i++;
+            for (; i < s.Length; i++)
+                if (s[i] != '.' && (s[i] < '0' || s[i] > '9'))
+                    return false;
+            return true;
         }
     }
 }

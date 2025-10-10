@@ -5,7 +5,7 @@ using System.Collections.Generic;
 
 namespace CK3Analyser.Analysis
 {
-    public class AnalysisVisitor : BaseDomainVisitor
+    public sealed class AnalysisVisitor : BaseDomainVisitor
     {
         public List<BaseDetector> Detectors { get; } = new List<BaseDetector>();
 

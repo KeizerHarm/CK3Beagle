@@ -14,15 +14,15 @@ namespace CK3Analyser.Analysis.Detectors
 
     public class InconsistentIndentationDetector : BaseDetector
     {
-        public struct Settings
+        public readonly struct Settings
         {
-            public IndentationType ExpectedIndentationType { get; set; }
-            public Severity Severity_UnexpectedType { get; set; }
-            public bool DisregardBracketsInComments { get; set; }
-            public Severity Severity_Inconsistency { get; set; }
+            public IndentationType ExpectedIndentationType { get; init; }
+            public Severity Severity_UnexpectedType { get; init; }
+            public bool DisregardBracketsInComments { get; init; }
+            public Severity Severity_Inconsistency { get; init; }
         }
 
-        private Settings _settings;
+        private readonly Settings _settings;
 
         public InconsistentIndentationDetector(ILogger logger, Context context, Settings settings) : base(logger, context)
         {

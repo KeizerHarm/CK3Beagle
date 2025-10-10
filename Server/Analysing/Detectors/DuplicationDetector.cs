@@ -10,14 +10,14 @@ namespace CK3Analyser.Analysis.Detectors
 {
     public class DuplicationDetector : BaseDetector
     {
-        public struct Settings
+        public readonly struct Settings
         {
-            public Severity Severity { get; set; }
-            public int MinSize { get; set; }
-            public int MaxNumberOfDifferentValues { get; set; }
+            public Severity Severity { get; init; }
+            public int MinSize { get; init; }
+            public int MaxNumberOfDifferentValues { get; init; }
         }
 
-        private Settings _settings;
+        private readonly Settings _settings;
 
         public DuplicationDetector(ILogger logger, Context context, Settings settings) : base(logger, context)
         {

@@ -84,7 +84,7 @@ namespace CK3Analyser.Analysis
                     return "MG.1";
 
                 default:
-                    throw new ArgumentException("What is that smell...");
+                    throw new ArgumentException("What is that smell, that smelly smell...?");
             }
         }
     }

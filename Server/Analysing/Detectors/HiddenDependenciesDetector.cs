@@ -8,32 +8,32 @@ namespace CK3Analyser.Analysis.Detectors
 {
     public class HiddenDependenciesDetector : BaseDetector
     {
-        public struct Settings
+        public readonly struct Settings
         {
-            public Severity Severity_UseOfRoot { get; set; }
-            public bool UseOfRoot_IgnoreIfInName { get; set; }
-            public bool UseOfRoot_IgnoreIfInComment { get; set; }
-            public bool UseOfRoot_AllowInEventFile { get; set; }
+            public Severity Severity_UseOfRoot { get; init; }
+            public bool UseOfRoot_IgnoreIfInName { get; init; }
+            public bool UseOfRoot_IgnoreIfInComment { get; init; }
+            public bool UseOfRoot_AllowInEventFile { get; init; }
 
-            public Severity Severity_UseOfPrev { get; set; }
-            public bool UseOfPrev_IgnoreIfInName { get; set; }
-            public bool UseOfPrev_IgnoreIfInComment { get; set; }
-            public bool UseOfPrev_AllowInEventFile { get; set; }
+            public Severity Severity_UseOfPrev { get; init; }
+            public bool UseOfPrev_IgnoreIfInName { get; init; }
+            public bool UseOfPrev_IgnoreIfInComment { get; init; }
+            public bool UseOfPrev_AllowInEventFile { get; init; }
 
-            public Severity Severity_UseOfSavedScope { get; set; }
-            public bool UseOfSavedScope_IgnoreIfInName { get; set; }
-            public bool UseOfSavedScope_IgnoreIfInComment { get; set; }
-            public bool UseOfSavedScope_AllowInEventFile { get; set; }
+            public Severity Severity_UseOfSavedScope { get; init; }
+            public bool UseOfSavedScope_IgnoreIfInName { get; init; }
+            public bool UseOfSavedScope_IgnoreIfInComment { get; init; }
+            public bool UseOfSavedScope_AllowInEventFile { get; init; }
 
-            public Severity Severity_UseOfVariable { get; set; }
-            public bool UseOfVariable_IgnoreIfInName { get; set; }
-            public bool UseOfVariable_IgnoreIfInComment { get; set; }
-            public bool UseOfVariable_AllowInEventFile { get; set; }
+            public Severity Severity_UseOfVariable { get; init; }
+            public bool UseOfVariable_IgnoreIfInName { get; init; }
+            public bool UseOfVariable_IgnoreIfInComment { get; init; }
+            public bool UseOfVariable_AllowInEventFile { get; init; }
 
-            public HashSet<string> VariablesWhitelist { get; set; }
+            public HashSet<string> VariablesWhitelist { get; init; }
         }
 
-        private Settings _settings;
+        private readonly Settings _settings;
 
         private Declaration thisDeclaration;
         private bool usedRoot = false;

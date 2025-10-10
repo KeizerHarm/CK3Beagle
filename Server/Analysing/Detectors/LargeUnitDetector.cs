@@ -7,48 +7,56 @@ namespace CK3Analyser.Analysis.Detectors
 {
     public class LargeUnitDetector : BaseDetector
     {
-        public struct Settings
+        public readonly struct Settings
         {
-            public int MaxSize_NonMacroBlock { get; set; }
-            public Severity Severity_NonMacroBlock { get; set; }
-            public int MaxSize_File { get; set; }
-            public Severity Severity_File { get; set; }
-            public int MaxSize_Macro { get; set; }
-            public Severity Severity_Macro { get; set; }
+            public int MaxSize_NonMacroBlock { get; init; }
+            public Severity Severity_NonMacroBlock { get; init; }
+
+            public int MaxSize_File { get; init; }
+            public Severity Severity_File { get; init; }
+
+            public int MaxSize_Macro { get; init; }
+            public Severity Severity_Macro { get; init; }
         }
 
-        private Settings _settings;
+        private readonly Settings _settings;
 
         public LargeUnitDetector(ILogger logger, Context context, Settings settings) : base(logger, context)
         {
             _settings = settings;
         }
+
         public override void EnterScriptFile(ScriptFile scriptFile)
         {
-            var length = scriptFile.Raw.Split('\n').Length;
-            if (length >= _settings.MaxSize_File)
+            int noOfLines = 1;
+            foreach (char c in scriptFile.Raw)
+                if (c == '\n') noOfLines++;
+
+            if (noOfLines >= _settings.MaxSize_File)
             {
                 logger.Log(
                     Smell.LargeUnit_File,
                     _settings.Severity_File,
-                    $"Large file detected: {length} lines",
+                    $"Large file detected: {noOfLines} lines",
                     scriptFile.GetIdentifier());
             }
         }
 
         public override void EnterDeclaration(Declaration declaration)
         {
-            var size = declaration.GetSize();
-            if (size >= _settings.MaxSize_Macro && declaration.DeclarationType.IsMacroType())
+            if (declaration.DeclarationType.IsMacroType())
             {
-                logger.Log (
-                    Smell.LargeUnit_Macro,
-                    _settings.Severity_Macro,
-                    $"Large macro detected: {size} statements",
-                    declaration.GetIdentifier());
+                var size = declaration.GetSize();
+                if (size >= _settings.MaxSize_Macro)
+                {
+                    logger.Log(
+                        Smell.LargeUnit_Macro,
+                        _settings.Severity_Macro,
+                        $"Large macro detected: {size} statements",
+                        declaration.GetIdentifier());
+                }
             }
-            
-            if (!declaration.DeclarationType.IsMacroType())
+            else
             {
                 AnalyseMacroBlocks(declaration);
             }
@@ -56,7 +64,14 @@ namespace CK3Analyser.Analysis.Detectors
 
         private void AnalyseMacroBlocks(Block block)
         {
-            if (block.Children.Any(x => x.NodeType == NodeType.Statement || x.NodeType == NodeType.Link)) {
+            bool interpretAsScriptBlock = false;
+            foreach (var child in block.Children)
+            {
+                if (child.NodeType != NodeType.Other)
+                    interpretAsScriptBlock = true;
+            }
+
+            if (interpretAsScriptBlock) {
                 var size = block.GetSize();
                 if (size >= _settings.MaxSize_NonMacroBlock)
                 {
@@ -69,10 +84,12 @@ namespace CK3Analyser.Analysis.Detectors
                 return;
             }
 
-            var blockChildren = block.Children.OfType<Block>();
-            foreach (var blockChild in blockChildren)
+            foreach (var child in block.Children)
             {
-                AnalyseMacroBlocks(blockChild);
+                if (child is Block blockChild)
+                {
+                    AnalyseMacroBlocks(blockChild);
+                }
             }
         }
     }

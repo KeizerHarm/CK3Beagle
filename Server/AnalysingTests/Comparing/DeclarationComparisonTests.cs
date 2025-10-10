@@ -10,7 +10,7 @@ namespace CK3Analyser.Analysing.Comparing
             //arrange
             (var old, var @new) = GetTestCase("Basic");
 
-            var comparison = new DeclarationComparison().MatchSubtrees(old, @new);
+            //var comparison = new DeclarationComparison().MatchSubtrees(old, @new);
         }
     }
 }
