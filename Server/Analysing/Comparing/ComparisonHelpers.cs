@@ -1,4 +1,5 @@
 ﻿using CK3Analyser.Core.Domain.Entities;
+using System;
 using System.Collections.Generic;
 
 namespace CK3Analyser.Analysis.Comparing
@@ -6,7 +7,7 @@ namespace CK3Analyser.Analysis.Comparing
     public sealed class ComparisonHelpers
     {
         public static (HashSet<string> added, HashSet<string> removed, HashSet<string> changed, HashSet<string> untouched)
-            SimpleListComparison<T>(Dictionary<string, T> baseDict, Dictionary<string, T> editDict)
+            SimpleListComparison<T>(Dictionary<string, T> baseDict, Dictionary<string, T> editDict, Func<T, T, bool> comparator)
            where T : Node
         {
             var added = new HashSet<string>();
@@ -16,13 +17,13 @@ namespace CK3Analyser.Analysis.Comparing
 
             foreach (var item in baseDict)
             {
-                if (!editDict.TryGetValue(item.Key, out T editedFile))
+                if (!editDict.TryGetValue(item.Key, out T editedItem))
                 {
                     removed.Add(item.Key);
                 }
                 else
                 {
-                    if (item.Value.Raw == editedFile.Raw)
+                    if (comparator(item.Value, editedItem))
                     {
                         untouched.Add(item.Key);
                     }

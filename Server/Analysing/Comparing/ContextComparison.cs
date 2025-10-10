@@ -1,10 +1,11 @@
 ﻿using CK3Analyser.Core.Domain;
+using CK3Analyser.Core.Domain.Entities;
 using System;
 using System.Collections.Generic;
 
 namespace CK3Analyser.Analysis.Comparing
 {
-    public partial class ContextComparison
+    public class ContextComparison
     {
         public Context Base { get; }
         public Context Edit { get; }
@@ -33,7 +34,7 @@ namespace CK3Analyser.Analysis.Comparing
         private void HandleFiles()
         {
             (AddedFiles, RemovedFiles, ChangedFiles, UntouchedFiles) 
-                = ComparisonHelpers.SimpleListComparison(Base.Files, Edit.Files);
+                = ComparisonHelpers.SimpleListComparison(Base.Files, Edit.Files, (first, second) => first.Raw == second.Raw);
 
             foreach (var file in ChangedFiles)
             {
@@ -45,7 +46,8 @@ namespace CK3Analyser.Analysis.Comparing
             foreach (var declarationType in Enum.GetValues<DeclarationType>())
             {
                 (AddedDeclarations[(int)declarationType], RemovedDeclarations[(int)declarationType], ChangedDeclarations[(int)declarationType], UntouchedDeclarations[(int)declarationType])
-                = ComparisonHelpers.SimpleListComparison(Base.Declarations[(int)declarationType], Edit.Declarations[(int)declarationType]);
+                    = ComparisonHelpers.SimpleListComparison(Base.Declarations[(int)declarationType], Edit.Declarations[(int)declarationType],
+                        (first, second) => first.GetStrictHashCode() == second.GetStrictHashCode());
             }
         }
     }
