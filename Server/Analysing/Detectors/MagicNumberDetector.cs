@@ -31,7 +31,9 @@ namespace CK3Analyser.Analysis.Detectors
                     Smell.MagicNumber,
                     _settings.Severity,
                     $"Use of literal number as an argument for '{binaryExpression.Key}'; use a script value instead!",
-                    binaryExpression.GetIdentifier());
+                    binaryExpression.GetIdentifier(),
+                    binaryExpression.StartIndex,
+                    binaryExpression.EndIndex);
             }
         }
 

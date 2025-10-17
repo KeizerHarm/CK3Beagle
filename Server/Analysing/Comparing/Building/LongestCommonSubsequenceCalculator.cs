@@ -19,7 +19,6 @@ namespace CK3Analyser.Analysis.Comparing.Building
 
         //        }
         //    }
-
         //}
 
 

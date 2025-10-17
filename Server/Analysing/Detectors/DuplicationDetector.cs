@@ -191,7 +191,9 @@ namespace CK3Analyser.Analysis.Detectors
                     logger.Log(Smell.Duplication,
                         _settings.Severity,
                         msg,
-                        node.GetIdentifier());
+                        node.GetIdentifier(),
+                        node.StartIndex,
+                        node.EndIndex);
                 }
             }
 

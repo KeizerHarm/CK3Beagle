@@ -2,6 +2,7 @@
 using CK3Analyser.Core.Domain;
 using CK3Analyser.Core.Domain.Entities;
 using System.Linq;
+using System.Xml.Linq;
 
 namespace CK3Analyser.Analysis.Detectors
 {
@@ -53,7 +54,9 @@ namespace CK3Analyser.Analysis.Detectors
                         Smell.LargeUnit_Macro,
                         _settings.Severity_Macro,
                         $"Large macro detected: {size} statements",
-                        declaration.GetIdentifier());
+                        declaration.GetIdentifier(),
+                        declaration.StartIndex,
+                        declaration.EndIndex);
                 }
             }
             else
@@ -79,7 +82,9 @@ namespace CK3Analyser.Analysis.Detectors
                         Smell.LargeUnit_NonMacroBlock,
                         _settings.Severity_NonMacroBlock,
                         $"Large block detected: {size} statements",
-                        block.GetIdentifier());
+                        block.GetIdentifier(),
+                        block.StartIndex,
+                        block.EndIndex);
                 }
                 return;
             }

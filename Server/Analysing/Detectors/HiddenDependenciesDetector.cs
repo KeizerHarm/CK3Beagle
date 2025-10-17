@@ -3,6 +3,7 @@ using CK3Analyser.Core.Domain;
 using CK3Analyser.Core.Domain.Entities;
 using System.Collections.Generic;
 using System.Text;
+using System.Xml.Linq;
 
 namespace CK3Analyser.Analysis.Detectors
 {
@@ -107,7 +108,9 @@ namespace CK3Analyser.Analysis.Detectors
                     Smell.HiddenDependencies_UseOfSavedScope,
                     _settings.Severity_UseOfSavedScope,
                     "Declaration uses 'scope:" + scopeName + "'." + msg,
-                    declaration.GetIdentifier()
+                    declaration.GetIdentifier(),
+                    declaration.StartIndex,
+                    declaration.EndIndex
                 );
             }
         }
@@ -129,7 +132,9 @@ namespace CK3Analyser.Analysis.Detectors
                     Smell.HiddenDependencies_UseOfSavedScope,
                     _settings.Severity_UseOfSavedScope,
                     "Declaration uses 'var:" + varName + "'." + msg,
-                    declaration.GetIdentifier()
+                    declaration.GetIdentifier(),
+                    declaration.StartIndex,
+                    declaration.EndIndex
                 );
             }
         }
@@ -149,7 +154,9 @@ namespace CK3Analyser.Analysis.Detectors
                     Smell.HiddenDependencies_UseOfPrev,
                     _settings.Severity_UseOfPrev,
                     "Declaration uses 'prev' at the top level." + msg,
-                    declaration.GetIdentifier()
+                    declaration.GetIdentifier(),
+                    declaration.StartIndex,
+                    declaration.EndIndex
                 );
             }
         }
@@ -167,7 +174,9 @@ namespace CK3Analyser.Analysis.Detectors
                     Smell.HiddenDependencies_UseOfRoot,
                     _settings.Severity_UseOfRoot,
                     "Declaration uses 'root'." + msg,
-                    declaration.GetIdentifier()
+                    declaration.GetIdentifier(),
+                    declaration.StartIndex,
+                    declaration.EndIndex
                 );
             }
         }

@@ -64,13 +64,16 @@ namespace CK3Analyser.Analysis.Detectors
 
             if (key == "AND")
             {
-                if (childBlockKeys.Contains("AND"))
+                var ANDchildren = childNamedBlocks.Where(x => x.Key == "AND");
+                foreach (var child in ANDchildren)
                 {
                     logger.Log(
                         Smell.OvercomplicatedBoolean_Associativity,
                         _settings.Severity_Associativity,
                         "AND containing AND",
-                        namedBlock.GetIdentifier());
+                        child.GetIdentifier(),
+                        child.StartIndex,
+                        child.EndIndex);
                 }
 
                 var ORchildren = childNamedBlocks.Where(x => x.Key == "OR");
@@ -80,36 +83,41 @@ namespace CK3Analyser.Analysis.Detectors
                         Smell.OvercomplicatedBoolean_Distributivity,
                         _settings.Severity_Distributivity,
                         "AND with ORs that share a trigger",
-                        namedBlock.GetIdentifier());
+                        namedBlock.GetIdentifier(),
+                        namedBlock.StartIndex,
+                        namedBlock.EndIndex);
                 }
-
-                if (childBlockKeys.Contains("OR"))
+                foreach (var orChild in ORchildren)
                 {
-                    foreach (var orChild in childNamedBlocks.Where(x => x.Key == "OR"))
+                    if (HasRepeatedString(childBinaryExpressions.Select(x => x.Raw),
+                        orChild.Children.OfType<BinaryExpression>().Select(x => x.Raw)))
                     {
-                        if (HasRepeatedString(childBinaryExpressions.Select(x => x.Raw),
-                            orChild.Children.OfType<BinaryExpression>().Select(x => x.Raw)))
-                        {
-                            logger.Log(
-                                Smell.OvercomplicatedBoolean_Absorption,
-                                _settings.Severity_Absorption,
-                                "AND with OR that includes a trigger in the parent AND",
-                                namedBlock.GetIdentifier());
-                        }
+                        logger.Log(
+                            Smell.OvercomplicatedBoolean_Absorption,
+                            _settings.Severity_Absorption,
+                            "AND with OR that includes a trigger in the parent AND",
+                            namedBlock.GetIdentifier(),
+                            orChild.StartIndex,
+                            orChild.EndIndex);
                     }
                 }
             }
 
             if (key == "OR")
             {
-                if (childBlockKeys.Contains("OR"))
+                var ORChildren = childNamedBlocks.Where(x => x.Key == "OR");
+
+                foreach (var orChild in ORChildren)
                 {
                     logger.Log(
                         Smell.OvercomplicatedBoolean_Associativity,
                         _settings.Severity_Associativity,
                         "OR containing OR",
-                        namedBlock.GetIdentifier());
+                        orChild.GetIdentifier(),
+                        orChild.StartIndex,
+                        orChild.EndIndex);
                 }
+
 
                 var ANDchildren = childNamedBlocks.Where(x => x.Key == "AND");
                 if (HasRepeatedString(ANDchildren.Select(x => x.Children.OfType<BinaryExpression>().Select(y => y.Raw))))
@@ -118,24 +126,25 @@ namespace CK3Analyser.Analysis.Detectors
                         Smell.OvercomplicatedBoolean_Distributivity,
                         _settings.Severity_Distributivity,
                         "OR with ANDs that share a trigger",
-                        namedBlock.GetIdentifier());
+                        namedBlock.GetIdentifier(),
+                        namedBlock.StartIndex,
+                        namedBlock.EndIndex);
                 }
-
-                if (childBlockKeys.Contains("AND"))
+                foreach (var andChild in ANDchildren)
                 {
-                    foreach (var andChild in childNamedBlocks.Where(x => x.Key == "AND"))
+                    if (HasRepeatedString(childBinaryExpressions.Select(x => x.Raw),
+                        andChild.Children.OfType<BinaryExpression>().Select(x => x.Raw)))
                     {
-                        if (HasRepeatedString(childBinaryExpressions.Select(x => x.Raw),
-                            andChild.Children.OfType<BinaryExpression>().Select(x => x.Raw)))
-                        {
-                            logger.Log(
-                                Smell.OvercomplicatedBoolean_Absorption,
-                                _settings.Severity_Absorption,
-                                "OR with AND that includes a trigger in the parent OR",
-                                namedBlock.GetIdentifier());
-                        }
+                        logger.Log(
+                            Smell.OvercomplicatedBoolean_Absorption,
+                            _settings.Severity_Absorption,
+                            "OR with AND that includes a trigger in the parent OR",
+                            namedBlock.GetIdentifier(),
+                            namedBlock.StartIndex,
+                            namedBlock.EndIndex);
                     }
                 }
+                
             }
 
             var seenKeys = new HashSet<string>();
@@ -148,7 +157,9 @@ namespace CK3Analyser.Analysis.Detectors
                         Smell.OvercomplicatedBoolean_Idempotency,
                         _settings.Severity_Idempotency,
                         $"Duplicate trigger: {item.Raw}",
-                        namedBlock.GetIdentifier());
+                        namedBlock.GetIdentifier(),
+                        item.StartIndex,
+                        item.EndIndex);
                     continue;
                 }
 
@@ -158,7 +169,9 @@ namespace CK3Analyser.Analysis.Detectors
                         Smell.OvercomplicatedBoolean_Complementation,
                         _settings.Severity_Complementation,
                         $"Complementary triggers: {item.Raw} and its inverse",
-                        namedBlock.GetIdentifier());
+                        namedBlock.GetIdentifier(),
+                        namedBlock.StartIndex,
+                        namedBlock.EndIndex);
                 }
             }
 
@@ -170,7 +183,9 @@ namespace CK3Analyser.Analysis.Detectors
                         Smell.OvercomplicatedBoolean_DoubleNegation,
                         _settings.Severity_DoubleNegation,
                         "All children of NOR are negated themselves",
-                        namedBlock.GetIdentifier());
+                        namedBlock.GetIdentifier(),
+                        namedBlock.StartIndex,
+                        namedBlock.EndIndex);
                 }
             }
 
@@ -182,7 +197,9 @@ namespace CK3Analyser.Analysis.Detectors
                         Smell.OvercomplicatedBoolean_DoubleNegation,
                         _settings.Severity_DoubleNegation,
                         "All children of NAND are negated themselves",
-                        namedBlock.GetIdentifier());
+                        namedBlock.GetIdentifier(),
+                        namedBlock.StartIndex,
+                        namedBlock.EndIndex);
                 }
             }
 
@@ -194,7 +211,9 @@ namespace CK3Analyser.Analysis.Detectors
                         Smell.NotIsNotNor,
                         _settings.Severity_NotIsNotNor,
                         "NOT containing multiple elements",
-                        namedBlock.GetIdentifier());
+                        namedBlock.GetIdentifier(),
+                        namedBlock.StartIndex,
+                        namedBlock.EndIndex);
                 }
 
                 if (AllChildrenAreNegated(namedBlock))
@@ -203,7 +222,9 @@ namespace CK3Analyser.Analysis.Detectors
                         Smell.OvercomplicatedBoolean_DoubleNegation,
                         _settings.Severity_DoubleNegation,
                         $"All children of NOT are negated themselves",
-                        namedBlock.GetIdentifier());
+                        namedBlock.GetIdentifier(),
+                        namedBlock.StartIndex,
+                        namedBlock.EndIndex);
                 }
 
                 if (childBlockKeys.Contains("NOR"))
@@ -212,7 +233,9 @@ namespace CK3Analyser.Analysis.Detectors
                         Smell.OvercomplicatedBoolean_DoubleNegation,
                         _settings.Severity_DoubleNegation,
                         "NOT contains NOR",
-                        namedBlock.GetIdentifier());
+                        namedBlock.GetIdentifier(),
+                        namedBlock.StartIndex,
+                        namedBlock.EndIndex);
                 }
 
                 if (childBlockKeys.Contains("NAND"))
@@ -221,7 +244,9 @@ namespace CK3Analyser.Analysis.Detectors
                         Smell.OvercomplicatedBoolean_DoubleNegation,
                         _settings.Severity_DoubleNegation,
                         "NOT contains NAND",
-                        namedBlock.GetIdentifier());
+                        namedBlock.GetIdentifier(),
+                        namedBlock.StartIndex,
+                        namedBlock.EndIndex);
                 }
             }
         }
