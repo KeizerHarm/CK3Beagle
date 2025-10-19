@@ -1,26 +1,77 @@
-﻿using CK3Analyser.Core.Domain;
+﻿using Antlr4.Runtime;
+using CK3Analyser.Core.Domain;
 using CK3Analyser.Core.Domain.Entities;
+using CK3Analyser.Core.Parsing.Antlr;
 using CK3Analyser.Core.Parsing.SecondPass;
 using CK3Analyser.Core.Resources;
 using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace CK3Analyser.Core.Parsing
 {
     public class ParsingService
     {
-        public static void ParseAllEntities(ICk3Parser parser, Context context)
+        public static void ParseAllEntities(Func<ICk3Parser> parserMaker, Context context)
         {
             Console.WriteLine($"Now reading files from {context.Path}");
+
             foreach (var declarationType in Enum.GetValues<DeclarationType>())
             {
-                GatherDeclarationsForDeclarationType(parser, context, declarationType);
+                ReadEverythingAsync(parserMaker, context, declarationType);
             }
+            GlobalResources.Lock();
             Console.WriteLine("Done with first pass");
             new SecondPassHandler().ExecuteSecondPass(context);
             Console.WriteLine("Done with second pass");
+        }
+
+        public static void ReadEverythingAsync(Func<ICk3Parser> parserMaker, Context context, DeclarationType declarationType)
+        {
+            var entityFiles = new ConcurrentBag<ScriptFile>();
+
+            var entityHome = Path.Combine(context.Path, declarationType.GetEntityHome());
+            if (Directory.Exists(entityHome))
+            {
+                var files = Directory.GetFiles(entityHome, "*.txt", SearchOption.AllDirectories);
+                Console.WriteLine($"Found {files.Length} {declarationType.ToString()} files");
+
+                var batchSize = 50;
+                var fileBatches = files.Chunk(batchSize);
+                Parallel.ForEach(fileBatches, new ParallelOptions { MaxDegreeOfParallelism = Environment.ProcessorCount }, batch =>
+                {
+                    var parser = parserMaker();
+                    foreach (var filePath in batch)
+                    {
+                        var input = File.ReadAllText(filePath);
+                        var scriptFile = new ScriptFile(context, Path.GetRelativePath(context.Path, filePath), declarationType, input);
+
+                        ParseScriptFile(scriptFile, parser);
+                        entityFiles.Add(scriptFile);
+                    }
+                });
+            }
+
+            foreach (var file in entityFiles)
+            {
+                context.AddFile(file);
+            }
+        }
+
+        private static void ParseScriptFile(ScriptFile scriptfile, ICk3Parser parser)
+        {
+            parser.ParseFile(scriptfile);
+            if (scriptfile.ExpectedDeclarationType == DeclarationType.ScriptedEffect)
+            {
+                GlobalResources.AddEffects(scriptfile.Declarations.Keys);
+            }
+            if (scriptfile.ExpectedDeclarationType == DeclarationType.ScriptedTrigger)
+            {
+                GlobalResources.AddTriggers(scriptfile.Declarations.Keys);
+            }
         }
 
         public static void GatherDeclarationsForDeclarationType(ICk3Parser parser, Context context, DeclarationType declarationType)
@@ -46,23 +97,11 @@ namespace CK3Analyser.Core.Parsing
                 //    }
                 //    context.AddFile(scriptFile);
                 //};
-                Parallel.ForEach(files, filePath =>
-                {
-                    var relativePath = Path.GetRelativePath(context.Path, filePath);
-                    var input = File.ReadAllText(filePath);
-                    var scriptfile = new ScriptFile(context, relativePath, declarationType, input);
-
-                    parser.ParseFile(scriptfile);
-                    if (declarationType == DeclarationType.ScriptedEffect)
-                    {
-                        GlobalResources.AddEffects(scriptfile.Declarations.Keys);
-                    }
-                    if (declarationType == DeclarationType.ScriptedTrigger)
-                    {
-                        GlobalResources.AddTriggers(scriptfile.Declarations.Keys);
-                    }
-                    context.AddFile(scriptfile);
-                });
+                //Parallel.ForEach(files, async filePath =>
+                //{
+                //    ScriptFile scriptfile = await MakeScriptFile(context, declarationType, filePath);
+                //    ParseScriptFile(parser, context, declarationType, scriptfile);
+                //});
             }
             GlobalResources.Lock();
         }

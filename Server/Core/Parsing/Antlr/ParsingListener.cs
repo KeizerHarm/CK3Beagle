@@ -7,12 +7,12 @@ using System.Linq;
 
 namespace CK3Analyser.Core.Parsing.Antlr
 {
-    public class ParsingVisitor : CK3BaseListener
+    public class ParsingListener : CK3BaseListener
     {
         public ScriptFile file;
-        private Stack<Block> thisBlock;
+        private readonly Stack<Block> thisBlock;
 
-        public ParsingVisitor(ScriptFile file)
+        public ParsingListener(ScriptFile file)
         {
             thisBlock = new Stack<Block>();
             this.file = file;
@@ -127,7 +127,7 @@ namespace CK3Analyser.Core.Parsing.Antlr
                 return "";
 
             int startIndex = context.Start.StartIndex;
-            int endIndex = startIndex;
+            int endIndex = context.Start.StopIndex;
             if(context?.Stop != null)
             {
                 endIndex = context.Stop.StopIndex + 1;

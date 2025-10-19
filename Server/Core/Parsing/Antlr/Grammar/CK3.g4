@@ -8,10 +8,10 @@ script : (
     | anonymousToken
     | comment ) + ;
 
-namedBlock : token SCOPER '{' script? '}';
+namedBlock : identifier=token SCOPER '{' script? '}';
 anonymousBlock : '{' script? '}';
-binaryExpression : token SCOPER token;
-anonymousToken : token;
+binaryExpression : key=token SCOPER value=token;
+anonymousToken : identifier=token;
 token : TOKEN ( ( '.' | '|' ) TOKEN)*;
 comment: COMMENT;
 

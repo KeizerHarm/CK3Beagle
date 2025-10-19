@@ -45,7 +45,7 @@ namespace CK3Analyser.CLI
             var parsingTimer = new Stopwatch();
             parsingTimer.Start();
             //GatherDeclarationsForDeclarationType(antlrParser, GlobalResources.Old, DeclarationType.ScriptedTrigger);
-            ParsingService.ParseAllEntities(antlrParser, GlobalResources.Old);
+            ParsingService.ParseAllEntities(() => new AntlrParser(), GlobalResources.Old);
             parsingTimer.Stop();
 
             //var analysisTimer = new Stopwatch();
