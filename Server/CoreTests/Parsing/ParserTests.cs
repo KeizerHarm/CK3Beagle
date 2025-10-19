@@ -27,12 +27,14 @@ namespace CK3Analyser.Core.Parsing
             var parser = GetParser(parserType);
 
             var expectedScriptFile = new ScriptFile(context, relativePath, expectedDeclarationType, stringToParse);
+            var actualScriptFile = new ScriptFile(context, relativePath, expectedDeclarationType, stringToParse);
+
 
             //act
-            var parsed = parser.ParseText(stringToParse, relativePath, context, expectedDeclarationType);
+            parser.ParseFile(actualScriptFile);
 
             //assert
-            AssertNodesEqual(expectedScriptFile, parsed);
+            AssertNodesEqual(expectedScriptFile, actualScriptFile);
         }
 
         [Theory]
@@ -60,11 +62,13 @@ namespace CK3Analyser.Core.Parsing
 
             expectedScriptFile.AddDeclaration(expectedDecl);
 
+            var actualScriptFile = new ScriptFile(context, relativePath, expectedDeclarationType, stringToParse);
+
             //act
-            var parsed = parser.ParseText(stringToParse, relativePath, context, expectedDeclarationType);
+            parser.ParseFile(actualScriptFile);
 
             //assert
-            AssertNodesEqual(expectedScriptFile, parsed);
+            AssertNodesEqual(expectedScriptFile, actualScriptFile);
         }
 
 
@@ -99,11 +103,13 @@ namespace CK3Analyser.Core.Parsing
             };
             expectedScriptFile.AddChild(expectedComment);
 
+            var actualScriptFile = new ScriptFile(context, relativePath, expectedDeclarationType, stringToParse);
+
             //act
-            var parsed = parser.ParseText(stringToParse, relativePath, context, expectedDeclarationType);
+            parser.ParseFile(actualScriptFile);
 
             //assert
-            AssertNodesEqual(expectedScriptFile, parsed);
+            AssertNodesEqual(expectedScriptFile, actualScriptFile);
         }
 
 

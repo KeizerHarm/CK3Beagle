@@ -9,32 +9,14 @@ namespace CK3Analyser.Core.Parsing.Antlr
 {
     public class ParsingVisitor : CK3BaseListener
     {
-        private readonly string rawFile;
-        private readonly Context domainContext;
-        private readonly string relativePath;
-        private readonly DeclarationType expectedDeclarationType;
         public ScriptFile file;
         private Stack<Block> thisBlock;
 
-        public ParsingVisitor(string rawFile, Context domainContext, string relativePath, DeclarationType expectedDeclarationType)
+        public ParsingVisitor(ScriptFile file)
         {
-            this.rawFile = rawFile;
-            this.domainContext = domainContext;
-            this.relativePath = relativePath;
-            this.expectedDeclarationType = expectedDeclarationType;
             thisBlock = new Stack<Block>();
-        }
-
-        public override void EnterFile([NotNull] CK3Parser.FileContext context)
-        {
-            var file = new ScriptFile(domainContext, relativePath, expectedDeclarationType, rawFile);
             this.file = file;
             thisBlock.Push(file);
-        }
-
-        public override void ExitFile([NotNull] CK3Parser.FileContext context)
-        {
-            thisBlock.Pop();
         }
 
         public override void EnterNamedBlock([NotNull] CK3Parser.NamedBlockContext context)
@@ -150,7 +132,7 @@ namespace CK3Analyser.Core.Parsing.Antlr
             {
                 endIndex = context.Stop.StopIndex + 1;
             }
-            return rawFile.Substring(startIndex, endIndex - startIndex);
+            return file.Raw.Substring(startIndex, endIndex - startIndex);
         }
     }
 }

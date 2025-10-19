@@ -1,6 +1,4 @@
-﻿using CK3Analyser.Analysis.Comparing;
-
-namespace CK3Analyser.Analysing.Comparing
+﻿namespace CK3Analyser.Analysing.Comparing
 {
     public class DeclarationComparisonTests : BaseComparisonTest
     {

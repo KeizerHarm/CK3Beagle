@@ -3,7 +3,6 @@ using CK3Analyser.Core.Domain;
 using CK3Analyser.Core.Domain.Entities;
 using System.Collections.Generic;
 using System.Text;
-using System.Xml.Linq;
 
 namespace CK3Analyser.Analysis.Detectors
 {

@@ -1,8 +1,6 @@
 ﻿using CK3Analyser.Analysis.Logging;
 using CK3Analyser.Core.Domain;
 using CK3Analyser.Core.Domain.Entities;
-using System.Linq;
-using System.Xml.Linq;
 
 namespace CK3Analyser.Analysis.Detectors
 {

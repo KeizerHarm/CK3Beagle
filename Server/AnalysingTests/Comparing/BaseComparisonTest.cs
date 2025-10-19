@@ -22,8 +22,11 @@ namespace CK3Analyser.Analysing.Comparing
 
             var expDeclarationType = expectedDeclarationType ?? DeclarationType.Debug;
             var parser = new AntlrParser();
-            var oldParsed = parser.ParseText(oldFileString, "", oldContext, expDeclarationType);
-            var newParsed = parser.ParseText(oldFileString, "", newContext, expDeclarationType);
+            var oldParsed = new ScriptFile(oldContext, "", expDeclarationType, oldFileString);
+            parser.ParseFile(oldParsed);
+
+            var newParsed = new ScriptFile(newContext, "", expDeclarationType, newFileString);
+            parser.ParseFile(newParsed);
 
             oldParsed.Accept(new SecondPassVisitor());
             newParsed.Accept(new SecondPassVisitor());

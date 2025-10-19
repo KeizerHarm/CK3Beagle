@@ -1,8 +1,6 @@
 ﻿using CK3Analyser.Analysis.Comparing.Building;
 using CK3Analyser.Core.Domain.Entities;
-using System;
 using System.Collections.Generic;
-using System.Linq;
 
 namespace CK3Analyser.Analysis.Comparing
 {

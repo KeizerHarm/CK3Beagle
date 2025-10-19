@@ -1,5 +1,4 @@
-﻿using CK3Analyser.Core.Domain;
-using CK3Analyser.Core.Domain.Entities;
+﻿using CK3Analyser.Core.Domain.Entities;
 using System;
 using System.IO;
 
@@ -7,18 +6,10 @@ namespace CK3Analyser.Core.Parsing.Fast
 {
     public class FastParser : ICk3Parser
     {
-        public ScriptFile ParseFile(string path, Context context, DeclarationType expectedDeclarationType)
+        public void ParseFile(ScriptFile file)
         {
-            var relativePath = Path.GetRelativePath(context.Path, path);
-            var input = File.ReadAllText(path);
-            return ParseText(input, relativePath, context, expectedDeclarationType);
-        }
-
-        public ScriptFile ParseText(string input, string relativePath, Context context, DeclarationType expectedDeclarationType)
-        {
-            var file = new ScriptFile(context, relativePath, expectedDeclarationType, input);
+            var input = File.ReadAllText(file.Raw);
             GatherDeclarations(file);
-            return file;
         }
 
         private static void GatherDeclarations(ScriptFile file)

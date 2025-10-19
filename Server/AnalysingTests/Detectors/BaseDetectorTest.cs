@@ -15,13 +15,16 @@ namespace CK3Analyser.Analysing.Detectors
             GlobalResources.AddEffects(["add_gold"]);
             GlobalResources.AddTriggers(["has_gold"]);
             GlobalResources.AddEventTargets(["father"]);
+            GlobalResources.Lock();
 
             var context = new Context("", ContextType.Old);
             var expDeclarationType = expectedDeclarationType ?? DeclarationType.Debug;
             var parser = new AntlrParser();
-            var parsed = parser.ParseText(stringToParse, "", context, expDeclarationType);
-            parsed.Accept(new SecondPassVisitor());
-            return parsed;
+
+            var parsedScriptFile = new ScriptFile(context, "", expDeclarationType, stringToParse);
+            parser.ParseFile(parsedScriptFile);
+            parsedScriptFile.Accept(new SecondPassVisitor());
+            return parsedScriptFile;
         }
     }
 }

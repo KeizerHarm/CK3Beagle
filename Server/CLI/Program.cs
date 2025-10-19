@@ -1,16 +1,10 @@
-﻿using CK3Analyser.Analysis;
-using CK3Analyser.Core;
-using CK3Analyser.Core.Parsing.Antlr;
+﻿using CK3Analyser.Core.Parsing.Antlr;
 using CK3Analyser.Core.Domain;
-using CK3Analyser.Core.Domain.Entities;
 using CK3Analyser.Core.Parsing.Fast;
 using CK3Analyser.Core.Resources;
-using CK3Analyser.Core.Parsing.SecondPass;
 using System;
-using System.Collections.Generic;
 using System.Diagnostics;
-using System.IO;
-using System.Linq;
+using CK3Analyser.Core.Parsing;
 
 namespace CK3Analyser.CLI
 {
@@ -30,7 +24,7 @@ namespace CK3Analyser.CLI
         {
             Console.WriteLine("Let's go! Parsing logs");
             LogsParser.ParseLogs(LogsFolder);
-            Console.WriteLine($"Parsed logs; found {GlobalResources.EFFECTKEYS.Count} effects, {GlobalResources.TRIGGERKEYS.Count} triggers, {GlobalResources.EVENTTARGETS.Count} event targets ");
+            //Console.WriteLine($"Parsed logs; found {GlobalResources.EFFECTKEYS.Count} effects, {GlobalResources.TRIGGERKEYS.Count} triggers, {GlobalResources.EVENTTARGETS.Count} event targets ");
 
             var inputDir = OldVanillaPath;
 
@@ -51,18 +45,18 @@ namespace CK3Analyser.CLI
             var parsingTimer = new Stopwatch();
             parsingTimer.Start();
             //GatherDeclarationsForDeclarationType(antlrParser, GlobalResources.Old, DeclarationType.ScriptedTrigger);
-            GatherDeclarations(antlrParser, GlobalResources.Old);
+            ParsingService.ParseAllEntities(antlrParser, GlobalResources.Old);
             parsingTimer.Stop();
 
-            var analysisTimer = new Stopwatch();
-            analysisTimer.Start();
-            var analyser = new Analyser();
-            analyser.Analyse(GlobalResources.Old);
-            analysisTimer.Stop();
+            //var analysisTimer = new Stopwatch();
+            //analysisTimer.Start();
+            //var analyser = new Analyser();
+            //analyser.Analyse(GlobalResources.Old);
+            //analysisTimer.Stop();
             Console.WriteLine($"Analysed a total of { GlobalResources.Old.Files.Count} files");
-            Console.WriteLine($"Found { analyser.LogEntries.Count()} issues");
+            //Console.WriteLine($"Found { analyser.LogEntries.Count()} issues");
             Console.WriteLine($"Parsing time: {parsingTimer.Elapsed}");
-            Console.WriteLine($"Analysis time: {analysisTimer.Elapsed}");
+            //Console.WriteLine($"Analysis time: {analysisTimer.Elapsed}");
 
             //stopwatch.Restart();
             //GatherDeclarations(fastParser, Modded);
@@ -72,43 +66,6 @@ namespace CK3Analyser.CLI
             //GatherDeclarations(fastParser, New);
             //stopwatch.Stop();
             //Console.WriteLine($"Elapsed (new vanilla): {stopwatch.Elapsed}");
-        }
-
-        public static void GatherDeclarations(ICk3Parser parser, Context context)
-        {
-            Console.WriteLine($"Now reading files from {context.Path}");
-            foreach (var declarationType in Enum.GetValues<DeclarationType>())
-            {
-                GatherDeclarationsForDeclarationType(parser, context, declarationType);
-            }
-            Console.WriteLine("Done with first pass");
-            new SecondPassHandler().ExecuteSecondPass(context);
-            Console.WriteLine("Done with second pass");
-        }
-
-        public static void GatherDeclarationsForDeclarationType(ICk3Parser parser, Context context, DeclarationType declarationType)
-        {
-            var entityDeclarations = new Dictionary<string, Declaration>();
-
-            var entityHome = Path.Combine(context.Path, declarationType.GetEntityHome());
-            if (Directory.Exists(entityHome))
-            {
-                var files = Directory.GetFiles(entityHome, "*.txt", SearchOption.AllDirectories);
-                Console.WriteLine($"Found {files.Length} {declarationType.ToString()} files");
-                foreach (var file in files)
-                {
-                    var scriptFile = parser.ParseFile(file, context, declarationType);
-                    if (declarationType == DeclarationType.ScriptedEffect)
-                    {
-                        GlobalResources.AddEffects(scriptFile.Declarations.Keys);
-                    }
-                    if (declarationType == DeclarationType.ScriptedTrigger)
-                    {
-                        GlobalResources.AddTriggers(scriptFile.Declarations.Keys);
-                    }
-                    context.AddFile(scriptFile);
-                }
-            }
         }
     }
 }
