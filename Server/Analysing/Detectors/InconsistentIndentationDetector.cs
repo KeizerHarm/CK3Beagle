@@ -16,6 +16,7 @@ namespace CK3Analyser.Analysis.Detectors
     {
         public readonly struct Settings
         {
+            public bool Enabled { get; init; }
             public IndentationType ExpectedIndentationType { get; init; }
             public Severity Severity_UnexpectedType { get; init; }
             public bool DisregardBracketsInComments { get; init; }

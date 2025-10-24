@@ -9,6 +9,7 @@ namespace CK3Analyser.Analysis.Detectors
     {
         public readonly struct Settings
         {
+            public bool Enabled { get; init; }
             public Severity Severity { get; init; }
             public HashSet<string> StatementKeysToConsider { get; init; }
         }

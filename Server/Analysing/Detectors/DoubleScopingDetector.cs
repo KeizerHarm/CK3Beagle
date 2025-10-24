@@ -1,5 +1,6 @@
 ﻿using CK3Analyser.Analysis.Logging;
 using CK3Analyser.Core.Domain;
+using System;
 
 namespace CK3Analyser.Analysis.Detectors
 {
@@ -7,6 +8,7 @@ namespace CK3Analyser.Analysis.Detectors
     {
         public readonly struct Settings
         {
+            public bool Enabled { get; init; }
             public Severity Severity { get; init; }
         }
 

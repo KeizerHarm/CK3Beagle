@@ -10,6 +10,7 @@ namespace CK3Analyser.Analysis.Detectors
     {
         public readonly struct Settings
         {
+            public bool Enabled { get; init; }
             public Severity Severity_UseOfRoot { get; init; }
             public bool UseOfRoot_IgnoreIfInName { get; init; }
             public bool UseOfRoot_IgnoreIfInComment { get; init; }

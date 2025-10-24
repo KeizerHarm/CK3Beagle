@@ -12,6 +12,7 @@ namespace CK3Analyser.Analysis.Detectors
     {
         public readonly struct Settings
         {
+            public bool Enabled { get; init; }
             public Severity Severity { get; init; }
             public int MinSize { get; init; }
             public int MaxNumberOfDifferentValues { get; init; }

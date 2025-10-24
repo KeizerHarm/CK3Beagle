@@ -21,6 +21,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Generation", "Generation\Ge
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GenerationTests", "GenerationTests\GenerationTests.csproj", "{4DF3DED6-A155-42C2-B32B-48490D388DF1}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LspInterface", "LspInterface\LspInterface.csproj", "{B96A2495-8393-4C9F-8999-68E25826E8BB}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -63,6 +65,10 @@ Global
 		{4DF3DED6-A155-42C2-B32B-48490D388DF1}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{4DF3DED6-A155-42C2-B32B-48490D388DF1}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{4DF3DED6-A155-42C2-B32B-48490D388DF1}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B96A2495-8393-4C9F-8999-68E25826E8BB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B96A2495-8393-4C9F-8999-68E25826E8BB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B96A2495-8393-4C9F-8999-68E25826E8BB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B96A2495-8393-4C9F-8999-68E25826E8BB}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

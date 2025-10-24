@@ -8,6 +8,7 @@ namespace CK3Analyser.Analysis.Detectors
     {
         public readonly struct Settings
         {
+            public bool Enabled { get; init; }
             public int MaxSize_NonMacroBlock { get; init; }
             public Severity Severity_NonMacroBlock { get; init; }
 

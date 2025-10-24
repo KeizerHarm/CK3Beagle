@@ -16,6 +16,7 @@ namespace CK3Analyser.Analysis.Detectors
 
         public struct Settings
         {
+            public bool Enabled { get; init; }
             public Severity Severity_DoubleNegation { get; set; }
             public Severity Severity_Associativity { get; set; }
             public Severity Severity_Distributivity { get; set; }
