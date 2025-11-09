@@ -49,7 +49,8 @@ namespace CK3Analyser.CLI
             var parsingTimer = new Stopwatch();
             parsingTimer.Start();
             //GatherDeclarationsForDeclarationType(antlrParser, GlobalResources.Old, DeclarationType.ScriptedTrigger);
-            ParsingService.ParseAllEntities(() => new AntlrParser(), GlobalResources.Modded);
+            ParsingService.ParseAllEntities(() => new AntlrParser(), GlobalResources.Modded,
+                Console.WriteLine);
             parsingTimer.Stop();
 
 
@@ -77,7 +78,7 @@ namespace CK3Analyser.CLI
             var analysisTimer = new Stopwatch();
             analysisTimer.Start();
             var analyser = new Analyser();
-            analyser.Analyse(GlobalResources.Modded);
+            analyser.Analyse(GlobalResources.Modded, Console.WriteLine);
             analysisTimer.Stop();
             Console.WriteLine($"Analysed a total of { GlobalResources.Modded.Files.Count} files");
             //Console.WriteLine($"Found { analyser.LogEntries.Count()} issues");

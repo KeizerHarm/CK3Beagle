@@ -2,6 +2,7 @@
 using CK3Analyser.Core.Domain;
 using CK3Analyser.Core.Domain.Entities;
 using CK3Analyser.Core.Resources;
+using CK3Analyser.Core.Resources.DetectorSettings;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -15,21 +16,9 @@ namespace CK3Analyser.Analysis.Detectors
             "AND", "OR", "NOT", "NOR", "NAND"
         ];
 
-        public struct Settings
-        {
-            public bool Enabled { get; init; }
-            public Severity DoubleNegation_Severity { get; set; }
-            public Severity Associativity_Severity { get; set; }
-            public Severity Distributivity_Severity { get; set; }
-            public Severity Idempotency_Severity { get; set; }
-            public Severity Complementation_Severity { get; set; }
-            public Severity NotIsNotNor_Severity { get; set; }
-            public Severity Absorption_Severity { get; set; }
-        }
+        private OvercomplicatedBooleanSettings _settings;
 
-        private Settings _settings;
-
-        public OvercomplicatedBooleanDetector(ILogger logger, Context context, Settings settings) : base(logger, context)
+        public OvercomplicatedBooleanDetector(ILogger logger, Context context, OvercomplicatedBooleanSettings settings) : base(logger, context)
         {
             _settings = settings;
         }

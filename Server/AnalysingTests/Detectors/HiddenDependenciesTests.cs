@@ -4,6 +4,7 @@ using CK3Analyser.Analysis.Logging;
 using CK3Analyser.Core.Domain;
 using CK3Analyser.Core.Domain.Entities;
 using CK3Analyser.Core.Resources;
+using CK3Analyser.Core.Resources.DetectorSettings;
 
 namespace CK3Analyser.Analysing.Detectors
 {
@@ -134,7 +135,7 @@ namespace CK3Analyser.Analysing.Detectors
             HashSet<string>? variablesWhitelist = null)
         {
             variablesWhitelist ??= new HashSet<string>();
-            var settings = new HiddenDependenciesDetector.Settings
+            var settings = new HiddenDependenciesSettings
             {
                 UseOfPrev_Severity = UseOfPrev_severity,
                 UseOfRoot_Severity = UseOfRoot_severity,

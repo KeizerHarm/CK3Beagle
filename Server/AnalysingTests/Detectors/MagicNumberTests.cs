@@ -4,6 +4,7 @@ using CK3Analyser.Analysis.Logging;
 using CK3Analyser.Core.Domain;
 using CK3Analyser.Core.Domain.Entities;
 using CK3Analyser.Core.Resources;
+using CK3Analyser.Core.Resources.DetectorSettings;
 
 namespace CK3Analyser.Analysing.Detectors
 {
@@ -32,7 +33,7 @@ namespace CK3Analyser.Analysing.Detectors
         {
             var visitor = new AnalysisVisitor();
             statementsToConsider ??= [];
-            var settings = new MagicNumberDetector.Settings
+            var settings = new MagicNumberSettings
             {
                 Severity = severity,
                 StatementKeysToConsider = statementsToConsider

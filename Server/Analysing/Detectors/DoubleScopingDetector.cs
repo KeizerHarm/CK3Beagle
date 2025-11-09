@@ -1,21 +1,14 @@
 ﻿using CK3Analyser.Analysis.Logging;
 using CK3Analyser.Core.Domain;
-using CK3Analyser.Core.Resources;
-using System;
+using CK3Analyser.Core.Resources.DetectorSettings;
 
 namespace CK3Analyser.Analysis.Detectors
 {
     public class DoubleScopingDetector : BaseDetector
     {
-        public readonly struct Settings
-        {
-            public bool Enabled { get; init; }
-            public Severity Severity { get; init; }
-        }
+        private readonly DoubleScopingSettings _settings;
 
-        private readonly Settings _settings;
-
-        public DoubleScopingDetector(ILogger logger, Context context, Settings settings) : base(logger, context)
+        public DoubleScopingDetector(ILogger logger, Context context, DoubleScopingSettings settings) : base(logger, context)
         {
             _settings = settings;
         }

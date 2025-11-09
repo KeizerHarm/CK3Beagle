@@ -2,7 +2,7 @@
 using CK3Analyser.Core;
 using CK3Analyser.Core.Domain;
 using CK3Analyser.Core.Domain.Entities;
-using CK3Analyser.Core.Resources;
+using CK3Analyser.Core.Resources.DetectorSettings;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,17 +11,10 @@ namespace CK3Analyser.Analysis.Detectors
 {
     public class DuplicationDetector : BaseDetector
     {
-        public readonly struct Settings
-        {
-            public bool Enabled { get; init; }
-            public Severity Severity { get; init; }
-            public int MinSize { get; init; }
-            public int MaxNumberOfDifferentValues { get; init; }
-        }
 
-        private readonly Settings _settings;
+        private readonly DuplicationSettings _settings;
 
-        public DuplicationDetector(ILogger logger, Context context, Settings settings) : base(logger, context)
+        public DuplicationDetector(ILogger logger, Context context, DuplicationSettings settings) : base(logger, context)
         {
             _settings = settings;
         }

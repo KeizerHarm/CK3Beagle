@@ -4,6 +4,7 @@ using CK3Analyser.Analysis.Logging;
 using CK3Analyser.Core.Domain;
 using CK3Analyser.Core.Domain.Entities;
 using CK3Analyser.Core.Resources;
+using CK3Analyser.Core.Resources.DetectorSettings;
 
 namespace CK3Analyser.Analysing.Detectors
 {
@@ -104,7 +105,7 @@ namespace CK3Analyser.Analysing.Detectors
             bool disregardCommentedBracket = true, 
             IndentationType expectedIndentationType = IndentationType.Tab)
         {
-            var settings = new InconsistentIndentationDetector.Settings
+            var settings = new InconsistentIndentationSettings
             {
                 Inconsistency_Severity = Inconsistency_severity,
                 UnexpectedType_Severity = UnexpectedType_severity,

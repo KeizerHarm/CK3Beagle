@@ -3,6 +3,7 @@ using CK3Analyser.Analysis.Detectors;
 using CK3Analyser.Analysis.Logging;
 using CK3Analyser.Core.Domain;
 using CK3Analyser.Core.Resources;
+using CK3Analyser.Core.Resources.DetectorSettings;
 
 namespace CK3Analyser.Analysing.Detectors
 {
@@ -148,7 +149,7 @@ namespace CK3Analyser.Analysing.Detectors
             Severity Absorption_severity = Severity.Warning)
         {
             var visitor = new AnalysisVisitor();
-            var settings = new OvercomplicatedBooleanDetector.Settings
+            var settings = new OvercomplicatedBooleanSettings
             {
                 Absorption_Severity = Absorption_severity,
                 Associativity_Severity = Associativity_severity,

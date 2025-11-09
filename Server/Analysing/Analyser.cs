@@ -1,5 +1,6 @@
 ﻿using CK3Analyser.Analysis.Detectors;
 using CK3Analyser.Analysis.Logging;
+using CK3Analyser.Core;
 using CK3Analyser.Core.Domain;
 using CK3Analyser.Core.Resources;
 using CK3Analyser.Core.Resources.DetectorSettings;
@@ -15,24 +16,14 @@ namespace CK3Analyser.Analysis
         public void Analyse(Context context, Action<string> progressDelegate = null)
         {
             var logger = new Logger();
-            logger.progressDelegate = progressDelegate;
             var visitor = new AnalysisVisitor();
-            //SetDefaultDetectors(context, logger, visitor);
-            SetDetectorsFromSettings(context, logger, visitor);
+            SetDefaultDetectors(context, logger, visitor);
+            //SetDetectorsFromSettings(context, logger, visitor);
 
-            progressDelegate($"Now starting on {context.Files.Count} files");
-            try
-            {
+            context.Files.ForEachWithProgress(
+                file => file.Value.Accept(visitor),
+                percent => progressDelegate($"Analysis {percent}% complete"));
 
-                foreach (var file in context.Files)
-                {
-                    file.Value.Accept(visitor);
-                }
-            }
-            catch (Exception ex)
-            {
-                progressDelegate("Error!" + ex.Message);
-            }
             //progressDelegate($"Read all files!");
             visitor.Finish();
             //progressDelegate($"Finished final pass!");
@@ -61,17 +52,17 @@ namespace CK3Analyser.Analysis
                     NonMacroBlock_Severity = Severity.Info,
                     NonMacroBlock_MaxSize = 50
                 }));
-            //visitor.Detectors.Add(new OvercomplicatedBooleanDetector(logger, context,
-            //    new OvercomplicatedBooleanDetector.Settings
-            //    {
-            //        Absorption_Severity = Severity.Info,
-            //        Associativity_Severity = Severity.Warning,
-            //        Complementation_Severity = Severity.Critical,
-            //        Distributivity_Severity = Severity.Info,
-            //        DoubleNegation_Severity = Severity.Warning,
-            //        Idempotency_Severity = Severity.Warning,
-            //        NotIsNotNor_Severity = Severity.Warning
-            //    }));
+            visitor.Detectors.Add(new OvercomplicatedBooleanDetector(logger, context,
+                new OvercomplicatedBooleanSettings
+                {
+                    Absorption_Severity = Severity.Info,
+                    Associativity_Severity = Severity.Warning,
+                    Complementation_Severity = Severity.Critical,
+                    Distributivity_Severity = Severity.Info,
+                    DoubleNegation_Severity = Severity.Warning,
+                    Idempotency_Severity = Severity.Warning,
+                    NotIsNotNor_Severity = Severity.Warning
+                }));
             //visitor.Detectors.Add(new InconsistentIndentationDetector(logger, context,
             //    new InconsistentIndentationDetector.Settings
             //    {

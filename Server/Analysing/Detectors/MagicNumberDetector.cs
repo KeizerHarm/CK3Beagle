@@ -1,23 +1,16 @@
 ﻿using CK3Analyser.Analysis.Logging;
 using CK3Analyser.Core.Domain;
 using CK3Analyser.Core.Domain.Entities;
-using CK3Analyser.Core.Resources;
-using System.Collections.Generic;
+using CK3Analyser.Core.Resources.DetectorSettings;
 
 namespace CK3Analyser.Analysis.Detectors
 {
     public class MagicNumberDetector : BaseDetector
     {
-        public readonly struct Settings
-        {
-            public bool Enabled { get; init; }
-            public Severity Severity { get; init; }
-            public HashSet<string> StatementKeysToConsider { get; init; }
-        }
 
-        private readonly Settings _settings;
+        private readonly MagicNumberSettings _settings;
 
-        public MagicNumberDetector(ILogger logger, Context context, Settings settings) : base(logger, context)
+        public MagicNumberDetector(ILogger logger, Context context, MagicNumberSettings settings) : base(logger, context)
         {
             _settings = settings;
         }

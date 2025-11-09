@@ -59,17 +59,16 @@ namespace CK3Analyser.LspInterface
 
         private async Task Analyse()
         {
-            ParsingService.ParseAllEntities(() => new AntlrParser(), GlobalResources.Modded);
-            await _program.SendMessageAsync(_program.GetBasicMessage("Parsing complete!"));
-
             async void progressDelegate(string msg)
             {
                 await _program.SendMessageAsync(_program.GetBasicMessage(msg));
             }
 
+            ParsingService.ParseAllEntities(() => new AntlrParser(), GlobalResources.Modded, progressDelegate);
+            await _program.SendMessageAsync(_program.GetBasicMessage("Parsing complete!"));
+
             var analyser = new Analyser();
             analyser.Analyse(GlobalResources.Modded, progressDelegate);
-
 
             var response = new
             {
