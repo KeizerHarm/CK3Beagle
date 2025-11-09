@@ -1,6 +1,7 @@
 ﻿using CK3Analyser.Analysis.Logging;
 using CK3Analyser.Core.Domain;
 using CK3Analyser.Core.Domain.Entities;
+using CK3Analyser.Core.Resources;
 using System.Collections.Generic;
 using System.Text;
 
@@ -11,22 +12,22 @@ namespace CK3Analyser.Analysis.Detectors
         public readonly struct Settings
         {
             public bool Enabled { get; init; }
-            public Severity Severity_UseOfRoot { get; init; }
+            public Severity UseOfRoot_Severity { get; init; }
             public bool UseOfRoot_IgnoreIfInName { get; init; }
             public bool UseOfRoot_IgnoreIfInComment { get; init; }
             public bool UseOfRoot_AllowInEventFile { get; init; }
 
-            public Severity Severity_UseOfPrev { get; init; }
+            public Severity UseOfPrev_Severity { get; init; }
             public bool UseOfPrev_IgnoreIfInName { get; init; }
             public bool UseOfPrev_IgnoreIfInComment { get; init; }
             public bool UseOfPrev_AllowInEventFile { get; init; }
 
-            public Severity Severity_UseOfSavedScope { get; init; }
+            public Severity UseOfSavedScope_Severity { get; init; }
             public bool UseOfSavedScope_IgnoreIfInName { get; init; }
             public bool UseOfSavedScope_IgnoreIfInComment { get; init; }
             public bool UseOfSavedScope_AllowInEventFile { get; init; }
 
-            public Severity Severity_UseOfVariable { get; init; }
+            public Severity UseOfVariable_Severity { get; init; }
             public bool UseOfVariable_IgnoreIfInName { get; init; }
             public bool UseOfVariable_IgnoreIfInComment { get; init; }
             public bool UseOfVariable_AllowInEventFile { get; init; }
@@ -106,11 +107,9 @@ namespace CK3Analyser.Analysis.Detectors
             {
                 logger.Log(
                     Smell.HiddenDependencies_UseOfSavedScope,
-                    _settings.Severity_UseOfSavedScope,
+                    _settings.UseOfSavedScope_Severity,
                     "Declaration uses 'scope:" + scopeName + "'." + msg,
-                    declaration.GetIdentifier(),
-                    declaration.StartIndex,
-                    declaration.EndIndex
+                    declaration
                 );
             }
         }
@@ -130,11 +129,9 @@ namespace CK3Analyser.Analysis.Detectors
             {
                 logger.Log(
                     Smell.HiddenDependencies_UseOfSavedScope,
-                    _settings.Severity_UseOfSavedScope,
+                    _settings.UseOfSavedScope_Severity,
                     "Declaration uses 'var:" + varName + "'." + msg,
-                    declaration.GetIdentifier(),
-                    declaration.StartIndex,
-                    declaration.EndIndex
+                    declaration
                 );
             }
         }
@@ -152,11 +149,9 @@ namespace CK3Analyser.Analysis.Detectors
             {
                 logger.Log(
                     Smell.HiddenDependencies_UseOfPrev,
-                    _settings.Severity_UseOfPrev,
+                    _settings.UseOfPrev_Severity,
                     "Declaration uses 'prev' at the top level." + msg,
-                    declaration.GetIdentifier(),
-                    declaration.StartIndex,
-                    declaration.EndIndex
+                    declaration
                 );
             }
         }
@@ -172,11 +167,9 @@ namespace CK3Analyser.Analysis.Detectors
             {
                 logger.Log(
                     Smell.HiddenDependencies_UseOfRoot,
-                    _settings.Severity_UseOfRoot,
+                    _settings.UseOfRoot_Severity,
                     "Declaration uses 'root'." + msg,
-                    declaration.GetIdentifier(),
-                    declaration.StartIndex,
-                    declaration.EndIndex
+                    declaration
                 );
             }
         }

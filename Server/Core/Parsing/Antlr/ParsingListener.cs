@@ -37,6 +37,7 @@ namespace CK3Analyser.Core.Parsing.Antlr
 
                 var declaration = new Declaration(key, declarationType);
                 declaration.Raw = raw;
+                ApplyRange(context, declaration);
                 file.AddDeclaration(declaration);
                 thisBlock.Push(declaration);
             }
@@ -46,6 +47,7 @@ namespace CK3Analyser.Core.Parsing.Antlr
                 {
                     Raw = raw
                 };
+                ApplyRange(context, block);
                 thisBlock.Peek().AddChild(block);
                 thisBlock.Push(block);
             }
@@ -64,6 +66,7 @@ namespace CK3Analyser.Core.Parsing.Antlr
             {
                 Raw = raw
             };
+            ApplyRange(context, block);
             thisBlock.Peek().AddChild(block);
             thisBlock.Push(block);
         }
@@ -82,6 +85,7 @@ namespace CK3Analyser.Core.Parsing.Antlr
                 Raw = raw,
                 RawWithoutHashtag = rawWithoutHashtag
             };
+            ApplyRange(context, comment);
             thisBlock.Peek().AddChild(comment);
         }
 
@@ -98,6 +102,7 @@ namespace CK3Analyser.Core.Parsing.Antlr
             var value = GetRawContents(context.token(1));
             var scoper = context.SCOPER().ToString();
             var binaryExpression = new BinaryExpression(key, scoper, value) { Raw = raw };
+            ApplyRange(context, binaryExpression);
             thisBlock.Peek().AddChild(binaryExpression);
         }
         public override void ExitBinaryExpression([NotNull] CK3Parser.BinaryExpressionContext context)
@@ -113,6 +118,7 @@ namespace CK3Analyser.Core.Parsing.Antlr
                 Raw = GetRawContents(context),
                 Value = GetRawContents(context.token())
             };
+            ApplyRange(context, token);
             thisBlock.Peek().AddChild(token);
         }
 
@@ -128,11 +134,20 @@ namespace CK3Analyser.Core.Parsing.Antlr
 
             int startIndex = context.Start.StartIndex;
             int endIndex = context.Start.StopIndex;
-            if(context?.Stop != null)
+            if (context?.Stop != null)
             {
                 endIndex = context.Stop.StopIndex + 1;
             }
             return file.Raw.Substring(startIndex, endIndex - startIndex);
+        }
+
+        private void ApplyRange(ParserRuleContext context, Node node)
+        {
+            node.StartLine = context.Start.Line;
+            node.StartIndex = context.Start.StartIndex;
+
+            node.EndLine = context.Stop?.Line ?? context.Start.Line;
+            node.EndIndex = context.Stop?.StopIndex ?? context.Start.StopIndex;
         }
     }
 }

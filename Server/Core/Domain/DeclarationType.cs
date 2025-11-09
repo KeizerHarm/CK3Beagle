@@ -5,7 +5,8 @@
         Debug,
         ScriptedEffect,
         ScriptedTrigger,
-        Event
+        Event,
+        //Culture
     }
 
     public static class DeclarationTypeExtensions
@@ -18,6 +19,7 @@
                 DeclarationType.ScriptedTrigger => "common/scripted_triggers",
                 DeclarationType.Event => "events",
                 DeclarationType.Debug => "test",
+                //DeclarationType.Culture => "common/culture/cultures",
                 _ => "",
             };
         }

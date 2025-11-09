@@ -3,6 +3,7 @@ using CK3Analyser.Analysis.Detectors;
 using CK3Analyser.Analysis.Logging;
 using CK3Analyser.Core.Domain;
 using CK3Analyser.Core.Domain.Entities;
+using CK3Analyser.Core.Resources;
 
 namespace CK3Analyser.Analysing.Detectors
 {
@@ -35,7 +36,7 @@ namespace CK3Analyser.Analysing.Detectors
             //arrange
             var logger = new Logger();
             ScriptFile testcase = GetTestCase("InconsistentIndentation/ConsistentTabs");
-            var visitor = GetDetector(logger, testcase.Context, expectedIndentationType: IndentationType.FourSpaces, severity_UnexpectedType: Severity.Critical);
+            var visitor = GetDetector(logger, testcase.Context, expectedIndentationType: IndentationType.FourSpaces, UnexpectedType_severity: Severity.Critical);
 
 
             //act
@@ -82,7 +83,7 @@ namespace CK3Analyser.Analysing.Detectors
             //arrange
             var logger = new Logger();
             ScriptFile testcase = GetTestCase("InconsistentIndentation/InconsistentTabs");
-            var visitor = GetDetector(logger, testcase.Context, severity_Inconsistency: Severity.Critical, expectedIndentationType: IndentationType.FourSpaces);
+            var visitor = GetDetector(logger, testcase.Context, Inconsistency_severity: Severity.Critical, expectedIndentationType: IndentationType.FourSpaces);
 
 
             //act
@@ -98,15 +99,15 @@ namespace CK3Analyser.Analysing.Detectors
         private static AnalysisVisitor GetDetector(
             Logger logger,
             Context context,
-            Severity severity_Inconsistency = Severity.Warning,
-            Severity severity_UnexpectedType = Severity.Warning, 
+            Severity Inconsistency_severity = Severity.Warning,
+            Severity UnexpectedType_severity = Severity.Warning, 
             bool disregardCommentedBracket = true, 
             IndentationType expectedIndentationType = IndentationType.Tab)
         {
             var settings = new InconsistentIndentationDetector.Settings
             {
-                Severity_Inconsistency = severity_Inconsistency,
-                Severity_UnexpectedType = severity_UnexpectedType,
+                Inconsistency_Severity = Inconsistency_severity,
+                UnexpectedType_Severity = UnexpectedType_severity,
                 DisregardBracketsInComments = disregardCommentedBracket,
                 ExpectedIndentationType = expectedIndentationType
             };

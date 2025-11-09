@@ -6,4 +6,9 @@
     <RootNamespace>CK3Analyser.LspInterface</RootNamespace>
   </PropertyGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\Analysing\Analysing.csproj" />
+    <ProjectReference Include="..\Core\Core.csproj" />
+  </ItemGroup>
+
 </Project>

@@ -1,0 +1,17 @@
+﻿using System.Text.Json.Serialization;
+
+namespace CK3Analyser.Core.Resources.DetectorSettings
+{
+    public readonly struct LargeUnitSettings
+    {
+        public bool Enabled { get; init; }
+        public int NonMacroBlock_MaxSize { get; init; }
+        public Severity NonMacroBlock_Severity { get; init; }
+
+        public int File_MaxSize { get; init; }
+        public Severity File_Severity { get; init; }
+
+        public int Macro_MaxSize { get; init; }
+        public Severity Macro_Severity { get; init; }
+    }
+}

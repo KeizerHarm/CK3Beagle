@@ -17,16 +17,18 @@ namespace CK3Analyser.Core.Parsing
     {
         public static void ParseAllEntities(Func<ICk3Parser> parserMaker, Context context)
         {
-            Console.WriteLine($"Now reading files from {context.Path}");
+            //Console.WriteLine($"Now reading files from {context.Path}");
+
+            //ReadEverythingAsync(parserMaker, context, DeclarationType.Culture);
 
             foreach (var declarationType in Enum.GetValues<DeclarationType>())
             {
                 ReadEverythingAsync(parserMaker, context, declarationType);
             }
             GlobalResources.Lock();
-            Console.WriteLine("Done with first pass");
+            //Console.WriteLine("Done with first pass");
             new SecondPassHandler().ExecuteSecondPass(context);
-            Console.WriteLine("Done with second pass");
+            //Console.WriteLine("Done with second pass");
         }
 
         public static void ReadEverythingAsync(Func<ICk3Parser> parserMaker, Context context, DeclarationType declarationType)
@@ -37,7 +39,7 @@ namespace CK3Analyser.Core.Parsing
             if (Directory.Exists(entityHome))
             {
                 var files = Directory.GetFiles(entityHome, "*.txt", SearchOption.AllDirectories);
-                Console.WriteLine($"Found {files.Length} {declarationType.ToString()} files");
+                //Console.WriteLine($"Found {files.Length} {declarationType.ToString()} files");
 
                 var batchSize = 50;
                 var fileBatches = files.Chunk(batchSize);
@@ -48,6 +50,7 @@ namespace CK3Analyser.Core.Parsing
                     {
                         var input = File.ReadAllText(filePath);
                         var scriptFile = new ScriptFile(context, Path.GetRelativePath(context.Path, filePath), declarationType, input);
+                        scriptFile.AbsolutePath = filePath;
 
                         ParseScriptFile(scriptFile, parser);
                         entityFiles.Add(scriptFile);
@@ -82,7 +85,7 @@ namespace CK3Analyser.Core.Parsing
             if (Directory.Exists(entityHome))
             {
                 var files = Directory.GetFiles(entityHome, "*.txt", SearchOption.AllDirectories);
-                Console.WriteLine($"Found {files.Length} {declarationType.ToString()} files");
+                //Console.WriteLine($"Found {files.Length} {declarationType.ToString()} files");
 
                 //foreach(var file in files)
                 //{

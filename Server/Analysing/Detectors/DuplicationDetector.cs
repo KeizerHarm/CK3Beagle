@@ -2,6 +2,7 @@
 using CK3Analyser.Core;
 using CK3Analyser.Core.Domain;
 using CK3Analyser.Core.Domain.Entities;
+using CK3Analyser.Core.Resources;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -192,9 +193,7 @@ namespace CK3Analyser.Analysis.Detectors
                     logger.Log(Smell.Duplication,
                         _settings.Severity,
                         msg,
-                        node.GetIdentifier(),
-                        node.StartIndex,
-                        node.EndIndex);
+                        node);
                 }
             }
 

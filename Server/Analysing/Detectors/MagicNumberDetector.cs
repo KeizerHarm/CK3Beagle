@@ -1,6 +1,7 @@
 ﻿using CK3Analyser.Analysis.Logging;
 using CK3Analyser.Core.Domain;
 using CK3Analyser.Core.Domain.Entities;
+using CK3Analyser.Core.Resources;
 using System.Collections.Generic;
 
 namespace CK3Analyser.Analysis.Detectors
@@ -32,9 +33,7 @@ namespace CK3Analyser.Analysis.Detectors
                     Smell.MagicNumber,
                     _settings.Severity,
                     $"Use of literal number as an argument for '{binaryExpression.Key}'; use a script value instead!",
-                    binaryExpression.GetIdentifier(),
-                    binaryExpression.StartIndex,
-                    binaryExpression.EndIndex);
+                    binaryExpression);
             }
         }
 

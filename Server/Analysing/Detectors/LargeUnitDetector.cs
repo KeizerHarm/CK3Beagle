@@ -1,27 +1,15 @@
 ﻿using CK3Analyser.Analysis.Logging;
 using CK3Analyser.Core.Domain;
 using CK3Analyser.Core.Domain.Entities;
+using CK3Analyser.Core.Resources.DetectorSettings;
 
 namespace CK3Analyser.Analysis.Detectors
 {
     public class LargeUnitDetector : BaseDetector
     {
-        public readonly struct Settings
-        {
-            public bool Enabled { get; init; }
-            public int MaxSize_NonMacroBlock { get; init; }
-            public Severity Severity_NonMacroBlock { get; init; }
+        private readonly LargeUnitSettings _settings;
 
-            public int MaxSize_File { get; init; }
-            public Severity Severity_File { get; init; }
-
-            public int MaxSize_Macro { get; init; }
-            public Severity Severity_Macro { get; init; }
-        }
-
-        private readonly Settings _settings;
-
-        public LargeUnitDetector(ILogger logger, Context context, Settings settings) : base(logger, context)
+        public LargeUnitDetector(ILogger logger, Context context, LargeUnitSettings settings) : base(logger, context)
         {
             _settings = settings;
         }
@@ -32,13 +20,13 @@ namespace CK3Analyser.Analysis.Detectors
             foreach (char c in scriptFile.Raw)
                 if (c == '\n') noOfLines++;
 
-            if (noOfLines >= _settings.MaxSize_File)
+            if (noOfLines >= _settings.File_MaxSize)
             {
                 logger.Log(
                     Smell.LargeUnit_File,
-                    _settings.Severity_File,
+                    _settings.File_Severity,
                     $"Large file detected: {noOfLines} lines",
-                    scriptFile.GetIdentifier());
+                    scriptFile);
             }
         }
 
@@ -47,15 +35,13 @@ namespace CK3Analyser.Analysis.Detectors
             if (declaration.DeclarationType.IsMacroType())
             {
                 var size = declaration.GetSize();
-                if (size >= _settings.MaxSize_Macro)
+                if (size >= _settings.Macro_MaxSize)
                 {
                     logger.Log(
                         Smell.LargeUnit_Macro,
-                        _settings.Severity_Macro,
+                        _settings.Macro_Severity,
                         $"Large macro detected: {size} statements",
-                        declaration.GetIdentifier(),
-                        declaration.StartIndex,
-                        declaration.EndIndex);
+                        declaration);
                 }
             }
             else
@@ -75,15 +61,13 @@ namespace CK3Analyser.Analysis.Detectors
 
             if (interpretAsScriptBlock) {
                 var size = block.GetSize();
-                if (size >= _settings.MaxSize_NonMacroBlock)
+                if (size >= _settings.NonMacroBlock_MaxSize)
                 {
                     logger.Log(
                         Smell.LargeUnit_NonMacroBlock,
-                        _settings.Severity_NonMacroBlock,
+                        _settings.NonMacroBlock_Severity,
                         $"Large block detected: {size} statements",
-                        block.GetIdentifier(),
-                        block.StartIndex,
-                        block.EndIndex);
+                        block);
                 }
                 return;
             }

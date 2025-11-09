@@ -5,6 +5,10 @@ using CK3Analyser.Core.Resources;
 using System;
 using System.Diagnostics;
 using CK3Analyser.Core.Parsing;
+using System.Linq;
+using CK3Analyser.Core.Domain.Entities;
+using System.Collections.Generic;
+using CK3Analyser.Analysis;
 
 namespace CK3Analyser.CLI
 {
@@ -15,8 +19,8 @@ namespace CK3Analyser.CLI
             _ = new Program();
         }
         
-        private static string OldVanillaPath = @"C:\Program Files (x86)\Steam\steamapps\common\Crusader Kings III\game";
-        private static string ModdedPath = @"C:\Program Files (x86)\Steam\steamapps\common\Crusader Kings III\game";
+        private static string OldVanillaPath = @"C:\Program Files (x86)\Steam\steamapps\common\Crusader Kings III Beta\game";
+        private static string ModdedPath = @"C:\Users\Harm\Documents\Paradox Interactive\Crusader Kings III\mod\alleged_infertility";
         private static string NewVanillaPath = @"C:\Program Files (x86)\Steam\steamapps\common\Crusader Kings III\game";
         private static string LogsFolder = @"C:\Users\Harm\Documents\Paradox Interactive\Crusader Kings III\logs";
 
@@ -26,15 +30,15 @@ namespace CK3Analyser.CLI
             LogsParser.ParseLogs(LogsFolder);
             //Console.WriteLine($"Parsed logs; found {GlobalResources.EFFECTKEYS.Count} effects, {GlobalResources.TRIGGERKEYS.Count} triggers, {GlobalResources.EVENTTARGETS.Count} event targets ");
 
-            var inputDir = OldVanillaPath;
+            //var inputDir = OldVanillaPath;
 
             GlobalResources.Old = new Context(OldVanillaPath, ContextType.Old);
             GlobalResources.Modded = new Context(ModdedPath, ContextType.Modded);
             GlobalResources.New = new Context(NewVanillaPath, ContextType.New);
 
 
-            var fastParser = new FastParser();
-            var antlrParser = new AntlrParser();
+            //var fastParser = new FastParser();
+            //var antlrParser = new AntlrParser();
 
             //stopwatch.Start();
             //GatherDeclarations(fastParser, Old);
@@ -45,19 +49,43 @@ namespace CK3Analyser.CLI
             var parsingTimer = new Stopwatch();
             parsingTimer.Start();
             //GatherDeclarationsForDeclarationType(antlrParser, GlobalResources.Old, DeclarationType.ScriptedTrigger);
-            ParsingService.ParseAllEntities(() => new AntlrParser(), GlobalResources.Old);
+            ParsingService.ParseAllEntities(() => new AntlrParser(), GlobalResources.Modded);
             parsingTimer.Stop();
 
-            //var analysisTimer = new Stopwatch();
-            //analysisTimer.Start();
-            //var analyser = new Analyser();
-            //analyser.Analyse(GlobalResources.Old);
-            //analysisTimer.Stop();
-            Console.WriteLine($"Analysed a total of { GlobalResources.Old.Files.Count} files");
+
+            //var culturesGfxes = GlobalResources.Old.Declarations[(int)DeclarationType.Culture]
+            //    .Select(x => x.Value.Children.OfType<NamedBlock>().First(c => c.Key == "clothing_gfx").Children.Select(c => c.Raw).First())
+            //    .Distinct();
+
+            //var gfxesWithCultures = new Dictionary<string, IEnumerable<string>>();
+
+            //foreach (var gfx in culturesGfxes)
+            //{
+            //    gfxesWithCultures.Add(gfx,
+            //        GlobalResources.Old.Declarations[(int)DeclarationType.Culture]
+            //            .Where(x => x.Value.Children.OfType<NamedBlock>().First(c => c.Key == "clothing_gfx").Children.Select(c => c.Raw)
+            //            .First() == gfx).Select(x => x.Value.Key));
+            //}
+
+            //foreach (var gfx in gfxesWithCultures.OrderByDescending(x => x.Value.Count()))
+            //{
+            //    Console.WriteLine($"{gfx.Key} has {gfx.Value.Count()} cultures: {string.Join(", ", gfx.Value)}");
+            //    Console.WriteLine();
+            //}
+
+
+            var analysisTimer = new Stopwatch();
+            analysisTimer.Start();
+            var analyser = new Analyser();
+            analyser.Analyse(GlobalResources.Modded);
+            analysisTimer.Stop();
+            Console.WriteLine($"Analysed a total of { GlobalResources.Modded.Files.Count} files");
             //Console.WriteLine($"Found { analyser.LogEntries.Count()} issues");
             Console.WriteLine($"Parsing time: {parsingTimer.Elapsed}");
             //Console.WriteLine($"Analysis time: {analysisTimer.Elapsed}");
 
+            var totalLog = string.Join("\n\n", analyser.LogEntries.Select(x => x.ToString()));
+            var length = totalLog.Length;
             //stopwatch.Restart();
             //GatherDeclarations(fastParser, Modded);
             //stopwatch.Stop();

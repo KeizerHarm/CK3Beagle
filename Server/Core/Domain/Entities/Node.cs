@@ -1,10 +1,13 @@
-﻿using System.Text;
+﻿using System.IO;
+using System.Text;
 
 namespace CK3Analyser.Core.Domain.Entities
 {
     public abstract class Node
     {
         public string Raw { get; set; }
+        public int StartLine { get; set; }
+        public int EndLine { get; set; }
         public int StartIndex { get; set; }
         public int EndIndex { get; set; }
 
@@ -69,6 +72,19 @@ namespace CK3Analyser.Core.Domain.Entities
             }
         }
         public Block Parent { get; set; }
+        public ScriptFile File
+        {
+            get
+            {
+                if (GetType() == typeof(ScriptFile))
+                    return (ScriptFile)this;
+
+                if (Parent == null)
+                    return null;
+
+                return Parent.File;
+            }
+        }
 
         public NodeType NodeType { get; set; }
 

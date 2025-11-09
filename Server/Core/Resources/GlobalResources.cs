@@ -19,6 +19,8 @@ namespace CK3Analyser.Core.Resources
         public static Context Modded { get; set; }
         public static Context New { get; set; }
 
+        public static Configuration Configuration { get; set; }
+
         public static void AddEffects(IEnumerable<string> effects)
         {
             _effectKeys ??= new ConcurrentBag<string>();

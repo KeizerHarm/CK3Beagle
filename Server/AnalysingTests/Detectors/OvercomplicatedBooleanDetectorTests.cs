@@ -2,6 +2,7 @@
 using CK3Analyser.Analysis.Detectors;
 using CK3Analyser.Analysis.Logging;
 using CK3Analyser.Core.Domain;
+using CK3Analyser.Core.Resources;
 
 namespace CK3Analyser.Analysing.Detectors
 {
@@ -15,7 +16,7 @@ namespace CK3Analyser.Analysing.Detectors
             //arrange
             var logger = new Logger();
             var testcase = GetTestCase(file, DeclarationType.ScriptedTrigger);
-            var detector = GetDetector(logger, testcase.Context, severity_Associativity: Severity.Critical);
+            var detector = GetDetector(logger, testcase.Context, Associativity_severity: Severity.Critical);
 
             //act
             detector.Visit(testcase);
@@ -31,7 +32,7 @@ namespace CK3Analyser.Analysing.Detectors
             //arrange
             var logger = new Logger();
             var testcase = GetTestCase("OvercomplicatedBoolean/Idempotency", DeclarationType.ScriptedTrigger);
-            var detector = GetDetector(logger, testcase.Context, severity_Idempotency: Severity.Critical);
+            var detector = GetDetector(logger, testcase.Context, Idempotency_severity: Severity.Critical);
 
             //act
             detector.Visit(testcase);
@@ -47,7 +48,7 @@ namespace CK3Analyser.Analysing.Detectors
             //arrange
             var logger = new Logger();
             var testcase = GetTestCase("OvercomplicatedBoolean/Complementation", DeclarationType.ScriptedTrigger);
-            var detector = GetDetector(logger, testcase.Context, severity_Complementation: Severity.Critical);
+            var detector = GetDetector(logger, testcase.Context, Complementation_severity: Severity.Critical);
 
             //act
             detector.Visit(testcase);
@@ -63,7 +64,7 @@ namespace CK3Analyser.Analysing.Detectors
             //arrange
             var logger = new Logger();
             var testcase = GetTestCase("OvercomplicatedBoolean/NotIsNotNor", DeclarationType.ScriptedTrigger);
-            var detector = GetDetector(logger, testcase.Context, severity_NotIsNotNor: Severity.Critical);
+            var detector = GetDetector(logger, testcase.Context, NotIsNotNor_severity: Severity.Critical);
 
             //act
             detector.Visit(testcase);
@@ -79,7 +80,7 @@ namespace CK3Analyser.Analysing.Detectors
             //arrange
             var logger = new Logger();
             var testcase = GetTestCase("OvercomplicatedBoolean/DoubleNegation", DeclarationType.ScriptedTrigger);
-            var detector = GetDetector(logger, testcase.Context, severity_DoubleNegation: Severity.Critical, severity_NotIsNotNor: Severity.Debug);
+            var detector = GetDetector(logger, testcase.Context, DoubleNegation_severity: Severity.Critical, NotIsNotNor_severity: Severity.Debug);
             
             //act
             detector.Visit(testcase);
@@ -95,7 +96,7 @@ namespace CK3Analyser.Analysing.Detectors
             //arrange
             var logger = new Logger();
             var testcase = GetTestCase("OvercomplicatedBoolean/DoubleNegation_Counterexamples", DeclarationType.ScriptedTrigger);
-            var detector = GetDetector(logger, testcase.Context, severity_DoubleNegation: Severity.Critical, severity_NotIsNotNor: Severity.Debug);
+            var detector = GetDetector(logger, testcase.Context, DoubleNegation_severity: Severity.Critical, NotIsNotNor_severity: Severity.Debug);
             
             //act
             detector.Visit(testcase);
@@ -110,7 +111,7 @@ namespace CK3Analyser.Analysing.Detectors
             //arrange
             var logger = new Logger();
             var testcase = GetTestCase("OvercomplicatedBoolean/Absorption", DeclarationType.ScriptedTrigger);
-            var detector = GetDetector(logger, testcase.Context, severity_Absorption: Severity.Critical, severity_Associativity: Severity.Debug, severity_Distributivity: Severity.Debug);
+            var detector = GetDetector(logger, testcase.Context, Absorption_severity: Severity.Critical, Associativity_severity: Severity.Debug, Distributivity_severity: Severity.Debug);
             
             //act
             detector.Visit(testcase);
@@ -126,7 +127,7 @@ namespace CK3Analyser.Analysing.Detectors
             //arrange
             var logger = new Logger();
             var testcase = GetTestCase("OvercomplicatedBoolean/Distributivity", DeclarationType.ScriptedTrigger);
-            var detector = GetDetector(logger, testcase.Context, severity_Distributivity: Severity.Critical, severity_Associativity: Severity.Debug);
+            var detector = GetDetector(logger, testcase.Context, Distributivity_severity: Severity.Critical, Associativity_severity: Severity.Debug);
             
             //act
             detector.Visit(testcase);
@@ -138,24 +139,24 @@ namespace CK3Analyser.Analysing.Detectors
 
         private static AnalysisVisitor GetDetector(Logger logger,
             Context context,
-            Severity severity_DoubleNegation = Severity.Warning,
-            Severity severity_Associativity = Severity.Warning,
-            Severity severity_Distributivity = Severity.Warning,
-            Severity severity_Idempotency = Severity.Warning,
-            Severity severity_Complementation = Severity.Warning,
-            Severity severity_NotIsNotNor = Severity.Warning,
-            Severity severity_Absorption = Severity.Warning)
+            Severity DoubleNegation_severity = Severity.Warning,
+            Severity Associativity_severity = Severity.Warning,
+            Severity Distributivity_severity = Severity.Warning,
+            Severity Idempotency_severity = Severity.Warning,
+            Severity Complementation_severity = Severity.Warning,
+            Severity NotIsNotNor_severity = Severity.Warning,
+            Severity Absorption_severity = Severity.Warning)
         {
             var visitor = new AnalysisVisitor();
             var settings = new OvercomplicatedBooleanDetector.Settings
             {
-                Severity_Absorption = severity_Absorption,
-                Severity_Associativity = severity_Associativity,
-                Severity_Complementation = severity_Complementation,
-                Severity_Distributivity = severity_Distributivity,
-                Severity_DoubleNegation = severity_DoubleNegation,
-                Severity_Idempotency = severity_Idempotency,
-                Severity_NotIsNotNor = severity_NotIsNotNor
+                Absorption_Severity = Absorption_severity,
+                Associativity_Severity = Associativity_severity,
+                Complementation_Severity = Complementation_severity,
+                Distributivity_Severity = Distributivity_severity,
+                DoubleNegation_Severity = DoubleNegation_severity,
+                Idempotency_Severity = Idempotency_severity,
+                NotIsNotNor_Severity = NotIsNotNor_severity
             };
 
             var detector = new OvercomplicatedBooleanDetector(logger, context, settings);

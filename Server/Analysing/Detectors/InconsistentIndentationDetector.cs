@@ -1,6 +1,7 @@
 ﻿using CK3Analyser.Analysis.Logging;
 using CK3Analyser.Core.Domain;
 using CK3Analyser.Core.Domain.Entities;
+using CK3Analyser.Core.Resources;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -18,9 +19,9 @@ namespace CK3Analyser.Analysis.Detectors
         {
             public bool Enabled { get; init; }
             public IndentationType ExpectedIndentationType { get; init; }
-            public Severity Severity_UnexpectedType { get; init; }
+            public Severity UnexpectedType_Severity { get; init; }
             public bool DisregardBracketsInComments { get; init; }
-            public Severity Severity_Inconsistency { get; init; }
+            public Severity Inconsistency_Severity { get; init; }
         }
 
         private readonly Settings _settings;
@@ -41,9 +42,9 @@ namespace CK3Analyser.Analysis.Detectors
             {
                 logger.Log(
                     Smell.InconsistentIndentation_UnexpectedType,
-                    _settings.Severity_UnexpectedType, 
+                    _settings.UnexpectedType_Severity, 
                     $"File uses indentation type {detectedIndentationType} instead of {_settings.ExpectedIndentationType}", 
-                    scriptFile.GetIdentifier());
+                    scriptFile);
             }
 
             if (detectedIndentationType == IndentationType.Inconclusive)
@@ -58,9 +59,9 @@ namespace CK3Analyser.Analysis.Detectors
             {
                 logger.Log(
                     Smell.InconsistentIndentation_Inconsistency,
-                    _settings.Severity_Inconsistency,
+                    _settings.Inconsistency_Severity,
                     $"File is detected to use {detectedIndentationType} but it has {abberatingIndentedLines} lines that don't",
-                    scriptFile.GetIdentifier());
+                    scriptFile);
             }
         }
 

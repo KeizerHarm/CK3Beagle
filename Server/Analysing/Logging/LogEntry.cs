@@ -1,26 +1,29 @@
-﻿namespace CK3Analyser.Analysis.Logging
+﻿using CK3Analyser.Core.Resources;
+
+namespace CK3Analyser.Analysis.Logging
 {
-    public enum Severity
-    {
-        Debug, Info, Warning, Critical
-    }
     public struct LogEntry
     {
         public Severity Severity { get; set; }
         public string Message { get; set; }
         public string Location { get; set; }
-        public int AffectedAreaStart { get; set; }
-        public int AffectedAreaEnd { get; set; }
+        public int AffectedAreaStartLine { get; set; }
+        public int AffectedAreaEndLine { get; set; }
+        public int AffectedAreaStartIndex { get; set; }
+        public int AffectedAreaEndIndex { get; set; }
         public Smell Smell { get; set; }
 
-        public LogEntry(Smell smell, Severity severity, string message, string location, int affectedAreaStart = 0, int affectedAreaEnd = 0) : this()
+        public LogEntry(Smell smell, Severity severity, string message, string location,
+            int affectedAreaStartLine = 0, int affectedAreaStartIndex = 0, int affectedAreaEndLine = 0, int affectedAreaEndIndex = 0) : this()
         {
             Severity = severity;
             Message = message;
             Location = location;
             Smell = smell;
-            AffectedAreaStart = affectedAreaStart;
-            AffectedAreaEnd = affectedAreaEnd;
+            AffectedAreaStartLine = affectedAreaStartLine;
+            AffectedAreaStartIndex = affectedAreaStartIndex;
+            AffectedAreaEndLine = affectedAreaEndLine;
+            AffectedAreaEndIndex = affectedAreaEndIndex;
         }
 
         public readonly string Print()

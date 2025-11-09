@@ -8,58 +8,82 @@ namespace CK3Analyser.LspInterface
 {
     public class Program
     {
+        public Stream StdIn;
+        public Stream StdOut;
+
         public static async Task Main()
+        {
+            var program = new Program();
+            await program.MainLoop();
+        }
+
+        public async Task MainLoop()
         {
             Console.OutputEncoding = Encoding.UTF8;
             Console.InputEncoding = Encoding.UTF8;
 
-            var stdin = Console.OpenStandardInput();
-            var stdout = Console.OpenStandardOutput();
+            StdIn = Console.OpenStandardInput();
+            StdOut = Console.OpenStandardOutput();
+            var commandHandler = new CommandHandler(this);
 
             while (true)
             {
-                var message = await ReadMessageAsync(stdin);
-                if (message == null) break;
+                string message = null;
+                try
+                {
+                    message = await ReadMessageAsync();
+                    if (message == null) break;
+                }
+                catch (Exception ex)
+                {
+                    File.WriteAllText("crash.log", ex.ToString());
+
+                    await SendMessageAsync(GetErrorMessage(ex.Message));
+                }
 
                 try
                 {
                     var request = JsonSerializer.Deserialize<JsonElement>(message);
 
-                    if (request.TryGetProperty("command", out var command))
+                    if (request.TryGetProperty("command", out var commandType))
                     {
-                        var cmd = command.GetString();
-                        if (cmd == "ping")
+                        var cmd = commandType.GetString();
+                        request.TryGetProperty("payload", out var payload);
+                        if (cmd == "exit")
                         {
-                            await SendMessageAsync(stdout, new { status = "ok", message = "pong" });
-                        }
-                        else if (cmd == "exit")
-                        {
-                            await SendMessageAsync(stdout, new { status = "ok", message = "goodbye" });
+                            await SendMessageAsync(GetBasicMessage("goodbye"));
                             break;
                         }
-                        else
-                        {
-                            await SendMessageAsync(stdout, new { status = "error", message = "unknown command" });
-                        }
+                        await commandHandler.HandleCommand(cmd, payload);
                     }
                     else
                     {
-                        await SendMessageAsync(stdout, new { status = "error", message = "missing command" });
+                        await SendMessageAsync(GetErrorMessage("malformed command"));
                     }
                 }
                 catch (Exception ex)
                 {
-                    await SendMessageAsync(stdout, new { status = "error", message = ex.Message });
+                    File.WriteAllText("crash.log", ex.ToString());
+                    await SendMessageAsync(GetErrorMessage(ex.Message));
                 }
             }
         }
 
-        public static async Task<string> ReadMessageAsync(Stream input)
+        public object GetBasicMessage(string message)
         {
-            using var reader = new StreamReader(input, Encoding.UTF8, false, 1024, true);
+            return new { type = "basic", payload = new { message } };
+        }
 
-            // Example header: "Content-Length: 123\r\n\r\n"
-            string? headerLine;
+        public object GetErrorMessage(string message)
+        {
+            return new { type = "error", payload = new { message } };
+        }
+
+        public async Task<string> ReadMessageAsync()
+        {
+            using var reader = new StreamReader(StdIn, Encoding.UTF8, false, 1024, true);
+
+            string headerLine;
             int contentLength = 0;
 
             while (!string.IsNullOrEmpty(headerLine = await reader.ReadLineAsync()))
@@ -86,15 +110,15 @@ namespace CK3Analyser.LspInterface
             return new string(buffer, 0, read);
         }
 
-        public static async Task SendMessageAsync(Stream output, object message)
+        public async Task SendMessageAsync(object message)
         {
             var json = JsonSerializer.Serialize(message);
             var content = Encoding.UTF8.GetBytes(json);
             var header = Encoding.ASCII.GetBytes($"Content-Length: {content.Length}\r\n\r\n");
 
-            await output.WriteAsync(header, 0, header.Length);
-            await output.WriteAsync(content, 0, content.Length);
-            await output.FlushAsync();
+            await StdOut.WriteAsync(header, 0, header.Length);
+            await StdOut.WriteAsync(content, 0, content.Length);
+            await StdOut.FlushAsync();
         }
     }
 }

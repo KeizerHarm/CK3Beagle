@@ -31,6 +31,7 @@ namespace CK3Analyser.Analysis
 
         MagicNumber
     }
+
     public static class SmellExtensions
     {
         public static string GetCode(this Smell smell)

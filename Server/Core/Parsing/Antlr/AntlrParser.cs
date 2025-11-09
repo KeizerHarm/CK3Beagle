@@ -49,19 +49,5 @@ namespace CK3Analyser.Core.Parsing.Antlr
             var listener = new ParsingListener(file);
             walker.Walk(listener, tree);
         }
-        public static void ParseFile(ScriptFile file, int _ = 0)
-        {
-            var str = new AntlrInputStream(file.Raw);
-            var lexer = new CK3Lexer(str);
-            var tokens = new CommonTokenStream(lexer);
-            var parser = new CK3Parser(tokens);
-            lexer.RemoveErrorListeners();
-            parser.RemoveErrorListeners();
-
-            var tree = parser.file();
-            var walker = new ParseTreeWalker();
-            var listener = new ParsingListener(file);
-            walker.Walk(listener, tree);
-        }
     }
 }

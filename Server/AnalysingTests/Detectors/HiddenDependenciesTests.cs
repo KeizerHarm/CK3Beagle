@@ -3,6 +3,7 @@ using CK3Analyser.Analysis.Detectors;
 using CK3Analyser.Analysis.Logging;
 using CK3Analyser.Core.Domain;
 using CK3Analyser.Core.Domain.Entities;
+using CK3Analyser.Core.Resources;
 
 namespace CK3Analyser.Analysing.Detectors
 {
@@ -21,7 +22,7 @@ namespace CK3Analyser.Analysing.Detectors
             var visitor = GetDetector(logger, testcase.Context,
                 useOfRoot_IgnoreIfInComment: ignoreIfInComment,
                 useOfRoot_IgnoreIfInName: ignoreIfInName,
-                severity_UseOfRoot: Severity.Critical
+                UseOfRoot_severity: Severity.Critical
             );
 
             //act
@@ -49,7 +50,7 @@ namespace CK3Analyser.Analysing.Detectors
                 useOfRoot_IgnoreIfInComment: ignoreIfInComment,
                 useOfRoot_IgnoreIfInName: ignoreIfInName,
                 useOfRoot_AllowInEventFile: allowInEventFile,
-                severity_UseOfRoot: Severity.Critical
+                UseOfRoot_severity: Severity.Critical
             );
 
             //act
@@ -72,7 +73,7 @@ namespace CK3Analyser.Analysing.Detectors
             var visitor = GetDetector(logger, testcase.Context,
                 useOfPrev_IgnoreIfInComment: ignoreIfInComment,
                 useOfPrev_IgnoreIfInName: ignoreIfInName,
-                severity_UseOfPrev: Severity.Critical
+                UseOfPrev_severity: Severity.Critical
             );
 
             //act
@@ -100,7 +101,7 @@ namespace CK3Analyser.Analysing.Detectors
                 useOfPrev_IgnoreIfInComment: ignoreIfInComment,
                 useOfPrev_IgnoreIfInName: ignoreIfInName,
                 useOfPrev_AllowInEventFile: allowInEventFile,
-                severity_UseOfPrev: Severity.Critical
+                UseOfPrev_severity: Severity.Critical
             );
 
             //act
@@ -114,10 +115,10 @@ namespace CK3Analyser.Analysing.Detectors
         private static AnalysisVisitor GetDetector(
             Logger logger,
             Context context,
-            Severity severity_UseOfPrev = Severity.Critical,
-            Severity severity_UseOfRoot = Severity.Critical,
-            Severity severity_UseOfSavedScope = Severity.Critical,
-            Severity severity_UseOfVariable = Severity.Critical,
+            Severity UseOfPrev_severity = Severity.Critical,
+            Severity UseOfRoot_severity = Severity.Critical,
+            Severity UseOfSavedScope_severity = Severity.Critical,
+            Severity UseOfVariable_severity = Severity.Critical,
             bool useOfPrev_IgnoreIfInComment = false,
             bool useOfPrev_IgnoreIfInName = false,
             bool useOfPrev_AllowInEventFile = true,
@@ -135,10 +136,10 @@ namespace CK3Analyser.Analysing.Detectors
             variablesWhitelist ??= new HashSet<string>();
             var settings = new HiddenDependenciesDetector.Settings
             {
-                Severity_UseOfPrev = severity_UseOfPrev,
-                Severity_UseOfRoot = severity_UseOfRoot,
-                Severity_UseOfSavedScope = severity_UseOfSavedScope,
-                Severity_UseOfVariable = severity_UseOfVariable,
+                UseOfPrev_Severity = UseOfPrev_severity,
+                UseOfRoot_Severity = UseOfRoot_severity,
+                UseOfSavedScope_Severity = UseOfSavedScope_severity,
+                UseOfVariable_Severity = UseOfVariable_severity,
                 UseOfPrev_IgnoreIfInComment = useOfPrev_IgnoreIfInComment,
                 UseOfPrev_AllowInEventFile = useOfPrev_AllowInEventFile,
                 UseOfPrev_IgnoreIfInName= useOfPrev_IgnoreIfInName,

@@ -3,6 +3,8 @@ using CK3Analyser.Analysis.Detectors;
 using CK3Analyser.Analysis.Logging;
 using CK3Analyser.Core.Domain;
 using CK3Analyser.Core.Domain.Entities;
+using CK3Analyser.Core.Resources;
+using CK3Analyser.Core.Resources.DetectorSettings;
 
 namespace CK3Analyser.Analysing.Detectors
 {
@@ -18,7 +20,7 @@ namespace CK3Analyser.Analysing.Detectors
             //arrange
             var logger = new Logger();
             ScriptFile testcase = GetTestCase("LargeUnit/LargeUnit_NonMacroBlock");
-            var visitor = GetDetector(logger, testcase.Context, severity_NonMacroBlock: Severity.Critical, maxSize_NonMacroBlock: maxSize);
+            var visitor = GetDetector(logger, testcase.Context, NonMacroBlock_severity: Severity.Critical, NonMacroBlock_maxSize: maxSize);
 
             //act
             visitor.Visit(testcase);
@@ -37,7 +39,7 @@ namespace CK3Analyser.Analysing.Detectors
             //arrange
             var logger = new Logger();
             ScriptFile testcase = GetTestCase("LargeUnit/LargeUnit_Macro", DeclarationType.ScriptedTrigger);
-            var visitor = GetDetector(logger, testcase.Context, severity_Macro: Severity.Critical, maxSize_Macro: maxSize);
+            var visitor = GetDetector(logger, testcase.Context, Macro_severity: Severity.Critical, Macro_maxSize: maxSize);
 
             //act
             visitor.Visit(testcase);
@@ -56,7 +58,7 @@ namespace CK3Analyser.Analysing.Detectors
             //arrange
             var logger = new Logger();
             ScriptFile testcase = GetTestCase("LargeUnit/LargeUnit_Macro", DeclarationType.Debug);
-            var visitor = GetDetector(logger, testcase.Context, severity_Macro: Severity.Critical, maxSize_Macro: maxSize);
+            var visitor = GetDetector(logger, testcase.Context, Macro_severity: Severity.Critical, Macro_maxSize: maxSize);
 
             //act
             visitor.Visit(testcase);
@@ -80,7 +82,7 @@ namespace CK3Analyser.Analysing.Detectors
             //arrange
             var logger = new Logger();
             ScriptFile testcase = GetTestCase(file);
-            var visitor = GetDetector(logger, testcase.Context, severity_File: Severity.Critical, maxSize_File: maxSize);
+            var visitor = GetDetector(logger, testcase.Context, File_severity: Severity.Critical, File_maxSize: maxSize);
 
 
             //act
@@ -124,22 +126,22 @@ namespace CK3Analyser.Analysing.Detectors
         private static AnalysisVisitor GetDetector(
             Logger logger,
             Context context,
-            Severity severity_NonMacroBlock = Severity.Warning,
-            int maxSize_NonMacroBlock = 40,
-            Severity severity_Macro = Severity.Warning,
-            int maxSize_Macro = 40,
-            Severity severity_File = Severity.Warning,
-            int maxSize_File = 10000
+            Severity NonMacroBlock_severity = Severity.Warning,
+            int NonMacroBlock_maxSize = 40,
+            Severity Macro_severity = Severity.Warning,
+            int Macro_maxSize = 40,
+            Severity File_severity = Severity.Warning,
+            int File_maxSize = 10000
             )
         {
-            var settings = new LargeUnitDetector.Settings
+            var settings = new LargeUnitSettings
             {
-                Severity_NonMacroBlock = severity_NonMacroBlock,
-                MaxSize_NonMacroBlock = maxSize_NonMacroBlock,
-                Severity_File = severity_File,
-                MaxSize_File = maxSize_File,
-                Severity_Macro = severity_Macro,
-                MaxSize_Macro = maxSize_Macro
+                NonMacroBlock_Severity = NonMacroBlock_severity,
+                NonMacroBlock_MaxSize = NonMacroBlock_maxSize,
+                File_Severity = File_severity,
+                File_MaxSize = File_maxSize,
+                Macro_Severity = Macro_severity,
+                Macro_MaxSize = Macro_maxSize
             };
 
             var visitor = new AnalysisVisitor();

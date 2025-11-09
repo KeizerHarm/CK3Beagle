@@ -8,6 +8,7 @@ namespace CK3Analyser.Core.Domain.Entities
     {
         public Context Context { get; }
         public string RelativePath { get; set; }
+        public string AbsolutePath { get; set; }
         public OrderedDictionary<string, Declaration> Declarations { get; private set; } = [];
 
         public DeclarationType ExpectedDeclarationType { get; }
