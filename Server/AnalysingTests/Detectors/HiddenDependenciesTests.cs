@@ -141,19 +141,19 @@ namespace CK3Analyser.Analysing.Detectors
                 UseOfRoot_Severity = UseOfRoot_severity,
                 UseOfSavedScope_Severity = UseOfSavedScope_severity,
                 UseOfVariable_Severity = UseOfVariable_severity,
-                UseOfPrev_IgnoreIfInComment = useOfPrev_IgnoreIfInComment,
-                UseOfPrev_AllowInEventFile = useOfPrev_AllowInEventFile,
-                UseOfPrev_IgnoreIfInName= useOfPrev_IgnoreIfInName,
-                UseOfRoot_AllowInEventFile= useOfRoot_AllowInEventFile,
-                UseOfRoot_IgnoreIfInComment= useOfRoot_IgnoreIfInComment,
-                UseOfRoot_IgnoreIfInName = useOfRoot_IgnoreIfInName,
-                UseOfSavedScope_AllowInEventFile = useOfSavedScope_AllowInEventFile,
-                UseOfSavedScope_IgnoreIfInComment = useOfSavedScope_IgnoreIfInComment,
-                UseOfSavedScope_IgnoreIfInName = useOfSavedScope_IgnoreIfInName,
-                UseOfVariable_AllowInEventFile = useOfVariable_AllowInEventFile,
-                UseOfVariable_IgnoreIfInComment = useOfVariable_IgnoreIfInComment,
-                UseOfVariable_IgnoreIfInName = useOfVariable_IgnoreIfInName,
-                VariablesWhitelist = variablesWhitelist
+                UseOfPrev_AllowedIfInComment = useOfPrev_IgnoreIfInComment,
+                UseOfPrev_AllowedIfInEventFile = useOfPrev_AllowInEventFile,
+                UseOfPrev_AllowedIfInName= useOfPrev_IgnoreIfInName,
+                UseOfRoot_AllowedIfInEventFile= useOfRoot_AllowInEventFile,
+                UseOfRoot_AllowedIfInComment= useOfRoot_IgnoreIfInComment,
+                UseOfRoot_AllowedIfInName = useOfRoot_IgnoreIfInName,
+                UseOfSavedScope_AllowedIfInEventFile = useOfSavedScope_AllowInEventFile,
+                UseOfSavedScope_AllowedIfInComment = useOfSavedScope_IgnoreIfInComment,
+                UseOfSavedScope_AllowedIfInName = useOfSavedScope_IgnoreIfInName,
+                UseOfVariable_AllowedIfInEventFile = useOfVariable_AllowInEventFile,
+                UseOfVariable_AllowedIfInComment = useOfVariable_IgnoreIfInComment,
+                UseOfVariable_AllowedIfInName = useOfVariable_IgnoreIfInName,
+                UseOfVariable_Whitelist = variablesWhitelist
             };
 
             var visitor = new AnalysisVisitor();

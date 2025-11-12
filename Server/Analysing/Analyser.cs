@@ -17,16 +17,15 @@ namespace CK3Analyser.Analysis
         {
             var logger = new Logger();
             var visitor = new AnalysisVisitor();
-            SetDefaultDetectors(context, logger, visitor);
-            //SetDetectorsFromSettings(context, logger, visitor);
+
+            //SetDefaultDetectors(context, logger, visitor);
+            SetDetectorsFromSettings(context, logger, visitor);
 
             context.Files.ForEachWithProgress(
                 file => file.Value.Accept(visitor),
                 percent => progressDelegate($"Analysis {percent}% complete"));
 
-            //progressDelegate($"Read all files!");
             visitor.Finish();
-            //progressDelegate($"Finished final pass!");
 
             LogEntries = logger.LogEntries;
         }
@@ -37,6 +36,21 @@ namespace CK3Analyser.Analysis
             {
                 visitor.Detectors.Add(new LargeUnitDetector(logger, context,
                     GlobalResources.Configuration.LargeUnitSettings));
+            }
+            if (GlobalResources.Configuration.OvercomplicatedBooleanSettings.Enabled)
+            {
+                visitor.Detectors.Add(new OvercomplicatedBooleanDetector(logger, context,
+                    GlobalResources.Configuration.OvercomplicatedBooleanSettings));
+            }
+            if (GlobalResources.Configuration.DuplicationSettings.Enabled)
+            {
+                visitor.Detectors.Add(new DuplicationDetector(logger, context,
+                    GlobalResources.Configuration.DuplicationSettings));
+            }
+            if (GlobalResources.Configuration.HiddenDependenciesSettings.Enabled)
+            {
+                visitor.Detectors.Add(new HiddenDependenciesDetector(logger, context,
+                    GlobalResources.Configuration.HiddenDependenciesSettings));
             }
         }
 
@@ -72,12 +86,12 @@ namespace CK3Analyser.Analysis
             //        ExpectedIndentationType = IndentationType.Tab
             //    }));
 
-            //visitor.Detectors.Add(new DuplicationDetector(logger, context,
-            //    new DuplicationDetector.Settings
-            //    {
-            //        Severity = Severity.Warning,
-            //        MinSize = 5
-            //    }));
+            visitor.Detectors.Add(new DuplicationDetector(logger, context,
+                new DuplicationSettings
+                {
+                    Severity = Severity.Warning,
+                    MinSize = 5
+                }));
 
             //visitor.Detectors.Add(new HiddenDependenciesDetector(logger, context,
             //    new HiddenDependenciesDetector.Settings

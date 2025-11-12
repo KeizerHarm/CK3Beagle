@@ -1,7 +1,6 @@
 ﻿using CK3Analyser.Analysis.Logging;
 using CK3Analyser.Core.Domain;
 using CK3Analyser.Core.Domain.Entities;
-using CK3Analyser.Core.Resources;
 using CK3Analyser.Core.Resources.DetectorSettings;
 using System.Collections.Generic;
 using System.Text;
@@ -10,7 +9,6 @@ namespace CK3Analyser.Analysis.Detectors
 {
     public class HiddenDependenciesDetector : BaseDetector
     {
-
         private readonly HiddenDependenciesSettings _settings;
 
         private Declaration thisDeclaration;
@@ -74,10 +72,10 @@ namespace CK3Analyser.Analysis.Detectors
         private void HandleUseOfSavedScope(Declaration declaration, string commentText, string scopeName)
         {
             if (((ScriptFile)declaration.Parent).ExpectedDeclarationType == DeclarationType.Event &&
-                _settings.UseOfSavedScope_AllowInEventFile)
+                _settings.UseOfSavedScope_AllowedIfInEventFile)
                 return;
 
-            (bool isSmelly, string msg) = HandleUseKeyword(scopeName, declaration, commentText, _settings.UseOfSavedScope_IgnoreIfInComment, _settings.UseOfSavedScope_IgnoreIfInName);
+            (bool isSmelly, string msg) = HandleUseKeyword(scopeName, declaration, commentText, _settings.UseOfSavedScope_AllowedIfInComment, _settings.UseOfSavedScope_AllowedIfInName);
 
             if (isSmelly)
             {
@@ -93,13 +91,13 @@ namespace CK3Analyser.Analysis.Detectors
         private void HandleUseOfVariables(Declaration declaration, string commentText, string varName)
         {
             if (((ScriptFile)declaration.Parent).ExpectedDeclarationType == DeclarationType.Event &&
-                _settings.UseOfVariable_AllowInEventFile)
+                _settings.UseOfVariable_AllowedIfInEventFile)
                 return;
 
-            if (_settings.VariablesWhitelist.Contains(varName))
+            if (_settings.UseOfVariable_Whitelist.Contains(varName))
                 return;
 
-            (bool isSmelly, string msg) = HandleUseKeyword(varName, declaration, commentText, _settings.UseOfSavedScope_IgnoreIfInComment, _settings.UseOfSavedScope_IgnoreIfInName);
+            (bool isSmelly, string msg) = HandleUseKeyword(varName, declaration, commentText, _settings.UseOfSavedScope_AllowedIfInComment, _settings.UseOfSavedScope_AllowedIfInName);
 
             if (isSmelly)
             {
@@ -116,10 +114,10 @@ namespace CK3Analyser.Analysis.Detectors
         private void HandleUseOfPrev(Declaration declaration, string commentText)
         {
             if (((ScriptFile)declaration.Parent).ExpectedDeclarationType == DeclarationType.Event &&
-                _settings.UseOfPrev_AllowInEventFile)
+                _settings.UseOfPrev_AllowedIfInEventFile)
                 return;
 
-            (bool isSmelly, string msg) = HandleUseKeyword("prev", declaration, commentText, _settings.UseOfPrev_IgnoreIfInComment, _settings.UseOfPrev_IgnoreIfInName);
+            (bool isSmelly, string msg) = HandleUseKeyword("prev", declaration, commentText, _settings.UseOfPrev_AllowedIfInComment, _settings.UseOfPrev_AllowedIfInName);
             
             if (isSmelly)
             {
@@ -134,10 +132,10 @@ namespace CK3Analyser.Analysis.Detectors
         private void HandleUseOfRoot(Declaration declaration, string commentText)
         {
             if (((ScriptFile)declaration.Parent).ExpectedDeclarationType == DeclarationType.Event &&
-                _settings.UseOfRoot_AllowInEventFile)
+                _settings.UseOfRoot_AllowedIfInEventFile)
                 return;
 
-            (bool isSmelly, string msg) = HandleUseKeyword("root", declaration, commentText, _settings.UseOfRoot_IgnoreIfInComment, _settings.UseOfRoot_IgnoreIfInName);
+            (bool isSmelly, string msg) = HandleUseKeyword("root", declaration, commentText, _settings.UseOfRoot_AllowedIfInComment, _settings.UseOfRoot_AllowedIfInName);
 
             if (isSmelly)
             {

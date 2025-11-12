@@ -12,24 +12,71 @@ namespace CK3Analyser.Core.Resources
 
     public class Configuration
     {
-        private JsonElement rawSettings { get; }
+        private JsonElement _rawSettings { get; }
 
         public Configuration(JsonElement rawSettings)
         {
-            this.rawSettings = rawSettings;
+            _rawSettings = rawSettings;
         }
 
         public LargeUnitSettings LargeUnitSettings
         {
             get
             {
-                if (rawSettings.TryGetProperty("largeUnit", out var largeUnitSettings))
+                if (_rawSettings.TryGetProperty("largeUnit", out var settings))
                 {
-                    var flattened = Pretransform(largeUnitSettings);
-                    var flat = flattened.ToString();
-                    return JsonSerializer.Deserialize<LargeUnitSettings>(flat);
+                    var transformed = Pretransform(settings);
+                    return JsonSerializer.Deserialize<LargeUnitSettings>(transformed);
                 }
                 return new LargeUnitSettings
+                {
+                    Enabled = false
+                };
+            }
+        }
+
+        public OvercomplicatedBooleanSettings OvercomplicatedBooleanSettings
+        {
+            get
+            {
+                if (_rawSettings.TryGetProperty("overcomplicatedBoolean", out var settings))
+                {
+                    var transformed = Pretransform(settings);
+                    return JsonSerializer.Deserialize<OvercomplicatedBooleanSettings>(transformed);
+                }
+                return new OvercomplicatedBooleanSettings
+                {
+                    Enabled = false
+                };
+            }
+        }
+
+        public DuplicationSettings DuplicationSettings
+        {
+            get
+            {
+                if (_rawSettings.TryGetProperty("duplication", out var settings))
+                {
+                    var transformed = Pretransform(settings);
+                    return JsonSerializer.Deserialize<DuplicationSettings>(transformed);
+                }
+                return new DuplicationSettings
+                {
+                    Enabled = false
+                };
+            }
+        }
+
+        public HiddenDependenciesSettings HiddenDependenciesSettings
+        {
+            get
+            {
+                if (_rawSettings.TryGetProperty("hiddenDependencies", out var settings))
+                {
+                    var transformed = Pretransform(settings);
+                    return JsonSerializer.Deserialize<HiddenDependenciesSettings>(transformed);
+                }
+                return new HiddenDependenciesSettings
                 {
                     Enabled = false
                 };
