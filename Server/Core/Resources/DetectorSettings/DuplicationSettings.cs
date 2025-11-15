@@ -1,6 +1,6 @@
 ﻿namespace CK3Analyser.Core.Resources.DetectorSettings
 {
-    public readonly struct DuplicationSettings
+    public readonly struct DuplicationSettings : IGenericSettings
     {
         public bool Enabled { get; init; }
         public Severity Severity { get; init; }

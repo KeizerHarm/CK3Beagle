@@ -3,7 +3,6 @@ using CK3Analyser.Analysis.Logging;
 using CK3Analyser.Core;
 using CK3Analyser.Core.Domain;
 using CK3Analyser.Core.Resources;
-using CK3Analyser.Core.Resources.DetectorSettings;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
@@ -18,9 +17,7 @@ namespace CK3Analyser.Analysis
         {
             var logger = new Logger();
             var visitor = new AnalysisVisitor();
-
-            //SetDefaultDetectors(context, logger, visitor);
-            SetDetectorsFromSettings(context, logger, visitor);
+            SetDetectors(context, logger, visitor);
 
             await context.Files.ForEachWithProgress(
                 file => file.Value.Accept(visitor),
@@ -31,7 +28,7 @@ namespace CK3Analyser.Analysis
             LogEntries = logger.LogEntries;
         }
 
-        private void SetDetectorsFromSettings(Context context, Logger logger, AnalysisVisitor visitor)
+        private static void SetDetectors(Context context, Logger logger, AnalysisVisitor visitor)
         {
             if (GlobalResources.Configuration.LargeUnitSettings.Enabled)
             {
@@ -58,75 +55,6 @@ namespace CK3Analyser.Analysis
                 visitor.Detectors.Add(new InconsistentIndentationDetector(logger, context,
                     GlobalResources.Configuration.InconsistentIndentationSettings));
             }
-        }
-
-        private void SetDefaultDetectors(Context context, Logger logger, AnalysisVisitor visitor)
-        {
-            visitor.Detectors.Add(new LargeUnitDetector(logger, context,
-                new LargeUnitSettings
-                {
-                    File_Severity = Severity.Info,
-                    File_MaxSize = 10000,
-                    Macro_Severity = Severity.Info,
-                    Macro_MaxSize = 50,
-                    NonMacroBlock_Severity = Severity.Info,
-                    NonMacroBlock_MaxSize = 50
-                }));
-            visitor.Detectors.Add(new OvercomplicatedBooleanDetector(logger, context,
-                new OvercomplicatedBooleanSettings
-                {
-                    Absorption_Severity = Severity.Info,
-                    Associativity_Severity = Severity.Warning,
-                    Complementation_Severity = Severity.Critical,
-                    Distributivity_Severity = Severity.Info,
-                    DoubleNegation_Severity = Severity.Warning,
-                    Idempotency_Severity = Severity.Warning,
-                    NotIsNotNor_Severity = Severity.Warning
-                }));
-            visitor.Detectors.Add(new InconsistentIndentationDetector(logger, context,
-                new InconsistentIndentationSettings
-                {
-                    Enabled = true,
-                    AbberatingLines_Severity = Severity.Warning,
-                    UnexpectedType_Severity = Severity.Warning,
-                    CommentHandling = CommentHandling.NoSpecialTreatment,
-                    AllowedIndentationTypes = [IndentationType.Tab, IndentationType.FourSpaces]
-                }));
-
-            visitor.Detectors.Add(new DuplicationDetector(logger, context,
-                new DuplicationSettings
-                {
-                    Severity = Severity.Warning,
-                    MinSize = 5
-                }));
-
-            //visitor.Detectors.Add(new HiddenDependenciesDetector(logger, context,
-            //    new HiddenDependenciesDetector.Settings
-            //    {
-            //        UseOfPrev_Severity = Severity.Warning,
-            //        UseOfRoot_Severity = Severity.Warning,
-            //        UseOfSavedScope_Severity = Severity.Warning,
-            //        UseOfVariable_Severity = Severity.Warning,
-            //        UseOfPrev_IgnoreIfInComment = true,
-            //        UseOfPrev_IgnoreIfInName = true,
-            //        UseOfPrev_AllowInEventFile = false,
-            //        UseOfRoot_IgnoreIfInComment = true,
-            //        UseOfRoot_IgnoreIfInName = true,
-            //        UseOfRoot_AllowInEventFile = false,
-            //        UseOfSavedScope_IgnoreIfInComment = true,
-            //        UseOfSavedScope_IgnoreIfInName = false,
-            //        UseOfSavedScope_AllowInEventFile = false,
-            //        UseOfVariable_IgnoreIfInComment = true,
-            //        UseOfVariable_IgnoreIfInName = false,
-            //        UseOfVariable_AllowInEventFile = false,
-            //        VariablesWhitelist = []
-            //    }));
-            //visitor.Detectors.Add(new MagicNumberDetector(logger, context,
-            //    new MagicNumberDetector.Settings
-            //    {
-            //        Severity = Severity.Info,
-            //        StatementKeysToConsider = ["add_gold"]
-            //    }));
         }
     }
 }

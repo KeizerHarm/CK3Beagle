@@ -2,7 +2,7 @@
 
 namespace CK3Analyser.Core.Resources.DetectorSettings
 {
-    public readonly struct HiddenDependenciesSettings
+    public readonly struct HiddenDependenciesSettings : IGenericSettings
     {
         public bool Enabled { get; init; }
 

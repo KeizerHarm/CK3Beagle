@@ -80,14 +80,10 @@ namespace CK3Analyser.Core
                 if (index >= nextThreshold)
                 {
                     await log(nextPercent);
-                    nextPercent += progressStepPercent;
+                    nextPercent += Math.Min(100, progressStepPercent);
                     nextThreshold = total * nextPercent / 100;
                 }
             }
-
-            // Ensure 100% is logged once, even if total isn't a clean multiple
-            if (nextPercent > 100)
-                await log(100);
         }
 
 

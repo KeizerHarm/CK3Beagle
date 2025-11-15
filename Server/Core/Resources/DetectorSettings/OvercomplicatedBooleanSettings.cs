@@ -1,6 +1,6 @@
 ﻿namespace CK3Analyser.Core.Resources.DetectorSettings
 {
-    public struct OvercomplicatedBooleanSettings
+    public struct OvercomplicatedBooleanSettings : IGenericSettings
     {
         public bool Enabled { get; init; }
         public Severity DoubleNegation_Severity { get; set; }

@@ -22,7 +22,7 @@ namespace CK3Analyser.Core.Resources.DetectorSettings
         NoSpecialTreatment,
         CommentsIgnored
     }
-    public readonly struct InconsistentIndentationSettings
+    public readonly struct InconsistentIndentationSettings : IGenericSettings
     {
         public bool Enabled { get; init; }
         public HashSet<IndentationType> AllowedIndentationTypes { get; init; }

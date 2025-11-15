@@ -28,7 +28,6 @@ namespace CK3Analyser.CLI
 
         private async Task Go()
         {
-
             Console.WriteLine("Let's go! Parsing logs");
             LogsParser.ParseLogs(LogsFolder);
             //Console.WriteLine($"Parsed logs; found {GlobalResources.EFFECTKEYS.Count} effects, {GlobalResources.TRIGGERKEYS.Count} triggers, {GlobalResources.EVENTTARGETS.Count} event targets ");
@@ -38,6 +37,7 @@ namespace CK3Analyser.CLI
             GlobalResources.Old = new Context(OldVanillaPath, ContextType.Old);
             GlobalResources.Modded = new Context(ModdedPath, ContextType.Modded);
             GlobalResources.New = new Context(NewVanillaPath, ContextType.New);
+            GlobalResources.Configuration = new Configuration(true);
 
 
             //var fastParser = new FastParser();

@@ -2,7 +2,7 @@
 
 namespace CK3Analyser.Core.Resources.DetectorSettings
 {
-    public readonly struct LargeUnitSettings
+    public readonly struct LargeUnitSettings : IGenericSettings
     {
         public bool Enabled { get; init; }
         public int NonMacroBlock_MaxSize { get; init; }
