@@ -16,7 +16,7 @@ namespace CK3Analyser.Analysis.Detectors
 
         public override void VisitBinaryExpression(BinaryExpression binaryExpression)
         {
-            if (!_settings.StatementKeysToConsider.Contains(binaryExpression.Key))
+            if (!_settings.KeysToConsider.Contains(binaryExpression.Key))
                 return;
 
             if (IsNumeric(binaryExpression.Value))
@@ -29,7 +29,7 @@ namespace CK3Analyser.Analysis.Detectors
             }
         }
 
-        private bool IsNumeric(string s)
+        private static bool IsNumeric(string s)
         {
             if (s.Length == 0) return false;
             int i = 0;

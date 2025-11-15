@@ -55,8 +55,6 @@ namespace CK3Analyser.LspInterface
             }
         }
 
-
-
         private async Task Analyse()
         {
             async Task progressDelegate(string msg)
@@ -97,6 +95,8 @@ namespace CK3Analyser.LspInterface
 
         private bool HandleSettings(JsonElement jsonElement, out string response)
         {
+            GlobalResources.ClearEverything();
+
             var vanillaPath = jsonElement.GetProperty("vanillaCk3Path").GetString();
             if (string.IsNullOrEmpty(vanillaPath))
             {

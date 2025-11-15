@@ -82,7 +82,7 @@ namespace CK3Analyser.Analysis
                     return "HD.4";
 
                 case Smell.MagicNumber:
-                    return "MG.1";
+                    return "MN.1";
 
                 default:
                     throw new ArgumentException("What is that smell, that smelly smell...?");

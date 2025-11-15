@@ -55,6 +55,11 @@ namespace CK3Analyser.Analysis
                 visitor.Detectors.Add(new InconsistentIndentationDetector(logger, context,
                     GlobalResources.Configuration.InconsistentIndentationSettings));
             }
+            if (GlobalResources.Configuration.MagicNumberSettings.Enabled)
+            {
+                visitor.Detectors.Add(new MagicNumberDetector(logger, context,
+                    GlobalResources.Configuration.MagicNumberSettings));
+            }
         }
     }
 }

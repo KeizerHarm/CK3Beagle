@@ -1,4 +1,5 @@
-﻿using System;
+﻿using CK3Analyser.Core.Resources;
+using System;
 using System.IO;
 using System.Text;
 using System.Text.Json;
@@ -36,7 +37,8 @@ namespace CK3Analyser.LspInterface
                 }
                 catch (Exception ex)
                 {
-                    File.WriteAllText("crash.log", ex.ToString());
+                    var crashLogPath = Path.Combine(GlobalResources.Modded?.Path ?? "", "CK3BEAGLE_crash.log");
+                    File.WriteAllText(crashLogPath, ex.ToString());
 
                     await SendMessageAsync(GetErrorMessage(ex.Message));
                 }
@@ -63,7 +65,8 @@ namespace CK3Analyser.LspInterface
                 }
                 catch (Exception ex)
                 {
-                    File.WriteAllText("crash.log", ex.ToString());
+                    var crashLogPath = Path.Combine(GlobalResources.Modded?.Path ?? "", "CK3BEAGLE_crash.log");
+                    File.WriteAllText(crashLogPath, ex.ToString());
                     await SendMessageAsync(GetErrorMessage(ex.Message));
                 }
             }

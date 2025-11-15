@@ -1,4 +1,5 @@
 ﻿using CK3Analyser.Core.Domain;
+using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
@@ -52,6 +53,20 @@ namespace CK3Analyser.Core.Resources
             EFFECTKEYS = _effectKeys?.ToHashSet();
             TRIGGERKEYS = _triggerKeys?.ToHashSet();
             EVENTTARGETS = _eventTargets?.ToHashSet();
+        }
+
+        public static void ClearEverything()
+        {
+            Old = null;
+            New = null;
+            Modded = null;
+            _effectKeys = null;
+            _triggerKeys = null;
+            _eventTargets = null;
+            EFFECTKEYS = null;
+            TRIGGERKEYS = null;
+            EVENTTARGETS = null;
+            Configuration = null;
         }
     }
 }

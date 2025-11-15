@@ -16,7 +16,7 @@ namespace CK3Analyser.Analysing.Detectors
             //arrange
             var logger = new Logger();
             ScriptFile testcase = GetTestCase("MagicNumber/MagicNumber");
-            var visitor = GetDetector(logger, testcase.Context, severity: Severity.Critical, statementsToConsider: [ "add_gold" ]);
+            var visitor = GetDetector(logger, testcase.Context, severity: Severity.Critical, keysToConsider: [ "add_gold" ]);
 
             //act
             visitor.Visit(testcase);
@@ -25,18 +25,17 @@ namespace CK3Analyser.Analysing.Detectors
             Assert.Single(logger.LogEntries, x => x.Smell == Smell.MagicNumber);
         }
 
-
         private static AnalysisVisitor GetDetector(Logger logger,
             Context context,
             Severity severity = Severity.Critical,
-            HashSet<string>? statementsToConsider = null)
+            HashSet<string>? keysToConsider = null)
         {
             var visitor = new AnalysisVisitor();
-            statementsToConsider ??= [];
+            keysToConsider ??= [];
             var settings = new MagicNumberSettings
             {
                 Severity = severity,
-                StatementKeysToConsider = statementsToConsider
+                KeysToConsider = keysToConsider
             };
 
             var detector = new MagicNumberDetector(logger, context, settings);
