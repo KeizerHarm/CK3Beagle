@@ -146,25 +146,25 @@ namespace CK3Analyser.Analysis.Detectors
         {
             FilterClones();
 
-            var sequenceLengthHistogram = new Dictionary<int, int>();
-            var sequences = sequencesByParentStrictHash.SelectMany(x => x.Value).ToList();
-            foreach (var sequence in sequences)
-            {
-                if (sequenceLengthHistogram.TryGetValue(sequence.Count, out _))
-                {
-                    sequenceLengthHistogram[sequence.Count] += 1;
-                }
-                else
-                {
-                    sequenceLengthHistogram.Add(sequence.Count, 1);
-                }
-            }
+            //var sequenceLengthHistogram = new Dictionary<int, int>();
+            //var sequences = sequencesByParentStrictHash.SelectMany(x => x.Value).ToList();
+            //foreach (var sequence in sequences)
+            //{
+            //    if (sequenceLengthHistogram.TryGetValue(sequence.Count, out _))
+            //    {
+            //        sequenceLengthHistogram[sequence.Count] += 1;
+            //    }
+            //    else
+            //    {
+            //        sequenceLengthHistogram.Add(sequence.Count, 1);
+            //    }
+            //}
 
-            var ordered = sequenceLengthHistogram.OrderBy(x => x.Key).ToList();
-            foreach (var item in ordered)
-            {
-                Console.WriteLine(item.Key + ": " + item.Value + " times");
-            }
+            //var ordered = sequenceLengthHistogram.OrderBy(x => x.Key).ToList();
+            //foreach (var item in ordered)
+            //{
+            //    Console.WriteLine(item.Key + ": " + item.Value + " times");
+            //}
 
             foreach (var nodes in nodesByStrictHash)
             {

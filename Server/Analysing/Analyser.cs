@@ -18,8 +18,8 @@ namespace CK3Analyser.Analysis
             var logger = new Logger();
             var visitor = new AnalysisVisitor();
 
-            //SetDefaultDetectors(context, logger, visitor);
-            SetDetectorsFromSettings(context, logger, visitor);
+            SetDefaultDetectors(context, logger, visitor);
+            //SetDetectorsFromSettings(context, logger, visitor);
 
             context.Files.ForEachWithProgress(
                 file => file.Value.Accept(visitor),
@@ -77,14 +77,15 @@ namespace CK3Analyser.Analysis
                     Idempotency_Severity = Severity.Warning,
                     NotIsNotNor_Severity = Severity.Warning
                 }));
-            //visitor.Detectors.Add(new InconsistentIndentationDetector(logger, context,
-            //    new InconsistentIndentationDetector.Settings
-            //    {
-            //        Inconsistency_Severity = Severity.Warning,
-            //        UnexpectedType_Severity = Severity.Info,
-            //        DisregardBracketsInComments = true,
-            //        ExpectedIndentationType = IndentationType.Tab
-            //    }));
+            visitor.Detectors.Add(new InconsistentIndentationDetector(logger, context,
+                new InconsistentIndentationSettings
+                {
+                    Enabled = true,
+                    AbberatingLines_Severity = Severity.Warning,
+                    UnexpectedType_Severity = Severity.Warning,
+                    AccountCommentedBrackets = false,
+                    AllowedIndentationTypes = [IndentationType.Tab, IndentationType.FourSpaces]
+                }));
 
             visitor.Detectors.Add(new DuplicationDetector(logger, context,
                 new DuplicationSettings

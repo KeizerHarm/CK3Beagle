@@ -10,5 +10,7 @@
         public Severity Complementation_Severity { get; set; }
         public Severity NotIsNotNor_Severity { get; set; }
         public Severity Absorption_Severity { get; set; }
+
+        public override string ToString() => this.GenericToString();
     }
 }

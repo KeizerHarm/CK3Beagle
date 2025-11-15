@@ -7,7 +7,6 @@ namespace CK3Analyser.Analysis.Detectors
 {
     public class MagicNumberDetector : BaseDetector
     {
-
         private readonly MagicNumberSettings _settings;
 
         public MagicNumberDetector(ILogger logger, Context context, MagicNumberSettings settings) : base(logger, context)

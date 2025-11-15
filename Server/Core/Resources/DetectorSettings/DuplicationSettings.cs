@@ -6,5 +6,7 @@
         public Severity Severity { get; init; }
         public int MinSize { get; init; }
         public int MaxNumberOfDifferentValues { get; init; }
+
+        public override string ToString() => this.GenericToString();
     }
 }

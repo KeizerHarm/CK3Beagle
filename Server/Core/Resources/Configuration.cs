@@ -12,6 +12,17 @@ namespace CK3Analyser.Core.Resources
 
     public class Configuration
     {
+        public override string ToString()
+        {
+            return "Configuration: {"
+                + $"{nameof(LargeUnitSettings)}: {LargeUnitSettings.ToString()} "
+                + $"{nameof(OvercomplicatedBooleanSettings)}: {OvercomplicatedBooleanSettings.ToString()} "
+                + $"{nameof(DuplicationSettings)}: {DuplicationSettings.ToString()} "
+                + $"{nameof(HiddenDependenciesSettings)}: {HiddenDependenciesSettings.ToString()} "
+                + $"{nameof(InconsistentIndentationSettings)}: {InconsistentIndentationSettings.ToString()} "
+                + "}";
+        }
+
         private JsonElement _rawSettings { get; }
 
         public Configuration(JsonElement rawSettings)
@@ -77,6 +88,22 @@ namespace CK3Analyser.Core.Resources
                     return JsonSerializer.Deserialize<HiddenDependenciesSettings>(transformed);
                 }
                 return new HiddenDependenciesSettings
+                {
+                    Enabled = false
+                };
+            }
+        }
+
+        public InconsistentIndentationSettings InconsistentIndentationSettings
+        {
+            get
+            {
+                if (_rawSettings.TryGetProperty("inconsistentIndentation", out var settings))
+                {
+                    var transformed = Pretransform(settings);
+                    return JsonSerializer.Deserialize<InconsistentIndentationSettings>(transformed);
+                }
+                return new InconsistentIndentationSettings
                 {
                     Enabled = false
                 };

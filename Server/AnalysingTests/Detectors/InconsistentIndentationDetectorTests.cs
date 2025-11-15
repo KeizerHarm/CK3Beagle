@@ -20,8 +20,7 @@ namespace CK3Analyser.Analysing.Detectors
             //arrange
             var logger = new Logger();
             ScriptFile testcase = GetTestCase(file);
-            var visitor = GetDetector(logger, testcase.Context, expectedIndentationType: expectedDetectedType);
-
+            var visitor = GetDetector(logger, testcase.Context, expectedIndentationTypes: [expectedDetectedType]);
 
             //act
             visitor.Visit(testcase);
@@ -37,8 +36,7 @@ namespace CK3Analyser.Analysing.Detectors
             //arrange
             var logger = new Logger();
             ScriptFile testcase = GetTestCase("InconsistentIndentation/ConsistentTabs");
-            var visitor = GetDetector(logger, testcase.Context, expectedIndentationType: IndentationType.FourSpaces, UnexpectedType_severity: Severity.Critical);
-
+            var visitor = GetDetector(logger, testcase.Context, expectedIndentationTypes: [IndentationType.FourSpaces], UnexpectedType_severity: Severity.Critical);
 
             //act
             visitor.Visit(testcase);
@@ -52,17 +50,16 @@ namespace CK3Analyser.Analysing.Detectors
         }
 
         [Theory]
-        [InlineData("InconsistentIndentation/ConsistentTabs", true, false)]
-        [InlineData("InconsistentIndentation/ConsistentTabs", false, true)]
-        [InlineData("InconsistentIndentation/ConsistentTabs_SpacedWithBracket", false, false)]
-        [InlineData("InconsistentIndentation/ConsistentTabs_SpacedWithBracket", true, true)]
-        public void RepectsSettingDisregardBracketsInComments(string file, bool disregardBracketsInComments, bool shouldError)
+        [InlineData("InconsistentIndentation/ConsistentTabs", false, false)]
+        [InlineData("InconsistentIndentation/ConsistentTabs", true, true)]
+        [InlineData("InconsistentIndentation/ConsistentTabs_SpacedWithBracket", true, false)]
+        [InlineData("InconsistentIndentation/ConsistentTabs_SpacedWithBracket", false, true)]
+        public void RepectsSettingDisregardBracketsInComments(string file, bool accountBracketsInComments, bool shouldError)
         {
             //arrange
             var logger = new Logger();
             ScriptFile testcase = GetTestCase(file);
-            var visitor = GetDetector(logger, testcase.Context, disregardCommentedBracket: disregardBracketsInComments);
-
+            var visitor = GetDetector(logger, testcase.Context, allowBracketsInComments: accountBracketsInComments);
 
             //act
             visitor.Visit(testcase);
@@ -84,8 +81,7 @@ namespace CK3Analyser.Analysing.Detectors
             //arrange
             var logger = new Logger();
             ScriptFile testcase = GetTestCase("InconsistentIndentation/InconsistentTabs");
-            var visitor = GetDetector(logger, testcase.Context, Inconsistency_severity: Severity.Critical, expectedIndentationType: IndentationType.FourSpaces);
-
+            var visitor = GetDetector(logger, testcase.Context, Inconsistency_severity: Severity.Critical, expectedIndentationTypes: [IndentationType.FourSpaces]);
 
             //act
             visitor.Visit(testcase);
@@ -102,15 +98,17 @@ namespace CK3Analyser.Analysing.Detectors
             Context context,
             Severity Inconsistency_severity = Severity.Warning,
             Severity UnexpectedType_severity = Severity.Warning, 
-            bool disregardCommentedBracket = true, 
-            IndentationType expectedIndentationType = IndentationType.Tab)
+            bool allowBracketsInComments = false, 
+            HashSet<IndentationType>? expectedIndentationTypes = null)
         {
+            expectedIndentationTypes ??= [IndentationType.Tab];
+
             var settings = new InconsistentIndentationSettings
             {
-                Inconsistency_Severity = Inconsistency_severity,
+                AbberatingLines_Severity = Inconsistency_severity,
                 UnexpectedType_Severity = UnexpectedType_severity,
-                DisregardBracketsInComments = disregardCommentedBracket,
-                ExpectedIndentationType = expectedIndentationType
+                AccountCommentedBrackets = allowBracketsInComments,
+                AllowedIndentationTypes = expectedIndentationTypes
             };
 
             var visitor = new AnalysisVisitor();

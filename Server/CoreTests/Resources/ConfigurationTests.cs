@@ -43,6 +43,30 @@ namespace CK3Analyser.Core.Resources
 
 			Assert.Equal(expectedSettings, actualSettings);
         }
+		[Fact]
+        public void ParsesEnumSettings()
+        {
+			var inputJson = @"{""inconsistentIndentation"":{""enabled"":true,""accountCommentedBrackets"":true,""allowedIndentationTypes"":[""Tab"",""Two Spaces""],""unexpectedType"":{""severity"":2},""abberatingLines"":{""severity"":2}}}";
+			var input = JsonDocument.Parse(inputJson);
+
+			var expectedSettings = new InconsistentIndentationSettings
+			{
+				Enabled = true,
+				AccountCommentedBrackets = true,
+				UnexpectedType_Severity = Severity.Warning,
+				AbberatingLines_Severity = Severity.Warning,
+				AllowedIndentationTypes = [IndentationType.Tab, IndentationType.TwoSpaces]
+			};
+
+			var config = new Configuration(input.RootElement);
+			var actualSettings = config.InconsistentIndentationSettings;
+
+			Assert.Equal(expectedSettings.Enabled, actualSettings.Enabled);
+			Assert.Equal(expectedSettings.AccountCommentedBrackets, actualSettings.AccountCommentedBrackets);
+			Assert.Equal(expectedSettings.UnexpectedType_Severity, actualSettings.UnexpectedType_Severity);
+			Assert.Equal(expectedSettings.AbberatingLines_Severity, actualSettings.AbberatingLines_Severity);
+			Assert.Equal(expectedSettings.AllowedIndentationTypes, actualSettings.AllowedIndentationTypes);
+        }
 
     }
 }

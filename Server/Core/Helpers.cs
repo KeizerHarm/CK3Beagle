@@ -1,6 +1,8 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 
 namespace CK3Analyser.Core
 {
@@ -21,7 +23,7 @@ namespace CK3Analyser.Core
             this IEnumerable<T> source,
             Action<T> action,
             Action<int> log,
-            int progressStepPercent = 10)
+            int progressStepPercent = 25)
         {
             var collection = source as ICollection<T> ?? source.ToList();
             int total = collection.Count;
@@ -70,5 +72,42 @@ namespace CK3Analyser.Core
             if (nextPercent > 100)
                 log(100);
         }
+
+
+        public static string GenericToString(this object obj)
+        {
+            Type type = obj.GetType();
+            FieldInfo[] fields = type.GetFields();
+            PropertyInfo[] properties = type.GetProperties();
+
+            Dictionary<string, object> values = new Dictionary<string, object>();
+            Array.ForEach(fields, field => values.Add(field.Name, field.GetValue(obj)));
+            Array.ForEach(properties, property =>
+            {
+                if (property.CanRead)
+                    values.Add(property.Name, property.GetValue(obj, null));
+            });
+
+            string FormatValue(object v)
+            {
+                if (v == null)
+                    return "null";
+
+                // Treat strings as scalars, not collections
+                if (v is System.Collections.IEnumerable enumerable && v is not string)
+                {
+                    var items = new List<string>();
+                    foreach (var item in enumerable)
+                        items.Add(item?.ToString() ?? "null");
+                    return "[" + string.Join(", ", items) + "]";
+                }
+
+                return v.ToString();
+            }
+
+            return string.Join(", ",
+                values.Select(kvp => kvp.Key + "=" + FormatValue(kvp.Value)));
+        }
+
     }
 }

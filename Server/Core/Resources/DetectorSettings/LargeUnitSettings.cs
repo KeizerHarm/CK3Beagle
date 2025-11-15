@@ -13,5 +13,7 @@ namespace CK3Analyser.Core.Resources.DetectorSettings
 
         public int Macro_MaxSize { get; init; }
         public Severity Macro_Severity { get; init; }
+
+        public override string ToString() => this.GenericToString();
     }
 }

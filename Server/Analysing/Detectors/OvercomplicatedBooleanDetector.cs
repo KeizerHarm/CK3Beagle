@@ -11,7 +11,7 @@ namespace CK3Analyser.Analysis.Detectors
 {
     public class OvercomplicatedBooleanDetector : BaseDetector
     {
-        private static readonly IEnumerable<string> Operators =
+        private static readonly HashSet<string> Operators =
         [
             "AND", "OR", "NOT", "NOR", "NAND"
         ];
@@ -123,7 +123,6 @@ namespace CK3Analyser.Analysis.Detectors
                             namedBlock);
                     }
                 }
-                
             }
 
             var seenKeys = new HashSet<string>();

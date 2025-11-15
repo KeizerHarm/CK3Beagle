@@ -9,10 +9,8 @@ using System.Linq;
 
 namespace CK3Analyser.Analysis.Detectors
 {
-
     public class InconsistentIndentationDetector : BaseDetector
     {
-
         private readonly InconsistentIndentationSettings _settings;
 
         public InconsistentIndentationDetector(ILogger logger, Context context, InconsistentIndentationSettings settings) : base(logger, context)
@@ -27,44 +25,78 @@ namespace CK3Analyser.Analysis.Detectors
             (var detectedIndentationType, var lines) = DetectIndentation(scriptFile);
             logger.Log(Smell.None, Severity.Debug, "Detected indentation type " + detectedIndentationType, scriptFile.GetIdentifier());
 
-            if (detectedIndentationType != _settings.ExpectedIndentationType)
+            if (!_settings.AllowedIndentationTypes.Contains(detectedIndentationType))
             {
                 logger.Log(
                     Smell.InconsistentIndentation_UnexpectedType,
                     _settings.UnexpectedType_Severity, 
-                    $"File uses indentation type {detectedIndentationType} instead of {_settings.ExpectedIndentationType}", 
+                    $"File uses indentation type {detectedIndentationType} instead of any of {string.Join(',', _settings.AllowedIndentationTypes)}", 
                     scriptFile);
             }
 
             if (detectedIndentationType == IndentationType.Inconclusive)
                 return;
 
-            int abberatingIndentedLines = 0;
-            foreach (var line in lines)
+            int firstAbberatingLine = -1;
+            int lastAbberatingLine = -1;
+            foreach (Line line in lines)
             {
-                if (!line.IndentationTypeWorks(detectedIndentationType)) abberatingIndentedLines++;
+                if (!line.IndentationTypeWorks(detectedIndentationType))
+                {
+                    if (firstAbberatingLine == -1)
+                        firstAbberatingLine = line.LineIndexInFile;
+
+                    lastAbberatingLine = line.LineIndexInFile;
+                }
+                else
+                {
+                    if (firstAbberatingLine != -1)
+                    {
+                        logger.Log (
+                            Smell.InconsistentIndentation_Inconsistency,
+                            _settings.AbberatingLines_Severity,
+                            $"Lines are not consistent with indentation type {detectedIndentationType} used by rest of file",
+                            scriptFile.AbsolutePath,
+                            firstAbberatingLine,
+                            0,
+                            lastAbberatingLine,
+                            int.MaxValue);
+
+                        firstAbberatingLine = -1;
+                        lastAbberatingLine = -1;
+                    }
+                }
             }
-            if (abberatingIndentedLines > 0)
+            if (firstAbberatingLine != -1)
             {
                 logger.Log(
                     Smell.InconsistentIndentation_Inconsistency,
-                    _settings.Inconsistency_Severity,
-                    $"File is detected to use {detectedIndentationType} but it has {abberatingIndentedLines} lines that don't",
-                    scriptFile);
+                    _settings.AbberatingLines_Severity,
+                    $"Lines are not consistent with indentation type {detectedIndentationType} used by rest of file",
+                    scriptFile.AbsolutePath,
+                    firstAbberatingLine,
+                    0,
+                    lastAbberatingLine,
+                    int.MaxValue);
             }
         }
 
-        private (IndentationType detectedIndentationType, IEnumerable<Line> lines) DetectIndentation(ScriptFile scriptFile)
+        private (IndentationType detectedIndentationType, List<Line> lines) DetectIndentation(ScriptFile scriptFile)
         {
             int currentDepth = 0;
             var lines = new List<Line>();
             int[] linesThatWorkForIndentationTypes = new int[Enum.GetValues<IndentationType>().Length];
-            foreach (var line in scriptFile.Raw.Split('\n'))
+            string[] rawLines = scriptFile.Raw.Split('\n');
+            for (int i = 0; i < rawLines.Length; i++)
             {
+                string line = rawLines[i];
                 if (string.IsNullOrWhiteSpace(line)) continue;
 
-                var lineObj = new Line();
-                lineObj.Depth = currentDepth;
+                var lineObj = new Line
+                {
+                    Depth = currentDepth,
+                    LineIndexInFile = i
+                };
                 bool isInLeadingWhitespace = true;
                 bool isInQuotedString = false;
                 int localBracketBalance = 0;
@@ -76,7 +108,7 @@ namespace CK3Analyser.Analysis.Detectors
                     {
                         if (!char.IsWhiteSpace(charac)) isInLeadingWhitespace = false;
 
-                        if (charac == '#' && _settings.DisregardBracketsInComments) break; ;
+                        if (charac == '#' && !_settings.AccountCommentedBrackets) break; ;
                         if (charac == ' ' && isInLeadingWhitespace) lineObj.LeadingSpaces++;
                         if (charac == '\t' && isInLeadingWhitespace) lineObj.LeadingTabs++;
                         if (charac == '{') localBracketBalance++;
@@ -118,12 +150,14 @@ namespace CK3Analyser.Analysis.Detectors
                 LeadingSpaces = 0;
                 LeadingTabs = 0;
                 CharacterCountBeforeThisLine = 0;
+                LineIndexInFile = 0;
             }
 
             public int Depth { get; set; }
             public int LeadingTabs { get; set; }
             public int LeadingSpaces { get; set; }
             public int CharacterCountBeforeThisLine { get; set; }
+            public int LineIndexInFile { get; set; }
 
 
             public readonly bool IndentationTypeWorks(IndentationType type)
@@ -143,6 +177,5 @@ namespace CK3Analyser.Analysis.Detectors
                 }
             }
         }
-
     }
 }

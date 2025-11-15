@@ -4,5 +4,7 @@
     {
         public bool Enabled { get; init; }
         public Severity Severity { get; init; }
+
+        public override string ToString() => this.GenericToString();
     }
 }

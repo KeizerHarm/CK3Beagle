@@ -138,9 +138,7 @@ namespace CK3Analyser.LspInterface
 
             GlobalResources.Configuration = new Configuration(jsonElement);
 
-
-            response = "Settings loaded succesfully\n\n";
-            response += "Large Unit Settings : File Max Size = " + GlobalResources.Configuration.LargeUnitSettings.File_MaxSize;
+            response = "Settings loaded succesfully: " + GlobalResources.Configuration.ToString();
             return true;
         }
     }

@@ -27,5 +27,7 @@ namespace CK3Analyser.Core.Resources.DetectorSettings
         public bool UseOfVariable_AllowedIfInComment { get; init; }
         public bool UseOfVariable_AllowedIfInEventFile { get; init; }
         public HashSet<string> UseOfVariable_Whitelist { get; init; }
+
+        public override string ToString() => this.GenericToString();
     }
 }
