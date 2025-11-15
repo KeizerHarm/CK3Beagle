@@ -143,11 +143,19 @@ namespace CK3Analyser.Core.Parsing.Antlr
 
         private void ApplyRange(ParserRuleContext context, Node node)
         {
-            node.StartLine = context.Start.Line;
-            node.StartIndex = context.Start.StartIndex;
+            node.StartLine = context.Start.Line - 1;
+            node.StartIndex = context.Start.Column;
 
-            node.EndLine = context.Stop?.Line ?? context.Start.Line;
-            node.EndIndex = context.Stop?.StopIndex ?? context.Start.StopIndex;
+            node.EndLine = context.Stop?.Line - 1 ?? context.Start.Line - 1;
+            if (context.Stop != null)
+            {
+                node.EndLine = context.Stop.Line - 1;
+                node.EndIndex = context.Stop.Column + context.Stop.Text.Length;
+            } else
+            {
+                node.EndLine = context.Start.Line - 1;
+                node.EndIndex = context.Start.Column + context.Start.Text.Length;
+            }
         }
     }
 }

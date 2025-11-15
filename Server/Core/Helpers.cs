@@ -86,7 +86,6 @@ namespace CK3Analyser.Core
             }
         }
 
-
         public static string GenericToString(this object obj)
         {
             Type type = obj.GetType();
