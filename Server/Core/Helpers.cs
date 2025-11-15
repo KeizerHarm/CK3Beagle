@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
+using System.Threading.Tasks;
 
 namespace CK3Analyser.Core
 {
@@ -25,6 +26,22 @@ namespace CK3Analyser.Core
             Action<int> log,
             int progressStepPercent = 25)
         {
+            source.ForEachWithProgress<T>(action,
+                (progress) =>
+                {
+                    log(progress);
+                    return Task.CompletedTask;
+                },
+                progressStepPercent
+                ).RunSynchronously();
+        }
+
+        public static async Task ForEachWithProgress<T>(
+            this IEnumerable<T> source,
+            Action<T> action,
+            Func<int, Task> log,
+            int progressStepPercent = 25)
+        {
             var collection = source as ICollection<T> ?? source.ToList();
             int total = collection.Count;
             if (total == 0)
@@ -37,7 +54,7 @@ namespace CK3Analyser.Core
                 {
                     action(item);
                 }
-                log(100);
+                await log(100);
                 return;
             }
 
@@ -62,7 +79,7 @@ namespace CK3Analyser.Core
 
                 if (index >= nextThreshold)
                 {
-                    log(nextPercent);
+                    await log(nextPercent);
                     nextPercent += progressStepPercent;
                     nextThreshold = total * nextPercent / 100;
                 }
@@ -70,7 +87,7 @@ namespace CK3Analyser.Core
 
             // Ensure 100% is logged once, even if total isn't a clean multiple
             if (nextPercent > 100)
-                log(100);
+                await log(100);
         }
 
 
@@ -93,8 +110,7 @@ namespace CK3Analyser.Core
                 if (v == null)
                     return "null";
 
-                // Treat strings as scalars, not collections
-                if (v is System.Collections.IEnumerable enumerable && v is not string)
+                if (v is IEnumerable enumerable && v is not string)
                 {
                     var items = new List<string>();
                     foreach (var item in enumerable)

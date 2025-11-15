@@ -49,22 +49,31 @@ namespace CK3Analyser.Analysing.Detectors
                  && x.Smell == Smell.InconsistentIndentation_UnexpectedType);
         }
 
+        public static IEnumerable<object[]> Data => [
+            ["InconsistentIndentation/ConsistentTabs", CommentHandling.CommentsIgnored, false],
+            ["InconsistentIndentation/ConsistentTabs", CommentHandling.NoSpecialTreatment, false],
+            ["InconsistentIndentation/ConsistentTabs", CommentHandling.CommentedBracketsCount, true],
+            ["InconsistentIndentation/ConsistentTabs_SpacedWithBracket", CommentHandling.CommentsIgnored, true],
+            ["InconsistentIndentation/ConsistentTabs_SpacedWithBracket", CommentHandling.NoSpecialTreatment, true],
+            ["InconsistentIndentation/ConsistentTabs_SpacedWithBracket", CommentHandling.CommentedBracketsCount, false],
+            ["InconsistentIndentation/ConsistentTabs_CommentOnWrongDepth", CommentHandling.CommentsIgnored, false],
+            ["InconsistentIndentation/ConsistentTabs_CommentOnWrongDepth", CommentHandling.NoSpecialTreatment, true],
+            ["InconsistentIndentation/ConsistentTabs_CommentOnWrongDepth", CommentHandling.CommentedBracketsCount, true],
+        ];
+
         [Theory]
-        [InlineData("InconsistentIndentation/ConsistentTabs", false, false)]
-        [InlineData("InconsistentIndentation/ConsistentTabs", true, true)]
-        [InlineData("InconsistentIndentation/ConsistentTabs_SpacedWithBracket", true, false)]
-        [InlineData("InconsistentIndentation/ConsistentTabs_SpacedWithBracket", false, true)]
-        public void RepectsSettingDisregardBracketsInComments(string file, bool accountBracketsInComments, bool shouldError)
+        [MemberData(nameof(Data))]
+        public void RespectsCommentHandlingSetting(string file, CommentHandling commentHandling, bool shouldError)
         {
-            //arrange
+            // arrange
             var logger = new Logger();
             ScriptFile testcase = GetTestCase(file);
-            var visitor = GetDetector(logger, testcase.Context, allowBracketsInComments: accountBracketsInComments);
+            var visitor = GetDetector(logger, testcase.Context, commentHandling: commentHandling);
 
-            //act
+            // act
             visitor.Visit(testcase);
 
-            //assert
+            // assert
             if (shouldError)
             {
                 Assert.Single(logger.LogEntries, x => x.Smell == Smell.InconsistentIndentation_Inconsistency);
@@ -74,6 +83,17 @@ namespace CK3Analyser.Analysing.Detectors
                 Assert.DoesNotContain(logger.LogEntries, x => x.Smell == Smell.InconsistentIndentation_Inconsistency);
             }
         }
+
+        //[Fact]
+        //public void ExtraTest()
+        //{
+        //    var logger = new Logger();
+        //    ScriptFile testcase = GetTestCase("InconsistentIndentation/ExtraTestCase");
+        //    var visitor = GetDetector(logger, testcase.Context, commentHandling: CommentHandling.CommentsIgnored);
+
+        //    visitor.Visit(testcase);
+
+        //}
 
         [Fact]
         public void DetectsInconsistency()
@@ -98,7 +118,7 @@ namespace CK3Analyser.Analysing.Detectors
             Context context,
             Severity Inconsistency_severity = Severity.Warning,
             Severity UnexpectedType_severity = Severity.Warning, 
-            bool allowBracketsInComments = false, 
+            CommentHandling commentHandling = CommentHandling.NoSpecialTreatment, 
             HashSet<IndentationType>? expectedIndentationTypes = null)
         {
             expectedIndentationTypes ??= [IndentationType.Tab];
@@ -107,7 +127,7 @@ namespace CK3Analyser.Analysing.Detectors
             {
                 AbberatingLines_Severity = Inconsistency_severity,
                 UnexpectedType_Severity = UnexpectedType_severity,
-                AccountCommentedBrackets = allowBracketsInComments,
+                CommentHandling = commentHandling,
                 AllowedIndentationTypes = expectedIndentationTypes
             };
 

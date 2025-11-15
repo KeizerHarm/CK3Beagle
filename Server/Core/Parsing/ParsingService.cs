@@ -15,7 +15,7 @@ namespace CK3Analyser.Core.Parsing
 {
     public class ParsingService
     {
-        public static void ParseAllEntities(Func<ICk3Parser> parserMaker, Context context, Action<string> progressDelegate = null)
+        public static async Task ParseAllEntities(Func<ICk3Parser> parserMaker, Context context, Func<string, Task> progressDelegate = null)
         {
             //Console.WriteLine($"Now reading files from {context.Path}");
 
@@ -24,7 +24,7 @@ namespace CK3Analyser.Core.Parsing
             foreach (var declarationType in Enum.GetValues<DeclarationType>())
             {
                 ReadEverythingAsync(parserMaker, context, declarationType);
-                progressDelegate("Completed parsing " + declarationType.ToString());
+                await progressDelegate("Completed parsing " + declarationType.ToString());
             }
             GlobalResources.Lock();
             //Console.WriteLine("Done with first pass");

@@ -6,6 +6,7 @@ using CK3Analyser.Core.Resources;
 using CK3Analyser.Core.Resources.DetectorSettings;
 using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace CK3Analyser.Analysis
 {
@@ -13,15 +14,15 @@ namespace CK3Analyser.Analysis
     {
         public IEnumerable<LogEntry> LogEntries { get; set; }
 
-        public void Analyse(Context context, Action<string> progressDelegate = null)
+        public async Task Analyse(Context context, Func<string, Task> progressDelegate = null)
         {
             var logger = new Logger();
             var visitor = new AnalysisVisitor();
 
-            SetDefaultDetectors(context, logger, visitor);
-            //SetDetectorsFromSettings(context, logger, visitor);
+            //SetDefaultDetectors(context, logger, visitor);
+            SetDetectorsFromSettings(context, logger, visitor);
 
-            context.Files.ForEachWithProgress(
+            await context.Files.ForEachWithProgress(
                 file => file.Value.Accept(visitor),
                 percent => progressDelegate($"Analysis {percent}% complete"));
 
@@ -51,6 +52,11 @@ namespace CK3Analyser.Analysis
             {
                 visitor.Detectors.Add(new HiddenDependenciesDetector(logger, context,
                     GlobalResources.Configuration.HiddenDependenciesSettings));
+            }
+            if (GlobalResources.Configuration.InconsistentIndentationSettings.Enabled)
+            {
+                visitor.Detectors.Add(new InconsistentIndentationDetector(logger, context,
+                    GlobalResources.Configuration.InconsistentIndentationSettings));
             }
         }
 
@@ -83,7 +89,7 @@ namespace CK3Analyser.Analysis
                     Enabled = true,
                     AbberatingLines_Severity = Severity.Warning,
                     UnexpectedType_Severity = Severity.Warning,
-                    AccountCommentedBrackets = false,
+                    CommentHandling = CommentHandling.NoSpecialTreatment,
                     AllowedIndentationTypes = [IndentationType.Tab, IndentationType.FourSpaces]
                 }));
 

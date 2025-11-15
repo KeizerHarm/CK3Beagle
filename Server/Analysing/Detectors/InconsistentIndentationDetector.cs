@@ -106,9 +106,19 @@ namespace CK3Analyser.Analysis.Detectors
                     if (charac == '"') isInQuotedString = !isInQuotedString;
                     if (!isInQuotedString)
                     {
+
+                        if (charac == '#')
+                        {
+                            if (_settings.CommentHandling == CommentHandling.CommentsIgnored)
+                                if (isInLeadingWhitespace)
+                                    goto NEXTLINE;
+                                else
+                                    break;
+                            if (_settings.CommentHandling == CommentHandling.NoSpecialTreatment)
+                                    break;
+                        }
                         if (!char.IsWhiteSpace(charac)) isInLeadingWhitespace = false;
 
-                        if (charac == '#' && !_settings.AccountCommentedBrackets) break; ;
                         if (charac == ' ' && isInLeadingWhitespace) lineObj.LeadingSpaces++;
                         if (charac == '\t' && isInLeadingWhitespace) lineObj.LeadingTabs++;
                         if (charac == '{') localBracketBalance++;
@@ -127,6 +137,7 @@ namespace CK3Analyser.Analysis.Detectors
                         linesThatWorkForIndentationTypes[(int)indentationType]++;
                 }
                 lines.Add(lineObj);
+            NEXTLINE:;
             }
 
             var lineCount = lines.Where(x => x.Depth > 0).Count();

@@ -9,23 +9,26 @@ using System.Linq;
 using CK3Analyser.Core.Domain.Entities;
 using System.Collections.Generic;
 using CK3Analyser.Analysis;
+using System.Threading.Tasks;
 
 namespace CK3Analyser.CLI
 {
     public class Program
     {
-        static void Main(string[] args)
+        static async Task Main(string[] args)
         {
-            _ = new Program();
+            var program = new Program();
+            await program.Go();
         }
-        
+
         private static string OldVanillaPath = @"C:\Program Files (x86)\Steam\steamapps\common\Crusader Kings III Beta\game";
         private static string ModdedPath = @"C:\Users\Harm\Documents\Paradox Interactive\Crusader Kings III\mod\T4N-CK3\T4N";
         private static string NewVanillaPath = @"C:\Program Files (x86)\Steam\steamapps\common\Crusader Kings III\game";
         private static string LogsFolder = @"C:\Users\Harm\Documents\Paradox Interactive\Crusader Kings III\logs";
 
-        public Program()
+        private async Task Go()
         {
+
             Console.WriteLine("Let's go! Parsing logs");
             LogsParser.ParseLogs(LogsFolder);
             //Console.WriteLine($"Parsed logs; found {GlobalResources.EFFECTKEYS.Count} effects, {GlobalResources.TRIGGERKEYS.Count} triggers, {GlobalResources.EVENTTARGETS.Count} event targets ");
@@ -49,8 +52,8 @@ namespace CK3Analyser.CLI
             var parsingTimer = new Stopwatch();
             parsingTimer.Start();
             //GatherDeclarationsForDeclarationType(antlrParser, GlobalResources.Old, DeclarationType.ScriptedTrigger);
-            ParsingService.ParseAllEntities(() => new AntlrParser(), GlobalResources.Modded,
-                Console.WriteLine);
+            await ParsingService.ParseAllEntities(() => new AntlrParser(), GlobalResources.Modded,
+                value => { Console.WriteLine(value); return Task.CompletedTask; });
             parsingTimer.Stop();
 
 
@@ -78,9 +81,9 @@ namespace CK3Analyser.CLI
             var analysisTimer = new Stopwatch();
             analysisTimer.Start();
             var analyser = new Analyser();
-            analyser.Analyse(GlobalResources.Modded, Console.WriteLine);
+            await analyser.Analyse(GlobalResources.Modded, value => { Console.WriteLine(value); return Task.CompletedTask; });
             analysisTimer.Stop();
-            Console.WriteLine($"Analysed a total of { GlobalResources.Modded.Files.Count} files");
+            Console.WriteLine($"Analysed a total of {GlobalResources.Modded.Files.Count} files");
             //Console.WriteLine($"Found { analyser.LogEntries.Count()} issues");
             Console.WriteLine($"Parsing time: {parsingTimer.Elapsed}");
             //Console.WriteLine($"Analysis time: {analysisTimer.Elapsed}");

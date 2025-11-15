@@ -8,9 +8,8 @@
 	bb = {
 		c = { a = b }
 	}
-	#Test test
-
-	#Comment with brackets {
+				#Test test
+#TEEST
 
 	1 = {
 		2 = {
@@ -19,5 +18,4 @@
 			}
 		}
 	}
-	#}
 }
