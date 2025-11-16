@@ -1,7 +1,5 @@
-﻿using Antlr4.Runtime;
-using CK3Analyser.Core.Domain;
+﻿using CK3Analyser.Core.Domain;
 using CK3Analyser.Core.Domain.Entities;
-using CK3Analyser.Core.Parsing.Antlr;
 using CK3Analyser.Core.Parsing.SecondPass;
 using CK3Analyser.Core.Resources;
 using System;

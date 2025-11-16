@@ -1,7 +1,6 @@
 ﻿using CK3Analyser.Analysis.Logging;
 using CK3Analyser.Core.Domain;
 using CK3Analyser.Core.Domain.Entities;
-using CK3Analyser.Core.Resources;
 using CK3Analyser.Core.Resources.DetectorSettings;
 using System;
 using System.Collections.Generic;

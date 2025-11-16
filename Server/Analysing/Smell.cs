@@ -29,7 +29,11 @@ namespace CK3Analyser.Analysis
         HiddenDependencies_UseOfSavedScope,
         HiddenDependencies_UseOfVariable,
 
-        MagicNumber
+        MagicNumber,
+
+        KeywordAsScopeName_RootPrev,
+        KeywordAsScopeName_ScopeLink,
+        KeywordAsScopeName_ScopeType
     }
 
     public static class SmellExtensions
@@ -83,6 +87,13 @@ namespace CK3Analyser.Analysis
 
                 case Smell.MagicNumber:
                     return "MN.1";
+
+                case Smell.KeywordAsScopeName_RootPrev:
+                    return "KASN.1";
+                case Smell.KeywordAsScopeName_ScopeLink:
+                    return "KASN.2";
+                case Smell.KeywordAsScopeName_ScopeType:
+                    return "KASN.3";
 
                 default:
                     throw new ArgumentException("What is that smell, that smelly smell...?");

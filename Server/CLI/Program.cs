@@ -1,13 +1,10 @@
 ﻿using CK3Analyser.Core.Parsing.Antlr;
 using CK3Analyser.Core.Domain;
-using CK3Analyser.Core.Parsing.Fast;
 using CK3Analyser.Core.Resources;
 using System;
 using System.Diagnostics;
 using CK3Analyser.Core.Parsing;
 using System.Linq;
-using CK3Analyser.Core.Domain.Entities;
-using System.Collections.Generic;
 using CK3Analyser.Analysis;
 using System.Threading.Tasks;
 

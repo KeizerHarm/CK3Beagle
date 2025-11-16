@@ -84,16 +84,27 @@ namespace CK3Analyser.Analysing.Detectors
             }
         }
 
-        //[Fact]
-        //public void ExtraTest()
-        //{
-        //    var logger = new Logger();
-        //    ScriptFile testcase = GetTestCase("InconsistentIndentation/ExtraTestCase");
-        //    var visitor = GetDetector(logger, testcase.Context, commentHandling: CommentHandling.CommentsIgnored);
+        [Fact]
+        public void ExtraTest()
+        {
+            var shouldError = false;
 
-        //    visitor.Visit(testcase);
+            var logger = new Logger();
+            ScriptFile testcase = GetTestCase("InconsistentIndentation/ExtraTestCase");
+            var visitor = GetDetector(logger, testcase.Context, commentHandling: CommentHandling.CommentsIgnored);
 
-        //}
+            visitor.Visit(testcase);
+
+            // assert
+            if (shouldError)
+            {
+                Assert.Single(logger.LogEntries, x => x.Smell == Smell.InconsistentIndentation_Inconsistency);
+            }
+            else
+            {
+                Assert.DoesNotContain(logger.LogEntries, x => x.Smell == Smell.InconsistentIndentation_Inconsistency);
+            }
+        }
 
         [Fact]
         public void DetectsInconsistency()

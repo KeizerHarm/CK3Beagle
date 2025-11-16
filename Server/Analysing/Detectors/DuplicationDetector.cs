@@ -11,7 +11,6 @@ namespace CK3Analyser.Analysis.Detectors
 {
     public class DuplicationDetector : BaseDetector
     {
-
         private readonly DuplicationSettings _settings;
 
         public DuplicationDetector(ILogger logger, Context context, DuplicationSettings settings) : base(logger, context)

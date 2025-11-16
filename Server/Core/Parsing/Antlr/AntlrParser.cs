@@ -1,7 +1,6 @@
 ﻿using Antlr4.Runtime;
 using Antlr4.Runtime.Tree;
 using CK3Analyser.Core.Domain.Entities;
-using System.IO;
 
 namespace CK3Analyser.Core.Parsing.Antlr
 {

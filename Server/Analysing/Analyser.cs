@@ -60,6 +60,11 @@ namespace CK3Analyser.Analysis
                 visitor.Detectors.Add(new MagicNumberDetector(logger, context,
                     GlobalResources.Configuration.MagicNumberSettings));
             }
+            if (GlobalResources.Configuration.KeywordAsScopeNameSettings.Enabled)
+            {
+                visitor.Detectors.Add(new KeywordAsScopeNameDetector(logger, context,
+                    GlobalResources.Configuration.KeywordAsScopeNameSettings));
+            }
         }
     }
 }

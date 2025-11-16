@@ -1,5 +1,4 @@
 ﻿using CK3Analyser.Core.Domain;
-using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
@@ -50,9 +49,9 @@ namespace CK3Analyser.Core.Resources
 
         public static void Lock()
         {
-            EFFECTKEYS = _effectKeys?.ToHashSet();
-            TRIGGERKEYS = _triggerKeys?.ToHashSet();
-            EVENTTARGETS = _eventTargets?.ToHashSet();
+            EFFECTKEYS = _effectKeys.ToHashSet() ?? new HashSet<string>();
+            TRIGGERKEYS = _triggerKeys?.ToHashSet() ?? new HashSet<string>();
+            EVENTTARGETS = _eventTargets?.ToHashSet() ?? new HashSet<string>();
         }
 
         public static void ClearEverything()

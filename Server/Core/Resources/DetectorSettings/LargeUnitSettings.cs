@@ -1,6 +1,4 @@
-﻿using System.Text.Json.Serialization;
-
-namespace CK3Analyser.Core.Resources.DetectorSettings
+﻿namespace CK3Analyser.Core.Resources.DetectorSettings
 {
     public readonly struct LargeUnitSettings : IGenericSettings
     {
