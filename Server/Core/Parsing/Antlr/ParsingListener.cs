@@ -43,7 +43,8 @@ namespace CK3Analyser.Core.Parsing.Antlr
             }
             else
             {
-                var block = new NamedBlock(key)
+                var scoper = context.SCOPER().ToString();
+                var block = new NamedBlock(key, scoper)
                 {
                     Raw = raw
                 };

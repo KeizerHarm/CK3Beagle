@@ -24,7 +24,12 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Parsing\Testcases\" />
+    <None Update="Parsing\Testcases\ScriptedEffect.txt">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="Parsing\Testcases\TwoEvents.txt">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
   </ItemGroup>
 
 </Project>

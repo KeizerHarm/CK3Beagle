@@ -48,7 +48,7 @@ namespace CK3Analyser.Analysis.Detectors
             //nodesByKeyHash.AddToDictCollection((Node)namedBlock, namedBlock.GetLooseHashCode());
 
             //Consider node itself as potential duplicate
-            if (namedBlock.NodeType != NodeType.Other && namedBlock.GetSize() >= _settings.MinSize)
+            if (namedBlock.NodeType != NodeType.NonStatement && namedBlock.GetSize() >= _settings.MinSize)
             {
                 nodesByStrictHash.AddToDictCollection((Node)namedBlock, namedBlock.GetStrictHashCode());
             }
@@ -60,7 +60,7 @@ namespace CK3Analyser.Analysis.Detectors
             }
             else
             {
-                var sequence = namedBlock.Children.Where(x => x.NodeType != NodeType.Other).ToList();
+                var sequence = namedBlock.Children.Where(x => x.NodeType != NodeType.NonStatement).ToList();
                 if (sequence.Count <= 1) 
                     return;
 

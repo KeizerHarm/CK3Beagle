@@ -70,7 +70,7 @@ namespace CK3Analyser.Core.Domain.Entities
         public override int GetSize()
         {
             if (_size == -1)
-                _size = Children.Where(x => x.NodeType != NodeType.Other).Count();
+                _size = Children.Where(x => x.NodeType != NodeType.NonStatement).Count();
             return _size;
         }
     }

@@ -20,13 +20,19 @@ namespace CK3Analyser.Core.Parsing.SecondPass
             "trigger_if", "trigger_else_if", "trigger_else"
         ];
 
-        private static NodeType DeduceNodeType(Node node, string key)
+        private static readonly HashSet<string> keysThatAreProbablyTriggers = [
+            "limit", "trigger", "potential", "is_shown", "is_valid"
+            ];
+
+        private static NodeType DeduceNodeType(Node node, string key, bool isBinExp)
         {
-            key = key.ToLowerInvariant();
+            key = key.ToLowerInvariant().Split(':', '.')[0];
+            var parentNodeType = node.Parent?.NodeType;
+
             if (node.Parent != null && node.Parent is NamedBlock parentBlock)
             {
                 var parentKey = parentBlock.Key.ToLowerInvariant();
-                if (parentBlock.NodeType == NodeType.Statement)
+                if (parentBlock.NodeType != NodeType.NonStatement)
                 {
                     if (!(statementsThatMayContainStatements.Contains(parentKey)
                         || parentKey.StartsWith("ordered")
@@ -35,35 +41,45 @@ namespace CK3Analyser.Core.Parsing.SecondPass
                         || parentKey.StartsWith("any")
                         ))
                     {
-                        return NodeType.Other;
+                        return NodeType.NonStatement;
                     }
+                }
+                else {
+                    if (keysThatAreProbablyTriggers.Contains(parentKey))
+                        parentNodeType = NodeType.Trigger;
                 }
             }
 
-            if (key.Contains(':'))
-                return NodeType.Link;
-
             if (GlobalResources.EFFECTKEYS.Contains(key))
-                return NodeType.Statement;
+                return NodeType.Effect;
             if (GlobalResources.TRIGGERKEYS.Contains(key))
-                return NodeType.Statement;
+                return NodeType.Trigger;
+
+            //Links may be either
             if (GlobalResources.EVENTTARGETS.Contains(key))
-                return NodeType.Link;
+            {
+                //Binary expressions where the keys are links, are always triggers
+                if (isBinExp)
+                    return NodeType.Trigger;
 
+                //Otherwise default to parent type
+                if (node.Parent != null)
+                    return node.Parent.NodeType;
+            }
 
-            return NodeType.Other;
+            return NodeType.NonStatement;
         }
 
 
         public override void Visit(BinaryExpression binaryExpression)
         {
-            binaryExpression.NodeType = DeduceNodeType(binaryExpression, binaryExpression.Key);
+            binaryExpression.NodeType = DeduceNodeType(binaryExpression, binaryExpression.Key, true);
             base.Visit(binaryExpression);
         }
 
         public override void Visit(NamedBlock namedBlock)
         {
-            namedBlock.NodeType = DeduceNodeType(namedBlock, namedBlock.Key);
+            namedBlock.NodeType = DeduceNodeType(namedBlock, namedBlock.Key, false);
             base.Visit(namedBlock);
         }
     }

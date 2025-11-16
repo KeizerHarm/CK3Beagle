@@ -1,0 +1,78 @@
+﻿using CK3Analyser.Core.Domain;
+using CK3Analyser.Core.Domain.Entities;
+
+namespace CK3Analyser.Core.Parsing
+{
+    public class SecondPassTests : BaseParserTest
+    {
+        [Fact]
+        public void EventFileDecoratedProperly()
+        {
+            //arrange
+            string[] effects = [
+                "if", "send_interface_toast", "custom_tooltip", "else"
+                ];
+            string[] triggers = [
+                "gold", "prestige", "not"
+                ];
+            string[] eventTargets = [
+                "root", "scope"
+                ];
+
+
+            //act
+            var parsedFile = GetTestCase("TwoEvents", expectedDeclarationType: DeclarationType.Event,
+                effects: effects, triggers: triggers, eventTargets: eventTargets);
+
+            //assert
+            Assert.Equal(4, parsedFile.Children.Count);
+            Assert.Equal(2, parsedFile.Declarations.Count);
+
+            var firstComment = parsedFile.Children[0];
+            Assert.True(firstComment is Comment comment
+                && comment.RawWithoutHashtag == "Send a toast to the imprisoner if the person they captured is worth war score."
+                && comment.NodeType == NodeType.NonStatement);
+
+            var secondComment = parsedFile.Children[2];
+            Assert.True(secondComment is Comment comment2
+                && comment2.RawWithoutHashtag == "Send a toast to the primary defender if the person that was captured is worth war score (and is not them)."
+                && comment2.NodeType == NodeType.NonStatement);
+
+            var firstEvent = parsedFile.Children[1];
+            Assert.True(firstEvent is Declaration _);
+            Declaration event1 = (Declaration)firstEvent;
+            Assert.True(event1.NodeType == NodeType.NonStatement
+                && event1.DeclarationType == DeclarationType.Event);
+
+            Assert.Equal(2, event1.Children.Count);
+            Assert.True(event1.Children[0] is BinaryExpression binExp1
+                && binExp1.Key == "hidden"
+                && binExp1.Value == "yes"
+                && binExp1.NodeType == NodeType.NonStatement);
+
+            Assert.True(event1.Children[1] is NamedBlock _);
+            NamedBlock immediate = (NamedBlock)event1.Children[1];
+            Assert.True(immediate.NodeType == NodeType.NonStatement
+                && immediate.Children[0] is NamedBlock ifChild
+                && ifChild.NodeType == NodeType.Effect
+                && ifChild.Children.Count == 2
+                && ifChild.Children[0] is NamedBlock _
+                && ifChild.Children[1] is NamedBlock _);
+            NamedBlock limit = (NamedBlock)((NamedBlock)immediate.Children[0]).Children[0];
+
+            Assert.True(limit.NodeType == NodeType.NonStatement
+                && limit.Children.Count == 3
+                && limit.Children.All(x => x.NodeType == NodeType.Trigger));
+
+            NamedBlock sendInterfaceToast1 = (NamedBlock)((NamedBlock)immediate.Children[0]).Children[1];
+
+
+            Assert.True(sendInterfaceToast1.NodeType == NodeType.Effect
+                && sendInterfaceToast1.Children[0].NodeType == NodeType.NonStatement
+                && sendInterfaceToast1.Children[1].NodeType == NodeType.NonStatement
+                && sendInterfaceToast1.Children[2].NodeType == NodeType.NonStatement
+                && sendInterfaceToast1.Children[3].NodeType == NodeType.Effect
+                );
+        }
+    }
+}

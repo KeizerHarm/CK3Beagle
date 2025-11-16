@@ -31,7 +31,7 @@ namespace CK3Analyser.Core.Domain.Entities
                 if (PrevSibling == null)
                     return null;
 
-                if (PrevSibling.NodeType == NodeType.Other)
+                if (PrevSibling.NodeType == NodeType.NonStatement)
                 {
                     return PrevSibling.PrevStatementOrLinkerSibling;
                 }
@@ -62,7 +62,7 @@ namespace CK3Analyser.Core.Domain.Entities
                 if (NextSibling == null)
                     return null;
 
-                if (NextSibling.NodeType == NodeType.Other)
+                if (NextSibling.NodeType == NodeType.NonStatement)
                 {
                     return NextSibling.NextStatementOrLinkerSibling;
                 }
@@ -105,6 +105,6 @@ namespace CK3Analyser.Core.Domain.Entities
         public abstract int GetLooseHashCode();
         public abstract int GetStrictHashCode();
 
-        public virtual int GetSize() => NodeType == NodeType.Other ? 0 : 1;
+        public virtual int GetSize() => NodeType == NodeType.NonStatement ? 0 : 1;
     }
 }

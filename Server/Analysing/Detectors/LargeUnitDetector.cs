@@ -55,7 +55,7 @@ namespace CK3Analyser.Analysis.Detectors
             bool interpretAsScriptBlock = false;
             foreach (var child in block.Children)
             {
-                if (child.NodeType != NodeType.Other)
+                if (child.NodeType != NodeType.NonStatement)
                     interpretAsScriptBlock = true;
             }
 

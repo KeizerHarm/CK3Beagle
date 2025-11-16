@@ -5,15 +5,8 @@ using CK3Analyser.Core.Parsing.Fast;
 
 namespace CK3Analyser.Core.Parsing
 {
-    public class ParserTests
+    public class ParserTests : BaseParserTest
     {
-        public static IEnumerable<object[]> ParserTypesUnderTest =>
-        [
-            ["antlr"],
-           // new object[]{ "fast" }
-        ];
-
-
         [Theory]
         [MemberData(nameof(ParserTypesUnderTest))]
         public void EmptyFile(string parserType)
@@ -187,115 +180,160 @@ namespace CK3Analyser.Core.Parsing
             AssertNodesEqual(expectedScriptFile, actualScriptFile);
         }
 
-
-        private void AssertNodesEqual(Node expected, Node actual)
+        [Theory]
+        [MemberData(nameof(ParserTypesUnderTest))]
+        public void ScriptedTrigger(string parserType)
         {
-            Assert.Equal(expected.GetType(), actual.GetType());
-            Assert.Equal(expected.Raw, actual.Raw);
-            Assert.Equal(expected.StartLine, actual.StartLine);
-            Assert.Equal(expected.StartIndex, actual.StartIndex);
-            Assert.Equal(expected.EndLine, actual.EndLine);
-            Assert.Equal(expected.EndIndex, actual.EndIndex);
-            if (actual.NextSibling != null)
-            {
-                Assert.Equal(actual.NextSibling.PrevSibling, actual);
-            }
-            if (actual.PrevSibling != null)
-            {
-                Assert.Equal(actual.PrevSibling.NextSibling, actual);
-            }
+            //arrange
+            var stringToParse = GetTestCaseContents("ScriptedEffect");
 
-            if (expected.GetType().IsAssignableTo(typeof(Block)))
-            {
-                AssertBlocksEqual((Block)expected, (Block)actual);
-            }
+            var relativePath = "";
+            var context = new Context("", ContextType.Old);
+            var expectedDeclarationType = DeclarationType.ScriptedEffect;
+            var parser = GetParser(parserType);
 
-            //if (expected.GetType().IsAssignableFrom(typeof(ScriptFile)))
-            //{
-            //    AssertScriptFilesEqual((ScriptFile)expected, (ScriptFile)actual);
-            //}
-
-            if (expected.GetType().IsAssignableTo(typeof(Comment)))
+            var expectedScriptFile = new ScriptFile(context, relativePath, expectedDeclarationType, stringToParse);
+            var expectedDecl = new Declaration("laamp_base_3041_contract_scheme_prep_effect", expectedDeclarationType)
             {
-                AssertCommentsEqual((Comment)expected, (Comment)actual);
-            }
-
-            if (expected.GetType().IsAssignableTo(typeof(BinaryExpression)))
+                Raw = stringToParse,
+                StartLine = 0,
+                StartIndex = 0,
+                EndLine = 13,
+                EndIndex = 1
+            };
+            var binExp1 = new BinaryExpression("save_scope_as", "=", "scheme")
             {
-                AssertBinaryExpressionsEqual((BinaryExpression)expected, (BinaryExpression)actual);
-            }
+                Raw = "save_scope_as = scheme",
+                StartLine = 1,
+                StartIndex = 1,
+                EndLine = 1,
+                EndIndex = 23
+            };
+            expectedDecl.AddChild(binExp1);
+            var namedBlock1 = new NamedBlock("scope:scheme.task_contract", "?=")
+            {
+                Raw = "scope:scheme.task_contract ?= { save_scope_as = task_contract }",
+                StartLine = 2,
+                StartIndex = 1,
+                EndLine = 2,
+                EndIndex = 64
+            };
+
+            var binExp2 = new BinaryExpression("save_scope_as", "=", "task_contract")
+            {
+                Raw = "save_scope_as = task_contract",
+                StartLine = 2,
+                StartIndex = 33,
+                EndLine = 2,
+                EndIndex = 62
+            };
+            namedBlock1.AddChild(binExp2);
+            expectedDecl.AddChild(namedBlock1);
+
+            var namedBlock2 = new NamedBlock("save_scope_value_as")
+            {
+                Raw = @"save_scope_value_as = {
+		name = follow_up_event
+		value = event_id:scheme_critical_moments.2641
+	}",
+                StartLine = 3,
+                StartIndex = 1,
+                EndLine = 6,
+                EndIndex = 2
+            };
+            var binExp3 = new BinaryExpression("name", "=", "follow_up_event")
+            {
+                Raw = "name = follow_up_event",
+                StartLine = 4,
+                StartIndex = 2,
+                EndLine = 4,
+                EndIndex = 24
+            };
+            var binExp4 = new BinaryExpression("value", "=", "event_id:scheme_critical_moments.2641")
+            {
+                Raw = "value = event_id:scheme_critical_moments.2641",
+                StartLine = 5,
+                StartIndex = 2,
+                EndLine = 5,
+                EndIndex = 47
+            };
+            namedBlock2.AddChild(binExp3);
+            namedBlock2.AddChild(binExp4);
+            expectedDecl.AddChild(namedBlock2);
+
+            var namedBlock3 = new NamedBlock("if")
+            {
+                Raw = @"if = {
+		limit = {
+			NOT = { exists = scope:suppress_next_event }
+		}
+		scheme_owner = { trigger_event = scheme_critical_moments.0002 }
+	}",
+                StartLine = 7,
+                StartIndex = 1,
+                EndLine = 12,
+                EndIndex = 2
+            };
+            var namedBlock4 = new NamedBlock("limit")
+            {
+                Raw = @"limit = {
+			NOT = { exists = scope:suppress_next_event }
+		}",
+                StartLine = 8,
+                StartIndex = 2,
+                EndLine = 10,
+                EndIndex = 3
+            };
+            var namedBlock5 = new NamedBlock("NOT")
+            {
+                Raw = "NOT = { exists = scope:suppress_next_event }",
+                StartLine = 9,
+                StartIndex = 3,
+                EndLine = 9,
+                EndIndex = 47
+            };
+            var binExp5 = new BinaryExpression("exists", "=", "scope:suppress_next_event")
+            {
+                Raw = "exists = scope:suppress_next_event",
+                StartLine = 9,
+                StartIndex = 11,
+                EndLine = 9,
+                EndIndex = 45
+            };
+            namedBlock5.AddChild(binExp5);
+            namedBlock4.AddChild(namedBlock5);
+            namedBlock3.AddChild(namedBlock4);
+
+            var namedBlock6 = new NamedBlock("scheme_owner")
+            {
+                Raw = "scheme_owner = { trigger_event = scheme_critical_moments.0002 }",
+                StartLine = 11,
+                StartIndex = 2,
+                EndLine = 11,
+                EndIndex = 65
+            };
+            var binExp6 = new BinaryExpression("trigger_event", "=", "scheme_critical_moments.0002")
+            {
+                Raw = "trigger_event = scheme_critical_moments.0002",
+                StartLine = 11,
+                StartIndex = 19,
+                EndLine = 11,
+                EndIndex = 63
+            };
+            namedBlock6.AddChild(binExp6);
+            namedBlock3.AddChild(namedBlock6);
+            expectedDecl.AddChild(namedBlock3);
+
+            expectedScriptFile.AddDeclaration(expectedDecl);
+
+            var actualScriptFile = new ScriptFile(context, relativePath, expectedDeclarationType, stringToParse);
+
+            //act
+            parser.ParseFile(actualScriptFile);
+
+            //assert
+            AssertNodesEqual(expectedScriptFile, actualScriptFile);
         }
 
-        private void AssertBinaryExpressionsEqual(BinaryExpression expected, BinaryExpression actual)
-        {
-            Assert.Equal(expected.Key, actual.Key);
-            Assert.Equal(expected.Scoper, actual.Scoper);
-            Assert.Equal(expected.Value, actual.Value);
-        }
-
-        private void AssertCommentsEqual(Comment expected, Comment actual)
-        {
-            Assert.Equal(expected.RawWithoutHashtag, actual.RawWithoutHashtag);
-        }
-
-        private void AssertBlocksEqual(Block expected, Block actual)
-        {
-            Assert.Equal(expected.Children.Count, actual.Children.Count);
-
-
-            if (expected.GetType().IsAssignableTo(typeof(NamedBlock)))
-            {
-                AssertNamedBlocksEqual((NamedBlock)expected, (NamedBlock)actual);
-            }
-
-            if (expected.GetType().IsAssignableTo(typeof(ScriptFile)))
-            {
-                AssertScriptFilesEqual((ScriptFile)expected, (ScriptFile)actual);
-            }
-
-            var expectedChild = expected.Children.FirstOrDefault();
-            var actualChild = actual.Children.FirstOrDefault();
-            while (expectedChild != null && actualChild != null)
-            {
-                Assert.NotNull(actual);
-                AssertNodesEqual(expectedChild, actualChild);
-                expectedChild = expectedChild.NextSibling;
-                actualChild = actualChild.NextSibling;
-            }
-        }
-        private void AssertScriptFilesEqual(ScriptFile expected, ScriptFile actual)
-        {
-            Assert.Equal(expected.RelativePath, actual.RelativePath);
-            Assert.Equal(expected.ExpectedDeclarationType, actual.ExpectedDeclarationType);
-            Assert.Equal(expected.Context, actual.Context);
-            Assert.Equal(expected.Declarations.Count, actual.Declarations.Count);
-        }
-
-
-        private void AssertNamedBlocksEqual(NamedBlock expected, NamedBlock actual)
-        {
-            Assert.Equal(expected.Key, actual.Key);
-            if (expected.GetType().IsAssignableTo(typeof(Declaration)))
-            {
-                AssertDeclarationsEqual((Declaration)expected, (Declaration)actual);
-            }
-        }
-        private void AssertDeclarationsEqual(Declaration expected, Declaration actual)
-        {
-            Assert.Equal(expected.DeclarationType, actual.DeclarationType);
-        }
-
-        private static ICk3Parser GetParser(string parserType)
-        {
-            switch (parserType)
-            {
-                case "antlr":
-                    return new AntlrParser();
-                case "fast":
-                    return new FastParser();
-                default:
-                    throw new ArgumentException();
-            }
-        }
     }
 }

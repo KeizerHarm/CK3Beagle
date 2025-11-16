@@ -1,0 +1,47 @@
+# Send a toast to the imprisoner if the person they captured is worth war score.
+siege.0005 = {
+	hidden = yes
+
+	immediate = {
+		if = {
+			limit = {
+				gold < 25
+				scope:valuable_prisoner = scope:primary_siege_defender
+				NOT = { prestige = medium_prestige_value }
+			}
+			send_interface_toast = {
+				title = siege.1005.pow_toast.t
+				left_icon = scope:occupier
+				right_icon = scope:valuable_prisoner
+
+				custom_tooltip = siege.1005.pow_toast.desc.primary
+			}
+		}
+		else = {
+			ROOT = {
+				send_interface_toast = {
+					title = siege.1005.pow_toast.t
+					left_icon = scope:occupier
+					right_icon = scope:valuable_prisoner
+
+					custom_tooltip = siege.1005.pow_toast.desc
+				}
+			}
+		}
+	}
+}
+
+# Send a toast to the primary defender if the person that was captured is worth war score (and is not them).
+siege.0006 = {
+	hidden = yes
+
+	immediate = {
+		send_interface_toast = {
+			title = siege.1006.pow_toast.t
+			left_icon = scope:occupier
+			right_icon = scope:valuable_prisoner
+
+			custom_tooltip = siege.1006.pow_toast.desc
+		}
+	}
+}
