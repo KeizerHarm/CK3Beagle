@@ -23,6 +23,9 @@ namespace CK3Analyser.Analysis.Detectors
             if (string.IsNullOrWhiteSpace(scriptFile.StringRepresentation)) return;
 
             (var detectedIndentationType, var lines) = DetectIndentation(scriptFile);
+
+            if (lines.Count  == 0) return;
+
             logger.Log(Smell.None, Severity.Debug, "Detected indentation type " + detectedIndentationType, scriptFile.GetIdentifier());
 
             if (!_settings.AllowedIndentationTypes.Contains(detectedIndentationType))
@@ -172,13 +175,16 @@ namespace CK3Analyser.Analysis.Detectors
                 currentDepth += balance;
                 if (currentDepth < 0) currentDepth = 0;
 
-
-                foreach (var indentationType in Enum.GetValues<IndentationType>())
+                if (lineObj.Depth != 0)
                 {
-                    if (lineObj.IndentationTypeWorks(indentationType) && lineObj.Depth > 0)
-                        linesThatWorkForIndentationTypes[(int)indentationType]++;
+                    foreach (var indentationType in Enum.GetValues<IndentationType>())
+                    {
+                        if (lineObj.IndentationTypeWorks(indentationType) && lineObj.Depth > 0)
+                            linesThatWorkForIndentationTypes[(int)indentationType]++;
+                    }
+                    lines.Add(lineObj);
                 }
-                lines.Add(lineObj);
+
 
             NEXTLINE:;
             }
