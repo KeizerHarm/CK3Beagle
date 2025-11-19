@@ -27,6 +27,31 @@ namespace CK3Analyser.Analysis.Logging
             AffectedAreaEndIndex = endPosition.Column;
         }
 
+        public LogEntry (Smell smell, Severity severity, string message, Node node)
+        {
+            Severity = severity;
+            Message = message;
+            Location = node.File.AbsolutePath;
+            Smell = smell;
+            AffectedAreaStartLine = node.Start.Line;
+            AffectedAreaStartIndex = node.Start.Column;
+            AffectedAreaEndLine = node.End.Line;
+            AffectedAreaEndIndex = node.End.Column;
+        }
+
+        public LogEntry(Smell smell, Severity severity, string message, string location,
+            int affectedAreaStartLine = 0, int affectedAreaStartIndex = 0, int affectedAreaEndLine = 0, int affectedAreaEndIndex = 0) : this()
+        {
+            Severity = severity;
+            Message = message;
+            Location = location;
+            Smell = smell;
+            AffectedAreaStartLine = affectedAreaStartLine;
+            AffectedAreaStartIndex = affectedAreaStartIndex;
+            AffectedAreaEndLine = affectedAreaEndLine;
+            AffectedAreaEndIndex = affectedAreaEndIndex;
+        }
+
         /// <summary>
         /// Should only be used for secondary entries, aka related info such as duplicate sources
         /// </summary>
@@ -43,17 +68,16 @@ namespace CK3Analyser.Analysis.Logging
             };
         }
 
-        public LogEntry(Smell smell, Severity severity, string message, string location,
-            int affectedAreaStartLine = 0, int affectedAreaStartIndex = 0, int affectedAreaEndLine = 0, int affectedAreaEndIndex = 0) : this()
+        /// <summary>
+        /// Should only be used for secondary entries, aka related info such as duplicate sources
+        /// </summary>
+        public static LogEntry MinimalLogEntry(string message, Node node)
         {
-            Severity = severity;
-            Message = message;
-            Location = location;
-            Smell = smell;
-            AffectedAreaStartLine = affectedAreaStartLine;
-            AffectedAreaStartIndex = affectedAreaStartIndex;
-            AffectedAreaEndLine = affectedAreaEndLine;
-            AffectedAreaEndIndex = affectedAreaEndIndex;
+            return MinimalLogEntry(
+                message,
+                node.File.AbsolutePath,
+                node.Start,
+                node.End);
         }
 
         public readonly string Print()

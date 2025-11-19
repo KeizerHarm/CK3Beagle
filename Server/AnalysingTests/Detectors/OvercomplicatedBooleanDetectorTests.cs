@@ -134,8 +134,8 @@ namespace CK3Analyser.Analysing.Detectors
             detector.Visit(testcase);
 
             //assert
-            Assert.Equal(2, logger.LogEntries.Where(x => x.Severity > Severity.Debug).Count());
-            Assert.Equal(2, logger.LogEntries.Where(x => x.Severity == Severity.Critical && x.Smell == Smell.OvercomplicatedBoolean_Distributivity).Count());
+            Assert.Equal(4, logger.LogEntries.Where(x => x.Severity > Severity.Debug).Count());
+            Assert.Equal(4, logger.LogEntries.Where(x => x.Severity == Severity.Critical && x.Smell == Smell.OvercomplicatedBoolean_Distributivity).Count());
         }
 
         private static AnalysisVisitor GetDetector(Logger logger,
@@ -149,7 +149,7 @@ namespace CK3Analyser.Analysing.Detectors
             Severity Absorption_severity = Severity.Warning)
         {
             var visitor = new AnalysisVisitor();
-            var settings = new OvercomplicatedBooleanSettings
+            var settings = new OvercomplicatedTriggerSettings
             {
                 Absorption_Severity = Absorption_severity,
                 Associativity_Severity = Associativity_severity,
@@ -160,7 +160,7 @@ namespace CK3Analyser.Analysing.Detectors
                 NotIsNotNor_Severity = NotIsNotNor_severity
             };
 
-            var detector = new OvercomplicatedBooleanDetector(logger, context, settings);
+            var detector = new OvercomplicatedTriggerDetector(logger, context, settings);
             visitor.Detectors.Add(detector);
             return visitor;
         }

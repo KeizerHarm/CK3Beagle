@@ -13,7 +13,7 @@ namespace CK3Analyser.Analysing.Detectors
             var stringToParse = File.ReadAllText(Path.Combine(AppContext.BaseDirectory, "Detectors/Testcases", caseName + ".txt"));
 
             GlobalResources.AddEffects(["add_gold"]);
-            GlobalResources.AddTriggers(["has_gold"]);
+            GlobalResources.AddTriggers(["has_gold", "or", "and", "aaa", "bbb", "ccc", "ddd"]);
             GlobalResources.AddEventTargets(["father"]);
             GlobalResources.Lock();
 

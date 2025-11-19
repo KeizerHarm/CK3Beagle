@@ -27,7 +27,7 @@ namespace CK3Analyser.Analysis.Detectors
                 if (SingleCloneMessages.ContainsKey(size))
                     return SingleCloneMessages[size];
 
-                var singleCloneMessage = SingleCloneMessages[size] = $"{size}-statement block is duplicate!";
+                var singleCloneMessage = SingleCloneMessages[size] = $"{size}-statement block is duplicate";
                 if (size < 50)
                     SingleCloneMessages[size] = singleCloneMessage;
 
@@ -37,7 +37,7 @@ namespace CK3Analyser.Analysis.Detectors
             if (MultiCloneMessages.ContainsKey((size, copies)))
                 return MultiCloneMessages[(size, copies)];
 
-            var multiCloneMessage = MultiCloneMessages[(size, copies)] = $"{size}-statement block occurs {copies} times!";
+            var multiCloneMessage = MultiCloneMessages[(size, copies)] = $"{size}-statement block occurs {copies} times";
             if (size < 50 && copies < 50)
                 MultiCloneMessages[(size, copies)] = multiCloneMessage;
 

@@ -13,6 +13,18 @@ dummytrigger = {
 		}
 	}
 
+	#2
+	AND = {
+		OR = {
+			aaa = yes
+			bbb = { ccc = yes }
+		}
+		OR = {
+			aaa = no
+			bbb = { ccc = yes }
+		}
+	}
+
 	#Not an example
 	AND = {
 		OR = {
@@ -25,7 +37,36 @@ dummytrigger = {
 		}
 	}
 
-	#2
+	#Not an example
+	AND = {
+		OR = {
+			aaa = yes
+			bbb = no
+		}
+		OR = {
+			aaa = yes
+			ccc = no
+		}
+		OR = {
+			aaa = no
+			ccc = no
+		}
+	}
+
+	#Not an example
+	AND = {
+		OR = {
+			aaa = yes
+			bbb = no
+		}
+		OR = {
+			aaa = yes
+			ccc = no
+			ddd = no
+		}
+	}
+
+	#3
 	OR = {
 		AND = {
 			aaa = yes
@@ -34,6 +75,18 @@ dummytrigger = {
 		AND = {
 			aaa = yes
 			ccc = no
+		}
+	}
+
+	#4
+	OR = {
+		AND = {
+			aaa = yes
+			bbb = { ccc = yes }
+		}
+		AND = {
+			aaa = no
+			bbb = { ccc = yes }
 		}
 	}
 
@@ -46,6 +99,35 @@ dummytrigger = {
 		AND = {
 			aaa = no
 			ccc = no
+		}
+	}
+
+	#Not an example
+	OR = {
+		AND = {
+			aaa = yes
+			bbb = no
+		}
+		AND = {
+			aaa = yes
+			ccc = no
+		}
+		AND = {
+			aaa = no
+			ccc = no
+		}
+	}
+
+	#Not an example
+	OR = {
+		AND = {
+			aaa = yes
+			bbb = no
+		}
+		AND = {
+			aaa = yes
+			ccc = no
+			ddd = no
 		}
 	}
 }

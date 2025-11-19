@@ -36,7 +36,7 @@ namespace CK3Analyser.Core.Resources
                     };
 
                 OvercomplicatedBooleanSettings =
-                    new OvercomplicatedBooleanSettings
+                    new OvercomplicatedTriggerSettings
                     {
                         Absorption_Severity = Severity.Info,
                         Associativity_Severity = Severity.Warning,
@@ -188,8 +188,8 @@ namespace CK3Analyser.Core.Resources
             }
         }
 
-        private OvercomplicatedBooleanSettings? _overcomplicatedBooleanSettings;
-        public OvercomplicatedBooleanSettings OvercomplicatedBooleanSettings
+        private OvercomplicatedTriggerSettings? _overcomplicatedBooleanSettings;
+        public OvercomplicatedTriggerSettings OvercomplicatedBooleanSettings
         {
             get
             {

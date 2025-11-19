@@ -8,16 +8,16 @@ using System.Linq;
 
 namespace CK3Analyser.Analysis.Detectors
 {
-    public class OvercomplicatedBooleanDetector : BaseDetector
+    public class OvercomplicatedTriggerDetector : BaseDetector
     {
         private static readonly HashSet<string> Operators =
         [
             "AND", "OR", "NOT", "NOR", "NAND"
         ];
 
-        private OvercomplicatedBooleanSettings _settings;
+        private OvercomplicatedTriggerSettings _settings;
 
-        public OvercomplicatedBooleanDetector(ILogger logger, Context context, OvercomplicatedBooleanSettings settings) : base(logger, context)
+        public OvercomplicatedTriggerDetector(ILogger logger, Context context, OvercomplicatedTriggerSettings settings) : base(logger, context)
         {
             _settings = settings;
         }
@@ -34,7 +34,7 @@ namespace CK3Analyser.Analysis.Detectors
         {
             var key = namedBlock.Key.ToUpper();
 
-            if (key == "limit" || key == "trigger" || key == "potential")
+            if (key == "limit" || key == "trigger" || key == "potential" || key == "is_shown")
             {
                 key = "AND";
             }
@@ -45,33 +45,57 @@ namespace CK3Analyser.Analysis.Detectors
             AnalyseAsTriggerBlock(namedBlock, key);
         }
 
-        public void AnalyseAsTriggerBlock(NamedBlock namedBlock, string key) { 
+        public void AnalyseAsTriggerBlock(NamedBlock namedBlock, string key) {
 
+            var triggerChildren = namedBlock.Children.Where(x => x.NodeType == NodeType.Trigger);
             var childNamedBlocks = namedBlock.Children.OfType<NamedBlock>();
+            var ANDchildren = childNamedBlocks.Where(x => x.Key == "AND");
+            var ORchildren = childNamedBlocks.Where(x => x.Key == "OR");
+
             var childBlockKeys = childNamedBlocks.Select(x => x.Key.ToUpper());
             var childBinaryExpressions = namedBlock.Children.OfType<BinaryExpression>();
             var childBinaryExpressionKeys = childBinaryExpressions.Select(x => x.Key.ToLower());
 
             if (key == "AND")
             {
-                var ANDchildren = childNamedBlocks.Where(x => x.Key == "AND");
                 foreach (var child in ANDchildren)
                 {
                     logger.Log(
                         Smell.OvercomplicatedBoolean_Associativity,
                         _settings.Associativity_Severity,
-                        "AND containing AND",
+                        "This AND-block is inside another AND",
                         child);
                 }
 
-                var ORchildren = childNamedBlocks.Where(x => x.Key == "OR");
-                if (HasRepeatedString(ORchildren.Select(x => x.Children.OfType<BinaryExpression>().Select(y => y.StringRepresentation))))
+                var chilrenOfORChildren = ORchildren.Select(x => x.Children.Where(x => x.NodeType == NodeType.Trigger).Select(x => x.StringRepresentation));
+                if (ORchildren.Count() > 1 && ORchildren.Count() == triggerChildren.Count() &&
+                    StringOccursInEverySublist(chilrenOfORChildren) is string duplicate
+                    && chilrenOfORChildren.All(x => x.Count() < 3)
+                    )
                 {
-                    logger.Log(
+                    var secondaryLogEntries = new List<LogEntry>();
+                    foreach (var binExp in ORchildren.SelectMany(x => x.Children.Where(x => x.NodeType == NodeType.Trigger)))
+                    {
+                        if (binExp.StringRepresentation == duplicate)
+                        {
+                            secondaryLogEntries.Add(
+                                LogEntry.MinimalLogEntry(
+                                    "Repeated trigger",
+                                    namedBlock.File.AbsolutePath,
+                                    binExp.Start,
+                                    binExp.End));
+                        }
+                    }
+
+                    var logEntry = new LogEntry(
                         Smell.OvercomplicatedBoolean_Distributivity,
                         _settings.Distributivity_Severity,
                         "AND with ORs that share a trigger",
                         namedBlock);
+
+                    logger.Log(
+                        logEntry,
+                        [.. secondaryLogEntries]);
                 }
                 foreach (var orChild in ORchildren)
                 {
@@ -89,26 +113,45 @@ namespace CK3Analyser.Analysis.Detectors
 
             if (key == "OR")
             {
-                var ORChildren = childNamedBlocks.Where(x => x.Key == "OR");
-
-                foreach (var orChild in ORChildren)
+                foreach (var orChild in ORchildren)
                 {
                     logger.Log(
                         Smell.OvercomplicatedBoolean_Associativity,
                         _settings.Associativity_Severity,
-                        "OR containing OR",
+                        "This OR-block is inside another OR",
                         orChild);
                 }
 
-
-                var ANDchildren = childNamedBlocks.Where(x => x.Key == "AND");
-                if (HasRepeatedString(ANDchildren.Select(x => x.Children.OfType<BinaryExpression>().Select(y => y.StringRepresentation))))
+                var childrenOfANDChildren = ANDchildren.Select(x => x.Children.Where(x => x.NodeType == NodeType.Trigger).Select(x => x.StringRepresentation));
+                if (ANDchildren.Count() > 1 && ANDchildren.Count() == triggerChildren.Count() &&
+                    StringOccursInEverySublist(
+                        childrenOfANDChildren
+                        ) is string duplicate
+                    && childrenOfANDChildren.All(x => x.Count() < 3))
                 {
-                    logger.Log(
+                    var secondaryLogEntries = new List<LogEntry>();
+                    foreach (var binExp in ANDchildren.SelectMany(x => x.Children.Where(x => x.NodeType == NodeType.Trigger)))
+                    {
+                        if (binExp.StringRepresentation == duplicate)
+                        {
+                            secondaryLogEntries.Add(
+                                LogEntry.MinimalLogEntry(
+                                    "Repeated trigger",
+                                    namedBlock.File.AbsolutePath,
+                                    binExp.Start,
+                                    binExp.End));
+                        }
+                    }
+
+                    var logEntry = new LogEntry(
                         Smell.OvercomplicatedBoolean_Distributivity,
                         _settings.Distributivity_Severity,
                         "OR with ANDs that share a trigger",
                         namedBlock);
+                    
+                    logger.Log(
+                        logEntry,
+                        [.. secondaryLogEntries]);
                 }
                 foreach (var andChild in ANDchildren)
                 {
@@ -235,6 +278,40 @@ namespace CK3Analyser.Analysis.Detectors
             return false;
         }
 
+        static string GetRepeatedString(IEnumerable<string> list)
+        {
+            var seen = new HashSet<string>();
+            foreach (var str in list)
+            {
+                if (!seen.Add(str))
+                {
+                    return str;
+                }
+            }
+            return null;
+        }
+
+        static string StringOccursInEverySublist(IEnumerable<IEnumerable<string>> list)
+        {
+            var sublists = list as IList<IEnumerable<string>> ?? list.ToList();
+            if (sublists.Count == 0) return null;
+
+            var sets = sublists
+                .Select(s => s is HashSet<string> hs ? hs : new HashSet<string>(s))
+                .ToList();
+
+            // Start with the smallest set to minimise work
+            var common = new HashSet<string>(sets.OrderBy(s => s.Count).First());
+
+            foreach (var set in sets)
+            {
+                common.IntersectWith(set);
+                if (common.Count == 0)
+                    return null;
+            }
+
+            return common.FirstOrDefault();
+        }
 
         static bool HasRepeatedString(IEnumerable<IEnumerable<string>> listOfLists)
         {

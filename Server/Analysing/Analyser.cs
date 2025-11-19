@@ -37,7 +37,7 @@ namespace CK3Analyser.Analysis
             }
             if (GlobalResources.Configuration.OvercomplicatedBooleanSettings.Enabled)
             {
-                visitor.Detectors.Add(new OvercomplicatedBooleanDetector(logger, context,
+                visitor.Detectors.Add(new OvercomplicatedTriggerDetector(logger, context,
                     GlobalResources.Configuration.OvercomplicatedBooleanSettings));
             }
             if (GlobalResources.Configuration.DuplicationSettings.Enabled)
