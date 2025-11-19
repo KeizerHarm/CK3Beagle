@@ -39,9 +39,9 @@ namespace CK3Analyser.Core.Domain.Entities
             return RelativePath == other.RelativePath && StringRepresentation == other.StringRepresentation;
         }
 
-        public void AddDeclaration(Declaration declaration, bool addText = false)
+        public void RegisterDeclaration(Declaration declaration, bool addText = false)
         {
-            AddChild(declaration);
+            //AddChild(declaration);
             Declarations.Add(declaration.Key, declaration);
 
             //if (addText)

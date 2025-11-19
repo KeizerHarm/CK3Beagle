@@ -4,6 +4,7 @@ using CK3Analyser.Core.Domain;
 using CK3Analyser.Core.Domain.Entities;
 using System.Collections.Generic;
 using System.Linq;
+using System.Xml.Linq;
 using static CK3Analyser.Core.CK3Parser;
 
 namespace CK3Analyser.Core.Parsing.Antlr
@@ -37,7 +38,7 @@ namespace CK3Analyser.Core.Parsing.Antlr
                 }
 
                 var declaration = new Declaration(key, declarationType);
-                file.AddDeclaration(declaration);
+                thisBlock.Peek().AddChild(declaration);
                 thisBlock.Push(declaration);
             }
             else
@@ -52,14 +53,15 @@ namespace CK3Analyser.Core.Parsing.Antlr
         {
             var thisNamedBlock = thisBlock.Peek();
             ApplyRange(context, thisNamedBlock);
-            if (thisNamedBlock is NamedBlock block)
+            if (thisNamedBlock is Declaration decl)
+            {
+                decl.Key = GetTokenText(context.identifier);
+                file.RegisterDeclaration(decl);
+            }
+            else if (thisNamedBlock is NamedBlock block)
             {
                 block.Scoper = context.SCOPER().ToString();
-                block.Key = context.identifier.Text;
-            }
-            else if (thisNamedBlock is Declaration decl)
-            {
-                decl.Key = context.identifier.Text;
+                block.Key = GetTokenText(context.identifier);
             }
             thisBlock.Pop();
         }
@@ -90,6 +92,17 @@ namespace CK3Analyser.Core.Parsing.Antlr
             //No-op
         }
 
+        private string GetTokenText(TokenChainContext context)
+        {
+            if (context?.Start == null)
+                return "";
+
+            if (context.Start == context.Stop)
+                return context.Start.Text;
+
+            return string.Join("", context.Start.Text, context.GetText(), context.Stop?.Text);
+        }
+
 
         public override void EnterBinaryExpression([NotNull] BinaryExpressionContext context)
         {
@@ -102,8 +115,8 @@ namespace CK3Analyser.Core.Parsing.Antlr
             var thisBinExp = (BinaryExpression)thisNonBlock;
             ApplyRange(context, thisBinExp);
             thisBinExp.Scoper = context.SCOPER().ToString();
-            thisBinExp.Value = context.value.Text;
-            thisBinExp.Key = context.key.Text;
+            thisBinExp.Value = GetTokenText(context.value);
+            thisBinExp.Key = GetTokenText(context.key);
             thisNonBlock = null;
         }
 
@@ -118,7 +131,7 @@ namespace CK3Analyser.Core.Parsing.Antlr
 
         public override void ExitAnonymousToken([NotNull] AnonymousTokenContext context)
         {
-            ((AnonymousToken)thisNonBlock).Value = context.identifier.Text;
+            ((AnonymousToken)thisNonBlock).Value = GetTokenText(context.identifier);
             ApplyRange(context, thisNonBlock);
             thisNonBlock = null;
             //No-op

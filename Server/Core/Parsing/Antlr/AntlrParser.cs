@@ -41,10 +41,10 @@ namespace CK3Analyser.Core.Parsing.Antlr
             parser.BuildParseTree = false;
             parser.AddParseListener(new ParseListener(file));
 
-            //var listener_lexer = new ErrorListener<int>();
-            //var listener_parser = new ErrorListener<IToken>();
-            //lexer.AddErrorListener(listener_lexer);
-            //parser.AddErrorListener(listener_parser);
+            var listener_lexer = new ErrorListener<int>();
+            var listener_parser = new ErrorListener<IToken>();
+            lexer.AddErrorListener(listener_lexer);
+            parser.AddErrorListener(listener_parser);
 
             var tree = parser.file();
             //var listener = new ParsingListener(file);

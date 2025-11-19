@@ -1,37 +1,33 @@
 grammar CK3;
 
-file : script EOF;
-script : ( 
-    namedBlock
-    | anonymousBlock 
+file : script? EOF;
+scriptElement
+    : namedBlock
+    | anonymousBlock
     | binaryExpression
+    | comment
     | anonymousToken
-    | comment ) + ;
+    ;
+script: scriptElement+;
 
-namedBlock : identifier=TOKENCHAIN SCOPER '{' script? '}';
+namedBlock : identifier=tokenChain SCOPER '{' script? '}';
 anonymousBlock : '{' script? '}';
-binaryExpression : key=TOKENCHAIN SCOPER value=TOKENCHAIN;
-anonymousToken : identifier=TOKENCHAIN;
-comment: COMMENT;
+binaryExpression : key=tokenChain SCOPER value=tokenChain;
+anonymousToken : identifier=tokenChain;
+comment: COMMENTLINE+;
+tokenChain : token (('.' | '|') token)* ;
+token      : QUOTED_TOKEN | CALCULATED_VAR | LINK | DATE | NUMERAL | BARE_TOKEN ;
 
 SCOPER : ('=' | '?=' | '<' | '<=' | '>' | '>=' | '!=' | '==');
-COMMENT : '#' ~[\r\n]* '\r'?  ( '\n' | EOF );
-TOKENCHAIN : TOKEN ( ( '.' | '|' ) TOKEN)*;
-TOKEN :
-    QUOTED_TOKEN
-    | CALCULATED_VAR
-    | LINK 
-    | DATE
-    | NUMERAL
-    | BARE_TOKEN;
+COMMENTLINE : '#' ~[\r\n]* '\r'?  ( '\n' | EOF );
 QUOTED_TOKEN : '"' ~'"'* '"';
 CALCULATED_VAR : '@' '[' ~']'* ']';
 LINK : BARE_TOKEN ':' BARE_TOKEN;
 
-NONZERODIGIT : ('1'|'2'|'3'|'4'|'5'|'6'|'7'|'8'|'9');
-DIGIT : NONZERODIGIT | '0';
 NUMERAL : '-'? DIGIT+ ( '.' DIGIT+ )? '%'?;
 DATE : DIGIT DIGIT? DIGIT? DIGIT? DIGIT? '.' DIGIT DIGIT? '.' DIGIT DIGIT?;
+DIGIT : NONZERODIGIT | '0';
+NONZERODIGIT : ('1'|'2'|'3'|'4'|'5'|'6'|'7'|'8'|'9');
 
 BARE_TOKEN : '@'? AnyIdentifierCharacter+;
 

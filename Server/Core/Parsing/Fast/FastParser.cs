@@ -61,7 +61,7 @@ namespace CK3Analyser.Core.Parsing.Fast
                                 //Raw = preamble + raw
                             };
                             prevDeclarationEndIndex = index;
-                            file.AddDeclaration(decl);
+                            file.RegisterDeclaration(decl);
                             currentDeclarationToken = null;
                         }
                     }
@@ -74,7 +74,7 @@ namespace CK3Analyser.Core.Parsing.Fast
                 var preambleLength = Math.Max(0, currentDeclarationStartIndex - prevDeclarationEndIndex - 1);
                 var preamble = text.Substring(prevDeclarationEndIndex + 1, preambleLength);
                 var decl = new Declaration(currentDeclarationToken, file.ExpectedDeclarationType);
-                file.AddDeclaration(decl);
+                file.RegisterDeclaration(decl);
             }
         }
 

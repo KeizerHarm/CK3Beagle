@@ -55,7 +55,8 @@ namespace CK3Analyser.Core.Parsing
             };
             expectedDecl.AddChild(expectedBinaryExpression);
 
-            expectedScriptFile.AddDeclaration(expectedDecl);
+            expectedScriptFile.AddChild(expectedDecl);
+            expectedScriptFile.RegisterDeclaration(expectedDecl);
 
             var actualScriptFile = new ScriptFile(context, relativePath, expectedDeclarationType, stringToParse);
 
@@ -92,7 +93,8 @@ namespace CK3Analyser.Core.Parsing
             };
             expectedDecl.AddChild(expectedBinaryExpression);
 
-            expectedScriptFile.AddDeclaration(expectedDecl);
+            expectedScriptFile.AddChild(expectedDecl);
+            expectedScriptFile.RegisterDeclaration(expectedDecl);
             var expectedComment = new Comment()
             {
                 Start = new Position(0, 16, 16),
@@ -140,7 +142,8 @@ namespace CK3Analyser.Core.Parsing
                 End = new Position(2, 18, 53)
             };
             expectedDecl.AddChild(expectedBinExp2);
-            expectedScriptFile.AddDeclaration(expectedDecl);
+            expectedScriptFile.AddChild(expectedDecl);
+            expectedScriptFile.RegisterDeclaration(expectedDecl);
 
             var actualScriptFile = new ScriptFile(context, relativePath, expectedDeclarationType, stringToParse);
 
@@ -246,7 +249,8 @@ namespace CK3Analyser.Core.Parsing
             namedBlock3.AddChild(namedBlock6);
             expectedDecl.AddChild(namedBlock3);
 
-            expectedScriptFile.AddDeclaration(expectedDecl);
+            expectedScriptFile.AddChild(expectedDecl);
+            expectedScriptFile.RegisterDeclaration(expectedDecl);
 
             var actualScriptFile = new ScriptFile(context, relativePath, expectedDeclarationType, stringToParse);
 

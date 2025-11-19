@@ -22,7 +22,7 @@ namespace CK3Analyser.Core.Parsing.Antlr
 
         public override void EnterNamedBlock([NotNull] NamedBlockContext context)
         {
-            var key = context.identifier.Text;
+            var key = context.identifier.GetText();
             if (thisBlock.Peek() == file)
             {
                 var declarationType = file.ExpectedDeclarationType;
@@ -37,7 +37,7 @@ namespace CK3Analyser.Core.Parsing.Antlr
 
                 var declaration = new Declaration(key, declarationType);
                 ApplyRange(context, declaration);
-                file.AddDeclaration(declaration);
+                file.RegisterDeclaration(declaration);
                 thisBlock.Push(declaration);
             }
             else
@@ -84,8 +84,8 @@ namespace CK3Analyser.Core.Parsing.Antlr
 
         public override void EnterBinaryExpression([NotNull] BinaryExpressionContext context)
         {
-            var key = context.key.Text;
-            var value = context.value.Text;
+            var key = context.key.GetText();
+            var value = context.value.GetText();
             var scoper = context.SCOPER().ToString();
             var binaryExpression = new BinaryExpression(key, scoper, value);
             ApplyRange(context, binaryExpression);
@@ -101,7 +101,7 @@ namespace CK3Analyser.Core.Parsing.Antlr
         {
             var token = new AnonymousToken
             {
-                Value = context.identifier.Text
+                Value = context.identifier.GetText()
             };
             ApplyRange(context, token);
             thisBlock.Peek().AddChild(token);
