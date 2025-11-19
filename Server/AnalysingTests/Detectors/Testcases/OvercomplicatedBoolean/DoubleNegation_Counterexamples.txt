@@ -9,38 +9,6 @@ dummytrigger = {
 	}
 
 
-	NOT = {
-		NOT = {
-			aaa = yes
-		}
-		bbb = yes
-	}
-
-
-	NOR = {
-		NOT = {
-			aaa = yes
-		}
-		bbb = yes
-	}
-	
-
-	NOR = {
-		NOR = {
-			aaa = yes
-		}
-		bbb = yes
-	}
-	
-
-	NOR = {
-		NAND = {
-			aaa = yes
-		}
-		bbb = yes
-	}
-	
-
 	NOR = {
 		aaa = no
 		bbb = yes

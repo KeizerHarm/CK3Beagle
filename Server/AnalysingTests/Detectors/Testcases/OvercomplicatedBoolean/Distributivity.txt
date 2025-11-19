@@ -66,6 +66,18 @@ dummytrigger = {
 		}
 	}
 
+	#Not an example
+	AND = {
+		OR = {
+			aaa = yes
+			bbb = no
+		}
+		NOR = {
+			aaa = yes
+			ccc = no
+		}
+	}
+
 	#3
 	OR = {
 		AND = {
@@ -128,6 +140,18 @@ dummytrigger = {
 			aaa = yes
 			ccc = no
 			ddd = no
+		}
+	}
+
+	#Not an example
+	OR = {
+		AND = {
+			aaa = yes
+			bbb = no
+		}
+		NAND = {
+			aaa = yes
+			ccc = no
 		}
 	}
 }

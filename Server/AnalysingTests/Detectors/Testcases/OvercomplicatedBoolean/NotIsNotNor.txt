@@ -1,7 +1,7 @@
 dummytrigger = {
 	NOT = {
 		#Comment child should not count
-		aa = yes
+		aaa = yes
 	}
 
 	NOR = { #Proper version, NOR

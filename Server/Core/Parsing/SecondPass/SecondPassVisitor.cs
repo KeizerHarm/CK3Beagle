@@ -16,7 +16,7 @@ namespace CK3Analyser.Core.Parsing.SecondPass
             "random", "custom_tooltip", "custom_description_no_bullet", "custom_description",
 
             //Triggers
-            "all_false", "calc_true_if", "or", "and", "nor", "nand",
+            "all_false", "calc_true_if", "or", "and", "nor", "nand", "not",
             "trigger_if", "trigger_else_if", "trigger_else"
         ];
 

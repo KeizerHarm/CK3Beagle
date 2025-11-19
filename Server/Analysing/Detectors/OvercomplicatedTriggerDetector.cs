@@ -32,144 +32,148 @@ namespace CK3Analyser.Analysis.Detectors
 
         public override void EnterNamedBlock(NamedBlock namedBlock)
         {
+            if (namedBlock.NodeType != NodeType.Trigger)
+                return;
+
             var key = namedBlock.Key.ToUpper();
-
-            if (key == "limit" || key == "trigger" || key == "potential" || key == "is_shown")
-            {
-                key = "AND";
-            }
-
             if (!Operators.Contains(key))
                 return;
 
             AnalyseAsTriggerBlock(namedBlock, key);
         }
 
-        public void AnalyseAsTriggerBlock(NamedBlock namedBlock, string key) {
-
+        public void AnalyseAsTriggerBlock(NamedBlock namedBlock, string key)
+        {
             var triggerChildren = namedBlock.Children.Where(x => x.NodeType == NodeType.Trigger);
-            var childNamedBlocks = namedBlock.Children.OfType<NamedBlock>();
-            var ANDchildren = childNamedBlocks.Where(x => x.Key == "AND");
-            var ORchildren = childNamedBlocks.Where(x => x.Key == "OR");
+            if (!triggerChildren.Any())
+                return;
 
-            var childBlockKeys = childNamedBlocks.Select(x => x.Key.ToUpper());
-            var childBinaryExpressions = namedBlock.Children.OfType<BinaryExpression>();
-            var childBinaryExpressionKeys = childBinaryExpressions.Select(x => x.Key.ToLower());
+            var triggerBlockChildren = namedBlock.Children.OfType<NamedBlock>();
+            var ANDchildren = triggerBlockChildren.Where(x => x.Key == "AND");
+            var ORchildren = triggerBlockChildren.Where(x => x.Key == "OR");
+
+            var childBlockKeys = triggerBlockChildren.Select(x => x.Key.ToUpper());
+            var triggerBinExpChildren = triggerChildren.OfType<BinaryExpression>();
+            var triggerBinExpKeys = triggerBinExpChildren.Select(x => x.Key.ToLower());
 
             if (key == "AND")
             {
-                foreach (var child in ANDchildren)
-                {
-                    logger.Log(
-                        Smell.OvercomplicatedBoolean_Associativity,
-                        _settings.Associativity_Severity,
-                        "This AND-block is inside another AND",
-                        child);
-                }
+                LogAssociativity(ANDchildren, "This AND-block is inside another AND");
 
-                var chilrenOfORChildren = ORchildren.Select(x => x.Children.Where(x => x.NodeType == NodeType.Trigger).Select(x => x.StringRepresentation));
-                if (ORchildren.Count() > 1 && ORchildren.Count() == triggerChildren.Count() &&
-                    StringOccursInEverySublist(chilrenOfORChildren) is string duplicate
-                    && chilrenOfORChildren.All(x => x.Count() < 3)
-                    )
+                if (triggerChildren.Count() == ORchildren.Count())
                 {
-                    var secondaryLogEntries = new List<LogEntry>();
-                    foreach (var binExp in ORchildren.SelectMany(x => x.Children.Where(x => x.NodeType == NodeType.Trigger)))
-                    {
-                        if (binExp.StringRepresentation == duplicate)
-                        {
-                            secondaryLogEntries.Add(
-                                LogEntry.MinimalLogEntry(
-                                    "Repeated trigger",
-                                    namedBlock.File.AbsolutePath,
-                                    binExp.Start,
-                                    binExp.End));
-                        }
-                    }
-
-                    var logEntry = new LogEntry(
-                        Smell.OvercomplicatedBoolean_Distributivity,
-                        _settings.Distributivity_Severity,
-                        "AND with ORs that share a trigger",
-                        namedBlock);
-
-                    logger.Log(
-                        logEntry,
-                        [.. secondaryLogEntries]);
+                    LogDistributivity(namedBlock, ORchildren, "AND with ORs that share a trigger");
                 }
-                foreach (var orChild in ORchildren)
-                {
-                    if (HasRepeatedString(childBinaryExpressions.Select(x => x.StringRepresentation),
-                        orChild.Children.OfType<BinaryExpression>().Select(x => x.StringRepresentation)))
-                    {
-                        logger.Log(
-                            Smell.OvercomplicatedBoolean_Absorption,
-                            _settings.Absorption_Severity,
-                            "AND with OR that includes a trigger in the parent AND",
-                            orChild);
-                    }
-                }
+                LogAbsorption(triggerBinExpChildren, ORchildren, "AND with OR that includes a trigger in the parent AND");
             }
 
             if (key == "OR")
             {
-                foreach (var orChild in ORchildren)
+                LogAssociativity(ORchildren, "This OR-block is inside another OR");
+
+                if (triggerChildren.Count() == ANDchildren.Count())
                 {
-                    logger.Log(
-                        Smell.OvercomplicatedBoolean_Associativity,
-                        _settings.Associativity_Severity,
-                        "This OR-block is inside another OR",
-                        orChild);
+                    LogDistributivity(namedBlock, ANDchildren, "AND with ORs that share a trigger");
                 }
 
-                var childrenOfANDChildren = ANDchildren.Select(x => x.Children.Where(x => x.NodeType == NodeType.Trigger).Select(x => x.StringRepresentation));
-                if (ANDchildren.Count() > 1 && ANDchildren.Count() == triggerChildren.Count() &&
-                    StringOccursInEverySublist(
-                        childrenOfANDChildren
-                        ) is string duplicate
-                    && childrenOfANDChildren.All(x => x.Count() < 3))
-                {
-                    var secondaryLogEntries = new List<LogEntry>();
-                    foreach (var binExp in ANDchildren.SelectMany(x => x.Children.Where(x => x.NodeType == NodeType.Trigger)))
-                    {
-                        if (binExp.StringRepresentation == duplicate)
-                        {
-                            secondaryLogEntries.Add(
-                                LogEntry.MinimalLogEntry(
-                                    "Repeated trigger",
-                                    namedBlock.File.AbsolutePath,
-                                    binExp.Start,
-                                    binExp.End));
-                        }
-                    }
+                LogAbsorption(triggerBinExpChildren, ANDchildren, "OR with AND that includes a trigger in the parent OR");
+            }
 
-                    var logEntry = new LogEntry(
-                        Smell.OvercomplicatedBoolean_Distributivity,
-                        _settings.Distributivity_Severity,
-                        "OR with ANDs that share a trigger",
-                        namedBlock);
-                    
-                    logger.Log(
-                        logEntry,
-                        [.. secondaryLogEntries]);
-                }
-                foreach (var andChild in ANDchildren)
+            LogIdempotencyAndComplementation(namedBlock, triggerBinExpChildren);
+
+            if (key == "NOR")
+            {
+                if (AllChildrenAreNegated(triggerBlockChildren, triggerBinExpChildren))
                 {
-                    if (HasRepeatedString(childBinaryExpressions.Select(x => x.StringRepresentation),
-                        andChild.Children.OfType<BinaryExpression>().Select(x => x.StringRepresentation)))
-                    {
-                        logger.Log(
-                            Smell.OvercomplicatedBoolean_Absorption,
-                            _settings.Absorption_Severity,
-                            "OR with AND that includes a trigger in the parent OR",
-                            namedBlock);
-                    }
+                    LogFullDoubleNegation(namedBlock, key);
+                }
+                else
+                {
+                    LogIncidentalDoubleNegation(triggerBlockChildren, key);
                 }
             }
 
+            if (key == "NAND")
+            {
+                if (AllChildrenAreNegated(triggerBlockChildren, triggerBinExpChildren))
+                {
+                    LogFullDoubleNegation(namedBlock, key);
+                }
+            }
+
+            if (key == "NOT")
+            {
+                if (triggerChildren.Count() > 1)
+                {
+                    LogNotIsNotNor(namedBlock);
+                }
+
+                if (AllChildrenAreNegated(triggerBlockChildren, triggerBinExpChildren))
+                {
+                    LogFullDoubleNegation(namedBlock, key);
+                }
+                else
+                {
+                    LogIncidentalDoubleNegation(triggerBlockChildren, key);
+                }
+            }
+        }
+
+        private void LogNotIsNotNor(NamedBlock namedBlock)
+        {
+            logger.Log(
+                Smell.NotIsNotNor,
+                _settings.NotIsNotNor_Severity,
+                "NOT containing multiple elements",
+                namedBlock);
+        }
+
+        private void LogFullDoubleNegation(NamedBlock namedBlock, string key)
+        {
+            logger.Log(
+                Smell.OvercomplicatedBoolean_DoubleNegation,
+                _settings.DoubleNegation_Severity,
+                $"All children of {key} are negated themselves",
+                namedBlock);
+        }
+
+        private void LogIncidentalDoubleNegation(IEnumerable<NamedBlock> triggerBlockChildren, string parentKey)
+        {
+            foreach (var childBlock in triggerBlockChildren)
+            {
+                var childKey = childBlock.Key;
+                if (childKey == "NOR")
+                {
+                    logger.Log(
+                        Smell.OvercomplicatedBoolean_DoubleNegation,
+                        _settings.DoubleNegation_Severity,
+                        $"NOR within {parentKey}-block",
+                        childBlock);
+                }
+                else if (childKey == "NAND")
+                {
+                    logger.Log(
+                        Smell.OvercomplicatedBoolean_DoubleNegation,
+                        _settings.DoubleNegation_Severity,
+                        $"NAND within {parentKey}-block",
+                        childBlock);
+                }
+                else if (childKey == "NOT")
+                {
+                    logger.Log(
+                        Smell.OvercomplicatedBoolean_DoubleNegation,
+                        _settings.DoubleNegation_Severity,
+                        $"NOT within {parentKey}-block",
+                        childBlock);
+                }
+            }
+        }
+
+        private void LogIdempotencyAndComplementation(NamedBlock namedBlock, IEnumerable<BinaryExpression> childBinaryExpressions)
+        {
             var seenKeys = new HashSet<string>();
             var seenRaws = new HashSet<string>();
-            foreach (var item in namedBlock.Children.OfType<BinaryExpression>())
+            foreach (var item in childBinaryExpressions)
             {
                 if (!seenRaws.Add(item.StringRepresentation))
                 {
@@ -190,79 +194,82 @@ namespace CK3Analyser.Analysis.Detectors
                         namedBlock);
                 }
             }
+        }
 
-            if (key == "NOR")
+        private void LogAssociativity(IEnumerable<NamedBlock> relevantChildren, string msg)
+        {
+            foreach (var child in relevantChildren)
             {
-                if (AllChildrenAreNegated(namedBlock))
-                {
-                    logger.Log(
-                        Smell.OvercomplicatedBoolean_DoubleNegation,
-                        _settings.DoubleNegation_Severity,
-                        "All children of NOR are negated themselves",
-                        namedBlock);
-                }
+                logger.Log(
+                    Smell.OvercomplicatedBoolean_Associativity,
+                    _settings.Associativity_Severity,
+                    msg,
+                    child);
             }
+        }
 
-            if (key == "NAND")
+        private void LogAbsorption(IEnumerable<BinaryExpression> childBinaryExpressions, IEnumerable<NamedBlock> relevantChildren, string msg)
+        {
+            foreach (var child in relevantChildren)
             {
-                if (AllChildrenAreNegated(namedBlock))
+                if (GetRepeatedString(childBinaryExpressions.Select(x => x.StringRepresentation),
+                    child.Children.OfType<BinaryExpression>().Select(x => x.StringRepresentation)) is string duplicate)
                 {
-                    logger.Log(
-                        Smell.OvercomplicatedBoolean_DoubleNegation,
-                        _settings.DoubleNegation_Severity,
-                        "All children of NAND are negated themselves",
-                        namedBlock);
-                }
-            }
+                    var firstOccurence = childBinaryExpressions.First(x => x.StringRepresentation == duplicate);
 
-            if (key == "NOT")
-            {
-                if (childBlockKeys.Count() + childBinaryExpressionKeys.Count() > 1)
-                {
-                    logger.Log(
-                        Smell.NotIsNotNor,
-                        _settings.NotIsNotNor_Severity,
-                        "NOT containing multiple elements",
-                        namedBlock);
-                }
+                    var secondOccurence = child.Children.OfType<BinaryExpression>().First(x => x.StringRepresentation == duplicate);
 
-                if (AllChildrenAreNegated(namedBlock))
-                {
                     logger.Log(
-                        Smell.OvercomplicatedBoolean_DoubleNegation,
-                        _settings.DoubleNegation_Severity,
-                        $"All children of NOT are negated themselves",
-                        namedBlock);
-                }
-
-                if (childBlockKeys.Contains("NOR"))
-                {
-                    logger.Log(
-                        Smell.OvercomplicatedBoolean_DoubleNegation,
-                        _settings.DoubleNegation_Severity,
-                        "NOT contains NOR",
-                        namedBlock);
-                }
-
-                if (childBlockKeys.Contains("NAND"))
-                {
-                    logger.Log(
-                        Smell.OvercomplicatedBoolean_DoubleNegation,
-                        _settings.DoubleNegation_Severity,
-                        "NOT contains NAND",
-                        namedBlock);
+                        Smell.OvercomplicatedBoolean_Absorption,
+                        _settings.Absorption_Severity,
+                        msg,
+                        child,
+                        LogEntry.MinimalLogEntry("Trigger occurence", firstOccurence),
+                        LogEntry.MinimalLogEntry("Trigger occurence", secondOccurence));
                 }
             }
         }
 
-        private bool AllChildrenAreNegated(NamedBlock namedBlock)
+        private void LogDistributivity(NamedBlock namedBlock, IEnumerable<NamedBlock> triggerChildren, string msg)
         {
-            var blockChildrenToConsider = namedBlock.Children.OfType<NamedBlock>();
-            var binaryExpressionChildrenToConsider = namedBlock.Children.OfType<BinaryExpression>();
+            var grandChildren = triggerChildren.Select(x => x.Children.Where(x => x.NodeType == NodeType.Trigger).Select(x => x.StringRepresentation));
+            if (triggerChildren.Count() > 1 &&
+                StringOccursInEverySublist(grandChildren) is string duplicate
+                && grandChildren.All(x => x.Count() < 3)
+                )
+            {
+                var secondaryLogEntries = new List<LogEntry>();
+                foreach (var trigger in triggerChildren.SelectMany(x => x.Children.Where(x => x.NodeType == NodeType.Trigger)))
+                {
+                    if (trigger.StringRepresentation == duplicate)
+                    {
+                        secondaryLogEntries.Add(
+                            LogEntry.MinimalLogEntry(
+                                "Repeated trigger",
+                                namedBlock.File.AbsolutePath,
+                                trigger.Start,
+                                trigger.End));
+                    }
+                }
 
-            return blockChildrenToConsider.All(x => x.Key.ToUpper() == "NOT" || x.Key.ToUpper() == "NOR" || x.Key.ToUpper() == "NAND")
-                && binaryExpressionChildrenToConsider.All(x => (x.Value.ToLower() == "no") || x.Scoper == "!=")
-                && blockChildrenToConsider.Count() + binaryExpressionChildrenToConsider.Count() > 0;
+                var logEntry = new LogEntry(
+                    Smell.OvercomplicatedBoolean_Distributivity,
+                    _settings.Distributivity_Severity,
+                    msg,
+                    namedBlock);
+
+                logger.Log(
+                    logEntry,
+                    [.. secondaryLogEntries]);
+            }
+
+        }
+
+        private bool AllChildrenAreNegated(IEnumerable<NamedBlock> blocks, IEnumerable<BinaryExpression> binaryExpressions)
+        {
+            return blocks.All(x => x.Key.ToUpper() == "NOT" || x.Key.ToUpper() == "NOR" || x.Key.ToUpper() == "NAND")
+                && binaryExpressions.All(x => (x.Value.ToLower() == "no") || x.Scoper == "!=")
+                && blocks.Count() + binaryExpressions.Count() > 0;
         }
 
         static bool HasRepeatedString(IEnumerable<string> list1, IEnumerable<string> list2)
@@ -276,6 +283,19 @@ namespace CK3Analyser.Analysis.Detectors
                 }
             }
             return false;
+        }
+
+        static string GetRepeatedString(IEnumerable<string> list1, IEnumerable<string> list2)
+        {
+            var seen = new HashSet<string>(list1);
+            foreach (var str in list2)
+            {
+                if (seen.Contains(str))
+                {
+                    return str;
+                }
+            }
+            return null;
         }
 
         static string GetRepeatedString(IEnumerable<string> list)

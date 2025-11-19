@@ -1,5 +1,6 @@
 dummytrigger = {
 	#Should contain 2 cases
+	ddd = yes
 
 	#1
 	AND = {

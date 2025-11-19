@@ -112,7 +112,10 @@ namespace CK3Analyser.Analysing.Detectors
             //arrange
             var logger = new Logger();
             var testcase = GetTestCase("OvercomplicatedBoolean/Absorption", DeclarationType.ScriptedTrigger);
-            var detector = GetDetector(logger, testcase.Context, Absorption_severity: Severity.Critical, Associativity_severity: Severity.Debug, Distributivity_severity: Severity.Debug);
+            var detector = GetDetector(logger, testcase.Context, 
+                Absorption_severity: Severity.Critical, 
+                Associativity_severity: Severity.Debug, 
+                Distributivity_severity: Severity.Debug);
             
             //act
             detector.Visit(testcase);
@@ -128,7 +131,10 @@ namespace CK3Analyser.Analysing.Detectors
             //arrange
             var logger = new Logger();
             var testcase = GetTestCase("OvercomplicatedBoolean/Distributivity", DeclarationType.ScriptedTrigger);
-            var detector = GetDetector(logger, testcase.Context, Distributivity_severity: Severity.Critical, Associativity_severity: Severity.Debug);
+            var detector = GetDetector(logger, testcase.Context, 
+                Distributivity_severity: Severity.Critical, 
+                Associativity_severity: Severity.Debug,
+                Absorption_severity: Severity.Debug);
             
             //act
             detector.Visit(testcase);
