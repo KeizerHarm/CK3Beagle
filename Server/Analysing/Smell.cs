@@ -13,12 +13,12 @@ namespace CK3Analyser.Analysis
         LargeUnit_NonMacroBlock,
         LargeUnit_Macro,
 
-        OvercomplicatedBoolean_Associativity,
-        OvercomplicatedBoolean_Idempotency,
-        OvercomplicatedBoolean_Complementation,
-        OvercomplicatedBoolean_DoubleNegation,
-        OvercomplicatedBoolean_Distributivity,
-        OvercomplicatedBoolean_Absorption,
+        OvercomplicatedTrigger_Associativity,
+        OvercomplicatedTrigger_Idempotency,
+        OvercomplicatedTrigger_Complementation,
+        OvercomplicatedTrigger_DoubleNegation,
+        OvercomplicatedTrigger_Distributivity,
+        OvercomplicatedTrigger_Absorption,
 
         NotIsNotNor,
 
@@ -57,17 +57,17 @@ namespace CK3Analyser.Analysis
                 case Smell.LargeUnit_NonMacroBlock:
                     return "LU.3";
 
-                case Smell.OvercomplicatedBoolean_Associativity:
+                case Smell.OvercomplicatedTrigger_Associativity:
                     return "OB.1";
-                case Smell.OvercomplicatedBoolean_Idempotency:
+                case Smell.OvercomplicatedTrigger_Idempotency:
                     return "OB.2";
-                case Smell.OvercomplicatedBoolean_Complementation:
+                case Smell.OvercomplicatedTrigger_Complementation:
                     return "OB.3";
-                case Smell.OvercomplicatedBoolean_DoubleNegation:
+                case Smell.OvercomplicatedTrigger_DoubleNegation:
                     return "OB.4";
-                case Smell.OvercomplicatedBoolean_Distributivity:
+                case Smell.OvercomplicatedTrigger_Distributivity:
                     return "OB.5";
-                case Smell.OvercomplicatedBoolean_Absorption:
+                case Smell.OvercomplicatedTrigger_Absorption:
                     return "OB.6";
 
                 case Smell.NotIsNotNor:

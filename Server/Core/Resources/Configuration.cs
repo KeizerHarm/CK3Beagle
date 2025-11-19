@@ -35,7 +35,7 @@ namespace CK3Analyser.Core.Resources
                         NonMacroBlock_MaxSize = 50
                     };
 
-                OvercomplicatedBooleanSettings =
+                OvercomplicatedTriggerSettings =
                     new OvercomplicatedTriggerSettings
                     {
                         Absorption_Severity = Severity.Info,
@@ -188,17 +188,17 @@ namespace CK3Analyser.Core.Resources
             }
         }
 
-        private OvercomplicatedTriggerSettings? _overcomplicatedBooleanSettings;
-        public OvercomplicatedTriggerSettings OvercomplicatedBooleanSettings
+        private OvercomplicatedTriggerSettings? _overcomplicatedTriggerSettings;
+        public OvercomplicatedTriggerSettings OvercomplicatedTriggerSettings
         {
             get
             {
-                _overcomplicatedBooleanSettings = GetSettings(_overcomplicatedBooleanSettings, "overcomplicatedBoolean");
-                return _overcomplicatedBooleanSettings.Value;
+                _overcomplicatedTriggerSettings = GetSettings(_overcomplicatedTriggerSettings, "overcomplicatedTrigger");
+                return _overcomplicatedTriggerSettings.Value;
             }
             set
             {
-                _overcomplicatedBooleanSettings = value;
+                _overcomplicatedTriggerSettings = value;
             }
         }
 
@@ -276,7 +276,7 @@ namespace CK3Analyser.Core.Resources
         {
             return "Configuration: {"
                 + $"{nameof(LargeUnitSettings)}: {LargeUnitSettings.ToString()} "
-                + $"{nameof(OvercomplicatedBooleanSettings)}: {OvercomplicatedBooleanSettings.ToString()} "
+                + $"{nameof(OvercomplicatedTriggerSettings)}: {OvercomplicatedTriggerSettings.ToString()} "
                 + $"{nameof(DuplicationSettings)}: {DuplicationSettings.ToString()} "
                 + $"{nameof(HiddenDependenciesSettings)}: {HiddenDependenciesSettings.ToString()} "
                 + $"{nameof(InconsistentIndentationSettings)}: {InconsistentIndentationSettings.ToString()} "

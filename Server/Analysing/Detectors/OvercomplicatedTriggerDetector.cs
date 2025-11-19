@@ -131,7 +131,7 @@ namespace CK3Analyser.Analysis.Detectors
         private void LogFullDoubleNegation(NamedBlock namedBlock, string key)
         {
             logger.Log(
-                Smell.OvercomplicatedBoolean_DoubleNegation,
+                Smell.OvercomplicatedTrigger_DoubleNegation,
                 _settings.DoubleNegation_Severity,
                 $"All children of {key} are negated themselves",
                 namedBlock);
@@ -145,7 +145,7 @@ namespace CK3Analyser.Analysis.Detectors
                 if (childKey == "NOR")
                 {
                     logger.Log(
-                        Smell.OvercomplicatedBoolean_DoubleNegation,
+                        Smell.OvercomplicatedTrigger_DoubleNegation,
                         _settings.DoubleNegation_Severity,
                         $"NOR within {parentKey}-block",
                         childBlock);
@@ -153,7 +153,7 @@ namespace CK3Analyser.Analysis.Detectors
                 else if (childKey == "NAND")
                 {
                     logger.Log(
-                        Smell.OvercomplicatedBoolean_DoubleNegation,
+                        Smell.OvercomplicatedTrigger_DoubleNegation,
                         _settings.DoubleNegation_Severity,
                         $"NAND within {parentKey}-block",
                         childBlock);
@@ -161,7 +161,7 @@ namespace CK3Analyser.Analysis.Detectors
                 else if (childKey == "NOT")
                 {
                     logger.Log(
-                        Smell.OvercomplicatedBoolean_DoubleNegation,
+                        Smell.OvercomplicatedTrigger_DoubleNegation,
                         _settings.DoubleNegation_Severity,
                         $"NOT within {parentKey}-block",
                         childBlock);
@@ -173,26 +173,51 @@ namespace CK3Analyser.Analysis.Detectors
         {
             var seenKeys = new HashSet<string>();
             var seenRaws = new HashSet<string>();
+            var duplicateTriggers = new HashSet<string>();
+            var complementaryTriggers = new HashSet<string>();
             foreach (var item in childBinaryExpressions)
             {
                 if (!seenRaws.Add(item.StringRepresentation))
                 {
-                    logger.Log(
-                        Smell.OvercomplicatedBoolean_Idempotency,
-                        _settings.Idempotency_Severity,
-                        $"Duplicate trigger: {item.StringRepresentation}",
-                        item);
+                    duplicateTriggers.Add(item.StringRepresentation);
                     continue;
                 }
 
                 if (!seenKeys.Add(item.Key) && (item.Value.Equals("yes", StringComparison.OrdinalIgnoreCase) || item.Value.Equals("no", StringComparison.OrdinalIgnoreCase)))
                 {
-                    logger.Log(
-                        Smell.OvercomplicatedBoolean_Complementation,
-                        _settings.Complementation_Severity,
-                        $"Complementary triggers: {item.StringRepresentation} and its inverse",
-                        namedBlock);
+                    complementaryTriggers.Add(item.Key);
                 }
+            }
+
+            foreach (var dupe in duplicateTriggers)
+            {
+                var occurences = childBinaryExpressions.Where(x => x.StringRepresentation == dupe);
+                var secondaryLogEntries = occurences.Skip(1).Select(
+                    x => LogEntry.MinimalLogEntry(
+                        "Duplicate", x));
+
+                logger.Log(
+                    Smell.OvercomplicatedTrigger_Idempotency,
+                    _settings.Idempotency_Severity,
+                    $"Duplicate trigger: {dupe}",
+                    occurences.First(),
+                    [.. secondaryLogEntries]
+                    );
+            }
+
+            foreach (var compl in complementaryTriggers)
+            {
+                var occurences = childBinaryExpressions.Where(x => x.Key == compl);
+                var secondaryLogEntries = occurences.Skip(1).Select(
+                    x => LogEntry.MinimalLogEntry(
+                        "Complementation", x));
+
+                logger.Log(
+                    Smell.OvercomplicatedTrigger_Complementation,
+                    _settings.Complementation_Severity,
+                    $"Complementary triggers: {occurences.First().StringRepresentation} and its inverse",
+                    occurences.First(),
+                    [..secondaryLogEntries]);
             }
         }
 
@@ -201,7 +226,7 @@ namespace CK3Analyser.Analysis.Detectors
             foreach (var child in relevantChildren)
             {
                 logger.Log(
-                    Smell.OvercomplicatedBoolean_Associativity,
+                    Smell.OvercomplicatedTrigger_Associativity,
                     _settings.Associativity_Severity,
                     msg,
                     child);
@@ -220,7 +245,7 @@ namespace CK3Analyser.Analysis.Detectors
                     var secondOccurence = child.Children.OfType<BinaryExpression>().First(x => x.StringRepresentation == duplicate);
 
                     logger.Log(
-                        Smell.OvercomplicatedBoolean_Absorption,
+                        Smell.OvercomplicatedTrigger_Absorption,
                         _settings.Absorption_Severity,
                         msg,
                         child,
@@ -253,7 +278,7 @@ namespace CK3Analyser.Analysis.Detectors
                 }
 
                 var logEntry = new LogEntry(
-                    Smell.OvercomplicatedBoolean_Distributivity,
+                    Smell.OvercomplicatedTrigger_Distributivity,
                     _settings.Distributivity_Severity,
                     msg,
                     namedBlock);

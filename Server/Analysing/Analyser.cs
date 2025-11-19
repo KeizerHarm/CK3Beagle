@@ -35,10 +35,10 @@ namespace CK3Analyser.Analysis
                 visitor.Detectors.Add(new LargeUnitDetector(logger, context,
                     GlobalResources.Configuration.LargeUnitSettings));
             }
-            if (GlobalResources.Configuration.OvercomplicatedBooleanSettings.Enabled)
+            if (GlobalResources.Configuration.OvercomplicatedTriggerSettings.Enabled)
             {
                 visitor.Detectors.Add(new OvercomplicatedTriggerDetector(logger, context,
-                    GlobalResources.Configuration.OvercomplicatedBooleanSettings));
+                    GlobalResources.Configuration.OvercomplicatedTriggerSettings));
             }
             if (GlobalResources.Configuration.DuplicationSettings.Enabled)
             {

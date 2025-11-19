@@ -7,11 +7,11 @@ using CK3Analyser.Core.Resources.DetectorSettings;
 
 namespace CK3Analyser.Analysing.Detectors
 {
-    public class OvercomplicatedBooleanDetectorTests : BaseDetectorTest
+    public class OvercomplicatedTriggerDetectorTests : BaseDetectorTest
     {
         [Theory]
-        [InlineData("OvercomplicatedBoolean/Associativity_AndWithAnd", "AND")]
-        [InlineData("OvercomplicatedBoolean/Associativity_OrWithOr", "OR")]
+        [InlineData("OvercomplicatedTrigger/Associativity_AndWithAnd", "AND")]
+        [InlineData("OvercomplicatedTrigger/Associativity_OrWithOr", "OR")]
         public void DetectsAssociativity(string file, string msgKeyword)
         {
             //arrange
@@ -24,7 +24,7 @@ namespace CK3Analyser.Analysing.Detectors
 
             //assert
             Assert.Single(logger.LogEntries);
-            Assert.Single(logger.LogEntries, x => x.Severity == Severity.Critical && x.Smell == Smell.OvercomplicatedBoolean_Associativity && x.Message.Contains(msgKeyword));
+            Assert.Single(logger.LogEntries, x => x.Severity == Severity.Critical && x.Smell == Smell.OvercomplicatedTrigger_Associativity && x.Message.Contains(msgKeyword));
         }
 
         [Fact]
@@ -32,7 +32,7 @@ namespace CK3Analyser.Analysing.Detectors
         {
             //arrange
             var logger = new Logger();
-            var testcase = GetTestCase("OvercomplicatedBoolean/Idempotency", DeclarationType.ScriptedTrigger);
+            var testcase = GetTestCase("OvercomplicatedTrigger/Idempotency", DeclarationType.ScriptedTrigger);
             var detector = GetDetector(logger, testcase.Context, Idempotency_severity: Severity.Critical);
 
             //act
@@ -40,7 +40,7 @@ namespace CK3Analyser.Analysing.Detectors
 
             //assert
             Assert.Single(logger.LogEntries);
-            Assert.Single(logger.LogEntries, x => x.Severity == Severity.Critical && x.Smell == Smell.OvercomplicatedBoolean_Idempotency);
+            Assert.Single(logger.LogEntries, x => x.Severity == Severity.Critical && x.Smell == Smell.OvercomplicatedTrigger_Idempotency);
         }
 
         [Fact]
@@ -48,7 +48,7 @@ namespace CK3Analyser.Analysing.Detectors
         {
             //arrange
             var logger = new Logger();
-            var testcase = GetTestCase("OvercomplicatedBoolean/Complementation", DeclarationType.ScriptedTrigger);
+            var testcase = GetTestCase("OvercomplicatedTrigger/Complementation", DeclarationType.ScriptedTrigger);
             var detector = GetDetector(logger, testcase.Context, Complementation_severity: Severity.Critical);
 
             //act
@@ -56,7 +56,7 @@ namespace CK3Analyser.Analysing.Detectors
 
             //assert
             Assert.Single(logger.LogEntries);
-            Assert.Single(logger.LogEntries, x => x.Severity == Severity.Critical && x.Smell == Smell.OvercomplicatedBoolean_Complementation);
+            Assert.Single(logger.LogEntries, x => x.Severity == Severity.Critical && x.Smell == Smell.OvercomplicatedTrigger_Complementation);
         }
 
         [Fact]
@@ -64,7 +64,7 @@ namespace CK3Analyser.Analysing.Detectors
         {
             //arrange
             var logger = new Logger();
-            var testcase = GetTestCase("OvercomplicatedBoolean/NotIsNotNor", DeclarationType.ScriptedTrigger);
+            var testcase = GetTestCase("OvercomplicatedTrigger/NotIsNotNor", DeclarationType.ScriptedTrigger);
             var detector = GetDetector(logger, testcase.Context, NotIsNotNor_severity: Severity.Critical);
 
             //act
@@ -80,7 +80,7 @@ namespace CK3Analyser.Analysing.Detectors
         {
             //arrange
             var logger = new Logger();
-            var testcase = GetTestCase("OvercomplicatedBoolean/DoubleNegation", DeclarationType.ScriptedTrigger);
+            var testcase = GetTestCase("OvercomplicatedTrigger/DoubleNegation", DeclarationType.ScriptedTrigger);
             var detector = GetDetector(logger, testcase.Context, DoubleNegation_severity: Severity.Critical, NotIsNotNor_severity: Severity.Debug);
             
             //act
@@ -88,7 +88,7 @@ namespace CK3Analyser.Analysing.Detectors
 
             //assert
             Assert.Equal(13, logger.LogEntries.Count);
-            Assert.Equal(13, logger.LogEntries.Where(x => x.Severity == Severity.Critical && x.Smell == Smell.OvercomplicatedBoolean_DoubleNegation).Count());
+            Assert.Equal(13, logger.LogEntries.Where(x => x.Severity == Severity.Critical && x.Smell == Smell.OvercomplicatedTrigger_DoubleNegation).Count());
         }
 
         [Fact]
@@ -96,7 +96,7 @@ namespace CK3Analyser.Analysing.Detectors
         {
             //arrange
             var logger = new Logger();
-            var testcase = GetTestCase("OvercomplicatedBoolean/DoubleNegation_Counterexamples", DeclarationType.ScriptedTrigger);
+            var testcase = GetTestCase("OvercomplicatedTrigger/DoubleNegation_Counterexamples", DeclarationType.ScriptedTrigger);
             var detector = GetDetector(logger, testcase.Context, DoubleNegation_severity: Severity.Critical, NotIsNotNor_severity: Severity.Debug);
             
             //act
@@ -111,7 +111,7 @@ namespace CK3Analyser.Analysing.Detectors
         {
             //arrange
             var logger = new Logger();
-            var testcase = GetTestCase("OvercomplicatedBoolean/Absorption", DeclarationType.ScriptedTrigger);
+            var testcase = GetTestCase("OvercomplicatedTrigger/Absorption", DeclarationType.ScriptedTrigger);
             var detector = GetDetector(logger, testcase.Context, 
                 Absorption_severity: Severity.Critical, 
                 Associativity_severity: Severity.Debug, 
@@ -122,7 +122,7 @@ namespace CK3Analyser.Analysing.Detectors
 
             //assert
             Assert.Equal(2, logger.LogEntries.Where(x => x.Severity > Severity.Debug).Count());
-            Assert.Equal(2, logger.LogEntries.Where(x => x.Severity == Severity.Critical && x.Smell == Smell.OvercomplicatedBoolean_Absorption).Count());
+            Assert.Equal(2, logger.LogEntries.Where(x => x.Severity == Severity.Critical && x.Smell == Smell.OvercomplicatedTrigger_Absorption).Count());
         }
 
         [Fact]
@@ -130,7 +130,7 @@ namespace CK3Analyser.Analysing.Detectors
         {
             //arrange
             var logger = new Logger();
-            var testcase = GetTestCase("OvercomplicatedBoolean/Distributivity", DeclarationType.ScriptedTrigger);
+            var testcase = GetTestCase("OvercomplicatedTrigger/Distributivity", DeclarationType.ScriptedTrigger);
             var detector = GetDetector(logger, testcase.Context, 
                 Distributivity_severity: Severity.Critical, 
                 Associativity_severity: Severity.Debug,
@@ -141,7 +141,7 @@ namespace CK3Analyser.Analysing.Detectors
 
             //assert
             Assert.Equal(4, logger.LogEntries.Where(x => x.Severity > Severity.Debug).Count());
-            Assert.Equal(4, logger.LogEntries.Where(x => x.Severity == Severity.Critical && x.Smell == Smell.OvercomplicatedBoolean_Distributivity).Count());
+            Assert.Equal(4, logger.LogEntries.Where(x => x.Severity == Severity.Critical && x.Smell == Smell.OvercomplicatedTrigger_Distributivity).Count());
         }
 
         private static AnalysisVisitor GetDetector(Logger logger,
