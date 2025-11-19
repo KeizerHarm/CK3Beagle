@@ -20,7 +20,7 @@ namespace CK3Analyser.Analysis.Detectors
 
         public override void EnterScriptFile(ScriptFile scriptFile)
         {
-            if (string.IsNullOrWhiteSpace(scriptFile.Raw)) return;
+            if (string.IsNullOrWhiteSpace(scriptFile.StringRepresentation)) return;
 
             (var detectedIndentationType, var lines) = DetectIndentation(scriptFile);
             logger.Log(Smell.None, Severity.Debug, "Detected indentation type " + detectedIndentationType, scriptFile.GetIdentifier());
@@ -86,7 +86,7 @@ namespace CK3Analyser.Analysis.Detectors
             int currentDepth = 0;
             var lines = new List<Line>();
             int[] linesThatWorkForIndentationTypes = new int[Enum.GetValues<IndentationType>().Length];
-            string[] rawLines = scriptFile.Raw.Split('\n');
+            string[] rawLines = scriptFile.StringRepresentation.Split('\n');
             for (int i = 0; i < rawLines.Length; i++)
             {
                 string line = rawLines[i];

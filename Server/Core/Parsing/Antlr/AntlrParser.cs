@@ -20,7 +20,7 @@ namespace CK3Analyser.Core.Parsing.Antlr
         public void ParseFile(ScriptFile file)
         {
             CK3Parser parser = null;
-            AntlrInputStream inputStream = new AntlrInputStream(file.Raw);
+            AntlrInputStream inputStream = new AntlrInputStream(file.StringRepresentation);
 
             if (!isInitialised)
             {

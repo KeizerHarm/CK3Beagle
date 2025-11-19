@@ -82,17 +82,17 @@ namespace CK3Analyser.Rebasing
                         var oldDecl = old_Relevant.Declarations[(int)moddedDecl.DeclarationType][decl.Key];
                         var newDecl = new_Relevant.Declarations[(int)moddedDecl.DeclarationType][decl.Key];
 
-                        if (oldDecl.Raw == newDecl.Raw)
+                        if (oldDecl.StringRepresentation == newDecl.StringRepresentation)
                         {
                             Console.WriteLine($"INFO: {moddedFile.RelativePath}:{decl.Key} - Modded declaration not changed by vanilla; using modded declaration!");
                         }
 
-                        if (moddedDecl.Raw == oldDecl.Raw)
+                        if (moddedDecl.StringRepresentation == oldDecl.StringRepresentation)
                         {
                             Console.WriteLine($"INFO: {moddedFile.RelativePath}:{decl.Key} - Modded version identical to old version; replaced with new version.");
                             rebasedFile.ReplaceDeclaration(newDecl);
                         }
-                        else if (moddedDecl.Raw == newDecl.Raw)
+                        else if (moddedDecl.StringRepresentation == newDecl.StringRepresentation)
                         {
                             Console.WriteLine($"INFO: {moddedFile.RelativePath}:{decl.Key} - Modded version identical to new version; how fortunate!");
                         }

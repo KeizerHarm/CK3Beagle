@@ -65,7 +65,7 @@ namespace CK3Analyser.Analysis.Detectors
                 }
 
                 var ORchildren = childNamedBlocks.Where(x => x.Key == "OR");
-                if (HasRepeatedString(ORchildren.Select(x => x.Children.OfType<BinaryExpression>().Select(y => y.Raw))))
+                if (HasRepeatedString(ORchildren.Select(x => x.Children.OfType<BinaryExpression>().Select(y => y.StringRepresentation))))
                 {
                     logger.Log(
                         Smell.OvercomplicatedBoolean_Distributivity,
@@ -75,8 +75,8 @@ namespace CK3Analyser.Analysis.Detectors
                 }
                 foreach (var orChild in ORchildren)
                 {
-                    if (HasRepeatedString(childBinaryExpressions.Select(x => x.Raw),
-                        orChild.Children.OfType<BinaryExpression>().Select(x => x.Raw)))
+                    if (HasRepeatedString(childBinaryExpressions.Select(x => x.StringRepresentation),
+                        orChild.Children.OfType<BinaryExpression>().Select(x => x.StringRepresentation)))
                     {
                         logger.Log(
                             Smell.OvercomplicatedBoolean_Absorption,
@@ -102,7 +102,7 @@ namespace CK3Analyser.Analysis.Detectors
 
 
                 var ANDchildren = childNamedBlocks.Where(x => x.Key == "AND");
-                if (HasRepeatedString(ANDchildren.Select(x => x.Children.OfType<BinaryExpression>().Select(y => y.Raw))))
+                if (HasRepeatedString(ANDchildren.Select(x => x.Children.OfType<BinaryExpression>().Select(y => y.StringRepresentation))))
                 {
                     logger.Log(
                         Smell.OvercomplicatedBoolean_Distributivity,
@@ -112,8 +112,8 @@ namespace CK3Analyser.Analysis.Detectors
                 }
                 foreach (var andChild in ANDchildren)
                 {
-                    if (HasRepeatedString(childBinaryExpressions.Select(x => x.Raw),
-                        andChild.Children.OfType<BinaryExpression>().Select(x => x.Raw)))
+                    if (HasRepeatedString(childBinaryExpressions.Select(x => x.StringRepresentation),
+                        andChild.Children.OfType<BinaryExpression>().Select(x => x.StringRepresentation)))
                     {
                         logger.Log(
                             Smell.OvercomplicatedBoolean_Absorption,
@@ -128,12 +128,12 @@ namespace CK3Analyser.Analysis.Detectors
             var seenRaws = new HashSet<string>();
             foreach (var item in namedBlock.Children.OfType<BinaryExpression>())
             {
-                if (!seenRaws.Add(item.Raw))
+                if (!seenRaws.Add(item.StringRepresentation))
                 {
                     logger.Log(
                         Smell.OvercomplicatedBoolean_Idempotency,
                         _settings.Idempotency_Severity,
-                        $"Duplicate trigger: {item.Raw}",
+                        $"Duplicate trigger: {item.StringRepresentation}",
                         item);
                     continue;
                 }
@@ -143,7 +143,7 @@ namespace CK3Analyser.Analysis.Detectors
                     logger.Log(
                         Smell.OvercomplicatedBoolean_Complementation,
                         _settings.Complementation_Severity,
-                        $"Complementary triggers: {item.Raw} and its inverse",
+                        $"Complementary triggers: {item.StringRepresentation} and its inverse",
                         namedBlock);
                 }
             }

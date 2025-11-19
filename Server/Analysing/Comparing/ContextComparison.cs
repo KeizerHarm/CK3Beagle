@@ -33,7 +33,7 @@ namespace CK3Analyser.Analysis.Comparing
         private void HandleFiles()
         {
             (AddedFiles, RemovedFiles, ChangedFiles, UntouchedFiles) 
-                = ComparisonHelpers.SimpleListComparison(Base.Files, Edit.Files, (first, second) => first.Raw == second.Raw);
+                = ComparisonHelpers.SimpleListComparison(Base.Files, Edit.Files, (first, second) => first.StringRepresentation == second.StringRepresentation);
 
             foreach (var file in ChangedFiles)
             {

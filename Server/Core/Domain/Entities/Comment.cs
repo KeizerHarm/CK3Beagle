@@ -2,7 +2,14 @@
 {
     public class Comment : Node
     {
-        public string RawWithoutHashtag { get; set; }
+        public string RawWithoutHashtag 
+        {
+            get
+            {
+                return StringRepresentation.Split('#')[1].Trim();
+
+            }
+        }
         public override void Accept(IDomainVisitor visitor) => visitor.Visit(this);
 
         public override int GetLooseHashCode()

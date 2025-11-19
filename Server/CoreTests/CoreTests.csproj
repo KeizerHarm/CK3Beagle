@@ -23,11 +23,9 @@
     <Using Include="Xunit" />
   </ItemGroup>
 
+
   <ItemGroup>
-    <None Update="Parsing\Testcases\ScriptedEffect.txt">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Update="Parsing\Testcases\TwoEvents.txt">
+    <None Update="Parsing\Testcases\**">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
   </ItemGroup>

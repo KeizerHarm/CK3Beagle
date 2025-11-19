@@ -20,11 +20,9 @@ namespace CK3Analyser.Core.Parsing
         protected void AssertNodesEqual(Node expected, Node actual)
         {
             Assert.Equal(expected.GetType(), actual.GetType());
-            Assert.Equal(expected.Raw, actual.Raw);
-            Assert.Equal(expected.StartLine, actual.StartLine);
-            Assert.Equal(expected.StartIndex, actual.StartIndex);
-            Assert.Equal(expected.EndLine, actual.EndLine);
-            Assert.Equal(expected.EndIndex, actual.EndIndex);
+            Assert.Equal(expected.StringRepresentation, actual.StringRepresentation);
+            Assert.Equal(expected.Start, actual.Start);
+            Assert.Equal(expected.End, actual.End);
             if (actual.NextSibling != null)
             {
                 Assert.Equal(actual.NextSibling.PrevSibling, actual);
@@ -65,7 +63,6 @@ namespace CK3Analyser.Core.Parsing
         private void AssertBlocksEqual(Block expected, Block actual)
         {
             Assert.Equal(expected.Children.Count, actual.Children.Count);
-
 
             if (expected.GetType().IsAssignableTo(typeof(NamedBlock)))
             {

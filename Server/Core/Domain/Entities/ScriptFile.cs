@@ -9,21 +9,34 @@ namespace CK3Analyser.Core.Domain.Entities
         public Context Context { get; }
         public string RelativePath { get; set; }
         public string AbsolutePath { get; set; }
+        private string rawFileContents { get; set; }
         public OrderedDictionary<string, Declaration> Declarations { get; private set; } = [];
 
         public DeclarationType ExpectedDeclarationType { get; }
 
-        public ScriptFile(Context context, string relativePath, DeclarationType expectedDeclarationType, string rawContent = null)
+        public string GetContentSelectionString(int absoluteStartIndex, int absoluteEndIndex)
+        {
+            return rawFileContents[absoluteStartIndex..absoluteEndIndex];
+        }
+
+        public ReadOnlySpan<char> GetContentSelectionSpan(int absoluteStartIndex, int absoluteEndIndex)
+        {
+            return rawFileContents.AsSpan()[absoluteStartIndex..absoluteEndIndex];
+        }
+
+        public ScriptFile(Context context, string relativePath, DeclarationType expectedDeclarationType, string contents = null)
         {
             Context = context;
             RelativePath = relativePath;
-            Raw = rawContent;
             ExpectedDeclarationType = expectedDeclarationType;
+            rawFileContents = contents;
+            Start = new Position(0, 0, 0);
+            End = new Position(0, 0, contents.Length);
         }
 
         public bool ContentsAndLocationMatch(ScriptFile other)
         {
-            return RelativePath == other.RelativePath && Raw == other.Raw;
+            return RelativePath == other.RelativePath && StringRepresentation == other.StringRepresentation;
         }
 
         public void AddDeclaration(Declaration declaration, bool addText = false)
@@ -31,10 +44,10 @@ namespace CK3Analyser.Core.Domain.Entities
             AddChild(declaration);
             Declarations.Add(declaration.Key, declaration);
 
-            if (addText)
-            {
-                Raw += declaration.Raw;
-            }
+            //if (addText)
+            //{
+            //    Raw += declaration.Raw;
+            //}
         }
 
         public void InsertDeclaration(Declaration newDecl, Declaration prevSibling)
@@ -50,7 +63,7 @@ namespace CK3Analyser.Core.Domain.Entities
             }
 
             prevSibling.NextSibling = newDecl;
-            Raw = Raw.Replace(prevSibling.Raw, prevSibling.Raw + newDecl.Raw);
+            //Raw = Raw.Replace(prevSibling.Raw, prevSibling.Raw + newDecl.Raw);
         }
 
         public void ReplaceDeclaration(Declaration replacement)
@@ -72,12 +85,12 @@ namespace CK3Analyser.Core.Domain.Entities
             Declarations.Remove(original.Key);
             Declarations.Insert(oldIndex, replacement.Key, replacement);
 
-            Raw = Raw.Replace(original.Raw, replacement.Raw);
+            //Raw = Raw.Replace(original.Raw, replacement.Raw);
         }
 
         public ScriptFile Clone()
         {
-            return new ScriptFile(Context, RelativePath, ExpectedDeclarationType, Raw)
+            return new ScriptFile(Context, RelativePath, ExpectedDeclarationType, StringRepresentation)
             {
                 Declarations = new OrderedDictionary<string, Declaration>(Declarations)
             };

@@ -20,7 +20,7 @@ namespace CK3Analyser.Analysis.Logging
 
         public void Log(Smell smell, Severity severity, string message, Node firstNode, Node lastNode)
         {
-            Log(smell, severity, message, firstNode.File.AbsolutePath, firstNode.StartLine, firstNode.StartIndex, lastNode.EndLine, lastNode.EndIndex);
+            Log(smell, severity, message, firstNode.File.AbsolutePath, firstNode.Start.Line, firstNode.Start.Column, lastNode.End.Line, lastNode.End.Column);
         }
 
         public void Log(Smell smell, Severity severity, string message, string location,

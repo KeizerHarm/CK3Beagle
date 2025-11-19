@@ -4,6 +4,7 @@ using CK3Analyser.Core.Domain;
 using CK3Analyser.Core.Domain.Entities;
 using System.Collections.Generic;
 using System.Linq;
+using static CK3Analyser.Core.CK3Parser;
 
 namespace CK3Analyser.Core.Parsing.Antlr
 {
@@ -19,24 +20,22 @@ namespace CK3Analyser.Core.Parsing.Antlr
             thisBlock.Push(file);
         }
 
-        public override void EnterNamedBlock([NotNull] CK3Parser.NamedBlockContext context)
+        public override void EnterNamedBlock([NotNull] NamedBlockContext context)
         {
             var key = context.token().GetText();
-            var raw = GetRawContents(context);
             if (thisBlock.Peek() == file)
             {
                 var declarationType = file.ExpectedDeclarationType;
-                if (file.ExpectedDeclarationType == DeclarationType.Event && thisBlock.Peek().Children.LastOrDefault()?.Raw == "scripted_trigger")
+                if (file.ExpectedDeclarationType == DeclarationType.Event && thisBlock.Peek().Children.LastOrDefault()?.StringRepresentation == "scripted_trigger")
                 {
                     declarationType = DeclarationType.ScriptedTrigger;
                 }
-                if (file.ExpectedDeclarationType == DeclarationType.Event && thisBlock.Peek().Children.LastOrDefault()?.Raw  == "scripted_effect")
+                if (file.ExpectedDeclarationType == DeclarationType.Event && thisBlock.Peek().Children.LastOrDefault()?.StringRepresentation  == "scripted_effect")
                 {
                     declarationType = DeclarationType.ScriptedEffect;
                 }
 
                 var declaration = new Declaration(key, declarationType);
-                declaration.Raw = raw;
                 ApplyRange(context, declaration);
                 file.AddDeclaration(declaration);
                 thisBlock.Push(declaration);
@@ -44,119 +43,107 @@ namespace CK3Analyser.Core.Parsing.Antlr
             else
             {
                 var scoper = context.SCOPER().ToString();
-                var block = new NamedBlock(key, scoper)
-                {
-                    Raw = raw
-                };
+                var block = new NamedBlock(key, scoper);
                 ApplyRange(context, block);
                 thisBlock.Peek().AddChild(block);
                 thisBlock.Push(block);
             }
         }
 
-        public override void ExitNamedBlock([NotNull] CK3Parser.NamedBlockContext context)
+        public override void ExitNamedBlock([NotNull] NamedBlockContext context)
         {
             thisBlock.Pop();
         }
 
 
-        public override void EnterAnonymousBlock([NotNull] CK3Parser.AnonymousBlockContext context)
+        public override void EnterAnonymousBlock([NotNull] AnonymousBlockContext context)
         {
-            var raw = GetRawContents(context);
-            var block = new AnonymousBlock()
-            {
-                Raw = raw
-            };
+            var block = new AnonymousBlock();
             ApplyRange(context, block);
             thisBlock.Peek().AddChild(block);
             thisBlock.Push(block);
         }
-        public override void ExitAnonymousBlock([NotNull] CK3Parser.AnonymousBlockContext context)
+        public override void ExitAnonymousBlock([NotNull] AnonymousBlockContext context)
         {
             thisBlock.Pop();
         }
 
 
-        public override void EnterComment([NotNull] CK3Parser.CommentContext context)
+        public override void EnterComment([NotNull] CommentContext context)
         {
-            var raw = GetRawContents(context);
-            var rawWithoutHashtag = raw.Split('#')[1].Trim();
-            var comment = new Comment()
-            {
-                Raw = raw,
-                RawWithoutHashtag = rawWithoutHashtag
-            };
+            var comment = new Comment();
             ApplyRange(context, comment);
             thisBlock.Peek().AddChild(comment);
         }
 
-        public override void ExitComment([NotNull] CK3Parser.CommentContext context)
+        public override void ExitComment([NotNull] CommentContext context)
         {
             //No-op
         }
 
 
-        public override void EnterBinaryExpression([NotNull] CK3Parser.BinaryExpressionContext context)
+        public override void EnterBinaryExpression([NotNull] BinaryExpressionContext context)
         {
-            var raw = GetRawContents(context);
-            var key = GetRawContents(context.token(0));
-            var value = GetRawContents(context.token(1));
+            var keyToken = context.token(0);
+            var key = GetTokenText(context.token(0));
+            var value = GetTokenText(context.token(1));
             var scoper = context.SCOPER().ToString();
-            var binaryExpression = new BinaryExpression(key, scoper, value) { Raw = raw };
+            var binaryExpression = new BinaryExpression(key, scoper, value);
             ApplyRange(context, binaryExpression);
             thisBlock.Peek().AddChild(binaryExpression);
         }
-        public override void ExitBinaryExpression([NotNull] CK3Parser.BinaryExpressionContext context)
+        public override void ExitBinaryExpression([NotNull] BinaryExpressionContext context)
         {
             //No-op
         }
 
 
-        public override void EnterAnonymousToken([NotNull] CK3Parser.AnonymousTokenContext context)
+        public override void EnterAnonymousToken([NotNull] AnonymousTokenContext context)
         {
             var token = new AnonymousToken
             {
-                Raw = GetRawContents(context),
-                Value = GetRawContents(context.token())
+                Value = GetTokenText(context.token())
             };
             ApplyRange(context, token);
             thisBlock.Peek().AddChild(token);
         }
 
-        public override void ExitAnonymousToken([NotNull] CK3Parser.AnonymousTokenContext context)
+        public override void ExitAnonymousToken([NotNull] AnonymousTokenContext context)
         {
             //No-op
         }
 
-        private string GetRawContents(ParserRuleContext context)
+        private string GetTokenText(TokenContext context)
         {
-            if (context == null)
+            if (context?.Start == null)
                 return "";
-
-            int startIndex = context.Start.StartIndex;
-            int endIndex = context.Start.StopIndex;
-            if (context?.Stop != null)
-            {
-                endIndex = context.Stop.StopIndex + 1;
-            }
-            return file.Raw.Substring(startIndex, endIndex - startIndex);
+            return context.GetText();
         }
 
         private void ApplyRange(ParserRuleContext context, Node node)
         {
-            node.StartLine = context.Start.Line - 1;
-            node.StartIndex = context.Start.Column;
+            var startLine = context.Start.Line - 1;
+            var startColumn = context.Start.Column;
+            var startOffset = context.Start.StartIndex;
 
-            node.EndLine = context.Stop?.Line - 1 ?? context.Start.Line - 1;
-            if (context.Stop != null)
+            node.Start = new Position
             {
-                node.EndLine = context.Stop.Line - 1;
-                node.EndIndex = context.Stop.Column + context.Stop.Text.Length;
-            } else
+                Line = startLine,
+                Column = startColumn,
+                Offset = startOffset
+            };
+
+            var finalToken = context.Stop ?? context.Start;
+            var endLine = finalToken.Line - 1;
+            var endColumn = finalToken.Column + finalToken.Text.Length;
+            var endOffset = finalToken.StopIndex + 1;
+
+            node.End = new Position
             {
-                node.EndLine = context.Start.Line - 1;
-                node.EndIndex = context.Start.Column + context.Start.Text.Length;
-            }
+                Line = endLine,
+                Column = endColumn,
+                Offset = endOffset
+            };
         }
     }
 }

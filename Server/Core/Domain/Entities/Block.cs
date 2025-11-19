@@ -24,10 +24,10 @@ namespace CK3Analyser.Core.Domain.Entities
 
             Children.Add(node);
 
-            if (addText)
-            {
-                Raw += node.Raw;
-            }
+            //if (addText)
+            //{
+            //    Raw += node.Raw;
+            //}
         }
 
         public void InsertChild(Node newNode, Node prevSibling)
@@ -45,7 +45,7 @@ namespace CK3Analyser.Core.Domain.Entities
             }
 
             prevSibling.NextSibling = newNode;
-            Raw = Raw.Replace(prevSibling.Raw, prevSibling.Raw + newNode.Raw);
+            //Raw = Raw.Replace(prevSibling.Raw, prevSibling.Raw + newNode.Raw);
         }
 
         public void ReplaceChild(Node original, Node replacement)

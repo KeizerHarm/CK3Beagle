@@ -1,14 +1,38 @@
-﻿using System.Text;
+﻿using System;
+using System.Text;
 
 namespace CK3Analyser.Core.Domain.Entities
 {
+    public readonly struct Position(int line, int column, int offset)
+    {
+        //0-based line number
+        public int Line { get; init; } = line;
+        //0-based character index in line
+        public int Column { get; init; } = column;
+        //0-based absolute index in file
+        public int Offset { get; init; } = offset;
+
+        public override string ToString() => this.GenericToString();
+    }
+
     public abstract class Node
     {
-        public string Raw { get; set; }
-        public int StartLine { get; set; }
-        public int EndLine { get; set; }
-        public int StartIndex { get; set; }
-        public int EndIndex { get; set; }
+        public string StringRepresentation 
+        {
+            get
+            {
+                return File.GetContentSelectionString(Start.Offset, End.Offset);
+            }
+        }
+        public ReadOnlySpan<char> SpanRepresentation 
+        {
+            get
+            {
+                return File.GetContentSelectionSpan(Start.Offset, End.Offset);
+            }
+        }
+        public Position Start { get; set; }
+        public Position End { get; set; }
 
         public Node PrevSibling { get; set; }
         public Node PrevNonCommentSibling {

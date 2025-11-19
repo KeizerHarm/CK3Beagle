@@ -180,7 +180,7 @@ namespace CK3Analyser.Analysis.Comparing.Building
             }
             if (baseNode is AnonymousToken baseToken && editNode is AnonymousToken editToken)
             {
-                return StringMatches(baseToken.Raw, editToken.Raw, out similarity);
+                return StringMatches(baseToken.StringRepresentation, editToken.StringRepresentation, out similarity);
             }
             if (baseNode is BinaryExpression baseBinExp && editNode is BinaryExpression editBinExp)
             {

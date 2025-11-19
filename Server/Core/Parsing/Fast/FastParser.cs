@@ -8,7 +8,7 @@ namespace CK3Analyser.Core.Parsing.Fast
     {
         public void ParseFile(ScriptFile file)
         {
-            var input = File.ReadAllText(file.Raw);
+            var input = File.ReadAllText(file.StringRepresentation);
             GatherDeclarations(file);
         }
 
@@ -20,7 +20,7 @@ namespace CK3Analyser.Core.Parsing.Fast
             int currentDeclarationStartIndex = 0;
             int prevDeclarationEndIndex = 0;
             string currentDeclarationToken = null;
-            string text = file.Raw;
+            string text = file.StringRepresentation;
             int length = text.Length - 1;
 
             for (int index = 0; index <= length; index++)
@@ -58,7 +58,7 @@ namespace CK3Analyser.Core.Parsing.Fast
                             var preamble = text.Substring(prevDeclarationEndIndex + 1, preambleLength);
                             var decl = new Declaration(currentDeclarationToken, file.ExpectedDeclarationType)
                             {
-                                Raw = preamble + raw
+                                //Raw = preamble + raw
                             };
                             prevDeclarationEndIndex = index;
                             file.AddDeclaration(decl);
@@ -73,10 +73,7 @@ namespace CK3Analyser.Core.Parsing.Fast
                 var raw = text.Substring(currentDeclarationStartIndex, length - currentDeclarationStartIndex - 1);
                 var preambleLength = Math.Max(0, currentDeclarationStartIndex - prevDeclarationEndIndex - 1);
                 var preamble = text.Substring(prevDeclarationEndIndex + 1, preambleLength);
-                var decl = new Declaration(currentDeclarationToken, file.ExpectedDeclarationType)
-                {
-                    Raw = preamble + raw
-                };
+                var decl = new Declaration(currentDeclarationToken, file.ExpectedDeclarationType);
                 file.AddDeclaration(decl);
             }
         }

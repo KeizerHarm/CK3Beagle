@@ -17,7 +17,7 @@ namespace CK3Analyser.Analysis.Detectors
         public override void EnterScriptFile(ScriptFile scriptFile)
         {
             int noOfLines = 1;
-            foreach (char c in scriptFile.Raw)
+            foreach (char c in scriptFile.StringRepresentation)
                 if (c == '\n') noOfLines++;
 
             if (noOfLines >= _settings.File_MaxSize)
