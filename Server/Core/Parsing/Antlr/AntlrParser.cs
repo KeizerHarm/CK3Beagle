@@ -38,6 +38,8 @@ namespace CK3Analyser.Core.Parsing.Antlr
             lexer.RemoveErrorListeners();
             parser = new CK3Parser(commonTokenStream);
             parser.RemoveErrorListeners();
+            parser.BuildParseTree = false;
+            parser.AddParseListener(new ParseListener(file));
 
             //var listener_lexer = new ErrorListener<int>();
             //var listener_parser = new ErrorListener<IToken>();
@@ -45,8 +47,8 @@ namespace CK3Analyser.Core.Parsing.Antlr
             //parser.AddErrorListener(listener_parser);
 
             var tree = parser.file();
-            var listener = new ParsingListener(file);
-            walker.Walk(listener, tree);
+            //var listener = new ParsingListener(file);
+            //walker.Walk(listener, tree);
         }
     }
 }

@@ -5,8 +5,8 @@ namespace CK3Analyser.Core.Domain.Entities
 {
     public class NamedBlock : Block
     {
-        public string Key { get; }
-        public string Scoper { get; }
+        public string Key { get; set; }
+        public string Scoper { get; set; }
 
         //private BlockType _ownBlockType;
         //public BlockType BlockType {
@@ -21,7 +21,7 @@ namespace CK3Analyser.Core.Domain.Entities
         //    }
         //}
 
-        public NamedBlock(string key, string scoper = "=")
+        public NamedBlock(string key = "", string scoper = "=")
         {
             Key = key;
             Scoper = scoper;

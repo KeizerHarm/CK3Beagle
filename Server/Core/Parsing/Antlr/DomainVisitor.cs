@@ -46,7 +46,7 @@ namespace CK3Analyser.Core.Parsing.Antlr
             var namedBlocks = context.children.OfType<CK3Parser.NamedBlockContext>();
             foreach (var namedBlock in namedBlocks)
             {
-                var key = namedBlock.token().GetText();
+                var key = namedBlock.identifier.Text;
                 var declarationType = file.ExpectedDeclarationType;
 
                 var declaration = new Declaration(key, declarationType);

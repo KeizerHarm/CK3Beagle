@@ -8,15 +8,15 @@ script : (
     | anonymousToken
     | comment ) + ;
 
-namedBlock : identifier=token SCOPER '{' script? '}';
+namedBlock : identifier=TOKENCHAIN SCOPER '{' script? '}';
 anonymousBlock : '{' script? '}';
-binaryExpression : key=token SCOPER value=token;
-anonymousToken : identifier=token;
-token : TOKEN ( ( '.' | '|' ) TOKEN)*;
+binaryExpression : key=TOKENCHAIN SCOPER value=TOKENCHAIN;
+anonymousToken : identifier=TOKENCHAIN;
 comment: COMMENT;
 
 SCOPER : ('=' | '?=' | '<' | '<=' | '>' | '>=' | '!=' | '==');
 COMMENT : '#' ~[\r\n]* '\r'?  ( '\n' | EOF );
+TOKENCHAIN : TOKEN ( ( '.' | '|' ) TOKEN)*;
 TOKEN :
     QUOTED_TOKEN
     | CALCULATED_VAR

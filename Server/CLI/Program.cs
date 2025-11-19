@@ -81,12 +81,9 @@ namespace CK3Analyser.CLI
             await analyser.Analyse(GlobalResources.Modded, value => { Console.WriteLine(value); return Task.CompletedTask; });
             analysisTimer.Stop();
             Console.WriteLine($"Analysed a total of {GlobalResources.Modded.Files.Count} files");
-            //Console.WriteLine($"Found { analyser.LogEntries.Count()} issues");
+            Console.WriteLine($"Found { analyser.LogEntries.Count()} issues");
             Console.WriteLine($"Parsing time: {parsingTimer.Elapsed}");
-            //Console.WriteLine($"Analysis time: {analysisTimer.Elapsed}");
-
-            var totalLog = string.Join("\n\n", analyser.LogEntries.Select(x => x.ToString()));
-            var length = totalLog.Length;
+            Console.WriteLine($"Analysis time: {analysisTimer.Elapsed}");
             //stopwatch.Restart();
             //GatherDeclarations(fastParser, Modded);
             //stopwatch.Stop();

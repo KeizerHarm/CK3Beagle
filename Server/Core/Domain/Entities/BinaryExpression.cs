@@ -4,11 +4,11 @@ namespace CK3Analyser.Core.Domain.Entities
 {
     public class BinaryExpression : Node
     {
-        public string Key { get; }
-        public string Scoper { get; }
-        public string Value { get; }
+        public string Key { get; set; }
+        public string Scoper { get; set; }
+        public string Value { get; set; }
 
-        public BinaryExpression(string key, string scoper, string value)
+        public BinaryExpression(string key = "", string scoper = "", string value = "")
         {
             Key = key;
             Scoper = scoper;
