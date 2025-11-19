@@ -86,7 +86,9 @@ namespace CK3Analyser.Analysis.Detectors
             int currentDepth = 0;
             var lines = new List<Line>();
             int[] linesThatWorkForIndentationTypes = new int[Enum.GetValues<IndentationType>().Length];
+
             string[] rawLines = scriptFile.StringRepresentation.Split('\n');
+
             for (int i = 0; i < rawLines.Length; i++)
             {
                 string line = rawLines[i];
@@ -94,42 +96,82 @@ namespace CK3Analyser.Analysis.Detectors
 
                 var lineObj = new Line
                 {
-                    Depth = currentDepth,
                     LineIndexInFile = i
                 };
-                bool isInLeadingWhitespace = true;
-                bool isInQuotedString = false;
-                int localBracketBalance = 0;
 
-                foreach (var charac in line)
+                int index = 0;
+                int leadingClosers = 0;
+                bool inQuoted = false;
+
+                // Count whitespace
+                while (index < line.Length && char.IsWhiteSpace(line[index]))
                 {
-                    if (charac == '"') isInQuotedString = !isInQuotedString;
-                    if (!isInQuotedString)
-                    {
+                    if (line[index] == ' ') lineObj.LeadingSpaces++;
+                    else if (line[index] == '\t') lineObj.LeadingTabs++;
+                    index++;
+                }
 
-                        if (charac == '#')
+                // Count closing parens
+                while (index < line.Length && (line[index] == '}' || char.IsWhiteSpace(line[index]) ||
+                    line[index] == '#' && _settings.CommentHandling == CommentHandling.CommentedBracketsCount))
+                {
+                    if (line[index] ==  '}')
+                        leadingClosers++;
+
+                    index++;
+                }
+
+                // Determine current depth
+                currentDepth -= leadingClosers;
+                if (currentDepth < 0) currentDepth = 0;
+
+                lineObj.Depth = currentDepth;
+
+                // Rest of line
+                int balance = 0;
+                bool inLeadingWhitespace = true;
+
+                while (index < line.Length)
+                {
+                    char c = line[index];
+
+                    if (c == '"')
+                    {
+                        inQuoted = !inQuoted;
+                        index++;
+                        continue;
+                    }
+
+                    if (!inQuoted)
+                    {
+                        // Comment handling
+                        if (c == '#')
                         {
                             if (_settings.CommentHandling == CommentHandling.CommentsIgnored)
-                                if (isInLeadingWhitespace)
+                            {
+                                if (inLeadingWhitespace)
                                     goto NEXTLINE;
                                 else
                                     break;
-                            if (_settings.CommentHandling == CommentHandling.NoSpecialTreatment)
-                                    break;
-                        }
-                        if (!char.IsWhiteSpace(charac)) isInLeadingWhitespace = false;
+                            }
 
-                        if (charac == ' ' && isInLeadingWhitespace) lineObj.LeadingSpaces++;
-                        if (charac == '\t' && isInLeadingWhitespace) lineObj.LeadingTabs++;
-                        if (charac == '{') localBracketBalance++;
-                        if (charac == '}') localBracketBalance--;
+                            if (_settings.CommentHandling == CommentHandling.NoSpecialTreatment)
+                                break;
+                        }
+
+                        if (!char.IsWhiteSpace(c))
+                            inLeadingWhitespace = false;
+
+                        if (c == '{') balance++;
+                        if (c == '}') balance--;
                     }
+
+                    index++;
                 }
-                currentDepth += localBracketBalance;
-                if (localBracketBalance < 0)
-                {
-                    lineObj.Depth += localBracketBalance;
-                }
+
+                currentDepth += balance;
+                if (currentDepth < 0) currentDepth = 0;
+
 
                 foreach (var indentationType in Enum.GetValues<IndentationType>())
                 {
@@ -137,14 +179,15 @@ namespace CK3Analyser.Analysis.Detectors
                         linesThatWorkForIndentationTypes[(int)indentationType]++;
                 }
                 lines.Add(lineObj);
+
             NEXTLINE:;
             }
 
-            var lineCount = lines.Where(x => x.Depth > 0).Count();
+            var relevantLineCount = lines.Count(x => x.Depth > 0);
             var detectedIndentationType = IndentationType.Inconclusive;
             foreach (var indentationType in Enum.GetValues<IndentationType>())
             {
-                if (linesThatWorkForIndentationTypes[(int)indentationType] >= lineCount * 2 / 3)
+                if (linesThatWorkForIndentationTypes[(int)indentationType] >= relevantLineCount * 2 / 3)
                 {
                     detectedIndentationType = indentationType;
                 }
@@ -173,19 +216,14 @@ namespace CK3Analyser.Analysis.Detectors
 
             public readonly bool IndentationTypeWorks(IndentationType type)
             {
-                switch (type)
+                return type switch
                 {
-                    case IndentationType.Tab:
-                        return Depth == LeadingTabs;
-                    case IndentationType.TwoSpaces:
-                        return Depth * 2 == LeadingSpaces;
-                    case IndentationType.ThreeSpaces:
-                        return Depth * 3 == LeadingSpaces;
-                    case IndentationType.FourSpaces:
-                        return Depth * 4 == LeadingSpaces;
-                    default:
-                        return false;
-                }
+                    IndentationType.Tab => Depth == LeadingTabs,
+                    IndentationType.TwoSpaces => Depth * 2 == LeadingSpaces,
+                    IndentationType.ThreeSpaces => Depth * 3 == LeadingSpaces,
+                    IndentationType.FourSpaces => Depth * 4 == LeadingSpaces,
+                    _ => false,
+                };
             }
         }
     }

@@ -8,6 +8,9 @@
 	bb = {
 		c = { a = b }
 	}
+	bb = {
+		c = { a = b }
+	}
 				#Test test
 #TEEST
 
