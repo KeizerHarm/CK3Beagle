@@ -172,6 +172,7 @@ namespace CK3Analyser.Analysis.Detectors
                     index++;
                 }
 
+                // Reckon all
                 currentDepth += balance;
                 if (currentDepth < 0) currentDepth = 0;
 
@@ -184,7 +185,6 @@ namespace CK3Analyser.Analysis.Detectors
                     }
                     lines.Add(lineObj);
                 }
-
 
             NEXTLINE:;
             }

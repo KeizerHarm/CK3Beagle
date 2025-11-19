@@ -12,11 +12,38 @@ namespace CK3Analyser.Analysis.Detectors
     public class DuplicationDetector : BaseDetector
     {
         private readonly DuplicationSettings _settings;
+        private readonly Dictionary<int, string> SingleCloneMessages = new Dictionary<int, string>(50);
+        private readonly Dictionary<(int, int), string> MultiCloneMessages = new Dictionary<(int, int), string>(50);
 
         public DuplicationDetector(ILogger logger, Context context, DuplicationSettings settings) : base(logger, context)
         {
             _settings = settings;
         }
+
+        public string GetMessage(int size, int copies)
+        {
+            if (copies == 2)
+            {
+                if (SingleCloneMessages.ContainsKey(size))
+                    return SingleCloneMessages[size];
+
+                var singleCloneMessage = SingleCloneMessages[size] = $"{size}-statement block is duplicate!";
+                if (size < 50)
+                    SingleCloneMessages[size] = singleCloneMessage;
+
+                return singleCloneMessage;
+            }
+
+            if (MultiCloneMessages.ContainsKey((size, copies)))
+                return MultiCloneMessages[(size, copies)];
+
+            var multiCloneMessage = MultiCloneMessages[(size, copies)] = $"{size}-statement block occurs {copies} times!";
+            if (size < 50 && copies < 50)
+                MultiCloneMessages[(size, copies)] = multiCloneMessage;
+
+            return multiCloneMessage;
+        }
+
 
         //private readonly Dictionary<int, List<BinaryExpression>> binaryExpressionsByKeyHash = [];
         //private readonly Dictionary<int, List<BinaryExpression>> binaryExpressionsByStrictHash = [];
@@ -169,23 +196,27 @@ namespace CK3Analyser.Analysis.Detectors
             {
                 var clones = nodes.Value;
                 var totalSize = clones.First().GetSize();
+                var msg = GetMessage(totalSize, clones.Count);
 
-                foreach (var node in clones) {
-                    var msg = "";
-                    var firstOtherLoc = clones.First(x => x != node);
-
-                    if (clones.Count > 2)
-                    {
-                        msg = $"{totalSize}-statement block is repeated in {clones.Count - 1} other places, first in {firstOtherLoc.GetIdentifier()}";
-                    }
-                    else
-                    {
-                        msg = $"{totalSize}-statement block duplicates block in {firstOtherLoc.GetIdentifier()}";
-                    }
-                    logger.Log(Smell.Duplication,
+                for (var i = 0; i < clones.Count; i++)
+                {
+                    var clone = clones[i];
+                    var originalLog = new LogEntry(Smell.Duplication,
                         _settings.Severity,
                         msg,
-                        node);
+                        clone.File.AbsolutePath,
+                        clone.Start,
+                        clone.End);
+
+                    var relatedLogs = new List<LogEntry>();
+
+                    for (var j = 0; j < clones.Count; j++)
+                    {
+                        if (i == j) continue;
+                        var copy = clones[j];
+                        relatedLogs.Add(LogEntry.MinimalLogEntry("Other location", copy.File.AbsolutePath, copy.Start, copy.End));
+                    }
+                    logger.Log(originalLog, [.. relatedLogs]);
                 }
             }
 

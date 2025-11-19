@@ -84,7 +84,18 @@ namespace CK3Analyser.LspInterface
                             startIndex = x.AffectedAreaStartIndex,
                             endIndex = x.AffectedAreaEndIndex,
                             message = x.Message,
-                            key = x.Smell.GetCode()
+                            key = x.Smell.GetCode(),
+                            relatedLogEntries = x.RelatedLogEntries.Select(y =>
+                                new
+                                {
+                                    file = y.Location,
+                                    startLine = y.AffectedAreaStartLine,
+                                    endLine = y.AffectedAreaEndLine,
+                                    startIndex = y.AffectedAreaStartIndex,
+                                    endIndex = y.AffectedAreaEndIndex,
+                                    message = y.Message
+                                }
+                            )
                         }
                     )
                 }

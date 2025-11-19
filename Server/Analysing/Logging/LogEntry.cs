@@ -1,4 +1,5 @@
-﻿using CK3Analyser.Core.Resources;
+﻿using CK3Analyser.Core.Domain.Entities;
+using CK3Analyser.Core.Resources;
 
 namespace CK3Analyser.Analysis.Logging
 {
@@ -12,6 +13,35 @@ namespace CK3Analyser.Analysis.Logging
         public int AffectedAreaStartIndex { get; set; }
         public int AffectedAreaEndIndex { get; set; }
         public Smell Smell { get; set; }
+        public LogEntry[] RelatedLogEntries { get; set; }
+
+        public LogEntry (Smell smell, Severity severity, string message, string location, Position startPosition, Position endPosition)
+        {
+            Severity = severity;
+            Message = message;
+            Location = location;
+            Smell = smell;
+            AffectedAreaStartLine = startPosition.Line;
+            AffectedAreaStartIndex = startPosition.Column;
+            AffectedAreaEndLine = endPosition.Line;
+            AffectedAreaEndIndex = endPosition.Column;
+        }
+
+        /// <summary>
+        /// Should only be used for secondary entries, aka related info such as duplicate sources
+        /// </summary>
+        public static LogEntry MinimalLogEntry(string message, string location, Position startPosition, Position endPosition)
+        {
+            return new LogEntry
+            {
+                Message = message,
+                Location = location,
+                AffectedAreaStartLine = startPosition.Line,
+                AffectedAreaStartIndex = startPosition.Column,
+                AffectedAreaEndLine = endPosition.Line,
+                AffectedAreaEndIndex = endPosition.Column
+            };
+        }
 
         public LogEntry(Smell smell, Severity severity, string message, string location,
             int affectedAreaStartLine = 0, int affectedAreaStartIndex = 0, int affectedAreaEndLine = 0, int affectedAreaEndIndex = 0) : this()
