@@ -39,8 +39,8 @@ namespace CK3Analyser.Analysis.Detectors
             if (lowercaseValue == "root" || lowercaseValue == "prev")
             {
                 logger.Log(
-                    Smell.KeywordAsScopeName_RootPrev,
-                    _settings.RootPrev_Severity,
+                    Smell.KeywordAsScopeName_RootOrPrev,
+                    _settings.RootOrPrev_Severity,
                     $"Saving a scope under the name {lowercaseValue}; this is almost certainly a misunderstanding. Use a more specific name for clarity",
                     node);
                 return;

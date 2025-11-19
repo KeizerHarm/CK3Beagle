@@ -167,7 +167,7 @@ namespace CK3Analyser.Core.Resources
                     new KeywordAsScopeNameSettings
                     {
                         Enabled = true,
-                        RootPrev_Severity = Severity.Warning,
+                        RootOrPrev_Severity = Severity.Warning,
                         ScopeLink_Severity = Severity.Warning,
                         ScopeType_Severity = Severity.Warning,
                     };

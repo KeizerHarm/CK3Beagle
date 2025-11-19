@@ -31,7 +31,7 @@ namespace CK3Analyser.Analysis
 
         MagicNumber,
 
-        KeywordAsScopeName_RootPrev,
+        KeywordAsScopeName_RootOrPrev,
         KeywordAsScopeName_ScopeLink,
         KeywordAsScopeName_ScopeType
     }
@@ -88,7 +88,7 @@ namespace CK3Analyser.Analysis
                 case Smell.MagicNumber:
                     return "MN.1";
 
-                case Smell.KeywordAsScopeName_RootPrev:
+                case Smell.KeywordAsScopeName_RootOrPrev:
                     return "KASN.1";
                 case Smell.KeywordAsScopeName_ScopeLink:
                     return "KASN.2";

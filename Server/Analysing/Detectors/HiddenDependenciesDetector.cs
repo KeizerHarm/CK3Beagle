@@ -14,6 +14,8 @@ namespace CK3Analyser.Analysis.Detectors
         private Declaration thisDeclaration;
         private bool usedRoot = false;
         private bool usedPrev = false;
+        private List<Node> rootUsages = [];
+        private List<Node> prevUsages = [];
         private HashSet<string> usedSavedScopes = [];
         private HashSet<string> setSavedScopes = [];
         private HashSet<string> usedVariables = [];
@@ -67,6 +69,8 @@ namespace CK3Analyser.Analysis.Detectors
             usedPrev = false;
             usedSavedScopes = [];
             usedVariables = [];
+            rootUsages = [];
+            prevUsages = [];
         }
 
         private void HandleUseOfSavedScope(Declaration declaration, string commentText, string scopeName)
@@ -121,12 +125,15 @@ namespace CK3Analyser.Analysis.Detectors
             
             if (isSmelly)
             {
-                logger.Log(
-                    Smell.HiddenDependencies_UseOfPrev,
-                    _settings.UseOfPrev_Severity,
-                    "Declaration uses 'prev' at the top level." + msg,
-                    declaration
-                );
+                foreach (var usage in prevUsages)
+                {
+                    logger.Log(
+                        Smell.HiddenDependencies_UseOfPrev,
+                        _settings.UseOfPrev_Severity,
+                        "'prev' is used at the top level." + msg,
+                        usage
+                    );
+                }
             }
         }
         private void HandleUseOfRoot(Declaration declaration, string commentText)
@@ -139,12 +146,15 @@ namespace CK3Analyser.Analysis.Detectors
 
             if (isSmelly)
             {
-                logger.Log(
-                    Smell.HiddenDependencies_UseOfRoot,
-                    _settings.UseOfRoot_Severity,
-                    "Declaration uses 'root'." + msg,
-                    declaration
-                );
+                foreach (var usage in rootUsages)
+                {
+                    logger.Log(
+                        Smell.HiddenDependencies_UseOfRoot,
+                        _settings.UseOfRoot_Severity,
+                        "'root' is used." + msg,
+                        usage
+                    );
+                }
             }
         }
 
@@ -211,7 +221,7 @@ namespace CK3Analyser.Analysis.Detectors
 
             var key = namedBlock.Key.ToLowerInvariant();
             var isTopLevel = namedBlock.Parent == thisDeclaration;
-            AnalyseToken(key, isTopLevel);
+            AnalyseToken(key, isTopLevel, namedBlock);
             //if (scopeSettingBlocks.Contains(key))
             //{
             //    var setScopeName = namedBlock.Children.OfType<BinaryExpression>().FirstOrDefault(x => x.Key == "name")?.Value;
@@ -229,35 +239,37 @@ namespace CK3Analyser.Analysis.Detectors
 
             var key = binaryExpression.Key.ToLowerInvariant();
             var isTopLevel = binaryExpression.Parent == thisDeclaration;
-            AnalyseToken(key, isTopLevel);
-            AnalyseToken(binaryExpression.Value.ToLowerInvariant(), isTopLevel);
+            AnalyseToken(key, isTopLevel, binaryExpression);
+            AnalyseToken(binaryExpression.Value.ToLowerInvariant(), isTopLevel, binaryExpression);
         }
 
-        private void AnalyseToken(string key, bool isTopLevel)
+        private void AnalyseToken(string key, bool isTopLevel, Node node)
         {
             if (key.Contains('.'))
             {
                 var subkeys = key.Split('.');
                 foreach (var subkey in subkeys)
                 {
-                    DetermineKeywordUsage(subkey, isTopLevel);
+                    DetermineKeywordUsage(subkey, isTopLevel, node);
                 }
             }
             else
             {
-                DetermineKeywordUsage(key, isTopLevel);
+                DetermineKeywordUsage(key, isTopLevel, node);
             }
         }
 
-        private void DetermineKeywordUsage(string key, bool isTopLevel)
+        private void DetermineKeywordUsage(string key, bool isTopLevel, Node node)
         {
             if (key == "root")
             {
                 usedRoot = true;
+                rootUsages.Add(node);
             }
             else if (key == "prev" && isTopLevel)
             {
                 usedPrev = true;
+                prevUsages.Add(node);
             }
             //else if (key.StartsWith("scope:"))
             //{
