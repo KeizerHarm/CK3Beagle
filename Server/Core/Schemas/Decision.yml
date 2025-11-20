@@ -1,0 +1,14 @@
+Decision:
+ HOME: "common/decisions"
+ picture:
+  trigger: TRIGGERBLOCK
+ is_shown: TRIGGERBLOCK
+ is_valid: TRIGGERBLOCK
+ is_valid_showing_failures_only: TRIGGERBLOCK
+ should_create_alert: TRIGGERBLOCK
+ effect: EFFECTBLOCK
+ ai_potential: TRIGGERBLOCK
+ widget:
+  item:
+   is_shown: TRIGGERBLOCK
+   is_valid: TRIGGERBLOCK

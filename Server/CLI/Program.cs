@@ -7,6 +7,10 @@ using CK3Analyser.Core.Parsing;
 using System.Linq;
 using CK3Analyser.Analysis;
 using System.Threading.Tasks;
+using CK3Analyser.Core.Resources.Semantics;
+using System.Collections.Generic;
+using CK3Analyser.Analysis.Logging;
+using System.Runtime.InteropServices;
 
 namespace CK3Analyser.CLI
 {
@@ -18,7 +22,7 @@ namespace CK3Analyser.CLI
             await program.Go();
         }
 
-        private static string OldVanillaPath = @"C:\Program Files (x86)\Steam\steamapps\common\Crusader Kings III Beta\game";
+        private static string OldVanillaPath = @"C:\Program Files (x86)\Steam\steamapps\common\Crusader Kings III\game";
         private static string ModdedPath = @"C:\Users\Harm\Documents\Paradox Interactive\Crusader Kings III\mod\T4N-CK3\T4N";
         private static string NewVanillaPath = @"C:\Program Files (x86)\Steam\steamapps\common\Crusader Kings III\game";
         private static string LogsFolder = @"C:\Users\Harm\Documents\Paradox Interactive\Crusader Kings III\logs";
@@ -35,6 +39,7 @@ namespace CK3Analyser.CLI
             GlobalResources.Modded = new Context(ModdedPath, ContextType.Modded);
             GlobalResources.New = new Context(NewVanillaPath, ContextType.New);
             GlobalResources.Configuration = new Configuration(true);
+            GlobalResources.SymbolTable = new SymbolTable();
 
 
             //var fastParser = new FastParser();
@@ -84,6 +89,8 @@ namespace CK3Analyser.CLI
             Console.WriteLine($"Found { analyser.LogEntries.Count()} issues");
             Console.WriteLine($"Parsing time: {parsingTimer.Elapsed}");
             Console.WriteLine($"Analysis time: {analysisTimer.Elapsed}");
+            var returnMessage = GetReturnMessage(analyser.LogEntries).ToString();
+            var size = returnMessage.Length;
             //stopwatch.Restart();
             //GatherDeclarations(fastParser, Modded);
             //stopwatch.Stop();
@@ -92,6 +99,42 @@ namespace CK3Analyser.CLI
             //GatherDeclarations(fastParser, New);
             //stopwatch.Stop();
             //Console.WriteLine($"Elapsed (new vanilla): {stopwatch.Elapsed}");
+       }
+
+        private object GetReturnMessage(IEnumerable<LogEntry> logEntries)
+        {
+            return new
+            {
+                type = "analysis",
+                payload = new
+                {
+                    summary = $"Found {logEntries.Count()} issues",
+                    smells = string.Join(',', logEntries.Select(x =>
+                        new
+                        {
+                            severity = x.Severity,
+                            file = x.Location,
+                            startLine = x.AffectedAreaStartLine,
+                            endLine = x.AffectedAreaEndLine,
+                            startIndex = x.AffectedAreaStartIndex,
+                            endIndex = x.AffectedAreaEndIndex,
+                            message = x.Message,
+                            key = x.Smell.GetCode(),
+                            relatedLogEntries = string.Join(',', x.RelatedLogEntries.Select(y =>
+                                new
+                                {
+                                    file = y.Location,
+                                    startLine = y.AffectedAreaStartLine,
+                                    endLine = y.AffectedAreaEndLine,
+                                    startIndex = y.AffectedAreaStartIndex,
+                                    endIndex = y.AffectedAreaEndIndex,
+                                    message = y.Message
+                                }
+                            ))
+                        }
+                    ))
+                }
+            };
         }
     }
 }

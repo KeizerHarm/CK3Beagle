@@ -46,7 +46,7 @@ namespace CK3Analyser.Core.Domain.Entities
         private int _strictHashCode;
         public override int GetStrictHashCode()
         {
-            if (_strictHashCode == 0)
+            if (_strictHashCode == 0 && NodeType != NodeType.NonStatement)
             {
                 var hashCode = new HashCode();
                 hashCode.Add(Key);

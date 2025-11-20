@@ -26,8 +26,8 @@ namespace CK3Analyser.Core.Parsing
                 await progressDelegate("Completed parsing " + declarationType.ToString());
             }
             GlobalResources.Lock();
-            //Console.WriteLine("Done with first pass");
-            new SecondPassHandler().ExecuteSecondPass(context);
+            Console.WriteLine("Done with first pass");
+            new SemanticPassHandler().ExecuteSemanticPass(context);
             //Console.WriteLine("Done with second pass");
         }
 

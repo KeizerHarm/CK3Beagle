@@ -34,10 +34,7 @@ namespace CK3Analyser.Core.Domain.Entities
             {
                 var hashCode = new HashCode();
                 hashCode.Add(1); //Acknowledge existence of anonymous block in hash algorithm but not with distinct identity
-                foreach (var relevantChild in Children.Where(x => x.NodeType != NodeType.NonStatement))
-                {
-                    hashCode.Add(relevantChild.GetStrictHashCode());
-                }
+                Children.ForEach(x => hashCode.Add(x.GetStrictHashCode()));
                 _strictHashCode = hashCode.ToHashCode();
             }
 

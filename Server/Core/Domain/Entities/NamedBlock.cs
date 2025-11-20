@@ -8,19 +8,6 @@ namespace CK3Analyser.Core.Domain.Entities
         public string Key { get; set; }
         public string Scoper { get; set; }
 
-        //private BlockType _ownBlockType;
-        //public BlockType BlockType {
-        //    get {
-        //        if (_ownBlockType != BlockType.None)
-        //            return _ownBlockType;
-
-        //        if (Parent is NamedBlock blockParent)
-        //            _ownBlockType = blockParent.BlockType;
-
-        //        return _ownBlockType;
-        //    }
-        //}
-
         public NamedBlock(string key = "", string scoper = "=")
         {
             Key = key;
@@ -60,11 +47,12 @@ namespace CK3Analyser.Core.Domain.Entities
             if (_strictHashCode == 0)
             {
                 var hashCode = new HashCode();
-                hashCode.Add(Key);
-                foreach (var relevantChild in Children.Where(x => x.NodeType != NodeType.NonStatement))
+                if (NodeType != NodeType.NonStatement)
                 {
-                    hashCode.Add(relevantChild.GetStrictHashCode());
+                    hashCode.Add(Key);
                 }
+                Children.ForEach(x => hashCode.Add(x.GetStrictHashCode()));
+
                 _strictHashCode = hashCode.ToHashCode();
             }
 

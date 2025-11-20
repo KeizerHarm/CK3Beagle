@@ -1,0 +1,20 @@
+CasusBelliType:
+ HOME: "common/casus_belli_types"
+ on_declaration: EFFECTBLOCK
+ on_victory: EFFECTBLOCK
+ on_white_peace: EFFECTBLOCK
+ on_defeat: EFFECTBLOCK
+ on_invalidated: EFFECTBLOCK
+ on_victory_desc: EFFECTBLOCK
+ on_defeat_desc: EFFECTBLOCK
+ on_white_peace_desc: EFFECTBLOCK
+ should_invalidate: TRIGGERBLOCK
+ mutually_exclusive_titles: TRIGGERBLOCK
+ allowed_for_character: TRIGGERBLOCK
+ allowed_for_character_display_regardless: TRIGGERBLOCK
+ allowed_against_character: TRIGGERBLOCK
+ allowed_against_character_display_regardless: TRIGGERBLOCK
+ valid_to_start: TRIGGERBLOCK
+ valid_to_start_display_regardless: TRIGGERBLOCK
+ is_allowed_claim_title: TRIGGERBLOCK
+ ai_can_target_all_titles: TRIGGERBLOCK

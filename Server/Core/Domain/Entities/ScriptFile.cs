@@ -127,10 +127,7 @@ namespace CK3Analyser.Core.Domain.Entities
             {
                 var hashCode = new HashCode();
                 hashCode.Add(RelativePath);
-                foreach (var relevantChild in Children.Where(x => x.GetType() != typeof(Comment)))
-                {
-                    hashCode.Add(relevantChild.GetStrictHashCode());
-                }
+                Children.ForEach(x => hashCode.Add(x.GetStrictHashCode()));
                 _strictHashCode = hashCode.ToHashCode();
             }
 

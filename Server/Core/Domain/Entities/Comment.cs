@@ -17,14 +17,14 @@ namespace CK3Analyser.Core.Domain.Entities
 
         public override int GetLooseHashCode()
         {
-            //Should never be called for comments
-            return 1;
+            //Comments don't count
+            return 0;
         }
 
         public override int GetStrictHashCode()
         {
-            //Should never be called for comments
-            throw new System.InvalidOperationException();
+            //Comments don't count
+            return 0;
         }
     }
 }

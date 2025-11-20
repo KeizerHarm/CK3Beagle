@@ -118,7 +118,6 @@ namespace CK3Analyser.LspInterface
             var json = JsonSerializer.Serialize(message);
             var content = Encoding.UTF8.GetBytes(json);
             var header = Encoding.ASCII.GetBytes($"Content-Length: {content.Length}\r\n\r\n");
-
             await StdOut.WriteAsync(header, 0, header.Length);
             await StdOut.WriteAsync(content, 0, content.Length);
             await StdOut.FlushAsync();

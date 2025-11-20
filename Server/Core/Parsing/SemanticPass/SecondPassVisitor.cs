@@ -65,9 +65,11 @@ namespace CK3Analyser.Core.Parsing.SemanticPass
                 if (node.Parent != null)
                 {
                     if (node.Parent.SymbolType.GetContextType() == Domain.Symbols.BlockContext.Trigger
+                        || node.Parent.NodeType == NodeType.Trigger
                         || keysThatAreProbablyTriggers.Contains(parentKey))
                         return NodeType.Trigger;
-                    if (node.Parent.SymbolType.GetContextType() == Domain.Symbols.BlockContext.Effect)
+                    if (node.Parent.SymbolType.GetContextType() == Domain.Symbols.BlockContext.Effect
+                        || node.Parent.NodeType == NodeType.Effect)
                         return NodeType.Effect;
                 }
             }

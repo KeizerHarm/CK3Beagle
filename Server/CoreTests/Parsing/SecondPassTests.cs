@@ -74,6 +74,8 @@ namespace CK3Analyser.Core.Parsing
                 && sendInterfaceToast1.Children[2].NodeType == NodeType.NonStatement
                 && sendInterfaceToast1.Children[3].NodeType == NodeType.Effect
                 );
+
+            Assert.Equal(11, event1.GetSize());
         }
 
         [Fact]

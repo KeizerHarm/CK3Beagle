@@ -83,19 +83,19 @@ namespace CK3Analyser.Analysis.Detectors
             //Consider node's children
             if (nodesByStrictHash.ContainsKey(namedBlock.GetStrictHashCode()))
             {
-                sequencesByParentStrictHash.Remove(namedBlock.GetStrictHashCode());
+                //sequencesByParentStrictHash.Remove(namedBlock.GetStrictHashCode());
             }
             else
             {
-                var sequence = namedBlock.Children.Where(x => x.NodeType != NodeType.NonStatement).ToList();
-                if (sequence.Count <= 1) 
-                    return;
+                //var sequence = namedBlock.Children.Where(x => x.NodeType != NodeType.NonStatement).ToList();
+                //if (sequence.Count <= 1) 
+                //    return;
 
-                var totalWeight = sequence.Sum(x => x.GetSize());
-                if (totalWeight > _settings.MinSize)
-                {
-                    sequencesByParentStrictHash.AddToDictCollection(sequence, namedBlock.GetStrictHashCode());
-                }
+                //var totalWeight = sequence.Sum(x => x.GetSize());
+                //if (totalWeight > _settings.MinSize)
+                //{
+                //    sequencesByParentStrictHash.AddToDictCollection(sequence, namedBlock.GetStrictHashCode());
+                //}
             }
         }
 
