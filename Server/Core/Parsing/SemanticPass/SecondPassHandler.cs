@@ -1,6 +1,6 @@
 ﻿using CK3Analyser.Core.Domain;
 
-namespace CK3Analyser.Core.Parsing.SecondPass
+namespace CK3Analyser.Core.Parsing.SemanticPass
 {
     public class SecondPassHandler
     {

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using CK3Analyser.Core.Generated;
+using System;
 using System.Linq;
 
 namespace CK3Analyser.Core.Domain.Entities

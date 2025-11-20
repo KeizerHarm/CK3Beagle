@@ -38,10 +38,10 @@ namespace CK3Analyser.Generation
                     switch (value)
                     {
                         case "TRIGGERBLOCK":
-                            currentSchema.Peek().BLOCKTYPE = BlockType.Trigger;
+                            currentSchema.Peek().BLOCKTYPE = BlockContext.Trigger;
                             break;
                         case "EFFECTBLOCK":
-                            currentSchema.Peek().BLOCKTYPE = BlockType.Effect;
+                            currentSchema.Peek().BLOCKTYPE = BlockContext.Effect;
                             break;
                     }
                 }
@@ -54,37 +54,39 @@ namespace CK3Analyser.Generation
                         key = key.Replace("*", "");
                         schema.IsPlural = true;
                     }
-                    schema.Key = key;
+                    schema.ScriptKey = key;
 
                     if (currentSchema.Count != 0)
                     {
-                        currentSchema.Peek().Children.Add(schema);
+                        currentSchema.Peek().AddChild(schema);
                     }
                     else
                     {
                         rootSchema = schema;
+                        rootSchema.FullCodeName = rootSchema.LocalCodeName;
+                        rootSchema.SchemasInTree.Add(schema);
                     }
 
                     currentSchema.Push(schema);
                 }
                 else
                 {
-                    var leafSchema = new Schema
+                    var leafSchema = new Schema()
                     {
-                        Key = key
+                        ScriptKey = key
                     };
 
                     switch (value)
                     {
                         case "TRIGGERBLOCK":
-                            leafSchema.BLOCKTYPE = BlockType.Trigger;
+                            leafSchema.BLOCKTYPE = BlockContext.Trigger;
                             break;
                         case "EFFECTBLOCK":
-                            leafSchema.BLOCKTYPE = BlockType.Effect;
+                            leafSchema.BLOCKTYPE = BlockContext.Effect;
                             break;
                     }
 
-                    currentSchema.Peek().Children.Add(leafSchema);
+                    currentSchema.Peek().AddChild(leafSchema);
                 }
             }
 

@@ -1,29 +1,9 @@
-﻿namespace CK3Analyser.Core.Domain
-{
-    public enum DeclarationType
-    {
-        Debug,
-        ScriptedEffect,
-        ScriptedTrigger,
-        Event,
-        //Culture
-    }
+﻿using CK3Analyser.Core.Generated;
 
+namespace CK3Analyser.Core.Domain
+{
     public static class DeclarationTypeExtensions
     {
-        public static string GetEntityHome(this DeclarationType declarationType)
-        {
-            return declarationType switch
-            {
-                DeclarationType.ScriptedEffect => "common/scripted_effects",
-                DeclarationType.ScriptedTrigger => "common/scripted_triggers",
-                DeclarationType.Event => "events",
-                DeclarationType.Debug => "test",
-                //DeclarationType.Culture => "common/culture/cultures",
-                _ => "",
-            };
-        }
-
         public static bool IsMacroType(this DeclarationType declarationType)
         {
             return declarationType switch

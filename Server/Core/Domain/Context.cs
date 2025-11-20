@@ -1,6 +1,8 @@
 ﻿using CK3Analyser.Core.Domain.Entities;
+using CK3Analyser.Core.Generated;
 using System;
 using System.Collections.Generic;
+
 
 namespace CK3Analyser.Core.Domain
 {

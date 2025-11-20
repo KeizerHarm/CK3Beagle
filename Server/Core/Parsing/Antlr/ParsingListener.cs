@@ -1,6 +1,6 @@
 ﻿using Antlr4.Runtime;
 using Antlr4.Runtime.Misc;
-using CK3Analyser.Core.Domain;
+using CK3Analyser.Core.Generated;
 using CK3Analyser.Core.Domain.Entities;
 using System.Collections.Generic;
 using System.Linq;

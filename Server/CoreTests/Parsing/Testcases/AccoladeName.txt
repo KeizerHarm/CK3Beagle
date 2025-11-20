@@ -1,0 +1,78 @@
+# The Baghatur of the Wolf
+accolade_the_knight_of_the_animal = {
+	key = "accolade_the_knight_of_the_animal"
+
+	num_options = 1
+
+	potential = {
+		always = no
+	}
+
+	option = {
+		trigger = {
+			always = yes
+		}
+		random_valid = {
+			triggered_desc = {
+				trigger = {
+					scope:accolade_type = {
+						OR = {
+							type_has_accolade_category = champion
+							type_has_accolade_category = militant
+							type_has_accolade_category = ethical
+							type_has_accolade_category = subtle
+							type_has_accolade_category = aggressive
+						}
+					}
+					exists = liege
+					liege.capital_county.title_province ?= {
+						NOR = {
+							geographical_region = world_steppe_west
+							geographical_region = world_europe_north
+						}
+					}
+					NOR = {
+						has_trait = giant
+						has_trait = dull
+						has_trait = intellect_bad
+					}
+				}
+				desc = accolade_panther
+			}
+		}
+	}
+	
+	option = {
+		trigger = {
+			always = yes
+		}
+		random_valid = {
+			triggered_desc = {
+				trigger = {
+					scope:accolade_type = {
+						OR = {
+							type_has_accolade_category = champion
+							type_has_accolade_category = militant
+							type_has_accolade_category = ethical
+							type_has_accolade_category = subtle
+							type_has_accolade_category = aggressive
+						}
+					}
+					exists = liege
+					liege.capital_county.title_province ?= {
+						NOR = {
+							geographical_region = world_steppe_west
+							geographical_region = world_europe_north
+						}
+					}
+					NOR = {
+						has_trait = giant
+						has_trait = dull
+						has_trait = intellect_bad
+					}
+				}
+				desc = accolade_panther
+			}
+		}
+	}
+}

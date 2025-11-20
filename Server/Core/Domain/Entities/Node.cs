@@ -1,4 +1,5 @@
-﻿using System;
+﻿using CK3Analyser.Core.Generated;
+using System;
 using System.Text;
 
 namespace CK3Analyser.Core.Domain.Entities
@@ -109,7 +110,9 @@ namespace CK3Analyser.Core.Domain.Entities
             }
         }
 
-        public NodeType NodeType { get; set; }
+        public NodeType NodeType { get; set; } = NodeType.NonStatement;
+        public int SemanticId { get; set; } = -1;
+        public SymbolType SymbolType { get; set; } = SymbolType.Undefined;
 
         public abstract void Accept(IDomainVisitor visitor);
 

@@ -1,5 +1,6 @@
 ﻿using CK3Analyser.Core.Domain;
 using CK3Analyser.Core.Domain.Entities;
+using CK3Analyser.Core.Generated;
 
 namespace CK3Analyser.Core.Parsing
 {
@@ -73,6 +74,52 @@ namespace CK3Analyser.Core.Parsing
                 && sendInterfaceToast1.Children[2].NodeType == NodeType.NonStatement
                 && sendInterfaceToast1.Children[3].NodeType == NodeType.Effect
                 );
+        }
+
+        [Fact]
+        public void AccoladeNameDecoratedProperly()
+        {
+            //arrange
+            string[] effects = [];
+            string[] triggers = [
+                "or", "exists", "nor", "always"
+                ];
+            string[] eventTargets = [
+                "liege", "capital_county", "scope", "title_province"
+                ];
+
+
+            //act
+            var parsedFile = GetTestCase("AccoladeName", expectedDeclarationType: DeclarationType.AccoladeName,
+                effects: effects, triggers: triggers, eventTargets: eventTargets);
+
+            //assert
+            Assert.Equal(2, parsedFile.Children.Count);
+            Assert.Single(parsedFile.Declarations);
+
+            var accolade = parsedFile.Declarations.First().Value;
+            Assert.Equal(SymbolType.AccoladeName, accolade.SymbolType);
+
+            var potential = accolade.Children.OfType<NamedBlock>().Single(x => x.Key == "potential");
+            Assert.Equal(SymbolType.AccoladeName_Potential, potential.SymbolType);
+
+            var options = accolade.Children.OfType<NamedBlock>().Where(x => x.Key == "option").ToList();
+            Assert.Equal(2, options.Count);
+            Assert.Equal(SymbolType.AccoladeName_Option, options[0].SymbolType);
+            Assert.Equal(SymbolType.AccoladeName_Option, options[1].SymbolType);
+
+            var option_trigger = options[0].Children.OfType<NamedBlock>().Single(x => x.Key == "trigger");
+            Assert.Equal(SymbolType.AccoladeName_Option_Trigger, option_trigger.SymbolType);
+
+            foreach (var triggerChild in option_trigger.Children)
+            {
+                Assert.Equal(NodeType.Trigger, triggerChild.NodeType);
+            }
+
+            foreach (var triggerChild in option_trigger.Children.OfType<NamedBlock>().SelectMany(x => x.Children))
+            {
+                Assert.Equal(NodeType.Trigger, triggerChild.NodeType);
+            }
         }
     }
 }

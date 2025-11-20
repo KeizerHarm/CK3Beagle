@@ -1,4 +1,5 @@
 ﻿using CK3Analyser.Core.Domain;
+using CK3Analyser.Core.Resources.Semantics;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
@@ -20,6 +21,7 @@ namespace CK3Analyser.Core.Resources
         public static Context New { get; set; }
 
         public static Configuration Configuration { get; set; }
+        public static SymbolTable SymbolTable { get; set; }
 
         public static void AddEffects(IEnumerable<string> effects)
         {
@@ -66,6 +68,7 @@ namespace CK3Analyser.Core.Resources
             TRIGGERKEYS = null;
             EVENTTARGETS = null;
             Configuration = null;
+            SymbolTable = null;
         }
     }
 }

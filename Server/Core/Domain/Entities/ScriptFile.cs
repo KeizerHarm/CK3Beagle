@@ -1,4 +1,5 @@
-﻿using System;
+﻿using CK3Analyser.Core.Generated;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 

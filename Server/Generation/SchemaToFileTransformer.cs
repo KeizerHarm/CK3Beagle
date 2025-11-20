@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Immutable;
+using System.Linq;
 
 namespace CK3Analyser.Generation
 {
@@ -9,71 +10,82 @@ namespace CK3Analyser.Generation
         {
             var str = @"
 using CK3Analyser.Core.Domain.Entities;
+using CK3Analyser.Core.Resources;
+using CK3Analyser.Core.Resources.Semantics;
+using CK3Analyser.Core.Domain.Symbols;
 using System.Collections.Generic;
 using System.Linq;
 
 namespace CK3Analyser.Core.Generated
 {";
-            str += GetClass(schema, 1);
+            str += GetClass(schema);
             str += @"
 }";
             return str;
         }
 
 
-        private static string GetClass(Schema schema, int indent)
+        private static string GetClass(Schema schema)
         {
-            var indentation = new string('\t', indent);
             var str = @"
-" + indentation + @"public class T_" + schema.Key + @" : NamedBlock
-" + indentation + @"{";
+    public struct " + schema.FullCodeName + @" : ISymbol
+    {
+        public static int Construct(NamedBlock node)
+        {
+            var symbol = new " + schema.FullCodeName + @"
+            {";
 
-            if (schema.Home != null)
+            foreach (var child in schema.Children)
             {
-                str += @"
-" + indentation + @"    public static readonly string Home = " + schema.Home + ";";
+                if (child.IsPlural)
+                {
+                    str += @"
+                " + child.LocalCodeName + @"s = GeneratedSymbolExtensions.ConstructMany<" + child.FullCodeName + @">(node, """ + child.ScriptKey + @""", " + child.FullCodeName + @".Construct),";
+                }
+                else
+                {
+                    str += @"
+                " + child.LocalCodeName + @" = GeneratedSymbolExtensions.Construct<" + child.FullCodeName + @">(node, """ + child.ScriptKey + @""", " + child.FullCodeName + @".Construct),";
+                }
             }
-
-            if (schema.BLOCKTYPE != BlockType.Other)
-            {
-                str += @"
-" + indentation + @"    public static readonly BlockType BLOCKTYPE = " + schema.BLOCKTYPE.GetName() + ";";
-            }
-
             str += @"
-" + indentation + @"    public T_" + schema.Key + @"(string key) : base(key)
-" + indentation + @"    {
-" + indentation + @"    }";
+            };
+            node.SemanticId = GlobalResources.SymbolTable.Insert(SymbolType." + schema.FullCodeName + @", symbol);
+            node.SymbolType = SymbolType." + schema.FullCodeName + @";
+            return node.SemanticId;
+        }";
+
             foreach (var child in schema.Children)
             {
                 if (child.IsPlural)
                 {
                     str += @"
 
-" + indentation + @"    public IEnumerable<T_" + child.Key + "> " + child.Key + @" => Children.OfType<NamedBlock>().Where(x => x.Key == """ + child.Key + @""").Select(x => (T_" + child.Key + ")x);";
-                }
+        public List<int> " + child.LocalCodeName + @"s { get; set; }
+        public readonly IEnumerable<" + child.FullCodeName + @"> " + child.FullCodeName + @"Symbols(SymbolTable symbolTable) =>
+            " + child.LocalCodeName + @"s.Select(x => (" + child.FullCodeName + @")symbolTable.Lookup(SymbolType." + child.FullCodeName + @", x));";
+                } 
                 else
                 {
                     str += @"
 
-" + indentation + @"    public T_" + child.Key + " " + child.Key + @" => (T_" + child.Key + @")Children.OfType<NamedBlock>().FirstOrDefault(x => x.Key == """ + child.Key + @""");";
+        public int? " + child.LocalCodeName + @" { get; set; }
+        public readonly " + child.FullCodeName + @" " + child.FullCodeName + @"Symbol(SymbolTable symbolTable) =>
+            (" + child.FullCodeName + @")symbolTable.Lookup(SymbolType." + child.FullCodeName + @", " + child.LocalCodeName + @");";
                 }
-
-                str += @"
-
-" + GetClass(child, indent + 1);
             }
 
             str += @"
-" + indentation + @"}";
+    }";
 
+            foreach (var child in schema.Children)
+            {
+                str += @"
+";
+                str += GetClass(child);
+            }
 
             return str;
-        }
-
-        public static string SchemasToEntityFile(ImmutableArray<Schema> schemas)
-        {
-            throw new NotImplementedException();
         }
     }
 }

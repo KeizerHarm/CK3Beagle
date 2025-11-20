@@ -2,8 +2,10 @@
 using CK3Analyser.Core.Domain.Entities;
 using CK3Analyser.Core.Parsing.Antlr;
 using CK3Analyser.Core.Parsing.Fast;
-using CK3Analyser.Core.Parsing.SecondPass;
+using CK3Analyser.Core.Parsing.SemanticPass;
 using CK3Analyser.Core.Resources;
+using CK3Analyser.Core.Resources.Semantics;
+using CK3Analyser.Core.Generated;
 
 namespace CK3Analyser.Core.Parsing
 {
@@ -14,7 +16,6 @@ namespace CK3Analyser.Core.Parsing
             ["antlr"],
            // new object[]{ "fast" }
         ];
-
 
 
         protected void AssertNodesEqual(Node expected, Node actual)
@@ -138,6 +139,7 @@ namespace CK3Analyser.Core.Parsing
             GlobalResources.AddEffects(effects);
             GlobalResources.AddTriggers(triggers);
             GlobalResources.AddEventTargets(eventTargets);
+            GlobalResources.SymbolTable = new SymbolTable();
             GlobalResources.Lock();
 
             var context = new Context("", ContextType.Old);
@@ -152,7 +154,8 @@ namespace CK3Analyser.Core.Parsing
 
             var parsedScriptFile = new ScriptFile(context, "", expDeclarationType, stringToParse);
             parser.ParseFile(parsedScriptFile);
-            parsedScriptFile.Accept(new SecondPassVisitor());
+            context.AddFile(parsedScriptFile);
+            new SemanticPassHandler().ExecuteSemanticPass(context);
             return parsedScriptFile;
         }
     }

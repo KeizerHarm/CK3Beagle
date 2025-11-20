@@ -5,6 +5,7 @@ using CK3Analyser.Core.Domain;
 using CK3Analyser.Core.Domain.Entities;
 using CK3Analyser.Core.Resources;
 using CK3Analyser.Core.Resources.DetectorSettings;
+using CK3Analyser.Core.Generated;
 
 namespace CK3Analyser.Analysing.Detectors
 {
