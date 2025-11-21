@@ -12,15 +12,15 @@ namespace CK3Analyser.Analysis.Detectors
     public class DuplicationDetector : BaseDetector
     {
         private readonly DuplicationSettings _settings;
-        private readonly Dictionary<int, string> SingleCloneMessages = new Dictionary<int, string>(50);
-        private readonly Dictionary<(int, int), string> MultiCloneMessages = new Dictionary<(int, int), string>(50);
+        private static readonly Dictionary<int, string> SingleCloneMessages = new Dictionary<int, string>(50);
+        private static readonly Dictionary<(int, int), string> MultiCloneMessages = new Dictionary<(int, int), string>(50);
 
         public DuplicationDetector(ILogger logger, Context context, DuplicationSettings settings) : base(logger, context)
         {
             _settings = settings;
         }
 
-        public string GetMessage(int size, int copies)
+        private static string GetMessage(int size, int copies)
         {
             if (copies == 2)
             {
@@ -264,7 +264,7 @@ namespace CK3Analyser.Analysis.Detectors
                         elementsToRemove.Add(item);
                 }
                 
-                list.Value.RemoveAll(elementsToRemove.Contains);
+                list.Value.RemoveAll(x => elementsToRemove.Any(y => y.GetStrictHashCode() == x.GetStrictHashCode()));
 
                 if (list.Value.Count <= 1)
                 {

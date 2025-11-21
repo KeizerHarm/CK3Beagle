@@ -127,7 +127,12 @@ namespace CK3Analyser.Core.Domain.Entities
             {
                 var hashCode = new HashCode();
                 hashCode.Add(RelativePath);
-                Children.ForEach(x => hashCode.Add(x.GetStrictHashCode()));
+                Children.ForEach(x =>
+                {
+                    var code = x.GetStrictHashCode();
+                    if (code != 0)
+                        hashCode.Add(x.GetStrictHashCode());
+                });
                 _strictHashCode = hashCode.ToHashCode();
             }
 

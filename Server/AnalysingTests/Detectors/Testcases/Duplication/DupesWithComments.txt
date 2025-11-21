@@ -1,0 +1,16 @@
+test = {
+	#There should be one pair of dupes here; aaa and aaa
+	link1 = {
+		#Comments shouldn't matter for dupe detection
+		yyy = yes
+		zzz = yes
+		yyy = no
+		zzz = no
+	}
+	link1 = {
+		yyy = yes
+		zzz = yes
+		yyy = no
+		zzz = no
+	}
+}
