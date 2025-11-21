@@ -20,7 +20,7 @@ namespace CK3Analyser.Analysing.Detectors
         {
             //arrange
             var logger = new Logger();
-            ScriptFile testcase = GetTestCase("LargeUnit/LargeUnit_NonMacroBlock");
+            ScriptFile testcase = GetTestCase("LargeUnit/LargeUnit_NonMacroBlock", DeclarationType.Event);
             var visitor = GetDetector(logger, testcase.Context, NonMacroBlock_severity: Severity.Critical, NonMacroBlock_maxSize: maxSize);
 
             //act

@@ -11,6 +11,7 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Text.Json;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace CK3Analyser.LspInterface
@@ -120,6 +121,7 @@ namespace CK3Analyser.LspInterface
                                 }
                             }
                         );
+                        Thread.Sleep(500);
                         currentChunk.Clear();
                         currentSize = 0;
                     }
@@ -140,6 +142,7 @@ namespace CK3Analyser.LspInterface
                             } 
                         }
                     );
+                    Thread.Sleep(500);
                 }
 
 
@@ -174,7 +177,7 @@ namespace CK3Analyser.LspInterface
                     type = "analysis_final",
                     payload = new
                     {
-                        message = "Done transmitting"
+                        message = "All smells transmitted!"
                     }
                 };
                 await _program.SendMessageAsync(finalResponse);

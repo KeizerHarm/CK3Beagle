@@ -2,6 +2,8 @@
 using CK3Analyser.Core.Domain;
 using CK3Analyser.Core.Domain.Entities;
 using CK3Analyser.Core.Resources.DetectorSettings;
+using CK3Analyser.Core.Generated;
+using CK3Analyser.Core.Domain.Symbols;
 
 namespace CK3Analyser.Analysis.Detectors
 {
@@ -52,12 +54,8 @@ namespace CK3Analyser.Analysis.Detectors
 
         private void AnalyseMacroBlocks(Block block)
         {
-            bool interpretAsScriptBlock = false;
-            foreach (var child in block.Children)
-            {
-                if (child.NodeType != NodeType.NonStatement)
-                    interpretAsScriptBlock = true;
-            }
+            bool interpretAsScriptBlock = block.NodeType == NodeType.NonStatement
+                && block.SymbolType.GetContextType() != BlockContext.None;
 
             if (interpretAsScriptBlock) {
                 var size = block.GetSize();

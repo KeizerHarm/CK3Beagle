@@ -4,6 +4,7 @@ using CK3Analyser.Core.Domain.Entities;
 using CK3Analyser.Core.Resources;
 using CK3Analyser.Core.Parsing.SemanticPass;
 using CK3Analyser.Core.Generated;
+using CK3Analyser.Core.Resources.Semantics;
 
 namespace CK3Analyser.Analysing.Detectors
 {
@@ -17,6 +18,7 @@ namespace CK3Analyser.Analysing.Detectors
             GlobalResources.AddTriggers(["has_gold", "or", "and", "nand", "nor", "not", "aaa", "bbb", "ccc", "ddd"]);
             GlobalResources.AddEventTargets(["father"]);
             GlobalResources.Lock();
+            GlobalResources.SymbolTable = new SymbolTable();
 
             var context = new Context("", ContextType.Old);
             var expDeclarationType = expectedDeclarationType ?? DeclarationType.Debug;
@@ -24,7 +26,8 @@ namespace CK3Analyser.Analysing.Detectors
 
             var parsedScriptFile = new ScriptFile(context, "", expDeclarationType, stringToParse);
             parser.ParseFile(parsedScriptFile);
-            parsedScriptFile.Accept(new SecondPassVisitor());
+            context.AddFile(parsedScriptFile);
+            new SemanticPassHandler().ExecuteSemanticPass(context);
             return parsedScriptFile;
         }
     }

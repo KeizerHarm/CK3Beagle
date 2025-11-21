@@ -1,14 +1,14 @@
-test = {
-	test1 = { #Contains 5 statements
+event = {
+	option = { #Contains 5 statements
 		add_gold = 5 add_gold = 5 add_gold = 5 add_gold = 5 add_gold = 5
 	}
 
-	test2 = { #Contains 10 statements
+	option = { #Contains 10 statements
 		add_gold = 5 add_gold = 5 add_gold = 5 add_gold = 5 add_gold = 5
 		add_gold = 5 add_gold = 5 add_gold = 5 add_gold = 5 add_gold = 5
 	}
 
-	test3 = { #Contains 1 statement and 10 comments
+	option = { #Contains 1 statement and 10 comments
 		add_gold = 5
 		# Test
 

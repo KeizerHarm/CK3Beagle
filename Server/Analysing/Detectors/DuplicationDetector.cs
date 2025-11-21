@@ -264,7 +264,7 @@ namespace CK3Analyser.Analysis.Detectors
                         elementsToRemove.Add(item);
                 }
                 
-                list.Value.RemoveAll(x => elementsToRemove.Contains(x));
+                list.Value.RemoveAll(elementsToRemove.Contains);
 
                 if (list.Value.Count <= 1)
                 {
