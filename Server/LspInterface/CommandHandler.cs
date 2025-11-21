@@ -1,8 +1,6 @@
 ﻿using CK3Analyser.Analysis;
 using CK3Analyser.Analysis.Logging;
 using CK3Analyser.Core.Domain;
-using CK3Analyser.Core.Parsing;
-using CK3Analyser.Core.Parsing.Antlr;
 using CK3Analyser.Core.Resources;
 using CK3Analyser.Core.Resources.Semantics;
 using System;
@@ -19,10 +17,12 @@ namespace CK3Analyser.LspInterface
     public class CommandHandler
     {
         private readonly Program _program;
+        private readonly ProcessOrchestrator _orchestrator;
 
         public CommandHandler(Program program)
         {
             _program = program;
+            _orchestrator = new ProcessOrchestrator();
         }
 
         public async Task HandleCommand(string commandType, JsonElement payload)
@@ -67,22 +67,18 @@ namespace CK3Analyser.LspInterface
                 await _program.SendMessageAsync(_program.GetBasicMessage(msg));
             }
 
-            await ParsingService.ParseAllEntities(() => new AntlrParser(), GlobalResources.Modded, progressDelegate);
-            await _program.SendMessageAsync(_program.GetBasicMessage("Parsing complete!"));
-
-            var analyser = new Analyser();
-            await analyser.Analyse(GlobalResources.Modded, progressDelegate);
+            var logEntries = await _orchestrator.HandleAnalysis(progressDelegate);
 
             //Send all in one go
-            if (analyser.LogEntries.Count() < 2000)
+            if (logEntries.Count() < 2000)
             {
                 var response = new
                 {
                     type = "analysis",
                     payload = new
                     {
-                        summary = $"Found {analyser.LogEntries.Count()} issues",
-                        smells = analyser.LogEntries.Select(LogEntryToReport)
+                        summary = $"Found {logEntries.Where(x => x.Severity > Severity.Debug).Count()} issues",
+                        smells = logEntries.Select(LogEntryToReport)
                     }
                 };
                 await _program.SendMessageAsync(response);
@@ -94,7 +90,7 @@ namespace CK3Analyser.LspInterface
                     type = "analysis_initial",
                     payload = new
                     {
-                        message = $"Found {analyser.LogEntries.Count()} issues, transmitting in chunks"
+                        message = $"Found {logEntries.Where(x => x.Severity > Severity.Debug).Count()} issues, transmitting in chunks"
                     }
                 };
                 await _program.SendMessageAsync(response);
@@ -103,7 +99,7 @@ namespace CK3Analyser.LspInterface
                 var currentChunk = new List<object>();
                 int currentSize = 0;
 
-                foreach (var entry in analyser.LogEntries)
+                foreach (var entry in logEntries)
                 {
                     var report = LogEntryToReport(entry);
                     var serializedEntry = JsonSerializer.Serialize(report);
@@ -145,33 +141,6 @@ namespace CK3Analyser.LspInterface
                     Thread.Sleep(500);
                 }
 
-
-                //var chunks = analyser.LogEntries.Chunk(100).ToArray();
-
-                //var response = new
-                //{
-                //    type = "analysis_initial",
-                //    payload = new
-                //    {
-                //        message = $"Found {analyser.LogEntries.Count()} issues, transmitting in chunks of 100"
-                //    }
-                //};
-                //await _program.SendMessageAsync(response);
-
-                //for (int i = 0; i < chunks.Length; i++)
-                //{
-                //    LogEntry[] chunk = chunks[i];
-                //    var partialReport = new
-                //    {
-                //        type = "analysis_median",
-                //        payload = new
-                //        {
-                //            message = "Chunk " + (i + 1) + " of " + chunks.Length,
-                //            smells = chunk.Select(LogEntryToReport).ToArray()
-                //        }
-                //    };
-                //    await _program.SendMessageAsync(partialReport);
-                //}
                 var finalResponse = new
                 {
                     type = "analysis_final",
@@ -183,7 +152,7 @@ namespace CK3Analyser.LspInterface
                 await _program.SendMessageAsync(finalResponse);
             }
 
-            GlobalResources.ClearEverything();
+            _orchestrator.WrapUp();
         }
 
         private static object LogEntryToReport(LogEntry x)
@@ -214,52 +183,7 @@ namespace CK3Analyser.LspInterface
 
         private bool HandleSettings(JsonElement jsonElement, out string response)
         {
-            GlobalResources.ClearEverything();
-
-            var vanillaPath = jsonElement.GetProperty("vanillaCk3Path").GetString();
-            if (string.IsNullOrEmpty(vanillaPath))
-            {
-                response = "Missing VanillaPath setting";
-                return false;
-            }
-            if (!Directory.Exists(vanillaPath))
-            {
-                response = "VanillaPath setting points to a non-existent directory";
-                return false;
-            }
-
-            var logsFolderPath = jsonElement.GetProperty("logsFolderPath").GetString();
-            if (string.IsNullOrEmpty(logsFolderPath))
-            {
-                response = "Missing LogsFolderPath setting";
-                return false;
-            }
-            if (!Directory.Exists(logsFolderPath))
-            {
-                response = "LogsFolderPath setting points to a non-existent directory";
-                return false;
-            }
-
-            var modPath = jsonElement.GetProperty("modPath").GetString();
-            if (!string.IsNullOrWhiteSpace(modPath) && !Directory.Exists(modPath))
-            {
-                response = "ModPath setting points to a non-existent directory";
-                return false;
-            }
-
-            if (string.IsNullOrWhiteSpace(modPath))
-                modPath = jsonElement.GetProperty("environmentPath").GetString();
-
-            LogsParser.ParseLogs(logsFolderPath);
-
-            GlobalResources.Old = new Context(vanillaPath, ContextType.Old);
-            GlobalResources.Modded = new Context(modPath, ContextType.Modded);
-
-            GlobalResources.Configuration = new Configuration(jsonElement);
-            GlobalResources.SymbolTable = new SymbolTable();
-
-            response = "Settings loaded succesfully: " + GlobalResources.Configuration.ToString();
-            return true;
+            return _orchestrator.Initiate(jsonElement, out response);
         }
     }
 }

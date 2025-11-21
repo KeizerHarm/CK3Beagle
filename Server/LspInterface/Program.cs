@@ -122,7 +122,7 @@ namespace CK3Analyser.LspInterface
             await StdOut.WriteAsync(header, 0, header.Length);
             await StdOut.WriteAsync(content, 0, content.Length);
             await StdOut.FlushAsync();
-            Thread.Sleep(50); //Always wait at least a little bit
+            Thread.Sleep(200); //Always wait at least a little bit
         }
     }
 }

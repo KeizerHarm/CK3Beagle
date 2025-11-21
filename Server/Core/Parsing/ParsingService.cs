@@ -9,6 +9,8 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
+using CK3Analyser.Core.Parsing.Antlr;
+using System.Diagnostics.CodeAnalysis;
 
 namespace CK3Analyser.Core.Parsing
 {
@@ -38,7 +40,9 @@ namespace CK3Analyser.Core.Parsing
             var entityHome = Path.Combine(context.Path, declarationType.GetEntityHome());
             if (Directory.Exists(entityHome))
             {
-                var files = Directory.GetFiles(entityHome, "*.txt", SearchOption.AllDirectories);
+                var files = Directory.GetFiles(entityHome, "*.txt", SearchOption.AllDirectories)
+                    .Except(context.Blacklist).ToArray();
+
                 //Console.WriteLine($"Found {files.Length} {declarationType.ToString()} files");
 
                 var batchSize = 50;
@@ -77,36 +81,24 @@ namespace CK3Analyser.Core.Parsing
             }
         }
 
-        public static void GatherDeclarationsForDeclarationType(ICk3Parser parser, Context context, DeclarationType declarationType)
+        public static void BlacklistVanillaFilesInModContext(Context modContext, Context vanillaContext, Func<string, Task> progressDelegate)
         {
-            var entityDeclarations = new Dictionary<string, Declaration>();
-
-            var entityHome = Path.Combine(context.Path, declarationType.GetEntityHome());
-            if (Directory.Exists(entityHome))
+            List<string> filesToRemove = [];
+            var potentialModFiles = Directory.GetFiles(modContext.Path, "*.txt", SearchOption.AllDirectories);
+            foreach (var file in potentialModFiles)
             {
-                var files = Directory.GetFiles(entityHome, "*.txt", SearchOption.AllDirectories);
-                //Console.WriteLine($"Found {files.Length} {declarationType.ToString()} files");
-
-                //foreach(var file in files)
-                //{
-                //    var scriptFile = parser.ParseFile(file, context, declarationType);
-                //    if (declarationType == DeclarationType.ScriptedEffect)
-                //    {
-                //        GlobalResources.AddEffects(scriptFile.Declarations.Keys);
-                //    }
-                //    if (declarationType == DeclarationType.ScriptedTrigger)
-                //    {
-                //        GlobalResources.AddTriggers(scriptFile.Declarations.Keys);
-                //    }
-                //    context.AddFile(scriptFile);
-                //};
-                //Parallel.ForEach(files, async filePath =>
-                //{
-                //    ScriptFile scriptfile = await MakeScriptFile(context, declarationType, filePath);
-                //    ParseScriptFile(parser, context, declarationType, scriptfile);
-                //});
+                var localPath = Path.GetRelativePath(modContext.Path, file);
+                var vanillaAbsPath = Path.Combine(vanillaContext.Path, localPath);
+                if (File.Exists(vanillaAbsPath))
+                {
+                    modContext.BlacklistFile(file);
+                }
             }
-            GlobalResources.Lock();
+        }
+
+        public static async Task ParseMacroEntities(Func<ICk3Parser> parserMaker, Context context, Func<string, Task> progressDelegate)
+        {
+            throw new NotImplementedException();
         }
     }
 }

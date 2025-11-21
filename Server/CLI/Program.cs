@@ -29,6 +29,12 @@ namespace CK3Analyser.CLI
 
         private async Task Go()
         {
+            Task progressDelegate(string msg)
+            {
+                Console.WriteLine(msg);
+                return Task.CompletedTask;
+            }
+
             Console.WriteLine("Let's go! Parsing logs");
             LogsParser.ParseLogs(LogsFolder);
             //Console.WriteLine($"Parsed logs; found {GlobalResources.EFFECTKEYS.Count} effects, {GlobalResources.TRIGGERKEYS.Count} triggers, {GlobalResources.EVENTTARGETS.Count} event targets ");
@@ -40,6 +46,9 @@ namespace CK3Analyser.CLI
             GlobalResources.New = new Context(NewVanillaPath, ContextType.New);
             GlobalResources.Configuration = new Configuration(true);
             GlobalResources.SymbolTable = new SymbolTable();
+
+            ParsingService.BlacklistVanillaFilesInModContext(GlobalResources.Modded, GlobalResources.Old, progressDelegate);
+            
 
 
             //var fastParser = new FastParser();
@@ -54,8 +63,7 @@ namespace CK3Analyser.CLI
             var parsingTimer = new Stopwatch();
             parsingTimer.Start();
             //GatherDeclarationsForDeclarationType(antlrParser, GlobalResources.Old, DeclarationType.ScriptedTrigger);
-            await ParsingService.ParseAllEntities(() => new AntlrParser(), GlobalResources.Modded,
-                value => { Console.WriteLine(value); return Task.CompletedTask; });
+            await ParsingService.ParseAllEntities(() => new AntlrParser(), GlobalResources.Modded, progressDelegate);
             parsingTimer.Stop();
 
 
@@ -83,7 +91,7 @@ namespace CK3Analyser.CLI
             var analysisTimer = new Stopwatch();
             analysisTimer.Start();
             var analyser = new Analyser();
-            await analyser.Analyse(GlobalResources.Modded, value => { Console.WriteLine(value); return Task.CompletedTask; });
+            await analyser.Analyse(GlobalResources.Modded, progressDelegate);
             analysisTimer.Stop();
             Console.WriteLine($"Analysed a total of {GlobalResources.Modded.Files.Count} files");
             Console.WriteLine($"Found { analyser.LogEntries.Count()} issues");

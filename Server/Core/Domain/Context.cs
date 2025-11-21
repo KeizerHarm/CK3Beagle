@@ -43,5 +43,14 @@ namespace CK3Analyser.Core.Domain
                 Declarations[(int)declaration.Value.DeclarationType].Add(declaration.Key, declaration.Value);
             }
         }
+
+        internal HashSet<string> Blacklist = [];
+        /// <summary>
+        /// Marks a file as 'should not be read'.
+        /// </summary>
+        internal void BlacklistFile(string file)
+        {
+            Blacklist.Add(file);
+        }
     }
 }

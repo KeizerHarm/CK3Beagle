@@ -10,20 +10,48 @@ namespace CK3Analyser.Core.Resources
         Debug, Info, Warning, Critical
     }
 
+    public enum VanillaFileHandling
+    {
+        TreatAsRegularFiles,
+        IgnoreEntirely,
+        AnalyseModsAdditions
+    }
+
     public class Configuration
     {
         private readonly JsonElement _rawSettings;
+        public bool ReadVanilla { get; set; }
+        public VanillaFileHandling VanillaFileHandling { get; set; }
 
         public Configuration(JsonElement rawSettings)
         {
             _rawSettings = rawSettings;
+            HandleGlobalSettings();
         }
 
-        public Configuration(bool useDefault)
+        private void HandleGlobalSettings()
+        {
+            ReadVanilla = false;
+            if (_rawSettings.ValueKind != JsonValueKind.Undefined && _rawSettings.TryGetProperty("readVanilla", out var readVanilla))
+            {
+                ReadVanilla = readVanilla.GetBoolean();
+            }
+
+            VanillaFileHandling = VanillaFileHandling.TreatAsRegularFiles;
+            if (_rawSettings.ValueKind != JsonValueKind.Undefined && _rawSettings.TryGetProperty("vanillaFileHandling", out var vanillaFileHandling))
+            {
+                VanillaFileHandling = (VanillaFileHandling)vanillaFileHandling.GetInt32();
+                if (VanillaFileHandling == VanillaFileHandling.AnalyseModsAdditions)
+                    ReadVanilla = true;
+            }
+        }
+
+        public Configuration(bool useDefault = false)
         {
             _rawSettings = new JsonElement();
             if (useDefault)
             {
+                HandleGlobalSettings();
                 LargeUnitSettings =
                     new LargeUnitSettings
                     {
@@ -275,13 +303,15 @@ namespace CK3Analyser.Core.Resources
         public override string ToString()
         {
             return "Configuration: {"
-                + $"{nameof(LargeUnitSettings)}: {LargeUnitSettings.ToString()} "
-                + $"{nameof(OvercomplicatedTriggerSettings)}: {OvercomplicatedTriggerSettings.ToString()} "
-                + $"{nameof(DuplicationSettings)}: {DuplicationSettings.ToString()} "
-                + $"{nameof(HiddenDependenciesSettings)}: {HiddenDependenciesSettings.ToString()} "
-                + $"{nameof(InconsistentIndentationSettings)}: {InconsistentIndentationSettings.ToString()} "
-                + $"{nameof(MagicNumberSettings)}: {MagicNumberSettings.ToString()} "
-                + $"{nameof(KeywordAsScopeNameSettings)}: {KeywordAsScopeNameSettings.ToString()} "
+                + $"[ {nameof(LargeUnitSettings)}: {LargeUnitSettings.ToString()} ], "
+                + $"[ {nameof(OvercomplicatedTriggerSettings)}: {OvercomplicatedTriggerSettings.ToString()} ], "
+                + $"[ {nameof(DuplicationSettings)}: {DuplicationSettings.ToString()} ], "
+                + $"[ {nameof(HiddenDependenciesSettings)}: {HiddenDependenciesSettings.ToString()} ], "
+                + $"[ {nameof(InconsistentIndentationSettings)}: {InconsistentIndentationSettings.ToString()} ], "
+                + $"[ {nameof(MagicNumberSettings)}: {MagicNumberSettings.ToString()} ], "
+                + $"[ {nameof(KeywordAsScopeNameSettings)}: {KeywordAsScopeNameSettings.ToString()} ], "
+                + $"[ {nameof(ReadVanilla)}: {ReadVanilla.ToString()} ], "
+                + $"[ {nameof(VanillaFileHandling)}: {VanillaFileHandling.ToString()} ]"
                 + "}";
         }
 

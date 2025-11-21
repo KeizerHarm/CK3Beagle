@@ -1,5 +1,5 @@
 CasusBelliType:
- HOME: "common/casus_belli_types"
+ HOME: "common\\casus_belli_types"
  on_declaration: EFFECTBLOCK
  on_victory: EFFECTBLOCK
  on_white_peace: EFFECTBLOCK

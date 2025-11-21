@@ -61,12 +61,14 @@ namespace CK3Analyser.Core.Resources
             Old = null;
             New = null;
             Modded = null;
+
             _effectKeys = null;
             _triggerKeys = null;
             _eventTargets = null;
             EFFECTKEYS = null;
             TRIGGERKEYS = null;
             EVENTTARGETS = null;
+
             Configuration = null;
             SymbolTable = null;
         }

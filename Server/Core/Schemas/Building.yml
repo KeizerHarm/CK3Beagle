@@ -1,5 +1,5 @@
 Building:
- HOME: "common/buildings"
+ HOME: "common\\buildings"
  is_enabled: TRIGGERBLOCK
  can_construct_potential: TRIGGERBLOCK
  can_construct_showing_failures_only: TRIGGERBLOCK

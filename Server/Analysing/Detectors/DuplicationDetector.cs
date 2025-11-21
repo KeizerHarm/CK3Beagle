@@ -260,7 +260,17 @@ namespace CK3Analyser.Analysis.Detectors
                 var elementsToRemove = new HashSet<Node>();
                 foreach (var item in list.Value)
                 {
-                    if (nodesByStrictHash.ContainsKey(item.Parent.GetStrictHashCode()))
+                    if (nodesByStrictHash.ContainsKey(item.Parent?.GetStrictHashCode() ?? 0))
+                        elementsToRemove.Add(item);
+                    if (nodesByStrictHash.ContainsKey(item.Parent?.Parent?.GetStrictHashCode() ?? 0))
+                        elementsToRemove.Add(item);
+                    if (nodesByStrictHash.ContainsKey(item.Parent?.Parent?.Parent?.GetStrictHashCode() ?? 0))
+                        elementsToRemove.Add(item);
+                    if (nodesByStrictHash.ContainsKey(item.Parent?.Parent?.Parent?.Parent?.GetStrictHashCode() ?? 0))
+                        elementsToRemove.Add(item);
+                    if (nodesByStrictHash.ContainsKey(item.Parent?.Parent?.Parent?.Parent?.Parent?.GetStrictHashCode() ?? 0))
+                        elementsToRemove.Add(item);
+                    if (nodesByStrictHash.ContainsKey(item.Parent?.Parent?.Parent?.Parent?.Parent?.Parent?.GetStrictHashCode() ?? 0))
                         elementsToRemove.Add(item);
                 }
                 

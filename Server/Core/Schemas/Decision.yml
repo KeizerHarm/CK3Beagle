@@ -1,5 +1,5 @@
 Decision:
- HOME: "common/decisions"
+ HOME: "common\\decisions"
  picture:
   trigger: TRIGGERBLOCK
  is_shown: TRIGGERBLOCK
