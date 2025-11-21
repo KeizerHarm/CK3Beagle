@@ -19,6 +19,7 @@ namespace CK3Analyser.Core.Resources
         public static Context Old {  get; set; }
         public static Context Modded { get; set; }
         public static Context New { get; set; }
+        public static HashSet<string> VanillaModIntersect { get; set; } = [];
 
         public static Configuration Configuration { get; set; }
         public static SymbolTable SymbolTable { get; set; }

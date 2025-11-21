@@ -77,10 +77,14 @@ namespace CK3Analyser.LspInterface
             await ParsingService.ParseAllEntities(() => new AntlrParser(), GlobalResources.Modded, progressDelegate);
             await progressDelegate("Mod parsing complete!");
 
-            //if (GlobalResources.Configuration.ReadVanilla || GlobalResources.Configuration.VanillaFileHandling == VanillaFileHandling.AnalyseModsAdditions)
-            //{
-            //    await ParsingService.ParseMacroEntities(() => new AntlrParser(), GlobalResources.Old, progressDelegate);
-            //}
+            if (GlobalResources.Configuration.ReadVanilla || GlobalResources.Configuration.VanillaFileHandling == VanillaFileHandling.AnalyseModsAdditions)
+            {
+                await ParsingService.ParseMacroEntities(() => new AntlrParser(), GlobalResources.Old, progressDelegate);
+            }
+            if (GlobalResources.Configuration.VanillaFileHandling == VanillaFileHandling.AnalyseModsAdditions)
+            {
+                await ParsingService.ParseVanillaEntitiesInMod(() => new AntlrParser(), GlobalResources.Modded, GlobalResources.Modded, progressDelegate);
+            }
 
             var analyser = new Analyser();
             await analyser.Analyse(GlobalResources.Modded, progressDelegate);

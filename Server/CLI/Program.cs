@@ -47,10 +47,7 @@ namespace CK3Analyser.CLI
             GlobalResources.Configuration = new Configuration(true);
             GlobalResources.SymbolTable = new SymbolTable();
 
-            ParsingService.BlacklistVanillaFilesInModContext(GlobalResources.Modded, GlobalResources.Old, progressDelegate);
-            
-
-
+            //ParsingService.BlacklistVanillaFilesInModContext(GlobalResources.Modded, GlobalResources.Old, progressDelegate);
             //var fastParser = new FastParser();
             //var antlrParser = new AntlrParser();
 
@@ -64,8 +61,11 @@ namespace CK3Analyser.CLI
             parsingTimer.Start();
             //GatherDeclarationsForDeclarationType(antlrParser, GlobalResources.Old, DeclarationType.ScriptedTrigger);
             await ParsingService.ParseAllEntities(() => new AntlrParser(), GlobalResources.Modded, progressDelegate);
-            parsingTimer.Stop();
 
+            await ParsingService.ParseMacroEntities(() => new AntlrParser(), GlobalResources.Old, progressDelegate);
+            await ParsingService.ParseVanillaEntitiesInMod(() => new AntlrParser(), GlobalResources.Modded, GlobalResources.Old, progressDelegate);
+
+            parsingTimer.Stop();
 
             //var culturesGfxes = GlobalResources.Old.Declarations[(int)DeclarationType.Culture]
             //    .Select(x => x.Value.Children.OfType<NamedBlock>().First(c => c.Key == "clothing_gfx").Children.Select(c => c.Raw).First())
@@ -87,13 +87,12 @@ namespace CK3Analyser.CLI
             //    Console.WriteLine();
             //}
 
-
             var analysisTimer = new Stopwatch();
             analysisTimer.Start();
             var analyser = new Analyser();
             await analyser.Analyse(GlobalResources.Modded, progressDelegate);
             analysisTimer.Stop();
-            Console.WriteLine($"Analysed a total of {GlobalResources.Modded.Files.Count} files");
+            Console.WriteLine($"Analysed a total of {(GlobalResources.Modded.Files.Count + GlobalResources.Old.Files.Count)} files");
             Console.WriteLine($"Found { analyser.LogEntries.Count()} issues");
             Console.WriteLine($"Parsing time: {parsingTimer.Elapsed}");
             Console.WriteLine($"Analysis time: {analysisTimer.Elapsed}");

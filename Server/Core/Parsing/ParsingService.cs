@@ -9,8 +9,6 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
-using CK3Analyser.Core.Parsing.Antlr;
-using System.Diagnostics.CodeAnalysis;
 
 namespace CK3Analyser.Core.Parsing
 {
@@ -43,7 +41,10 @@ namespace CK3Analyser.Core.Parsing
                 var files = Directory.GetFiles(entityHome, "*.txt", SearchOption.AllDirectories)
                     .Except(context.Blacklist).ToArray();
 
-                //Console.WriteLine($"Found {files.Length} {declarationType.ToString()} files");
+                if (context.Whitelist.Count > 0)
+                {
+                    files = files.Intersect(context.Whitelist).ToArray();
+                }
 
                 var batchSize = 50;
                 var fileBatches = files.Chunk(batchSize);
@@ -84,6 +85,9 @@ namespace CK3Analyser.Core.Parsing
         public static void BlacklistVanillaFilesInModContext(Context modContext, Context vanillaContext, Func<string, Task> progressDelegate)
         {
             List<string> filesToRemove = [];
+
+            // Not the real intersect - this takes place before actually parsing the mod (for performance reasons),
+            // so grab wide for potential mod files regardless of what's actually parsed later on
             var potentialModFiles = Directory.GetFiles(modContext.Path, "*.txt", SearchOption.AllDirectories);
             foreach (var file in potentialModFiles)
             {
@@ -91,14 +95,44 @@ namespace CK3Analyser.Core.Parsing
                 var vanillaAbsPath = Path.Combine(vanillaContext.Path, localPath);
                 if (File.Exists(vanillaAbsPath))
                 {
-                    modContext.BlacklistFile(file);
+                    modContext.Blacklist.Add(file);
                 }
             }
         }
 
         public static async Task ParseMacroEntities(Func<ICk3Parser> parserMaker, Context context, Func<string, Task> progressDelegate)
         {
-            throw new NotImplementedException();
+            ReadEverythingAsync(parserMaker, context, DeclarationType.ScriptedEffect);
+            ReadEverythingAsync(parserMaker, context, DeclarationType.ScriptedTrigger);
+            await progressDelegate("Parsed vanilla macros");
+        }
+
+        public static async Task ParseVanillaEntitiesInMod(
+            Func<ICk3Parser> parserMaker, 
+            Context modContext,
+            Context vanillaContext, 
+            Func<string, Task> progressDelegate)
+        {
+            var modFiles = modContext.Files.Keys;
+            foreach (var file in modFiles)
+            {
+                var vanillaAbsPath = Path.Combine(vanillaContext.Path, file);
+                if (File.Exists(vanillaAbsPath))
+                {
+                    GlobalResources.VanillaModIntersect.Add(file);
+                }
+            }
+
+            //Because these were already parsed in ParseMacroEntities, which necessarily also ran if this is being run
+            DeclarationType[] macroTypesToSkip = [DeclarationType.ScriptedEffect, DeclarationType.ScriptedTrigger];
+            foreach (var declarationType in Enum.GetValues<DeclarationType>().Except(macroTypesToSkip))
+            {
+                ReadEverythingAsync(parserMaker, vanillaContext, declarationType);
+                await progressDelegate("Completed parsing vanilla " + declarationType.ToString());
+            }
+
+
+            await progressDelegate("Parsed all vanilla entities from files intersecting with mod");
         }
     }
 }

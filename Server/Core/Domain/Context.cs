@@ -44,13 +44,15 @@ namespace CK3Analyser.Core.Domain
             }
         }
 
-        internal HashSet<string> Blacklist = [];
         /// <summary>
-        /// Marks a file as 'should not be read'.
+        /// Marks the files that 'shouldn't' be parsed for this context.
         /// </summary>
-        internal void BlacklistFile(string file)
-        {
-            Blacklist.Add(file);
-        }
+        internal HashSet<string> Blacklist { get; } = [];
+
+        /// <summary>
+        /// If set, marks the files that 'should' be parsed for this context - everything else shouldn't.
+        /// </summary>
+        internal HashSet<string> Whitelist { get; } = [];
+
     }
 }
