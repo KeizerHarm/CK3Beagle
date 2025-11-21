@@ -47,7 +47,7 @@ namespace CK3Analyser.Core.Parsing
                 Start = new Position(0, 0, 0),
                 End = new Position(0, stringToParse.Length, stringToParse.Length)
             };
-            var expectedBinaryExpression = new BinaryExpression("b", "=", "c")
+            var expectedBinaryExpression = new BinaryExpression("b", Scoper.Equal, "c")
             {
                 Start = new Position(0, 8, 8),
                 End = new Position(0, 13, 13)
@@ -85,7 +85,7 @@ namespace CK3Analyser.Core.Parsing
                 Start = new Position(0, 0, 0),
                 End = new Position(0, 15, 15)
             };
-            var expectedBinaryExpression = new BinaryExpression("b", "=", "c")
+            var expectedBinaryExpression = new BinaryExpression("b", Scoper.Equal, "c")
             {
                 Start = new Position(0, 8, 8),
                 End = new Position(0, 13, 13)
@@ -129,13 +129,13 @@ namespace CK3Analyser.Core.Parsing
                 Start = new Position(0, 0, 0),
                 End = new Position(3, 1, 56)
             };
-            var expectedBinExp1 = new BinaryExpression("param1", "=", "val1")
+            var expectedBinExp1 = new BinaryExpression("param1", Scoper.Equal, "val1")
             {
                 Start = new Position(1, 4, 20),
                 End = new Position(1, 17, 33)
             };
             expectedDecl.AddChild(expectedBinExp1);
-            var expectedBinExp2 = new BinaryExpression("param2", "!=", "val2")
+            var expectedBinExp2 = new BinaryExpression("param2", Scoper.NotEqual, "val2")
             {
                 Start = new Position(2, 4, 39),
                 End = new Position(2, 18, 53)
@@ -171,19 +171,19 @@ namespace CK3Analyser.Core.Parsing
                 Start = new Position(0, 0, 0),
                 End = new Position(13, 1, 393)
             };
-            var binExp1 = new BinaryExpression("save_scope_as", "=", "scheme")
+            var binExp1 = new BinaryExpression("save_scope_as", Scoper.Equal, "scheme")
             {
                 Start = new Position(1, 1, 50),
                 End = new Position(1, 23, 72)
             };
             expectedDecl.AddChild(binExp1);
-            var namedBlock1 = new NamedBlock("scope:scheme.task_contract", "?=")
+            var namedBlock1 = new NamedBlock("scope:scheme.task_contract", Scoper.ConditionalEqual)
             {
                 Start = new Position(2, 1, 75),
                 End = new Position(2, 64, 138)
             };
 
-            var binExp2 = new BinaryExpression("save_scope_as", "=", "task_contract")
+            var binExp2 = new BinaryExpression("save_scope_as", Scoper.Equal, "task_contract")
             {
                 Start = new Position(2, 33, 107),
                 End = new Position(2, 62, 136)
@@ -196,12 +196,12 @@ namespace CK3Analyser.Core.Parsing
                 Start = new Position(3, 1, 141),
                 End = new Position(6, 2, 243)
             };
-            var binExp3 = new BinaryExpression("name", "=", "follow_up_event")
+            var binExp3 = new BinaryExpression("name", Scoper.Equal, "follow_up_event")
             {
                 Start = new Position(4, 2, 168),
                 End = new Position(4, 24, 190)
             };
-            var binExp4 = new BinaryExpression("value", "=", "event_id:scheme_critical_moments.2641")
+            var binExp4 = new BinaryExpression("value", Scoper.Equal, "event_id:scheme_critical_moments.2641")
             {
                 Start = new Position(5, 2, 194),
                 End = new Position(5, 47, 239)
@@ -225,7 +225,7 @@ namespace CK3Analyser.Core.Parsing
                 Start = new Position(9, 3, 270),
                 End = new Position(9, 47, 314)
             };
-            var binExp5 = new BinaryExpression("exists", "=", "scope:suppress_next_event")
+            var binExp5 = new BinaryExpression("exists", Scoper.Equal, "scope:suppress_next_event")
             {
                 Start = new Position(9, 11, 278),
                 End = new Position(9, 45, 312)
@@ -239,7 +239,7 @@ namespace CK3Analyser.Core.Parsing
                 Start = new Position(11, 2, 323),
                 End = new Position(11, 65, 386)
             };
-            var binExp6 = new BinaryExpression("trigger_event", "=", "scheme_critical_moments.0002")
+            var binExp6 = new BinaryExpression("trigger_event", Scoper.Equal, "scheme_critical_moments.0002")
             {
                 Start = new Position(11, 19, 340),
                 End = new Position(11, 63, 384)

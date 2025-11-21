@@ -294,7 +294,7 @@ namespace CK3Analyser.Analysis.Detectors
         private bool AllChildrenAreNegated(IEnumerable<NamedBlock> blocks, IEnumerable<BinaryExpression> binaryExpressions)
         {
             return blocks.All(x => x.Key.ToUpper() == "NOT" || x.Key.ToUpper() == "NOR" || x.Key.ToUpper() == "NAND")
-                && binaryExpressions.All(x => (x.Value.ToLower() == "no") || x.Scoper == "!=")
+                && binaryExpressions.All(x => (x.Value.ToLower() == "no") || x.Scoper == Scoper.NotEqual)
                 && blocks.Count() + binaryExpressions.Count() > 0;
         }
 

@@ -1,7 +1,8 @@
 ﻿using Antlr4.Runtime;
 using Antlr4.Runtime.Misc;
-using CK3Analyser.Core.Generated;
+using CK3Analyser.Core.Domain;
 using CK3Analyser.Core.Domain.Entities;
+using CK3Analyser.Core.Generated;
 using System.Collections.Generic;
 using System.Linq;
 using static CK3Analyser.Core.CK3Parser;
@@ -42,7 +43,7 @@ namespace CK3Analyser.Core.Parsing.Antlr
             }
             else
             {
-                var scoper = context.SCOPER().ToString();
+                var scoper = context.SCOPER().ToString().StringToScoper();
                 var block = new NamedBlock(key, scoper);
                 ApplyRange(context, block);
                 thisBlock.Peek().AddChild(block);
@@ -86,7 +87,7 @@ namespace CK3Analyser.Core.Parsing.Antlr
         {
             var key = context.key.GetText();
             var value = context.value.GetText();
-            var scoper = context.SCOPER().ToString();
+            var scoper = context.SCOPER().ToString().StringToScoper();
             var binaryExpression = new BinaryExpression(key, scoper, value);
             ApplyRange(context, binaryExpression);
             thisBlock.Peek().AddChild(binaryExpression);

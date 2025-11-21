@@ -1,7 +1,7 @@
 ﻿using CK3Analyser.Core.Domain.Symbols;
 using System.Collections.Generic;
 
-namespace CK3Analyser.Core.Resources.Semantics
+namespace CK3Analyser.Core.Resources.Storage
 {
     public interface ISymbolStore
     {

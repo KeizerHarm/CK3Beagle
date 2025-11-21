@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Immutable;
-using System.Linq;
-
-namespace CK3Analyser.Generation
+﻿namespace CK3Analyser.Generation
 {
     public class SchemaToFileTransformer
     {
@@ -11,7 +7,7 @@ namespace CK3Analyser.Generation
             var str = @"
 using CK3Analyser.Core.Domain.Entities;
 using CK3Analyser.Core.Resources;
-using CK3Analyser.Core.Resources.Semantics;
+using CK3Analyser.Core.Resources.Storage;
 using CK3Analyser.Core.Domain.Symbols;
 using System.Collections.Generic;
 using System.Linq;

@@ -4,7 +4,7 @@ using CK3Analyser.Core.Domain;
 using CK3Analyser.Core.Parsing;
 using CK3Analyser.Core.Parsing.Antlr;
 using CK3Analyser.Core.Resources;
-using CK3Analyser.Core.Resources.Semantics;
+using CK3Analyser.Core.Resources.Storage;
 using System;
 using System.Collections.Generic;
 using System.IO;

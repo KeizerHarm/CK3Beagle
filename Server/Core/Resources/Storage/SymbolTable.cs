@@ -3,7 +3,7 @@ using CK3Analyser.Core.Generated;
 using System;
 using System.Collections.Generic;
 
-namespace CK3Analyser.Core.Resources.Semantics
+namespace CK3Analyser.Core.Resources.Storage
 {
 
     public sealed class SymbolTable

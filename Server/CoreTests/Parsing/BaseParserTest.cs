@@ -4,7 +4,7 @@ using CK3Analyser.Core.Parsing.Antlr;
 using CK3Analyser.Core.Parsing.Fast;
 using CK3Analyser.Core.Parsing.SemanticPass;
 using CK3Analyser.Core.Resources;
-using CK3Analyser.Core.Resources.Semantics;
+using CK3Analyser.Core.Resources.Storage;
 using CK3Analyser.Core.Generated;
 
 namespace CK3Analyser.Core.Parsing

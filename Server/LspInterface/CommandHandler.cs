@@ -2,7 +2,7 @@
 using CK3Analyser.Analysis.Logging;
 using CK3Analyser.Core.Domain;
 using CK3Analyser.Core.Resources;
-using CK3Analyser.Core.Resources.Semantics;
+using CK3Analyser.Core.Resources.Storage;
 using System;
 using System.Collections.Generic;
 using System.IO;

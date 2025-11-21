@@ -71,7 +71,8 @@ namespace CK3Analyser.Core.Generated
             var str = @"
 using CK3Analyser.Core.Domain.Entities;
 using CK3Analyser.Core.Domain.Symbols;
-using CK3Analyser.Core.Resources.Semantics;
+using CK3Analyser.Core.Domain;
+using CK3Analyser.Core.Resources.Storage;
 using System;
 using System.Collections.Generic;
 using System.Linq;

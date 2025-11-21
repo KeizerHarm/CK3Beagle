@@ -1,10 +1,27 @@
-﻿using System;
+﻿using CK3Analyser.Core.Resources;
+using System;
 
 namespace CK3Analyser.Core.Domain.Entities
 {
     public class AnonymousToken : Node
     {
-        public string Value;
+        private int _value;
+        public string Value
+        {
+            get
+            {
+                return _value != -1 
+                    ? GlobalResources.StringTable.GetString(_value)
+                    : "";
+            }
+            set
+            {
+                _value = 
+                    value != ""
+                    ? GlobalResources.StringTable.GetId(value)
+                    : -1;
+            }
+        }
 
         #region hashing
         private int _strictHashCode;

@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Xml.Linq;
 using static CK3Analyser.Core.CK3Parser;
+using CK3Analyser.Core.Domain;
 
 namespace CK3Analyser.Core.Parsing.Antlr
 {
@@ -60,7 +61,7 @@ namespace CK3Analyser.Core.Parsing.Antlr
             }
             else if (thisNamedBlock is NamedBlock block)
             {
-                block.Scoper = context.SCOPER().ToString();
+                block.Scoper = context.SCOPER().ToString().StringToScoper();
                 block.Key = GetTokenText(context.identifier);
             }
             thisBlock.Pop();
@@ -114,7 +115,7 @@ namespace CK3Analyser.Core.Parsing.Antlr
         {
             var thisBinExp = (BinaryExpression)thisNonBlock;
             ApplyRange(context, thisBinExp);
-            thisBinExp.Scoper = context.SCOPER().ToString();
+            thisBinExp.Scoper = context.SCOPER().ToString().StringToScoper();
             thisBinExp.Value = GetTokenText(context.value);
             thisBinExp.Key = GetTokenText(context.key);
             thisNonBlock = null;

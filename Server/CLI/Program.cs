@@ -7,10 +7,9 @@ using CK3Analyser.Core.Parsing;
 using System.Linq;
 using CK3Analyser.Analysis;
 using System.Threading.Tasks;
-using CK3Analyser.Core.Resources.Semantics;
+using CK3Analyser.Core.Resources.Storage;
 using System.Collections.Generic;
 using CK3Analyser.Analysis.Logging;
-using System.Runtime.InteropServices;
 
 namespace CK3Analyser.CLI
 {
@@ -46,6 +45,7 @@ namespace CK3Analyser.CLI
             GlobalResources.New = new Context(NewVanillaPath, ContextType.New);
             GlobalResources.Configuration = new Configuration(true);
             GlobalResources.SymbolTable = new SymbolTable();
+            GlobalResources.StringTable = new StringTable();
 
             //ParsingService.BlacklistVanillaFilesInModContext(GlobalResources.Modded, GlobalResources.Old, progressDelegate);
             //var fastParser = new FastParser();

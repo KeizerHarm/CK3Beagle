@@ -1,5 +1,5 @@
 ﻿using CK3Analyser.Core.Domain;
-using CK3Analyser.Core.Resources.Semantics;
+using CK3Analyser.Core.Resources.Storage;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
@@ -8,13 +8,15 @@ namespace CK3Analyser.Core.Resources
 {
     public static class GlobalResources
     {
-        public static HashSet<string> EFFECTKEYS { get; private set; }
-        public static HashSet<string> TRIGGERKEYS { get; private set; }
-        public static HashSet<string> EVENTTARGETS { get; private set; }
 
         private static ConcurrentBag<string> _effectKeys;
         private static ConcurrentBag<string> _triggerKeys;
         private static ConcurrentBag<string> _eventTargets;
+        public static HashSet<string> EFFECTKEYS { get; private set; }
+        public static HashSet<string> TRIGGERKEYS { get; private set; }
+        public static HashSet<string> EVENTTARGETS { get; private set; }
+
+        private static bool IsLocked = false;
 
         public static Context Old {  get; set; }
         public static Context Modded { get; set; }
@@ -23,6 +25,7 @@ namespace CK3Analyser.Core.Resources
 
         public static Configuration Configuration { get; set; }
         public static SymbolTable SymbolTable { get; set; }
+        public static StringTable StringTable { get; set; }
 
         public static void AddEffects(IEnumerable<string> effects)
         {
@@ -52,9 +55,14 @@ namespace CK3Analyser.Core.Resources
 
         public static void Lock()
         {
+            IsLocked = true;
             EFFECTKEYS = _effectKeys.ToHashSet() ?? new HashSet<string>();
             TRIGGERKEYS = _triggerKeys?.ToHashSet() ?? new HashSet<string>();
             EVENTTARGETS = _eventTargets?.ToHashSet() ?? new HashSet<string>();
+
+            _effectKeys = null;
+            _triggerKeys = null;
+            _eventTargets = null;
         }
 
         public static void ClearEverything()
@@ -72,6 +80,7 @@ namespace CK3Analyser.Core.Resources
 
             Configuration = null;
             SymbolTable = null;
+            StringTable = null;
         }
     }
 }
