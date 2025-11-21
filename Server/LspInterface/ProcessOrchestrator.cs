@@ -61,6 +61,7 @@ namespace CK3Analyser.LspInterface
 
             GlobalResources.Configuration = new Configuration(jsonElement);
             GlobalResources.SymbolTable = new SymbolTable();
+            GlobalResources.StringTable = new StringTable();
 
             response = "Settings loaded succesfully: " + GlobalResources.Configuration.ToString();
             return true;
