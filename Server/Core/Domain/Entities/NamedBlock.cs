@@ -5,8 +5,8 @@ namespace CK3Analyser.Core.Domain.Entities
 {
     public class NamedBlock : Block
     {
-        public string Key { get; set; }
-        public string Scoper { get; set; }
+        public string Key;
+        public string Scoper;
 
         public NamedBlock(string key = "", string scoper = "=")
         {
@@ -23,25 +23,8 @@ namespace CK3Analyser.Core.Domain.Entities
         }
 
         #region hashing
-        private int _looseHashCode;
-        public override int GetLooseHashCode()
-        {
-            if (_looseHashCode == 0)
-            {
-                var hashCode = new HashCode();
-                hashCode.Add(Key);
-                foreach (var relevantChild in Children.Where(x => x.NodeType != NodeType.NonStatement))
-                {
-                    hashCode.Add(relevantChild.GetLooseHashCode());
-                }
-                _looseHashCode = hashCode.ToHashCode();
-            }
-
-            return _looseHashCode;
-        }
 
         private int _strictHashCode;
-
         public override int GetStrictHashCode()
         {
             if (_strictHashCode == 0)

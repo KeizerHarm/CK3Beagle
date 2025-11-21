@@ -6,7 +6,7 @@ namespace CK3Analyser.Core.Domain.Entities
 {
     public class Declaration : NamedBlock
     {
-        public DeclarationType DeclarationType { get; set; }
+        public DeclarationType DeclarationType;
 
         public Declaration(string key, DeclarationType declarationType) : base(key)
         {

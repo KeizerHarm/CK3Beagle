@@ -5,7 +5,7 @@ namespace CK3Analyser.Core.Domain.Entities
 {
     public abstract class Block : Node
     {
-        public List<Node> Children { get; } = new List<Node>();
+        public List<Node> Children = new List<Node>();
 
         public void AddChild(Node node, bool addText = false)
         {

@@ -125,24 +125,14 @@ namespace CK3Analyser.Core.Parsing.Antlr
             var startColumn = context.Start.Column;
             var startOffset = context.Start.StartIndex;
 
-            node.Start = new Position
-            {
-                Line = startLine,
-                Column = startColumn,
-                Offset = startOffset
-            };
+            node.Start = new Position(startLine, startColumn, startOffset);
 
             var finalToken = context.Stop ?? context.Start;
             var endLine = finalToken.Line - 1;
             var endColumn = finalToken.Column + finalToken.Text.Length;
             var endOffset = finalToken.StopIndex + 1;
 
-            node.End = new Position
-            {
-                Line = endLine,
-                Column = endColumn,
-                Offset = endOffset
-            };
+            node.End = new Position(endLine, endColumn, endOffset);
         }
     }
 }

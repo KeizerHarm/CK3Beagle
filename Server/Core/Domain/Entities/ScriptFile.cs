@@ -7,13 +7,13 @@ namespace CK3Analyser.Core.Domain.Entities
 {
     public class ScriptFile : Block
     {
-        public Context Context { get; }
-        public string RelativePath { get; set; }
-        public string AbsolutePath { get; set; }
+        public Context Context;
+        public string RelativePath;
+        public string AbsolutePath;
         private string rawFileContents { get; set; }
-        public OrderedDictionary<string, Declaration> Declarations { get; private set; } = [];
+        public OrderedDictionary<string, Declaration> Declarations = [];
 
-        public DeclarationType ExpectedDeclarationType { get; }
+        public DeclarationType ExpectedDeclarationType;
 
         public string GetContentSelectionString(int absoluteStartIndex, int absoluteEndIndex)
         {
@@ -103,23 +103,6 @@ namespace CK3Analyser.Core.Domain.Entities
 
 
         #region hashing
-        private int _looseHashCode;
-        public override int GetLooseHashCode()
-        {
-            if (_looseHashCode == 0)
-            {
-                var hashCode = new HashCode();
-                hashCode.Add(RelativePath);
-                foreach (var relevantChild in Children.Where(x => x.GetType() != typeof(Comment)))
-                {
-                    hashCode.Add(relevantChild.GetLooseHashCode());
-                }
-                _looseHashCode = hashCode.ToHashCode();
-            }
-
-            return _looseHashCode;
-        }
-
         private int _strictHashCode;
         public override int GetStrictHashCode()
         {

@@ -7,18 +7,18 @@ namespace CK3Analyser.Core.Domain.Entities
     public readonly struct Position(int line, int column, int offset)
     {
         //0-based line number
-        public int Line { get; init; } = line;
+        public readonly int Line = line;
         //0-based character index in line
-        public int Column { get; init; } = column;
+        public readonly int Column = column;
         //0-based absolute index in file
-        public int Offset { get; init; } = offset;
+        public readonly int Offset = offset;
 
         public override string ToString() => this.GenericToString();
     }
 
     public abstract class Node
     {
-        public string StringRepresentation 
+        public string StringRepresentation
         {
             get
             {
@@ -32,10 +32,10 @@ namespace CK3Analyser.Core.Domain.Entities
                 return File.GetContentSelectionSpan(Start.Offset, End.Offset);
             }
         }
-        public Position Start { get; set; }
-        public Position End { get; set; }
+        public Position Start;
+        public Position End;
 
-        public Node PrevSibling { get; set; }
+        public Node PrevSibling;
         public Node PrevNonCommentSibling {
             get
             {
@@ -64,7 +64,7 @@ namespace CK3Analyser.Core.Domain.Entities
                 return PrevSibling;
             }
         }
-        public Node NextSibling { get; set; }
+        public Node NextSibling;
         public Node NextNonCommentSibling 
         {
             get
@@ -95,7 +95,7 @@ namespace CK3Analyser.Core.Domain.Entities
                 return NextSibling;
             }
         }
-        public Block Parent { get; set; }
+        public Block Parent;
         public ScriptFile File
         {
             get
@@ -110,9 +110,9 @@ namespace CK3Analyser.Core.Domain.Entities
             }
         }
 
-        public NodeType NodeType { get; set; } = NodeType.NonStatement;
-        public int SemanticId { get; set; } = -1;
-        public SymbolType SymbolType { get; set; } = SymbolType.Undefined;
+        public NodeType NodeType = NodeType.NonStatement;
+        public int SemanticId = -1;
+        public SymbolType SymbolType = SymbolType.Undefined;
 
         public abstract void Accept(IDomainVisitor visitor);
 
@@ -129,7 +129,6 @@ namespace CK3Analyser.Core.Domain.Entities
             return sb.ToString();
         }
 
-        public abstract int GetLooseHashCode();
         public abstract int GetStrictHashCode();
 
         public virtual int GetSize() => NodeType == NodeType.NonStatement ? 0 : 1;

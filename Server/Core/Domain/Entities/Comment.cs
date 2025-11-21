@@ -15,12 +15,6 @@ namespace CK3Analyser.Core.Domain.Entities
         }
         public override void Accept(IDomainVisitor visitor) => visitor.Visit(this);
 
-        public override int GetLooseHashCode()
-        {
-            //Comments don't count
-            return 0;
-        }
-
         public override int GetStrictHashCode()
         {
             //Comments don't count

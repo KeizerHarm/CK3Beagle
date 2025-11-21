@@ -96,8 +96,6 @@ namespace CK3Analyser.CLI
             Console.WriteLine($"Found { analyser.LogEntries.Count()} issues");
             Console.WriteLine($"Parsing time: {parsingTimer.Elapsed}");
             Console.WriteLine($"Analysis time: {analysisTimer.Elapsed}");
-            var returnMessage = GetReturnMessage(analyser.LogEntries).ToString();
-            var size = returnMessage.Length;
             //stopwatch.Restart();
             //GatherDeclarations(fastParser, Modded);
             //stopwatch.Stop();

@@ -508,9 +508,6 @@ namespace CK3Analyser.Analysis.Detectors
         }
         private int GetNoOfDifferentValues(Node first, Node second)
         {
-            if (first.GetLooseHashCode() != second.GetLooseHashCode())
-                return int.MaxValue;
-
             if (first.GetStrictHashCode() == second.GetStrictHashCode())
                 return 0;
 
