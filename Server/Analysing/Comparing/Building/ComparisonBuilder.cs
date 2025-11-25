@@ -3,7 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace CK3Analyser.Analysis.Comparing.Building
+namespace CK3Analyser.Analysing.Comparing.Building
 {
     public class ComparisonBuilder
     {

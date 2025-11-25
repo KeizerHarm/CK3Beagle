@@ -1,5 +1,4 @@
 ﻿using Microsoft.CodeAnalysis;
-using System.Diagnostics;
 using System.Linq;
 
 namespace CK3Analyser.Generation

@@ -1,8 +1,8 @@
-﻿using CK3Analyser.Analysis.Logging;
+﻿using CK3Analyser.Analysing.Logging;
 using CK3Analyser.Core.Domain;
 using CK3Analyser.Core.Domain.Entities;
 
-namespace CK3Analyser.Analysis.Detectors
+namespace CK3Analyser.Analysing.Detectors
 {
     public abstract class BaseDetector
     {

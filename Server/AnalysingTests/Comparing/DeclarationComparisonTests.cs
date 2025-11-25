@@ -1,5 +1,6 @@
 ﻿namespace CK3Analyser.Analysing.Comparing
 {
+    [Collection("ComparisonTests")]
     public class DeclarationComparisonTests : BaseComparisonTest
     {
         [Fact]

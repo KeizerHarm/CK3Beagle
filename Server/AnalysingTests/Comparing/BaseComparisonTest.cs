@@ -1,12 +1,14 @@
 ﻿using CK3Analyser.Core.Domain;
 using CK3Analyser.Core.Domain.Entities;
+using CK3Analyser.Core.Generated;
 using CK3Analyser.Core.Parsing.Antlr;
 using CK3Analyser.Core.Parsing.SemanticPass;
 using CK3Analyser.Core.Resources;
-using CK3Analyser.Core.Generated;
+using CK3Analyser.Core.Resources.Storage;
 
 namespace CK3Analyser.Analysing.Comparing
 {
+
     public class BaseComparisonTest
     {
         public static (ScriptFile, ScriptFile) GetTestCase(string caseName, DeclarationType? expectedDeclarationType = null)
@@ -17,6 +19,8 @@ namespace CK3Analyser.Analysing.Comparing
             GlobalResources.AddEffects(["add_gold"]);
             GlobalResources.AddTriggers(["has_gold"]);
             GlobalResources.AddEventTargets(["father"]);
+            GlobalResources.SymbolTable = new SymbolTable();
+            GlobalResources.StringTable = new StringTable();
 
             var oldContext = new Context("", ContextType.Old);
             var newContext = new Context("", ContextType.New);

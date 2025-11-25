@@ -7,6 +7,8 @@ using CK3Analyser.Core.Resources;
 using CK3Analyser.Core.Resources.Storage;
 using CK3Analyser.Core.Generated;
 
+[assembly: CollectionBehavior(DisableTestParallelization = true)]
+
 namespace CK3Analyser.Core.Parsing
 {
     public class BaseParserTest
@@ -136,10 +138,11 @@ namespace CK3Analyser.Core.Parsing
             triggers ??= ["has_gold"];
             eventTargets ??= ["father"];
 
+            GlobalResources.SymbolTable = new SymbolTable();
+            GlobalResources.StringTable = new StringTable();
             GlobalResources.AddEffects(effects);
             GlobalResources.AddTriggers(triggers);
             GlobalResources.AddEventTargets(eventTargets);
-            GlobalResources.SymbolTable = new SymbolTable();
             GlobalResources.Lock();
 
             var context = new Context("", ContextType.Old);

@@ -2,7 +2,7 @@
 using CK3Analyser.Core.Resources;
 using System.Collections.Generic;
 
-namespace CK3Analyser.Analysis.Logging
+namespace CK3Analyser.Analysing.Logging
 {
     public class Logger : ILogger
     {

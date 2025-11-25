@@ -16,16 +16,14 @@ namespace CK3Analyser.Core.Resources
         public static HashSet<string> TRIGGERKEYS { get; private set; }
         public static HashSet<string> EVENTTARGETS { get; private set; }
 
-        private static bool IsLocked = false;
+        public static Context Old;
+        public static Context Modded;
+        public static Context New;
+        public static HashSet<string> VanillaModIntersect = [];
 
-        public static Context Old {  get; set; }
-        public static Context Modded { get; set; }
-        public static Context New { get; set; }
-        public static HashSet<string> VanillaModIntersect { get; set; } = [];
-
-        public static Configuration Configuration { get; set; }
-        public static SymbolTable SymbolTable { get; set; }
-        public static StringTable StringTable { get; set; }
+        public static Configuration Configuration;
+        public static SymbolTable SymbolTable;
+        public static StringTable StringTable;
 
         public static void AddEffects(IEnumerable<string> effects)
         {
@@ -55,7 +53,6 @@ namespace CK3Analyser.Core.Resources
 
         public static void Lock()
         {
-            IsLocked = true;
             EFFECTKEYS = _effectKeys.ToHashSet() ?? new HashSet<string>();
             TRIGGERKEYS = _triggerKeys?.ToHashSet() ?? new HashSet<string>();
             EVENTTARGETS = _eventTargets?.ToHashSet() ?? new HashSet<string>();

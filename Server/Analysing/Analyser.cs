@@ -1,5 +1,5 @@
-﻿using CK3Analyser.Analysis.Detectors;
-using CK3Analyser.Analysis.Logging;
+﻿using CK3Analyser.Analysing.Detectors;
+using CK3Analyser.Analysing.Logging;
 using CK3Analyser.Core;
 using CK3Analyser.Core.Domain;
 using CK3Analyser.Core.Resources;
@@ -7,7 +7,7 @@ using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
-namespace CK3Analyser.Analysis
+namespace CK3Analyser.Analysing
 {
     public class Analyser
     {
@@ -65,6 +65,11 @@ namespace CK3Analyser.Analysis
                 visitor.Detectors.Add(new KeywordAsScopeNameDetector(logger, context,
                     GlobalResources.Configuration.KeywordAsScopeNameSettings));
             }
+        }
+
+        public async Task ComparativeAnalyse(Context modded, Context old, Func<string, Task> progressDelegate)
+        {
+            throw new NotImplementedException();
         }
     }
 }

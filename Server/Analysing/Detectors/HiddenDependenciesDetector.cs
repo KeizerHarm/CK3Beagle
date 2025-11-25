@@ -1,4 +1,4 @@
-﻿using CK3Analyser.Analysis.Logging;
+﻿using CK3Analyser.Analysing.Logging;
 using CK3Analyser.Core.Domain;
 using CK3Analyser.Core.Domain.Entities;
 using CK3Analyser.Core.Generated;
@@ -6,7 +6,7 @@ using CK3Analyser.Core.Resources.DetectorSettings;
 using System.Collections.Generic;
 using System.Text;
 
-namespace CK3Analyser.Analysis.Detectors
+namespace CK3Analyser.Analysing.Detectors
 {
     public class HiddenDependenciesDetector : BaseDetector
     {

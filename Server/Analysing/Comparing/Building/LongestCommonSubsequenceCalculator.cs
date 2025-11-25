@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace CK3Analyser.Analysis.Comparing.Building
+namespace CK3Analyser.Analysing.Comparing.Building
 {
     public class MyersAlgorithm
     {

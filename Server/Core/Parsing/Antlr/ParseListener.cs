@@ -4,7 +4,6 @@ using CK3Analyser.Core.Generated;
 using CK3Analyser.Core.Domain.Entities;
 using System.Collections.Generic;
 using System.Linq;
-using System.Xml.Linq;
 using static CK3Analyser.Core.CK3Parser;
 using CK3Analyser.Core.Domain;
 

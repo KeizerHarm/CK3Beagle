@@ -1,7 +1,7 @@
 ﻿using CK3Analyser.Core.Domain.Entities;
 using System;
 
-namespace CK3Analyser.Analysis.Comparing.Building
+namespace CK3Analyser.Analysing.Comparing.Building
 {
     public class PostOrderWalker
     {

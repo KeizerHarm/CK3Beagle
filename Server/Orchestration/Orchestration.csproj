@@ -2,11 +2,12 @@
 
   <PropertyGroup>
     <TargetFramework>net9.0</TargetFramework>
-    <RootNamespace>CK3Analyser.Analysing</RootNamespace>
+    <RootNamespace>CK3Analyser.Orchestration</RootNamespace>
   </PropertyGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\Core\Core.csproj" />
+    <ProjectReference Include="..\Analysing\Analysing.csproj" />
   </ItemGroup>
 
 </Project>

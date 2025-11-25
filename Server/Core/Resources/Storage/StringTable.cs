@@ -1,29 +1,26 @@
-﻿using System;
-using System.Collections.Concurrent;
-using System.Collections.Generic;
-using System.Threading;
+﻿using System.Collections.Generic;
 
 namespace CK3Analyser.Core.Resources.Storage
 {
     public class StringTable
     {
-        private readonly ConcurrentDictionary<string, int> _stringTable = [];
+        private readonly Dictionary<string, int> _stringTable = [];
         private int _nextId = 0;
         public List<string> STRINGTABLE = [];
         private readonly object lockObject = new();
 
         public int GetId(string s)
         {
-            return _stringTable.GetOrAdd(s, key =>
+            lock (lockObject)
             {
-                int id;
-                lock (lockObject)
+                if (!_stringTable.TryGetValue(s, out int id))
                 {
                     id = _nextId++;
-                    STRINGTABLE.Add(key);
+                    _stringTable[s] = id;
+                    STRINGTABLE.Add(s);
                 }
                 return id;
-            });
+            }
         }
 
         public string GetString(int i)
@@ -32,7 +29,6 @@ namespace CK3Analyser.Core.Resources.Storage
             {
                 return STRINGTABLE[i];
             }
-            
         }
     }
 }

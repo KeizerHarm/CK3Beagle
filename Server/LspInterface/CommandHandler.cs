@@ -1,11 +1,9 @@
-﻿using CK3Analyser.Analysis;
-using CK3Analyser.Analysis.Logging;
-using CK3Analyser.Core.Domain;
+﻿using CK3Analyser.Analysing;
+using CK3Analyser.Analysing.Logging;
 using CK3Analyser.Core.Resources;
-using CK3Analyser.Core.Resources.Storage;
+using CK3Analyser.Orchestration;
 using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
 using System.Text;
 using System.Text.Json;
@@ -17,12 +15,22 @@ namespace CK3Analyser.LspInterface
     public class CommandHandler
     {
         private readonly Program _program;
-        private readonly ProcessOrchestrator _orchestrator;
+        private readonly IProcessOrchestrator _orchestrator;
+
+        async Task positiveProgressDelegate(string msg)
+        {
+            await _program.SendMessageAsync(_program.GetBasicMessage(msg));
+        }
+
+        async Task negativeProgressDelegate(string msg)
+        {
+            await _program.SendMessageAsync(_program.GetBasicMessage(msg));
+        }
 
         public CommandHandler(Program program)
         {
             _program = program;
-            _orchestrator = new ProcessOrchestrator();
+            _orchestrator = new ProcessOrchestrator(positiveProgressDelegate, negativeProgressDelegate);
         }
 
         public async Task HandleCommand(string commandType, JsonElement payload)
@@ -33,14 +41,13 @@ namespace CK3Analyser.LspInterface
             }
             else if (commandType == "settings")
             {
-                bool success = HandleSettings(payload, out string settingsResponse);
-                if (success)
+                try
                 {
-                    await _program.SendMessageAsync(_program.GetBasicMessage(settingsResponse));
+                    await _orchestrator.InitiateFromJson(payload);
                 }
-                else
+                catch(Exception ex)
                 {
-                    await _program.SendMessageAsync(_program.GetErrorMessage(settingsResponse));
+                    await _program.SendMessageAsync(_program.GetErrorMessage(ex.ToString()));
                 }
             }
             else if (commandType == "analyse")
@@ -62,12 +69,7 @@ namespace CK3Analyser.LspInterface
 
         private async Task Analyse()
         {
-            async Task progressDelegate(string msg)
-            {
-                await _program.SendMessageAsync(_program.GetBasicMessage(msg));
-            }
-
-            var logEntries = await _orchestrator.HandleAnalysis(progressDelegate);
+            var logEntries = await _orchestrator.HandleAnalysis();
 
             //Send all in one go
             if (logEntries.Count() < 2000)
@@ -179,11 +181,6 @@ namespace CK3Analyser.LspInterface
                     }
                 )
             };
-        }
-
-        private bool HandleSettings(JsonElement jsonElement, out string response)
-        {
-            return _orchestrator.Initiate(jsonElement, out response);
         }
     }
 }

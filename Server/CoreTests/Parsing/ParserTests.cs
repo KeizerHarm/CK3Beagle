@@ -1,6 +1,8 @@
 ﻿using CK3Analyser.Core.Domain;
 using CK3Analyser.Core.Domain.Entities;
 using CK3Analyser.Core.Generated;
+using CK3Analyser.Core.Resources;
+using CK3Analyser.Core.Resources.Storage;
 
 namespace CK3Analyser.Core.Parsing
 {
@@ -35,6 +37,8 @@ namespace CK3Analyser.Core.Parsing
         {
             //arrange
             var stringToParse = GetTestCaseContents("SimpleBlock");
+            GlobalResources.SymbolTable = new SymbolTable();
+            GlobalResources.StringTable = new StringTable();
 
             var relativePath = "";
             var context = new Context("", ContextType.Old);
@@ -162,6 +166,8 @@ namespace CK3Analyser.Core.Parsing
 
             var relativePath = "";
             var context = new Context("", ContextType.Old);
+            GlobalResources.SymbolTable = new SymbolTable();
+            GlobalResources.StringTable = new StringTable();
             var expectedDeclarationType = DeclarationType.ScriptedEffect;
             var parser = GetParser(parserType);
 

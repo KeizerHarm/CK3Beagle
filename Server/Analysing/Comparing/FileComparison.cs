@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 
-namespace CK3Analyser.Analysis.Comparing
+namespace CK3Analyser.Analysing.Comparing
 {
     public class FileComparison
     {

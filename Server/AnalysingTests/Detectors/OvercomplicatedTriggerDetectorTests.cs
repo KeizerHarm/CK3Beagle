@@ -1,6 +1,4 @@
-﻿using CK3Analyser.Analysis;
-using CK3Analyser.Analysis.Detectors;
-using CK3Analyser.Analysis.Logging;
+﻿using CK3Analyser.Analysing.Logging;
 using CK3Analyser.Core.Domain;
 using CK3Analyser.Core.Resources;
 using CK3Analyser.Core.Resources.DetectorSettings;

@@ -1,8 +1,8 @@
-﻿using CK3Analyser.Analysis.Comparing.Building;
+﻿using CK3Analyser.Analysing.Comparing.Building;
 using CK3Analyser.Core.Domain.Entities;
 using System.Collections.Generic;
 
-namespace CK3Analyser.Analysis.Comparing
+namespace CK3Analyser.Analysing.Comparing
 {
     public class DeclarationComparison
     {

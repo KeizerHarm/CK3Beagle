@@ -1,6 +1,6 @@
 ﻿using CK3Analyser.Core.Domain.Entities;
 
-namespace CK3Analyser.Analysis.Comparing.Building
+namespace CK3Analyser.Analysing.Comparing.Building
 {
     public class EditOperation
     {

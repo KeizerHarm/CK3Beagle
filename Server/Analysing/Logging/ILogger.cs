@@ -1,7 +1,7 @@
 ﻿using CK3Analyser.Core.Domain.Entities;
 using CK3Analyser.Core.Resources;
 
-namespace CK3Analyser.Analysis.Logging
+namespace CK3Analyser.Analysing.Logging
 {
     public interface ILogger
     {

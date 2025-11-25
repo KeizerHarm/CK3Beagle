@@ -26,7 +26,7 @@ namespace CK3Analyser.Core.Parsing
                 await progressDelegate("Completed parsing " + declarationType.ToString());
             }
             GlobalResources.Lock();
-            Console.WriteLine("Done with first pass");
+            //Console.WriteLine("Done with first pass");
             new SemanticPassHandler().ExecuteSemanticPass(context);
             //Console.WriteLine("Done with second pass");
         }
@@ -133,6 +133,11 @@ namespace CK3Analyser.Core.Parsing
 
 
             await progressDelegate("Parsed all vanilla entities from files intersecting with mod");
+        }
+
+        public static void PrepareComparativeAnalysis()
+        {
+            throw new NotImplementedException();
         }
     }
 }

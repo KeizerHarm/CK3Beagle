@@ -6,6 +6,7 @@ using CK3Analyser.Core.Parsing.SemanticPass;
 using CK3Analyser.Core.Generated;
 using CK3Analyser.Core.Resources.Storage;
 
+[assembly: CollectionBehavior(DisableTestParallelization = true)]
 namespace CK3Analyser.Analysing.Detectors
 {
     public class BaseDetectorTest
@@ -19,6 +20,7 @@ namespace CK3Analyser.Analysing.Detectors
             GlobalResources.AddEventTargets(["father", "link1", "link2"]);
             GlobalResources.Lock();
             GlobalResources.SymbolTable = new SymbolTable();
+            GlobalResources.StringTable = new StringTable();
 
             var context = new Context("", ContextType.Old);
             var expDeclarationType = expectedDeclarationType ?? DeclarationType.Debug;
