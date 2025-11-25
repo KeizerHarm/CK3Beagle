@@ -54,7 +54,9 @@ namespace CK3Analyser.LspInterface
             {
                 try
                 {
-                    await Analyse();
+                    var logEntries = await _orchestrator.HandleAnalysis();
+                    await SendLogs(logEntries);
+                    _orchestrator.WrapUp();
                 }
                 catch (Exception ex)
                 {
@@ -67,10 +69,8 @@ namespace CK3Analyser.LspInterface
             }
         }
 
-        private async Task Analyse()
+        private async Task SendLogs(IEnumerable<LogEntry> logEntries)
         {
-            var logEntries = await _orchestrator.HandleAnalysis();
-
             //Send all in one go
             if (logEntries.Count() < 2000)
             {
@@ -84,77 +84,77 @@ namespace CK3Analyser.LspInterface
                     }
                 };
                 await _program.SendMessageAsync(response);
+                return;
             }
-            else //Chunks
+
+            //Chunks
+            var initialResponse = new
             {
-                var response = new
+                type = "analysis_initial",
+                payload = new
                 {
-                    type = "analysis_initial",
-                    payload = new
-                    {
-                        message = $"Found {logEntries.Where(x => x.Severity > Severity.Debug).Count()} issues, transmitting in chunks"
-                    }
-                };
-                await _program.SendMessageAsync(response);
-
-                const int MAX_CHUNK_BYTES = 1_000_000;
-                var currentChunk = new List<object>();
-                int currentSize = 0;
-
-                foreach (var entry in logEntries)
-                {
-                    var report = LogEntryToReport(entry);
-                    var serializedEntry = JsonSerializer.Serialize(report);
-                    int entrySize = Encoding.UTF8.GetByteCount(serializedEntry);
-
-                    if (currentSize + entrySize > MAX_CHUNK_BYTES)
-                    {
-                        await _program.SendMessageAsync(
-                            new { 
-                                type = "analysis_median", 
-                                payload = new 
-                                { 
-                                    smells = currentChunk.ToArray(),
-                                    message = "Chunk size: " + currentSize
-                                }
-                            }
-                        );
-                        Thread.Sleep(500);
-                        currentChunk.Clear();
-                        currentSize = 0;
-                    }
-
-                    currentChunk.Add(report);
-                    currentSize += entrySize;
+                    message = $"Found {logEntries.Where(x => x.Severity > Severity.Debug).Count()} issues, transmitting in chunks"
                 }
+            };
+            await _program.SendMessageAsync(initialResponse);
 
-                if (currentChunk.Count > 0)
+            const int MAX_CHUNK_BYTES = 1_000_000;
+            var currentChunk = new List<object>();
+            int currentSize = 0;
+
+            foreach (var entry in logEntries)
+            {
+                var report = LogEntryToReport(entry);
+                var serializedEntry = JsonSerializer.Serialize(report);
+                int entrySize = Encoding.UTF8.GetByteCount(serializedEntry);
+
+                if (currentSize + entrySize > MAX_CHUNK_BYTES)
                 {
                     await _program.SendMessageAsync(
-                        new { 
+                        new
+                        {
                             type = "analysis_median",
                             payload = new
-                            { 
+                            {
                                 smells = currentChunk.ToArray(),
-                                message = "Last of the chunks!"
-                            } 
+                                message = "Chunk size: " + currentSize
+                            }
                         }
                     );
                     Thread.Sleep(500);
+                    currentChunk.Clear();
+                    currentSize = 0;
                 }
 
-                var finalResponse = new
-                {
-                    type = "analysis_final",
-                    payload = new
-                    {
-                        message = "All smells transmitted!"
-                    }
-                };
-                await _program.SendMessageAsync(finalResponse);
+                currentChunk.Add(report);
+                currentSize += entrySize;
             }
 
-            _orchestrator.WrapUp();
+            if (currentChunk.Count > 0)
+            {
+                await _program.SendMessageAsync(
+                    new
+                    {
+                        type = "analysis_median",
+                        payload = new
+                        {
+                            smells = currentChunk.ToArray(),
+                            message = "Last of the chunks!"
+                        }
+                    }
+                );
+                Thread.Sleep(500);
+            }
+
+            var finalResponse = new
+            {
+                type = "analysis_final",
+                payload = new
+                {
+                    message = "All smells transmitted!"
+                }
+            };
+            await _program.SendMessageAsync(finalResponse);
         }
 
         private static object LogEntryToReport(LogEntry x)

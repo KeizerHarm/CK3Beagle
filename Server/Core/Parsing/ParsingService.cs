@@ -107,7 +107,7 @@ namespace CK3Analyser.Core.Parsing
             await progressDelegate("Parsed vanilla macros");
         }
 
-        public static async Task ParseVanillaEntitiesInMod(
+        public static async Task ParseVanillaEntitiesInMod (
             Func<ICk3Parser> parserMaker, 
             Context modContext,
             Context vanillaContext, 
@@ -137,7 +137,14 @@ namespace CK3Analyser.Core.Parsing
 
         public static void PrepareComparativeAnalysis()
         {
-            throw new NotImplementedException();
+            //Clear ASTs from mod context that are not in the intersect, or macro types
+            for (int i = 0; i < GlobalResources.Modded.Declarations.Length; i++)
+            {
+                Dictionary<string, Declaration> declType = GlobalResources.Modded.Declarations[i];
+                var declsToRemove = declType.Where(x => !GlobalResources.VanillaModIntersect.Contains(x.Value.File.RelativePath));
+                GlobalResources.Modded.Declarations[i] = declType.Except(declsToRemove).ToDictionary();
+            }
+
         }
     }
 }

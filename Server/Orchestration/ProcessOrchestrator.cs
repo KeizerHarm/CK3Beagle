@@ -54,7 +54,7 @@ namespace CK3Analyser.Orchestration
 
             LogsParser.ParseLogs(logsFolderPath);
 
-            GlobalResources.Old = new Context(vanillaPath, ContextType.Old);
+            GlobalResources.Vanilla = new Context(vanillaPath, ContextType.Vanilla);
             GlobalResources.Modded = new Context(modPath, ContextType.Modded);
 
             GlobalResources.Configuration = new Configuration(json);
@@ -84,7 +84,7 @@ namespace CK3Analyser.Orchestration
         public void InitiateFromMinimalConfig(string vanillaPath, string modPath, string logsPath)
         {
             LogsParser.ParseLogs(logsPath);
-            GlobalResources.Old = new Context(vanillaPath, ContextType.Old);
+            GlobalResources.Vanilla = new Context(vanillaPath, ContextType.Vanilla);
             GlobalResources.Modded = new Context(modPath, ContextType.Modded);
             GlobalResources.Configuration = new Configuration(true);
             GlobalResources.SymbolTable = new SymbolTable();
@@ -95,7 +95,7 @@ namespace CK3Analyser.Orchestration
         {
             if (GlobalResources.Configuration.VanillaFileHandling == VanillaFileHandling.IgnoreEntirely)
             {
-                ParsingService.BlacklistVanillaFilesInModContext(GlobalResources.Modded, GlobalResources.Old, _positiveProgressDelegate);
+                ParsingService.BlacklistVanillaFilesInModContext(GlobalResources.Modded, GlobalResources.Vanilla, _positiveProgressDelegate);
             }
 
             await ParsingService.ParseAllEntities(() => new AntlrParser(), GlobalResources.Modded, _positiveProgressDelegate);
@@ -103,19 +103,17 @@ namespace CK3Analyser.Orchestration
 
             if (GlobalResources.Configuration.ReadVanilla || GlobalResources.Configuration.VanillaFileHandling == VanillaFileHandling.AnalyseModsAdditions)
             {
-                await ParsingService.ParseMacroEntities(() => new AntlrParser(), GlobalResources.Old, _positiveProgressDelegate);
+                await ParsingService.ParseMacroEntities(() => new AntlrParser(), GlobalResources.Vanilla, _positiveProgressDelegate);
             }
             if (GlobalResources.Configuration.VanillaFileHandling == VanillaFileHandling.AnalyseModsAdditions)
             {
-                await ParsingService.ParseVanillaEntitiesInMod(() => new AntlrParser(), GlobalResources.Modded, GlobalResources.Old, _positiveProgressDelegate);
+                await ParsingService.ParseVanillaEntitiesInMod(() => new AntlrParser(), GlobalResources.Modded, GlobalResources.Vanilla, _positiveProgressDelegate);
             }
 
             var analyser = new Analyser();
             await analyser.Analyse(GlobalResources.Modded, _positiveProgressDelegate);
             return analyser.LogEntries;
         }
-
-
 
         public async Task<IEnumerable<LogEntry>> HandleComparativeAnalysis(bool reportTiming = false)
         {
@@ -125,7 +123,7 @@ namespace CK3Analyser.Orchestration
             await _positiveProgressDelegate("Cleared unused ASTs");
 
             var comparativeAnalyser = new Analyser();
-            await comparativeAnalyser.ComparativeAnalyse(GlobalResources.Modded, GlobalResources.Old, _positiveProgressDelegate);
+            await comparativeAnalyser.ComparativeAnalyse(GlobalResources.Modded, GlobalResources.Vanilla, _positiveProgressDelegate);
             return comparativeAnalyser.LogEntries;
 
         }

@@ -8,8 +8,8 @@ namespace CK3Analyser.Core.Domain
 {
     public enum ContextType
     {
-        Old,
-        New,
+        Vanilla,
+        UpdatedVanilla,
         Modded,
         ModdedRebased
     }

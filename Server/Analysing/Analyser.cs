@@ -69,7 +69,7 @@ namespace CK3Analyser.Analysing
 
         public async Task ComparativeAnalyse(Context modded, Context old, Func<string, Task> progressDelegate)
         {
-            throw new NotImplementedException();
+            
         }
     }
 }

@@ -145,7 +145,7 @@ namespace CK3Analyser.Core.Parsing
             GlobalResources.AddEventTargets(eventTargets);
             GlobalResources.Lock();
 
-            var context = new Context("", ContextType.Old);
+            var context = new Context("", ContextType.Vanilla);
             var expDeclarationType = expectedDeclarationType ?? DeclarationType.Debug;
             ICk3Parser parser;
             if (parserType != null)

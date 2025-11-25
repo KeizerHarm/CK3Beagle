@@ -16,7 +16,7 @@ namespace CK3Analyser.Core.Parsing
             var stringToParse = "";
 
             var relativePath = "";
-            var context = new Context("", ContextType.Old);
+            var context = new Context("", ContextType.Vanilla);
             var expectedDeclarationType = DeclarationType.Debug;
             var parser = GetParser(parserType);
 
@@ -41,7 +41,7 @@ namespace CK3Analyser.Core.Parsing
             GlobalResources.StringTable = new StringTable();
 
             var relativePath = "";
-            var context = new Context("", ContextType.Old);
+            var context = new Context("", ContextType.Vanilla);
             var expectedDeclarationType = DeclarationType.Debug;
             var parser = GetParser(parserType);
 
@@ -79,7 +79,7 @@ namespace CK3Analyser.Core.Parsing
             var stringToParse = GetTestCaseContents("BlockWithComment");
 
             var relativePath = "";
-            var context = new Context("", ContextType.Old);
+            var context = new Context("", ContextType.Vanilla);
             var expectedDeclarationType = DeclarationType.Debug;
             var parser = GetParser(parserType);
 
@@ -123,7 +123,7 @@ namespace CK3Analyser.Core.Parsing
             var stringToParse = GetTestCaseContents("MultilineBlock");
 
             var relativePath = "";
-            var context = new Context("", ContextType.Old);
+            var context = new Context("", ContextType.Vanilla);
             var expectedDeclarationType = DeclarationType.Debug;
             var parser = GetParser(parserType);
 
@@ -165,7 +165,7 @@ namespace CK3Analyser.Core.Parsing
             var stringToParse = GetTestCaseContents("ScriptedEffect");
 
             var relativePath = "";
-            var context = new Context("", ContextType.Old);
+            var context = new Context("", ContextType.Vanilla);
             GlobalResources.SymbolTable = new SymbolTable();
             GlobalResources.StringTable = new StringTable();
             var expectedDeclarationType = DeclarationType.ScriptedEffect;

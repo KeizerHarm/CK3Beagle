@@ -22,8 +22,8 @@ namespace CK3Analyser.Analysing.Comparing
             GlobalResources.SymbolTable = new SymbolTable();
             GlobalResources.StringTable = new StringTable();
 
-            var oldContext = new Context("", ContextType.Old);
-            var newContext = new Context("", ContextType.New);
+            var oldContext = new Context("", ContextType.Vanilla);
+            var newContext = new Context("", ContextType.UpdatedVanilla);
 
             var expDeclarationType = expectedDeclarationType ?? DeclarationType.Debug;
             var parser = new AntlrParser();

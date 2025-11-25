@@ -16,9 +16,8 @@ namespace CK3Analyser.Core.Resources
         public static HashSet<string> TRIGGERKEYS { get; private set; }
         public static HashSet<string> EVENTTARGETS { get; private set; }
 
-        public static Context Old;
+        public static Context Vanilla;
         public static Context Modded;
-        public static Context New;
         public static HashSet<string> VanillaModIntersect = [];
 
         public static Configuration Configuration;
@@ -64,8 +63,7 @@ namespace CK3Analyser.Core.Resources
 
         public static void ClearEverything()
         {
-            Old = null;
-            New = null;
+            Vanilla = null;
             Modded = null;
 
             _effectKeys = null;

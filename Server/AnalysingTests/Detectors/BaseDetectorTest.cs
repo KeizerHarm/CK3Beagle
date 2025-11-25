@@ -22,7 +22,7 @@ namespace CK3Analyser.Analysing.Detectors
             GlobalResources.SymbolTable = new SymbolTable();
             GlobalResources.StringTable = new StringTable();
 
-            var context = new Context("", ContextType.Old);
+            var context = new Context("", ContextType.Vanilla);
             var expDeclarationType = expectedDeclarationType ?? DeclarationType.Debug;
             var parser = new AntlrParser();
 

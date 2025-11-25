@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Linq;
 using System.Threading.Tasks;
+using CK3Analyser.Core.Resources;
 using CK3Analyser.Orchestration;
 
 namespace CK3Analyser.CLI
@@ -31,10 +32,13 @@ namespace CK3Analyser.CLI
             }
             var orchestrator = new ProcessOrchestrator(posProgressDelegate, negProgressDelegate);
             orchestrator.InitiateFromMinimalConfig(VanillaPath, ModdedPath, LogsFolder);
+            GlobalResources.Configuration.ReadVanilla = true;
+            GlobalResources.Configuration.VanillaFileHandling = VanillaFileHandling.AnalyseModsAdditions;
 
             var logs = await orchestrator.HandleAnalysis(true);
 
             Console.WriteLine($"Found {logs.Count()} issues");
+            await orchestrator.HandleComparativeAnalysis();
        }
     }
 }
