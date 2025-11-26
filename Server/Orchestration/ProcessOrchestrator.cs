@@ -1,5 +1,6 @@
 ﻿using CK3Analyser.Analysing.Common;
 using CK3Analyser.Analysing.Logging;
+using CK3Analyser.Core.Comparing;
 using CK3Analyser.Core.Domain;
 using CK3Analyser.Core.Parsing;
 using CK3Analyser.Core.Parsing.Antlr;
@@ -95,7 +96,7 @@ namespace CK3Analyser.Orchestration
         {
             if (GlobalResources.Configuration.VanillaFileHandling == VanillaFileHandling.IgnoreEntirely)
             {
-                ParsingService.BlacklistVanillaFilesInModContext(GlobalResources.Modded, GlobalResources.Vanilla, _positiveProgressDelegate);
+                ComparingService.BlacklistVanillaFilesInModContext(GlobalResources.Modded, GlobalResources.Vanilla, _positiveProgressDelegate);
             }
 
             await ParsingService.ParseAllEntities(() => new AntlrParser(), GlobalResources.Modded, _positiveProgressDelegate);
@@ -107,7 +108,7 @@ namespace CK3Analyser.Orchestration
             }
             if (GlobalResources.Configuration.VanillaFileHandling == VanillaFileHandling.AnalyseModsAdditions)
             {
-                await ParsingService.ParseVanillaEntitiesInMod(() => new AntlrParser(), GlobalResources.Modded, GlobalResources.Vanilla, _positiveProgressDelegate);
+                await ComparingService.ParseVanillaModIntersect(() => new AntlrParser(), GlobalResources.Modded, GlobalResources.Vanilla, _positiveProgressDelegate);
             }
 
             var analyser = new CommonAnalyser();
@@ -117,10 +118,13 @@ namespace CK3Analyser.Orchestration
 
         public async Task<IEnumerable<LogEntry>> HandleComparativeAnalysis(bool reportTiming = false)
         {
-            ParsingService.PrepareComparativeAnalysis();
-            GC.Collect(GC.MaxGeneration, GCCollectionMode.Forced, blocking: true, compacting: true);
-            GC.WaitForPendingFinalizers();
+            ComparingService.ClearMemoryUnusedForComparison(GlobalResources.Modded);
+
             await _positiveProgressDelegate("Cleared unused ASTs");
+
+            await ComparingService.BuildContextComparison(GlobalResources.Modded, GlobalResources.Vanilla, _positiveProgressDelegate);
+
+            await _positiveProgressDelegate("Finished building comparison");
 
             var comparativeAnalyser = new CommonAnalyser();
             

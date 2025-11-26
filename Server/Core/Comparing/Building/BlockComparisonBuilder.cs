@@ -1,18 +1,19 @@
-﻿using CK3Analyser.Core.Domain.Entities;
+﻿using CK3Analyser.Core.Comparing.Domain;
+using CK3Analyser.Core.Domain.Entities;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 
 namespace CK3Analyser.Core.Comparing.Building
 {
-    public class ComparisonBuilder
+    public class BlockComparisonBuilder
     {
-        private Node Base;
-        private Node Edit;
-        private Dictionary<int, (Node, Node)> MatchedNodes = [];
-        private List<EditOperation> EditScript = [];
+        private Block Base;
+        private Block Edit;
+        private readonly Dictionary<int, (Node, Node)> MatchedNodes = [];
+        public List<IEditOperation> EditScript = [];
 
-        public void BuildComparison(Node @base, Node edit)
+        public void BuildComparison(Block @base, Block edit)
         {
             Base = @base; Edit = edit;
 
@@ -27,75 +28,6 @@ namespace CK3Analyser.Core.Comparing.Building
             InsertPhase();
             MovePhase();
             DeletePhase();
-        }
-
-        private void UpdatePhase()
-        {
-            foreach ((Node baseNode, Node editNode) in MatchedNodes.Values)
-            {
-                if (baseNode is BinaryExpression baseBinExp && editNode is BinaryExpression editBinExp && !baseBinExp.Value.Equals(editBinExp.Value))
-                {
-                    EditScript.Add(new UpdateOperation
-                    {
-                        NewValue = editBinExp.Value,
-                        UpdatedNode = editNode
-                    });
-                }
-                else if (baseNode is Comment baseComment && editNode is Comment editComment && !baseComment.RawWithoutHashtag.Equals(editComment.RawWithoutHashtag))
-                {
-                    EditScript.Add(new UpdateOperation
-                    {
-                        NewValue = editComment.RawWithoutHashtag,
-                        UpdatedNode = editNode
-                    });
-                }
-                else if (baseNode is AnonymousToken baseAnonToken && editNode is AnonymousToken editAnonToken && !baseAnonToken.Value.Equals(editAnonToken.Value))
-                {
-                    EditScript.Add(new UpdateOperation
-                    {
-                        NewValue = editAnonToken.Value,
-                        UpdatedNode = editNode
-                    });
-                }
-            }
-        }
-
-        private void AlignPhase()
-        {
-            throw new NotImplementedException();
-        }
-
-        private void InsertPhase()
-        {
-            //var leaves = new List<Node>();
-
-            //void addIfLeaf(Node node)
-            //{
-                
-            //}
-
-            //new PostOrderWalker(addIfLeaf).Walk(Edit);
-        }
-
-        private void MovePhase()
-        {
-            throw new NotImplementedException();
-        }
-
-        private void DeletePhase()
-        {
-            void deleteIfUnmatched(Node node)
-            {
-                if (!MatchedNodes.ContainsKey(node.GetHashCode()))
-                {
-                    EditScript.Add(new DeleteOperation
-                    {
-                        DeletedNode = node
-                    });
-                }
-            }
-
-            new PostOrderWalker(deleteIfUnmatched).Walk(Edit);
         }
 
         public void FindMatchedNodes()
@@ -139,6 +71,60 @@ namespace CK3Analyser.Core.Comparing.Building
                 new PostOrderWalker(addIfMatch).Walk(Edit);
             };
             new PostOrderWalker(addIfMatch).Walk(Base);
+        }
+
+        private void UpdatePhase()
+        {
+            foreach ((Node baseNode, Node editNode) in MatchedNodes.Values)
+            {
+                if (baseNode is BinaryExpression baseBinExp && editNode is BinaryExpression editBinExp && !baseBinExp.Value.Equals(editBinExp.Value))
+                {
+                    EditScript.Add(new UpdateOperation(editNode, editBinExp.Value));
+                }
+                else if (baseNode is Comment baseComment && editNode is Comment editComment && !baseComment.RawWithoutHashtag.Equals(editComment.RawWithoutHashtag))
+                {
+                    EditScript.Add(new UpdateOperation(editNode, editComment.RawWithoutHashtag));
+                }
+                else if (baseNode is AnonymousToken baseAnonToken && editNode is AnonymousToken editAnonToken && !baseAnonToken.Value.Equals(editAnonToken.Value))
+                {
+                    EditScript.Add(new UpdateOperation(editNode, editAnonToken.Value));
+                }
+            }
+        }
+
+        private void AlignPhase()
+        {
+            throw new NotImplementedException();
+        }
+
+        private void InsertPhase()
+        {
+            //var leaves = new List<Node>();
+
+            //void addIfLeaf(Node node)
+            //{
+                
+            //}
+
+            //new PostOrderWalker(addIfLeaf).Walk(Edit);
+        }
+
+        private void MovePhase()
+        {
+            throw new NotImplementedException();
+        }
+
+        private void DeletePhase()
+        {
+            void deleteIfUnmatched(Node node)
+            {
+                if (!MatchedNodes.ContainsKey(node.GetHashCode()))
+                {
+                    EditScript.Add(new DeleteOperation(node));
+                }
+            }
+
+            new PostOrderWalker(deleteIfUnmatched).Walk(Edit);
         }
 
         private static List<Node> GetLeaves(Node node)

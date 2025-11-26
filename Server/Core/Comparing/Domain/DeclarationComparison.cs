@@ -1,8 +1,7 @@
-﻿using CK3Analyser.Core.Comparing.Building;
-using CK3Analyser.Core.Domain.Entities;
+﻿using CK3Analyser.Core.Domain.Entities;
 using System.Collections.Generic;
 
-namespace CK3Analyser.Core.Comparing
+namespace CK3Analyser.Core.Comparing.Domain
 {
     public class DeclarationComparison
     {
@@ -11,10 +10,6 @@ namespace CK3Analyser.Core.Comparing
         public ScriptFile BaseFile { get; }
         public ScriptFile EditFile { get; }
         public ContextComparison Context { get; }
-
-        private Dictionary<int, (Node, Node)> MatchedNodes = [];
-        public List<EditOperation> EditScript { get; set; }
-
-
+        public List<IEditOperation> EditScript { get; set; }
     }
 }
