@@ -30,4 +30,14 @@
     </None>
   </ItemGroup>
 
+
+  <ItemGroup>
+    <None Update="Comparing\Testcases\Basic\new.txt">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="Comparing\Testcases\Basic\old.txt">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+
 </Project>

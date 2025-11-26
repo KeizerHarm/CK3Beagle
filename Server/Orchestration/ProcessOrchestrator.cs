@@ -1,4 +1,4 @@
-﻿using CK3Analyser.Analysing;
+﻿using CK3Analyser.Analysing.Common;
 using CK3Analyser.Analysing.Logging;
 using CK3Analyser.Core.Domain;
 using CK3Analyser.Core.Parsing;
@@ -110,7 +110,7 @@ namespace CK3Analyser.Orchestration
                 await ParsingService.ParseVanillaEntitiesInMod(() => new AntlrParser(), GlobalResources.Modded, GlobalResources.Vanilla, _positiveProgressDelegate);
             }
 
-            var analyser = new Analyser();
+            var analyser = new CommonAnalyser();
             await analyser.Analyse(GlobalResources.Modded, _positiveProgressDelegate);
             return analyser.LogEntries;
         }
@@ -122,8 +122,8 @@ namespace CK3Analyser.Orchestration
             GC.WaitForPendingFinalizers();
             await _positiveProgressDelegate("Cleared unused ASTs");
 
-            var comparativeAnalyser = new Analyser();
-            await comparativeAnalyser.ComparativeAnalyse(GlobalResources.Modded, GlobalResources.Vanilla, _positiveProgressDelegate);
+            var comparativeAnalyser = new CommonAnalyser();
+            
             return comparativeAnalyser.LogEntries;
 
         }

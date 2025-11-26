@@ -24,13 +24,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <None Update="Detectors\Testcases\**">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-  </ItemGroup>
-
-  <ItemGroup>
-    <None Update="Comparing\Testcases\**">
+    <None Update="Common\Detectors\Testcases\**">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
   </ItemGroup>

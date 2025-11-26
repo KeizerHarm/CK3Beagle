@@ -1,5 +1,5 @@
-﻿using CK3Analyser.Analysing;
-using CK3Analyser.Analysing.Logging;
+﻿using CK3Analyser.Analysing.Logging;
+using CK3Analyser.Analysing;
 using CK3Analyser.Core.Resources;
 using CK3Analyser.Orchestration;
 using System;

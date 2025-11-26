@@ -131,13 +131,12 @@ namespace CK3Analyser.Core.Parsing
                 await progressDelegate("Completed parsing vanilla " + declarationType.ToString());
             }
 
-
             await progressDelegate("Parsed all vanilla entities from files intersecting with mod");
         }
 
         public static void PrepareComparativeAnalysis()
         {
-            //Clear ASTs from mod context that are not in the intersect, or macro types
+            //Clear declarations from mod context that are not in the file intersect
             for (int i = 0; i < GlobalResources.Modded.Declarations.Length; i++)
             {
                 Dictionary<string, Declaration> declType = GlobalResources.Modded.Declarations[i];
@@ -145,6 +144,11 @@ namespace CK3Analyser.Core.Parsing
                 GlobalResources.Modded.Declarations[i] = declType.Except(declsToRemove).ToDictionary();
             }
 
+            //Clear files from mod context that are not in the file intersect
+            foreach (var fileNotInIntersect in GlobalResources.Modded.Files.Keys.Except(GlobalResources.VanillaModIntersect))
+            {
+                GlobalResources.Modded.Files.Remove(fileNotInIntersect);
+            }
         }
     }
 }
