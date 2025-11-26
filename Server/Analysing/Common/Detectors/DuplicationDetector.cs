@@ -77,11 +77,11 @@ namespace CK3Analyser.Analysing.Common.Detectors
             //Consider node itself as potential duplicate
             if (namedBlock.NodeType != NodeType.NonStatement && namedBlock.GetSize() >= _settings.MinSize)
             {
-                nodesByStrictHash.AddToDictCollection((Node)namedBlock, namedBlock.GetStrictHashCode());
+                nodesByStrictHash.AddToDictCollection((Node)namedBlock, namedBlock.GetDuplicationCheckingHash());
             }
 
             //Consider node's children
-            if (nodesByStrictHash.ContainsKey(namedBlock.GetStrictHashCode()))
+            if (nodesByStrictHash.ContainsKey(namedBlock.GetDuplicationCheckingHash()))
             {
                 //sequencesByParentStrictHash.Remove(namedBlock.GetStrictHashCode());
             }
@@ -260,21 +260,21 @@ namespace CK3Analyser.Analysing.Common.Detectors
                 var elementsToRemove = new HashSet<Node>();
                 foreach (var item in list.Value)
                 {
-                    if (nodesByStrictHash.ContainsKey(item.Parent?.GetStrictHashCode() ?? 0))
+                    if (nodesByStrictHash.ContainsKey(item.Parent?.GetDuplicationCheckingHash() ?? 0))
                         elementsToRemove.Add(item);
-                    if (nodesByStrictHash.ContainsKey(item.Parent?.Parent?.GetStrictHashCode() ?? 0))
+                    if (nodesByStrictHash.ContainsKey(item.Parent?.Parent?.GetDuplicationCheckingHash() ?? 0))
                         elementsToRemove.Add(item);
-                    if (nodesByStrictHash.ContainsKey(item.Parent?.Parent?.Parent?.GetStrictHashCode() ?? 0))
+                    if (nodesByStrictHash.ContainsKey(item.Parent?.Parent?.Parent?.GetDuplicationCheckingHash() ?? 0))
                         elementsToRemove.Add(item);
-                    if (nodesByStrictHash.ContainsKey(item.Parent?.Parent?.Parent?.Parent?.GetStrictHashCode() ?? 0))
+                    if (nodesByStrictHash.ContainsKey(item.Parent?.Parent?.Parent?.Parent?.GetDuplicationCheckingHash() ?? 0))
                         elementsToRemove.Add(item);
-                    if (nodesByStrictHash.ContainsKey(item.Parent?.Parent?.Parent?.Parent?.Parent?.GetStrictHashCode() ?? 0))
+                    if (nodesByStrictHash.ContainsKey(item.Parent?.Parent?.Parent?.Parent?.Parent?.GetDuplicationCheckingHash() ?? 0))
                         elementsToRemove.Add(item);
-                    if (nodesByStrictHash.ContainsKey(item.Parent?.Parent?.Parent?.Parent?.Parent?.Parent?.GetStrictHashCode() ?? 0))
+                    if (nodesByStrictHash.ContainsKey(item.Parent?.Parent?.Parent?.Parent?.Parent?.Parent?.GetDuplicationCheckingHash() ?? 0))
                         elementsToRemove.Add(item);
                 }
                 
-                list.Value.RemoveAll(x => elementsToRemove.Any(y => y.GetStrictHashCode() == x.GetStrictHashCode()));
+                list.Value.RemoveAll(x => elementsToRemove.Any(y => y.GetDuplicationCheckingHash() == x.GetDuplicationCheckingHash()));
 
                 if (list.Value.Count <= 1)
                 {
@@ -313,7 +313,7 @@ namespace CK3Analyser.Analysing.Common.Detectors
                     var node1 = list.Value[i];
 
                     //First, try to match with any existing clone groups
-                    var nextSibHash = node1.NextNonCommentSibling?.GetStrictHashCode() ?? -1;
+                    var nextSibHash = node1.NextNonCommentSibling?.GetDuplicationCheckingHash() ?? -1;
 
                     if (relevantCloneGroups.TryGetValue(nextSibHash, out CloneGroup cloneGroup))
                     {
@@ -346,7 +346,7 @@ namespace CK3Analyser.Analysing.Common.Detectors
                         Node nextSib1 = node1.NextNonCommentSibling;
                         Node nextSib2 = node2.NextNonCommentSibling;
 
-                        if (nextSib1.GetStrictHashCode() != nextSib2.GetStrictHashCode())
+                        if (nextSib1.GetDuplicationCheckingHash() != nextSib2.GetDuplicationCheckingHash())
                             continue;
 
                         var sequence1 = new List<Node>() { node1 };
@@ -357,7 +357,7 @@ namespace CK3Analyser.Analysing.Common.Detectors
 
                         while (nextSib1 != null && nextSib2 != null)
                         {
-                            if (nextSib1.GetStrictHashCode() == nextSib2.GetStrictHashCode())
+                            if (nextSib1.GetDuplicationCheckingHash() == nextSib2.GetDuplicationCheckingHash())
                             {
                                 sequence1.Add(nextSib1);
                                 sequence2.Add(nextSib2);
@@ -508,7 +508,7 @@ namespace CK3Analyser.Analysing.Common.Detectors
         }
         private int GetNoOfDifferentValues(Node first, Node second)
         {
-            if (first.GetStrictHashCode() == second.GetStrictHashCode())
+            if (first.GetDuplicationCheckingHash() == second.GetDuplicationCheckingHash())
                 return 0;
 
             if (first is BinaryExpression && second is BinaryExpression)

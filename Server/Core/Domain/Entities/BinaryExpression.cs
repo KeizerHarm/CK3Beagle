@@ -58,23 +58,38 @@ namespace CK3Analyser.Core.Domain.Entities
                    Value == expression.Value;
         }
 
-        public override int GetHashCode() => GetStrictHashCode();
+        public override int GetHashCode() => GetDuplicationCheckingHash();
 
 
         #region hashing
-        private int _strictHashCode;
-        public override int GetStrictHashCode()
+        private int _duplicationCheckingHash;
+        public override int GetDuplicationCheckingHash()
         {
-            if (_strictHashCode == 0 && NodeType != NodeType.NonStatement)
+            if (_duplicationCheckingHash == 0 && NodeType != NodeType.NonStatement)
             {
                 var hashCode = new HashCode();
                 hashCode.Add(Key);
                 hashCode.Add(Scoper);
                 hashCode.Add(Value);
-                _strictHashCode = hashCode.ToHashCode();
+                _duplicationCheckingHash = hashCode.ToHashCode();
             }
 
-            return _strictHashCode;
+            return _duplicationCheckingHash;
+        }
+
+        private int _trueHash;
+        public override int GetTrueHash()
+        {
+            if (_trueHash == 0)
+            {
+                var hashCode = new HashCode();
+                hashCode.Add(Key);
+                hashCode.Add(Scoper);
+                hashCode.Add(Value);
+                _trueHash = hashCode.ToHashCode();
+            }
+
+            return _trueHash;
         }
         #endregion
     }

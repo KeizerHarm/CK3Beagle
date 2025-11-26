@@ -41,10 +41,10 @@ namespace CK3Analyser.Core.Domain.Entities
 
         #region hashing
 
-        private int _strictHashCode;
-        public override int GetStrictHashCode()
+        private int _duplicationCheckingHash;
+        public override int GetDuplicationCheckingHash()
         {
-            if (_strictHashCode == 0)
+            if (_duplicationCheckingHash == 0)
             {
                 var hashCode = new HashCode();
                 if (NodeType != NodeType.NonStatement)
@@ -53,15 +53,35 @@ namespace CK3Analyser.Core.Domain.Entities
                 }
                 Children.ForEach(x =>
                 {
-                    var code = x.GetStrictHashCode();
+                    var code = x.GetDuplicationCheckingHash();
                     if (code != 0)
-                        hashCode.Add(x.GetStrictHashCode());
+                        hashCode.Add(x.GetDuplicationCheckingHash());
                 });
 
-                _strictHashCode = hashCode.ToHashCode();
+                _duplicationCheckingHash = hashCode.ToHashCode();
             }
 
-            return _strictHashCode;
+            return _duplicationCheckingHash;
+        }
+
+        private int _trueHash;
+        public override int GetTrueHash()
+        {
+            if (_trueHash == 0)
+            {
+                var hashCode = new HashCode();
+                hashCode.Add(Key);
+                Children.ForEach(x =>
+                {
+                    var code = x.GetTrueHash();
+                    if (code != 0)
+                        hashCode.Add(x.GetTrueHash());
+                });
+
+                _trueHash = hashCode.ToHashCode();
+            }
+
+            return _trueHash;
         }
         #endregion
     }

@@ -22,9 +22,9 @@ namespace CK3Analyser.Core.Comparing.Domain
             Base = baseFile;
             Edit = editFile;
 
-            (AddedDeclarations, ChangedDeclarations, RemovedDeclarations, UntouchedDeclarations)
+            (AddedDeclarations, RemovedDeclarations, ChangedDeclarations, UntouchedDeclarations)
                 = ComparisonHelpers.SimpleListComparison(Base.Declarations.ToDictionary(), Edit.Declarations.ToDictionary(),
-                    (first, second) => first.GetStrictHashCode() == second.GetStrictHashCode());
+                    (first, second) => first.GetTrueHash() == second.GetTrueHash());
 
             _comparisonBuilder = new BlockComparisonBuilder();
             _comparisonBuilder.BuildComparison(Base, Edit);

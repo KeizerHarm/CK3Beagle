@@ -6,7 +6,7 @@ nerge_check_commander_trait_xp_effect = {
 			}
 			add_trait_xp = {
 				trait = $TRAIT$
-				value = 20 #EDITED
+				value = 20
 			}
 		}
 	}

@@ -24,18 +24,19 @@ namespace CK3Analyser.Core.Domain.Entities
         }
 
         #region hashing
-        private int _strictHashCode;
-        public override int GetStrictHashCode()
+        private int _duplicationCheckingHash;
+        public override int GetDuplicationCheckingHash()
         {
-            if (_strictHashCode == 0)
+            if (_duplicationCheckingHash == 0)
             {
                 var hashCode = new HashCode();
                 hashCode.Add(Value);
-                _strictHashCode = hashCode.ToHashCode();
+                _duplicationCheckingHash = hashCode.ToHashCode();
             }
 
-            return _strictHashCode;
+            return _duplicationCheckingHash;
         }
+        public override int GetTrueHash() => GetDuplicationCheckingHash();
         #endregion
         public override void Accept(IDomainVisitor visitor) => visitor.Visit(this);
     }

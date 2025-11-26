@@ -129,7 +129,8 @@ namespace CK3Analyser.Core.Domain.Entities
             return sb.ToString();
         }
 
-        public abstract int GetStrictHashCode();
+        public abstract int GetDuplicationCheckingHash();
+        public abstract int GetTrueHash();
 
         public virtual int GetSize() => NodeType == NodeType.NonStatement ? 0 : 1;
     }

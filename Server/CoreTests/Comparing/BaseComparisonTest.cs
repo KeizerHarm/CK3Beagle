@@ -8,7 +8,6 @@ using CK3Analyser.Core.Resources.Storage;
 
 namespace CK3Analyser.Core.Comparing
 {
-
     public class BaseComparisonTest
     {
         public static (ScriptFile, ScriptFile) GetTestCase(string caseName, DeclarationType? expectedDeclarationType = null)
@@ -16,27 +15,28 @@ namespace CK3Analyser.Core.Comparing
             var oldFileString = File.ReadAllText(Path.Combine(AppContext.BaseDirectory, "Comparing/Testcases", caseName, "old.txt"));
             var newFileString = File.ReadAllText(Path.Combine(AppContext.BaseDirectory, "Comparing/Testcases", caseName, "new.txt"));
 
-            GlobalResources.AddEffects(["add_gold"]);
-            GlobalResources.AddTriggers(["has_gold"]);
-            GlobalResources.AddEventTargets(["father"]);
+            GlobalResources.AddEffects(["add_gold", "xxx", "yyy", "zzz"]);
+            GlobalResources.AddTriggers(["has_gold", "or", "and", "nand", "nor", "not", "aaa", "bbb", "ccc", "ddd"]);
+            GlobalResources.AddEventTargets(["father", "link1", "link2"]);
+            GlobalResources.Lock();
             GlobalResources.SymbolTable = new SymbolTable();
             GlobalResources.StringTable = new StringTable();
 
             var oldContext = new Context("", ContextType.Vanilla);
-            var newContext = new Context("", ContextType.UpdatedVanilla);
+            var newContext = new Context("", ContextType.Modded);
 
             var expDeclarationType = expectedDeclarationType ?? DeclarationType.Debug;
             var parser = new AntlrParser();
-            var oldParsed = new ScriptFile(oldContext, "", expDeclarationType, oldFileString);
-            parser.ParseFile(oldParsed);
+            var vanillaParsed = new ScriptFile(oldContext, "", expDeclarationType, oldFileString);
+            parser.ParseFile(vanillaParsed);
 
-            var newParsed = new ScriptFile(newContext, "", expDeclarationType, newFileString);
-            parser.ParseFile(newParsed);
+            var modParsed = new ScriptFile(newContext, "", expDeclarationType, newFileString);
+            parser.ParseFile(modParsed);
 
-            oldParsed.Accept(new SecondPassVisitor());
-            newParsed.Accept(new SecondPassVisitor());
+            vanillaParsed.Accept(new SecondPassVisitor());
+            modParsed.Accept(new SecondPassVisitor());
 
-            return (oldParsed, newParsed);
+            return (vanillaParsed, modParsed);
         }
     }
 }

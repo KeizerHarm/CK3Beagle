@@ -24,10 +24,10 @@ namespace CK3Analyser.Core.Comparing.Building
         private void GenerateEditScript()
         {
             UpdatePhase();
-            AlignPhase();
-            InsertPhase();
-            MovePhase();
-            DeletePhase();
+            //AlignPhase();
+            //InsertPhase();
+            //MovePhase();
+            //DeletePhase();
         }
 
         public void FindMatchedNodes()
@@ -52,9 +52,9 @@ namespace CK3Analyser.Core.Comparing.Building
 
             foreach (var matchedPair in orderedMatchedLeaves)
             {
-                if (!MatchedNodes.ContainsKey(matchedPair.Item1.GetHashCode()))
+                if (!MatchedNodes.ContainsKey(matchedPair.Item1.GetTrueHash()))
                 {
-                    MatchedNodes.Add(matchedPair.Item1.GetHashCode(), (matchedPair.Item1, matchedPair.Item2));
+                    MatchedNodes.Add(matchedPair.Item1.GetTrueHash(), (matchedPair.Item1, matchedPair.Item2));
                 }
             }
 
@@ -63,9 +63,9 @@ namespace CK3Analyser.Core.Comparing.Building
             {
                 Action<Node> addIfMatch = (editNode) =>
                 {
-                    if (!MatchedNodes.ContainsKey(baseNode.GetHashCode()))
+                    if (!MatchedNodes.ContainsKey(baseNode.GetTrueHash()))
                     {
-                        MatchedNodes.Add(baseNode.GetHashCode(), (baseNode, editNode));
+                        MatchedNodes.Add(baseNode.GetTrueHash(), (baseNode, editNode));
                     }
                 };
                 new PostOrderWalker(addIfMatch).Walk(Edit);
@@ -118,7 +118,7 @@ namespace CK3Analyser.Core.Comparing.Building
         {
             void deleteIfUnmatched(Node node)
             {
-                if (!MatchedNodes.ContainsKey(node.GetHashCode()))
+                if (!MatchedNodes.ContainsKey(node.GetTrueHash()))
                 {
                     EditScript.Add(new DeleteOperation(node));
                 }
@@ -207,7 +207,7 @@ namespace CK3Analyser.Core.Comparing.Building
             var commonNodes = 0;
             foreach (var child in baseBlock.Children)
             {
-                if (MatchedNodes.TryGetValue(child.GetHashCode(), out (Node, Node) pair) && pair.Item2.Parent == editBlock)
+                if (MatchedNodes.TryGetValue(child.GetTrueHash(), out (Node, Node) pair) && pair.Item2.Parent == editBlock)
                 {
                     commonNodes++;
                 }

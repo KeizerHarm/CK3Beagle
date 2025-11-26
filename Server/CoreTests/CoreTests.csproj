@@ -32,10 +32,10 @@
 
 
   <ItemGroup>
-    <None Update="Comparing\Testcases\Basic\new.txt">
+    <None Update="Comparing\Testcases\UpdatedValue\new.txt">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Update="Comparing\Testcases\Basic\old.txt">
+    <None Update="Comparing\Testcases\UpdatedValue\old.txt">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
   </ItemGroup>
