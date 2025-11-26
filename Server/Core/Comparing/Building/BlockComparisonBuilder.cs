@@ -65,7 +65,10 @@ namespace CK3Analyser.Core.Comparing.Building
                 {
                     if (!MatchedNodes.ContainsKey(baseNode.GetTrueHash()))
                     {
-                        MatchedNodes.Add(baseNode.GetTrueHash(), (baseNode, editNode));
+                        if (Matches(baseNode, editNode))
+                        {
+                            MatchedNodes.Add(baseNode.GetTrueHash(), (baseNode, editNode));
+                        }
                     }
                 };
                 new PostOrderWalker(addIfMatch).Walk(Edit);
@@ -170,8 +173,9 @@ namespace CK3Analyser.Core.Comparing.Building
             }
             if (baseNode is BinaryExpression baseBinExp && editNode is BinaryExpression editBinExp)
             {
-                return baseBinExp.Key == editBinExp.Key
-                    && StringMatches(baseBinExp.Value, editBinExp.Value, out similarity);
+                //Consider bin exps equal if keys are equal
+                //Test to see if it produces sane results
+                return baseBinExp.Key == editBinExp.Key;
             }
             throw new ArgumentException("Node type not recognised!");
         }

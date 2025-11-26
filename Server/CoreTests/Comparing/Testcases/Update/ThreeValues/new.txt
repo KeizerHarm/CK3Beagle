@@ -1,0 +1,13 @@
+nerge_check_commander_trait_xp_effect = {
+	prev = {
+		if = {
+			limit = {
+				has_trait = ambitious
+			}
+			add_trait_xp = {
+				trait = ambitious
+				value = 20
+			}
+		}
+	}
+}
