@@ -97,8 +97,6 @@ namespace CK3Analyser.Core.Domain.Entities
         }
         public override void Accept(IDomainVisitor visitor) => visitor.Visit(this);
 
-        public override string GetLoneIdentifier() => RelativePath;
-
 
 
         #region hashing

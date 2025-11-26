@@ -26,7 +26,7 @@ namespace CK3Analyser.Analysing.Common.Detectors
 
             if (lines.Count  == 0) return;
 
-            logger.Log(Smell.None, Severity.Debug, "Detected indentation type " + detectedIndentationType, scriptFile.GetIdentifier());
+            logger.Log(Smell.None, Severity.Debug, "Detected indentation type " + detectedIndentationType, scriptFile);
 
             if (!_settings.AllowedIndentationTypes.Contains(detectedIndentationType))
             {

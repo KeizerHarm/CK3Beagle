@@ -32,12 +32,6 @@ namespace CK3Analyser.Core.Domain.Entities
         }
 
         public override void Accept(IDomainVisitor visitor) => visitor.Visit(this);
-        public override string GetLoneIdentifier() => Key;
-
-        public override int GetHashCode()
-        {
-            return HashCode.Combine(Key, Children.Where(x => x.GetType() != typeof(Comment)));
-        }
 
         #region hashing
 

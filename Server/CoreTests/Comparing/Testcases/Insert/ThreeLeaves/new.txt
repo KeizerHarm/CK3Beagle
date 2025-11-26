@@ -1,0 +1,16 @@
+nerge_check_commander_trait_xp_effect = {
+	#Test
+	prev = {
+		if = {
+			#Test 2
+			limit = {
+				has_trait = $TRAIT$
+				NOT = { has_trait = arrogant }
+			}
+			add_trait_xp = {
+				trait = $TRAIT$
+				value = 10
+			}
+		}
+	}
+}

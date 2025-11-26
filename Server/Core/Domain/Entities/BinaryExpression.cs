@@ -22,7 +22,19 @@ namespace CK3Analyser.Core.Domain.Entities
                     : -1;
             }
         }
-        public Scoper Scoper;
+
+        private Scoper _scoper;
+        public Scoper Scoper
+        {
+            get
+            {
+                return _scoper;
+            }
+            set
+            {
+                _scoper = value;
+            }
+        }
         private int _value;
         public string Value
         {
@@ -48,7 +60,6 @@ namespace CK3Analyser.Core.Domain.Entities
             Value = value;
         }
         public override void Accept(IDomainVisitor visitor) => visitor.Visit(this);
-        public override string GetLoneIdentifier() => Key;
 
         public override bool Equals(object obj)
         {
@@ -57,9 +68,6 @@ namespace CK3Analyser.Core.Domain.Entities
                    Scoper == expression.Scoper &&
                    Value == expression.Value;
         }
-
-        public override int GetHashCode() => GetDuplicationCheckingHash();
-
 
         #region hashing
         private int _duplicationCheckingHash;

@@ -1,21 +1,23 @@
 ﻿using CK3Analyser.Core.Comparing.Domain;
+using CK3Analyser.Core.Domain;
 using CK3Analyser.Core.Domain.Entities;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.InteropServices;
 
 namespace CK3Analyser.Core.Comparing.Building
 {
     public class BlockComparisonBuilder
     {
-        private Block Base;
+        private ShallowNode Base;
         private Block Edit;
-        private readonly Dictionary<int, (Node, Node)> MatchedNodes = [];
+        private NodeMatcher matcher;
         public List<IEditOperation> EditScript = [];
 
         public void BuildComparison(Block @base, Block edit)
         {
-            Base = @base; Edit = edit;
+            Base = new ShallowNode(@base); Edit = edit;
 
             FindMatchedNodes();
             GenerateEditScript();
@@ -25,72 +27,36 @@ namespace CK3Analyser.Core.Comparing.Building
         {
             UpdatePhase();
             //AlignPhase();
-            //InsertPhase();
+            InsertPhase();
             //MovePhase();
             //DeletePhase();
         }
 
         public void FindMatchedNodes()
         {
-            var baseLeaves = GetLeaves(Base);
-            var editLeaves = GetLeaves(Edit);
-
-            var matchedLeaves = new List<Tuple<Node, Node, float>>();
-
-            foreach (var baseLeaf in baseLeaves)
-            {
-                foreach (var editLeaf in editLeaves)
-                {
-                    if (LeafMatches(baseLeaf, editLeaf, out float similarity))
-                    {
-                        matchedLeaves.Add(new Tuple<Node, Node, float>(baseLeaf, editLeaf, similarity));
-                    }
-                }
-            }
-
-            var orderedMatchedLeaves = matchedLeaves.OrderByDescending(x => x.Item3);
-
-            foreach (var matchedPair in orderedMatchedLeaves)
-            {
-                if (!MatchedNodes.ContainsKey(matchedPair.Item1.GetTrueHash()))
-                {
-                    MatchedNodes.Add(matchedPair.Item1.GetTrueHash(), (matchedPair.Item1, matchedPair.Item2));
-                }
-            }
-
-
-            Action<Node> addIfMatch = (baseNode) =>
-            {
-                Action<Node> addIfMatch = (editNode) =>
-                {
-                    if (!MatchedNodes.ContainsKey(baseNode.GetTrueHash()))
-                    {
-                        if (Matches(baseNode, editNode))
-                        {
-                            MatchedNodes.Add(baseNode.GetTrueHash(), (baseNode, editNode));
-                        }
-                    }
-                };
-                new PostOrderWalker(addIfMatch).Walk(Edit);
-            };
-            new PostOrderWalker(addIfMatch).Walk(Base);
+            matcher = new NodeMatcher();
+            matcher.MatchAllNodes(Base, Edit);
         }
 
         private void UpdatePhase()
         {
-            foreach ((Node baseNode, Node editNode) in MatchedNodes.Values)
+            foreach ((ShallowNode baseNode, Node editNode) in matcher.MatchedNodes)
             {
-                if (baseNode is BinaryExpression baseBinExp && editNode is BinaryExpression editBinExp && !baseBinExp.Value.Equals(editBinExp.Value))
+                if (editNode is BinaryExpression editBinExp && !baseNode.StringRepresentation.Equals(editBinExp.StringRepresentation))
                 {
-                    EditScript.Add(new UpdateOperation(editNode, editBinExp.Value));
+                    EditScript.Add(new UpdateOperation(editNode, editBinExp.StringRepresentation));
                 }
-                else if (baseNode is Comment baseComment && editNode is Comment editComment && !baseComment.RawWithoutHashtag.Equals(editComment.RawWithoutHashtag))
+                else if (editNode is Comment editComment && !baseNode.StringRepresentation.Equals(editComment.RawWithoutHashtag))
                 {
                     EditScript.Add(new UpdateOperation(editNode, editComment.RawWithoutHashtag));
                 }
-                else if (baseNode is AnonymousToken baseAnonToken && editNode is AnonymousToken editAnonToken && !baseAnonToken.Value.Equals(editAnonToken.Value))
+                else if (editNode is AnonymousToken editAnonToken && !baseNode.StringRepresentation.Equals(editAnonToken.Value))
                 {
                     EditScript.Add(new UpdateOperation(editNode, editAnonToken.Value));
+                }
+                else if (editNode is NamedBlock editNamedBlock && !(baseNode.StringRepresentation == editNamedBlock.Key + " " + editNamedBlock.Scoper.ScoperToString()))
+                {
+                    EditScript.Add(new UpdateOperation(editNode, editNamedBlock.Key + " " + editNamedBlock.Scoper.ScoperToString()));
                 }
             }
         }
@@ -102,14 +68,20 @@ namespace CK3Analyser.Core.Comparing.Building
 
         private void InsertPhase()
         {
-            //var leaves = new List<Node>();
+            void ifUnmatchedAdd(Node editNode)
+            {
+                if (!matcher.EditNodeIsMatched(editNode)
+                    && matcher.EditNodeIsMatched(editNode.Parent))
+                {
+                    var matchedParent = matcher.GetBaseMatchForEditNode(editNode.Parent);
+                    EditScript.Add(new InsertOperation(editNode, editNode.Parent, 0));
+                    var clone = new ShallowNode(editNode);
+                    matchedParent.Children.Add(clone);
+                    matcher.AddMatch(clone, editNode);
+                }
+            }
 
-            //void addIfLeaf(Node node)
-            //{
-                
-            //}
-
-            //new PostOrderWalker(addIfLeaf).Walk(Edit);
+            new PostOrderWalker(ifUnmatchedAdd).Walk(Edit);
         }
 
         private void MovePhase()
@@ -119,148 +91,16 @@ namespace CK3Analyser.Core.Comparing.Building
 
         private void DeletePhase()
         {
-            void deleteIfUnmatched(Node node)
-            {
-                if (!MatchedNodes.ContainsKey(node.GetTrueHash()))
-                {
-                    EditScript.Add(new DeleteOperation(node));
-                }
-            }
+            //void deleteIfUnmatched(Node node)
+            //{
+            //    if (!matcher.MatchedNodes.ContainsKey(node.GetTrueHash()))
+            //    {
+            //        EditScript.Add(new DeleteOperation(node));
+            //    }
+            //}
 
-            new PostOrderWalker(deleteIfUnmatched).Walk(Edit);
+            //new PostOrderWalker(deleteIfUnmatched).Walk(Edit);
         }
 
-        private static List<Node> GetLeaves(Node node)
-        {
-            var leaves = new List<Node>();
-
-            void addIfLeaf(Node node)
-            {
-                if (node is not Block _)
-                {
-                    leaves.Add(node);
-                }
-            }
-
-            new PostOrderWalker(addIfLeaf).Walk(node);
-            return leaves;
-        }
-
-        public bool Matches(Node baseNode, Node editNode)
-        {
-            if (baseNode.GetType() != editNode.GetType())
-                return false;
-
-            if (baseNode is Block baseBlock && editNode is Block editBlock)
-                return BlockMatches(baseBlock, editBlock);
-
-            return LeafMatches(baseNode, editNode, out float _);
-        }
-
-        public bool LeafMatches(Node baseNode, Node editNode, out float similarity)
-        {
-            similarity = 0;
-            if (baseNode.GetType() != editNode.GetType())
-                return false;
-
-            if (baseNode is Comment baseComment && editNode is Comment editComment)
-            {
-                return StringMatches(baseComment.RawWithoutHashtag, editComment.RawWithoutHashtag, out similarity);
-            }
-            if (baseNode is AnonymousToken baseToken && editNode is AnonymousToken editToken)
-            {
-                return StringMatches(baseToken.StringRepresentation, editToken.StringRepresentation, out similarity);
-            }
-            if (baseNode is BinaryExpression baseBinExp && editNode is BinaryExpression editBinExp)
-            {
-                //Consider bin exps equal if keys are equal
-                //Test to see if it produces sane results
-                return baseBinExp.Key == editBinExp.Key;
-            }
-            throw new ArgumentException("Node type not recognised!");
-        }
-
-        public bool BlockMatches(Block baseBlock, Block editBlock)
-        {
-            if (baseBlock.GetType() != editBlock.GetType())
-                return false;
-
-            if (baseBlock is AnonymousBlock baseAnonBlock && editBlock is AnonymousBlock editAnonBlock)
-            {
-                return ChildrenMatch(baseAnonBlock, editAnonBlock);
-            }
-            if (baseBlock is NamedBlock baseNamedBlock && editBlock is NamedBlock editNamedBlock)
-            {
-                return baseNamedBlock.Key == editNamedBlock.Key
-                    && ChildrenMatch(baseNamedBlock, editNamedBlock);
-            }
-            if (baseBlock is Declaration baseDeclaration && editBlock is Declaration editDeclaration)
-            {
-                return baseDeclaration.Key == editDeclaration.Key
-                    && baseDeclaration.DeclarationType == editDeclaration.DeclarationType;
-            }
-            if (baseBlock is ScriptFile baseFile && editBlock is ScriptFile editFile)
-            {
-                return baseFile.RelativePath == editFile.RelativePath;
-            }
-            throw new ArgumentException("Node type not recognised!");
-        }
-
-        private bool ChildrenMatch(Block baseBlock, Block editBlock)
-        {
-            var commonNodes = 0;
-            foreach (var child in baseBlock.Children)
-            {
-                if (MatchedNodes.TryGetValue(child.GetTrueHash(), out (Node, Node) pair) && pair.Item2.Parent == editBlock)
-                {
-                    commonNodes++;
-                }
-            }
-            var maxNoOfNodes = Math.Max(baseBlock.Children.Count, editBlock.Children.Count);
-
-            var maxSize = Math.Max(baseBlock.GetSize(), editBlock.GetSize());
-            if (maxSize <= 4)
-            {
-                return (float)commonNodes / maxNoOfNodes >= 0.4;
-            }
-            return (float)commonNodes / maxNoOfNodes >= 0.6;
-        }
-
-        public static bool StringMatches(string baseString, string editString, out float similarity)
-        {
-            if (baseString == editString)
-                similarity = 1;
-            else
-                similarity = CalcBigramSimilarity(baseString, editString);
-
-            return similarity >= 0.6;
-        }
-
-        public static float CalcBigramSimilarity(string baseString, string editString)
-        {
-            if (baseString.Length <= 1 || editString.Length <= 1)
-                return baseString == editString ? 1 : 0;
-
-            var bigrams = new HashSet<string>();
-            for (int i = 0; i < baseString.Length - 1; i++)
-            {
-                var substring = baseString.Substring(i, 2);
-                bigrams.Add(substring);
-            }
-
-            int sharedBigramCount = 0;
-            for (int i = 0; i < editString.Length - 1; i++)
-            {
-                var substring = editString.Substring(i, 2);
-                if (!bigrams.Add(substring))
-                {
-                    sharedBigramCount++;
-                }
-            }
-
-            var totalNoOfBigrams = baseString.Length - 1 + editString.Length - 1;
-
-            return 2 * (float)sharedBigramCount / totalNoOfBigrams;
-        }
     }
 }

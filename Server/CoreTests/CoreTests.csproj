@@ -32,10 +32,34 @@
 
 
   <ItemGroup>
+    <None Update="Comparing\Testcases\Insert\SingleBlock\new.txt">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="Comparing\Testcases\Insert\SingleBlock\old.txt">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="Comparing\Testcases\Insert\ThreeLeaves\new.txt">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="Comparing\Testcases\Insert\ThreeLeaves\old.txt">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="Comparing\Testcases\Insert\SingleLeaf\new.txt">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="Comparing\Testcases\Insert\SingleLeaf\old.txt">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
     <None Update="Comparing\Testcases\NoChanges\new.txt">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <None Update="Comparing\Testcases\NoChanges\old.txt">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="Comparing\Testcases\Update\ChangedScoper\new.txt">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="Comparing\Testcases\Update\ChangedScoper\old.txt">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <None Update="Comparing\Testcases\Update\ThreeValues\new.txt">

@@ -116,19 +116,6 @@ namespace CK3Analyser.Core.Domain.Entities
 
         public abstract void Accept(IDomainVisitor visitor);
 
-        public virtual string GetLoneIdentifier() => " ";
-        public string GetIdentifier()
-        {
-            var sb = new StringBuilder(GetLoneIdentifier());
-            var parent = Parent;
-            while (parent != null)
-            {
-                sb.Insert(0, parent.GetLoneIdentifier() + "->");
-                parent = parent.Parent;
-            }
-            return sb.ToString();
-        }
-
         public abstract int GetDuplicationCheckingHash();
         public abstract int GetTrueHash();
 

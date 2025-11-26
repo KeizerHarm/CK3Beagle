@@ -1,0 +1,14 @@
+nerge_check_commander_trait_xp_effect = {
+	#Test
+	prev = {
+		if = {
+			limit = {
+				has_trait = $TRAIT$
+			}
+			add_trait_xp = {
+				trait = $TRAIT$
+				value = 10
+			}
+		}
+	}
+}

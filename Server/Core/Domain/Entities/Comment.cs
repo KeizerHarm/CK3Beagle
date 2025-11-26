@@ -12,7 +12,6 @@ namespace CK3Analyser.Core.Domain.Entities
             get
             {
                 return commentRegex.Replace(StringRepresentation, "").Trim();
-
             }
         }
         public override void Accept(IDomainVisitor visitor) => visitor.Visit(this);

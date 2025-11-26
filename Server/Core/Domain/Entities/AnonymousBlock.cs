@@ -6,8 +6,6 @@ namespace CK3Analyser.Core.Domain.Entities
     {
         public override void Accept(IDomainVisitor visitor) => visitor.Visit(this);
 
-        public override string GetLoneIdentifier() => "<anonymous block>";
-
         #region hashing
         private int _duplicationCheckingHash;
         public override int GetDuplicationCheckingHash()
@@ -31,7 +29,7 @@ namespace CK3Analyser.Core.Domain.Entities
         private int _trueHash;
         public override int GetTrueHash()
         {
-            if (_duplicationCheckingHash == 0)
+            if (_trueHash == 0)
             {
                 var hashCode = new HashCode();
                 hashCode.Add(1); //Acknowledge existence of anonymous block in hash algorithm but not with distinct identity

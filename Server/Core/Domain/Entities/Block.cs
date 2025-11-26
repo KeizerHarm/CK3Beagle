@@ -6,6 +6,10 @@ namespace CK3Analyser.Core.Domain.Entities
     public abstract class Block : Node
     {
         public List<Node> Children = new List<Node>();
+        public List<Node> ChildrenFlattened =>
+            [.. Children.SelectMany(x => {
+                if (x is Block block) return block.ChildrenFlattened; return []; 
+            }).Union(Children)];
 
         public void AddChild(Node node, bool addText = false)
         {
