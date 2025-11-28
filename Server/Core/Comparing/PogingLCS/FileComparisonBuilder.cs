@@ -52,7 +52,7 @@ namespace CK3Analyser.Core.Comparing.PogingLCS
             if (source is Block sourceBlock && edit is Block editBlock)
             {
                 int noOfSourceChildren = sourceBlock.Children.Count;
-                int noOfEditChildren = sourceBlock.Children.Count;
+                int noOfEditChildren = editBlock.Children.Count;
                 if (noOfSourceChildren == 0 && noOfEditChildren == 0)
                 {
                     return Delta.Changed(edit, new ShadowNode(source));
@@ -100,7 +100,7 @@ namespace CK3Analyser.Core.Comparing.PogingLCS
 
             var matchedChildrenDict = relevantMatchedChildren.ToDictionary(k => k.Item1, v => v.Item2);
             var matchedChildrenDictReversed = relevantMatchedChildren.ToDictionary(k => k.Item2, v => v.Item1);
-            while (sourceIndex < noOfSourceChildren && editIndex < noOfEditChildren)
+            while (sourceIndex < noOfSourceChildren || editIndex < noOfEditChildren)
             {
                 var sourceChild =
                     sourceIndex < noOfSourceChildren

@@ -3,7 +3,6 @@ using CK3Analyser.Core.Domain.Entities;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
-using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Runtime.InteropServices;
 using System.Text;
@@ -11,19 +10,6 @@ using System.Threading.Tasks;
 
 namespace CK3Analyser.Core.Comparing.PogingLCS
 {
-    public class SimpleNodeComparator : IEqualityComparer<Node>
-    {
-        public bool Equals(Node x, Node y)
-        {
-            return x.GetType() == y.GetType()
-                && x.GetTrueHash() == y.GetTrueHash();
-        }
-
-        public int GetHashCode([DisallowNull] Node obj)
-        {
-            return obj.GetTrueHash();
-        }
-    }
 
     public class DeltaTreeBuilder
     {
@@ -33,7 +19,7 @@ namespace CK3Analyser.Core.Comparing.PogingLCS
         public HashSet<string> ChangedDeclarations { get; private set; }
         public HashSet<string> RemovedDeclarations { get; private set; }
         public HashSet<string> UntouchedDeclarations { get; private set; }
-        private static SimpleNodeComparator defaultComparator = new SimpleNodeComparator();
+        private static TrueHashBasedNodeComparer defaultComparator = new TrueHashBasedNodeComparer();
 
 
         public DeltaTreeBuilder(ScriptFile source, ScriptFile edit)

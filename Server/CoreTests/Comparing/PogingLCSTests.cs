@@ -68,7 +68,7 @@ namespace CK3Analyser.Core.Comparing
             var comparison = new FileComparisonBuilder().BuildFileComparison(old, @new);
 
             //assert
-            Assert.Equal(4, comparison.Children.Count);
+            Assert.Equal(7, comparison.Children.Count);
         }
     }
 }
