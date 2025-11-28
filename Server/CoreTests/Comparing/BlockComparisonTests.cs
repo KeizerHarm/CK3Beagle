@@ -141,5 +141,77 @@ namespace CK3Analyser.Core.Comparing
             Assert.Equal("root", ((NamedBlock)insertOperation.InsertedNode).Key);
             Assert.Equal("prev", ((NamedBlock)insertOperation.NewParent).Key);
         }
+
+        [Fact]
+        public void LongFile()
+        {
+            //arrange
+            (var old, var @new) = GetTestCase("Insert/LongFileManyInserts");
+
+            //act
+            var comparison = new FileComparison(old, @new);
+
+            //assert
+            var insertOperations = comparison.EditScript.OfType<InsertOperation>();
+            Assert.Equal(comparison.EditScript.Count, insertOperations.Count());
+        }
+
+
+        //[Fact]
+        //public void SingleDeletedLeaf()
+        //{
+        //    //arrange
+        //    (var old, var @new) = GetTestCase("Delete/SingleLeaf");
+
+        //    //act
+        //    var comparison = new FileComparison(old, @new);
+
+        //    //assert
+        //    Assert.Single(comparison.EditScript);
+        //    Assert.IsType<DeleteOperation>(comparison.EditScript.First());
+        //    var DeleteOperation = comparison.EditScript.OfType<DeleteOperation>().First();
+
+        //    Assert.Equal("value = 10", DeleteOperation.DeletedNode.StringRepresentation);
+        //}
+
+        //[Fact]
+        //public void ThreeDeletedLeaves()
+        //{
+        //    //arrange
+        //    (var old, var @new) = GetTestCase("Delete/ThreeLeaves");
+
+        //    //act
+        //    var comparison = new FileComparison(old, @new);
+
+        //    //assert
+        //    Assert.Equal(3, comparison.EditScript.Count);
+        //    Assert.Equal(3, comparison.EditScript.OfType<DeleteOperation>().Count());
+
+        //    var DeleteOperation1 = comparison.EditScript.OfType<DeleteOperation>().ElementAt(0);
+        //    Assert.Equal("Test", DeleteOperation1.DeletedNode.StringRepresentation);
+
+        //    var DeleteOperation2 = comparison.EditScript.OfType<DeleteOperation>().ElementAt(1);
+        //    Assert.Equal("Test 2", DeleteOperation2.DeletedNode.StringRepresentation);
+
+        //    var DeleteOperation3 = comparison.EditScript.OfType<DeleteOperation>().ElementAt(2);
+        //    Assert.Equal("NOT", DeleteOperation3.DeletedNode.Key);
+        //}
+
+        //[Fact]
+        //public void SingleDeletedBlock()
+        //{
+        //    //arrange
+        //    (var old, var @new) = GetTestCase("Delete/SingleBlock");
+
+        //    //act
+        //    var comparison = new FileComparison(old, @new);
+
+        //    //assert
+        //    Assert.Single(comparison.EditScript);
+        //    Assert.IsType<DeleteOperation>(comparison.EditScript.First());
+        //    var DeleteOperation = comparison.EditScript.OfType<DeleteOperation>().First();
+
+        //    Assert.Equal("root", DeleteOperation.DeletedNode.Key);
+        //}
     }
 }

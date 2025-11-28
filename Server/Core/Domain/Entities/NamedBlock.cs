@@ -44,6 +44,7 @@ namespace CK3Analyser.Core.Domain.Entities
                 if (NodeType != NodeType.NonStatement)
                 {
                     hashCode.Add(Key);
+                    hashCode.Add(Scoper);
                 }
                 Children.ForEach(x =>
                 {
@@ -65,6 +66,7 @@ namespace CK3Analyser.Core.Domain.Entities
             {
                 var hashCode = new HashCode();
                 hashCode.Add(Key);
+                hashCode.Add(Scoper);
                 Children.ForEach(x =>
                 {
                     var code = x.GetTrueHash();

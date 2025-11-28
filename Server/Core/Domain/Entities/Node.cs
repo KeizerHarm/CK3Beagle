@@ -6,11 +6,11 @@ namespace CK3Analyser.Core.Domain.Entities
 {
     public readonly struct Position(int line, int column, int offset)
     {
-        //0-based line number
+        //0-sourced line number
         public readonly int Line = line;
-        //0-based character index in line
+        //0-sourced character index in line
         public readonly int Column = column;
-        //0-based absolute index in file
+        //0-sourced absolute index in file
         public readonly int Offset = offset;
 
         public override string ToString() => this.GenericToString();

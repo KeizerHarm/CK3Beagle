@@ -52,14 +52,14 @@ namespace CK3Analyser.Core.Comparing.Building
 
     public class PostOrderShallowWalker
     {
-        public PostOrderShallowWalker(Action<ShallowNode> action)
+        public PostOrderShallowWalker(Action<ShadowNode> action)
         {
             Action = action;
         }
 
-        public Action<ShallowNode> Action { get; set; }
+        public Action<ShadowNode> Action { get; set; }
 
-        public void Walk(ShallowNode node)
+        public void Walk(ShadowNode node)
         {
             foreach (var child in node.Children)
             {

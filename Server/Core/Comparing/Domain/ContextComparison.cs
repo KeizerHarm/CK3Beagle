@@ -7,7 +7,7 @@ namespace CK3Analyser.Core.Comparing.Domain
 {
     public class ContextComparison
     {
-        public Context Base { get; }
+        public Context Source { get; }
         public Context Edit { get; }
 
         public HashSet<string> AddedFiles { get; private set; }
@@ -18,9 +18,9 @@ namespace CK3Analyser.Core.Comparing.Domain
         public Dictionary<string, FileComparison> FileComparisons { get; private set; }
         public Dictionary<string, DeclarationComparison>[] DeclarationComparisons { get; private set; }
 
-        public ContextComparison(Context baseContext, Context editContext)
+        public ContextComparison(Context sourceContext, Context editContext)
         {
-            Base = baseContext;
+            Source = sourceContext;
             Edit = editContext;
             HandleFiles();
         }
@@ -28,7 +28,7 @@ namespace CK3Analyser.Core.Comparing.Domain
         private void HandleFiles()
         {
             (AddedFiles, RemovedFiles, ChangedFiles, UntouchedFiles) 
-                = ComparisonHelpers.SimpleListComparison(Base.Files, Edit.Files, (first, second) => first.StringRepresentation == second.StringRepresentation);
+                = ComparisonHelpers.SimpleListComparison(Source.Files, Edit.Files, (first, second) => first.StringRepresentation == second.StringRepresentation);
         }
     }
 }

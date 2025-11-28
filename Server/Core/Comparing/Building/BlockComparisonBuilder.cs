@@ -3,21 +3,19 @@ using CK3Analyser.Core.Domain;
 using CK3Analyser.Core.Domain.Entities;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Runtime.InteropServices;
 
 namespace CK3Analyser.Core.Comparing.Building
 {
     public class BlockComparisonBuilder
     {
-        private ShallowNode Base;
+        private ShadowNode Source;
         private Block Edit;
         private NodeMatcher matcher;
         public List<IEditOperation> EditScript = [];
 
-        public void BuildComparison(Block @base, Block edit)
+        public void BuildComparison(Block source, Block edit)
         {
-            Base = new ShallowNode(@base); Edit = edit;
+            Source = new ShadowNode(source); Edit = edit;
 
             FindMatchedNodes();
             GenerateEditScript();
@@ -35,26 +33,26 @@ namespace CK3Analyser.Core.Comparing.Building
         public void FindMatchedNodes()
         {
             matcher = new NodeMatcher();
-            matcher.MatchAllNodes(Base, Edit);
+            matcher.MatchAllNodes(Source, Edit);
         }
 
         private void UpdatePhase()
         {
-            foreach ((ShallowNode baseNode, Node editNode) in matcher.MatchedNodes)
+            foreach ((ShadowNode sourceNode, Node editNode) in matcher.MatchedNodes)
             {
-                if (editNode is BinaryExpression editBinExp && !baseNode.StringRepresentation.Equals(editBinExp.StringRepresentation))
+                if (editNode is BinaryExpression editBinExp && !sourceNode.StringRepresentation.Equals(editBinExp.StringRepresentation))
                 {
                     EditScript.Add(new UpdateOperation(editNode, editBinExp.StringRepresentation));
                 }
-                else if (editNode is Comment editComment && !baseNode.StringRepresentation.Equals(editComment.RawWithoutHashtag))
+                else if (editNode is Comment editComment && !sourceNode.StringRepresentation.Equals(editComment.StringRepresentation))
                 {
-                    EditScript.Add(new UpdateOperation(editNode, editComment.RawWithoutHashtag));
+                    EditScript.Add(new UpdateOperation(editNode, editComment.StringRepresentation));
                 }
-                else if (editNode is AnonymousToken editAnonToken && !baseNode.StringRepresentation.Equals(editAnonToken.Value))
+                else if (editNode is AnonymousToken editAnonToken && !sourceNode.StringRepresentation.Equals(editAnonToken.Value))
                 {
                     EditScript.Add(new UpdateOperation(editNode, editAnonToken.Value));
                 }
-                else if (editNode is NamedBlock editNamedBlock && !(baseNode.StringRepresentation == editNamedBlock.Key + " " + editNamedBlock.Scoper.ScoperToString()))
+                else if (editNode is NamedBlock editNamedBlock && !(sourceNode.StringRepresentation == editNamedBlock.Key + " " + editNamedBlock.Scoper.ScoperToString()))
                 {
                     EditScript.Add(new UpdateOperation(editNode, editNamedBlock.Key + " " + editNamedBlock.Scoper.ScoperToString()));
                 }
@@ -73,9 +71,9 @@ namespace CK3Analyser.Core.Comparing.Building
                 if (!matcher.EditNodeIsMatched(editNode)
                     && matcher.EditNodeIsMatched(editNode.Parent))
                 {
-                    var matchedParent = matcher.GetBaseMatchForEditNode(editNode.Parent);
+                    var matchedParent = matcher.GetSourceMatchForEditNode(editNode.Parent);
                     EditScript.Add(new InsertOperation(editNode, editNode.Parent, 0));
-                    var clone = new ShallowNode(editNode);
+                    var clone = new ShadowNode(editNode);
                     matchedParent.Children.Add(clone);
                     matcher.AddMatch(clone, editNode);
                 }
@@ -91,15 +89,15 @@ namespace CK3Analyser.Core.Comparing.Building
 
         private void DeletePhase()
         {
-            //void deleteIfUnmatched(Node node)
-            //{
-            //    if (!matcher.MatchedNodes.ContainsKey(node.GetTrueHash()))
-            //    {
-            //        EditScript.Add(new DeleteOperation(node));
-            //    }
-            //}
+            void ifUnmatchedAdd(ShadowNode sourceNode)
+            {
+                if (!matcher.SourceNodeIsMatched(sourceNode))
+                {
+                    EditScript.Add(new DeleteOperation(sourceNode));
+                }
+            }
 
-            //new PostOrderWalker(deleteIfUnmatched).Walk(Edit);
+            new PostOrderShallowWalker(ifUnmatchedAdd).Walk(Source);
         }
 
     }

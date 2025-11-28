@@ -7,7 +7,7 @@ namespace CK3Analyser.Core.Comparing.Domain
 {
     public class FileComparison
     {
-        public ScriptFile Base { get; }
+        public ScriptFile Source { get; }
         public ScriptFile Edit { get; }
         public HashSet<string> AddedDeclarations { get; private set; }
         public HashSet<string> ChangedDeclarations { get; private set; }
@@ -17,17 +17,19 @@ namespace CK3Analyser.Core.Comparing.Domain
 
         private BlockComparisonBuilder _comparisonBuilder;
 
-        public FileComparison(ScriptFile baseFile, ScriptFile editFile)
+        public FileComparison(ScriptFile sourceFile, ScriptFile editFile)
         {
-            Base = baseFile;
+            Source = sourceFile;
             Edit = editFile;
 
             (AddedDeclarations, RemovedDeclarations, ChangedDeclarations, UntouchedDeclarations)
-                = ComparisonHelpers.SimpleListComparison(Base.Declarations.ToDictionary(), Edit.Declarations.ToDictionary(),
+                = ComparisonHelpers.SimpleListComparison(Source.Declarations.ToDictionary(), Edit.Declarations.ToDictionary(),
                     (first, second) => first.GetTrueHash() == second.GetTrueHash());
 
             _comparisonBuilder = new BlockComparisonBuilder();
-            _comparisonBuilder.BuildComparison(Base, Edit);
+            foreach (var changedDecl in ChangedDeclarations) {
+                _comparisonBuilder.BuildComparison(Source.Declarations[changedDecl], Edit.Declarations[changedDecl]);
+            }
             EditScript = _comparisonBuilder.EditScript;
             _comparisonBuilder = null;
         }

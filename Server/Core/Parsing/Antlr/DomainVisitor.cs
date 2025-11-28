@@ -5,7 +5,7 @@
 
 //namespace CK3Analyser.Core.Parsing.Antlr
 //{
-//    public class DomainVisitor : CK3BaseVisitor<Node>
+//    public class DomainVisitor : CK3SourceVisitor<Node>
 //    {
 //        private readonly string rawFile;
 //        private readonly Context domainContext;

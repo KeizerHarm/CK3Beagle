@@ -12,9 +12,9 @@ namespace CK3Analyser.Core.Comparing.Domain
         public readonly Block NewParent = newParent;
         public readonly int NewPosition = newPosition;
     }
-    public readonly struct DeleteOperation(Node node) : IEditOperation
+    public readonly struct DeleteOperation(ShadowNode node) : IEditOperation
     {
-        public readonly Node DeletedNode = node;
+        public readonly ShadowNode DeletedNode = node;
     }
     public readonly struct UpdateOperation(Node updatedNode, string newValue) : IEditOperation
     {

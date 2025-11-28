@@ -7,14 +7,14 @@ using System.Linq;
 
 namespace CK3Analyser.Core.Comparing.Domain
 {
-    public class ShallowNode
+    public class ShadowNode
     {
         public DeclarationType DeclarationType;
         public string Key;
         public Type OriginalType;
         public string StringRepresentation;
-        public List<ShallowNode> Children = [];
-        public List<ShallowNode> ChildrenFlattened
+        public List<ShadowNode> Children = [];
+        public List<ShadowNode> ChildrenFlattened
         {
             get
             {
@@ -26,7 +26,7 @@ namespace CK3Analyser.Core.Comparing.Domain
             return 1 + Children.Sum(x => x.GetSize());
         }
 
-        public ShallowNode(Node node)
+        public ShadowNode(Node node)
         {
             OriginalType = node.GetType();
             if (node is BinaryExpression binExp)
@@ -39,17 +39,17 @@ namespace CK3Analyser.Core.Comparing.Domain
                 Key = declaration.Key;
                 DeclarationType = declaration.DeclarationType;
                 StringRepresentation = declaration.Key + " " + declaration.Scoper.ScoperToString();
-                Children = declaration.Children.Select(x => new ShallowNode(x)).ToList();
+                Children = declaration.Children.Select(x => new ShadowNode(x)).ToList();
             }
             else if (node is NamedBlock namedBlock)
             {
                 Key = namedBlock.Key;
                 StringRepresentation = namedBlock.Key + " " + namedBlock.Scoper.ScoperToString();
-                Children = namedBlock.Children.Select(x => new ShallowNode(x)).ToList();
+                Children = namedBlock.Children.Select(x => new ShadowNode(x)).ToList();
             }
             else if (node is Block block)
             {
-                Children = block.Children.Select(x => new ShallowNode(x)).ToList();
+                Children = block.Children.Select(x => new ShadowNode(x)).ToList();
             }
             else if (node is AnonymousToken anonymousToken)
             {

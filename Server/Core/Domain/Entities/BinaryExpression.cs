@@ -61,14 +61,6 @@ namespace CK3Analyser.Core.Domain.Entities
         }
         public override void Accept(IDomainVisitor visitor) => visitor.Visit(this);
 
-        public override bool Equals(object obj)
-        {
-            return obj is BinaryExpression expression &&
-                   Key == expression.Key &&
-                   Scoper == expression.Scoper &&
-                   Value == expression.Value;
-        }
-
         #region hashing
         private int _duplicationCheckingHash;
         public override int GetDuplicationCheckingHash()
