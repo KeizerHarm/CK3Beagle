@@ -4,7 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace CK3Analyser.Core.Comparing.PogingLCS
+namespace CK3Analyser.Core.Comparing.Building
 {
     public class FileComparisonBuilder
     {
@@ -61,7 +61,7 @@ namespace CK3Analyser.Core.Comparing.PogingLCS
                 // If we are in a Declaration block, the matching still needs to happen
                 if (source is Declaration _)
                 {
-                    var matcher = new NodeMatcher2();
+                    var matcher = new NodeMatcher();
                     matcher.MatchAllNodes(sourceBlock, editBlock);
                     matchedChildren = matcher.MatchedNodes.Select(x => (x.Key, x.Value));
                 }
@@ -75,7 +75,7 @@ namespace CK3Analyser.Core.Comparing.PogingLCS
                 }
 
                 //If less than 1/3rd of children are matched, treat whole block as changed
-                if (relevantMatchedChildren.Count() < (Math.Max(noOfSourceChildren, noOfEditChildren) / 3f))
+                if (relevantMatchedChildren.Count() < Math.Max(noOfSourceChildren, noOfEditChildren) / 3f)
                 {
                     return Delta.Changed(edit, new ShadowNode(source));
                 }

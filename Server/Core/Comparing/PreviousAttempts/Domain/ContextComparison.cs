@@ -3,7 +3,7 @@ using CK3Analyser.Core.Generated;
 using System;
 using System.Collections.Generic;
 
-namespace CK3Analyser.Core.Comparing.Domain
+namespace CK3Analyser.Core.Comparing.PreviousAttempts.Domain
 {
     public class ContextComparison
     {

@@ -27,5 +27,9 @@
     <PackageReference Include="Antlr4.Runtime.Standard" Version="4.11.1" />
     <PackageReference Include="Antlr4BuildTasks" Version="12.2" PrivateAssets="all" />
   </ItemGroup>
+  
+  <ItemGroup>
+    <Folder Include="Comparing\PogingLCS\" />
+  </ItemGroup>
 
 </Project>

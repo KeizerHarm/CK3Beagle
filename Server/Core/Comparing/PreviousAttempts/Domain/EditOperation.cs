@@ -1,6 +1,7 @@
-﻿using CK3Analyser.Core.Domain.Entities;
+﻿using CK3Analyser.Core.Comparing.Domain;
+using CK3Analyser.Core.Domain.Entities;
 
-namespace CK3Analyser.Core.Comparing.Domain
+namespace CK3Analyser.Core.Comparing.PreviousAttempts.Domain
 {
     public interface IEditOperation
     {

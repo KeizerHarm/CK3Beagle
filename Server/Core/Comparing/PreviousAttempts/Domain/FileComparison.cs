@@ -1,9 +1,9 @@
-﻿using CK3Analyser.Core.Comparing.Building;
+﻿using CK3Analyser.Core.Comparing.PreviousAttempts.Building;
 using CK3Analyser.Core.Domain.Entities;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace CK3Analyser.Core.Comparing.Domain
+namespace CK3Analyser.Core.Comparing.PreviousAttempts.Domain
 {
     public class FileComparison
     {

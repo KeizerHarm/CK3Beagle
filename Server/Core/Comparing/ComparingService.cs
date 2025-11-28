@@ -1,5 +1,6 @@
 ﻿using CK3Analyser.Core.Comparing.Building;
 using CK3Analyser.Core.Comparing.Domain;
+using CK3Analyser.Core.Comparing.PreviousAttempts.Domain;
 using CK3Analyser.Core.Domain;
 using CK3Analyser.Core.Domain.Entities;
 using CK3Analyser.Core.Generated;
@@ -68,9 +69,9 @@ namespace CK3Analyser.Core.Comparing
         public static async Task BuildContextComparison(Context modContext, Context vanillaContext, Func<string, Task> positiveProgressDelegate)
         {
             //Run the actual comparison builder on what's left
-            var fileComparisons = new ConcurrentBag<FileComparison>();
+            var fileComparisons = new ConcurrentBag<Delta>();
 
-            var comparisonMaker = () => new BlockComparisonBuilder();
+            var comparisonMaker = () => new FileComparisonBuilder();
 
             var contextComparison = new ContextComparison(vanillaContext, modContext);
 
@@ -85,10 +86,10 @@ namespace CK3Analyser.Core.Comparing
                 {
                     var vanillaFile = vanillaContext.Files[localFilePath];
                     var modFile = modContext.Files[localFilePath];
-
-                    fileComparisons.Add(BuildFileComparison(modFile, vanillaFile));
+                    fileComparisons.Add(comparisonBuilder.BuildFileComparison(modFile, vanillaFile));
                 }
             });
+            await positiveProgressDelegate("Finally completed!");
         }
 
         public static void ClearMemoryUnusedForComparison(Context modContext)

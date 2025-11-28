@@ -2,7 +2,7 @@
 using System;
 using System.Collections.Generic;
 
-namespace CK3Analyser.Core.Comparing.PogingLCS
+namespace CK3Analyser.Core.Comparing.Building
 {
     public static class LcsCalculator
     {

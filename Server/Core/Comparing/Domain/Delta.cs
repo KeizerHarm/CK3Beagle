@@ -1,8 +1,7 @@
-﻿using CK3Analyser.Core.Comparing.Domain;
-using CK3Analyser.Core.Domain.Entities;
+﻿using CK3Analyser.Core.Domain.Entities;
 using System.Collections.Generic;
 
-namespace CK3Analyser.Core.Comparing.PogingLCS
+namespace CK3Analyser.Core.Comparing.Domain
 {
     public enum DeltaKind
     {

@@ -1,16 +1,18 @@
-﻿using CK3Analyser.Core.Comparing.Domain;
+﻿using CK3Analyser.Core.Comparing.Building;
+using CK3Analyser.Core.Comparing.Domain;
+using CK3Analyser.Core.Comparing.PreviousAttempts.Domain;
 using CK3Analyser.Core.Domain;
 using CK3Analyser.Core.Domain.Entities;
 using System;
 using System.Collections.Generic;
 
-namespace CK3Analyser.Core.Comparing.Building
+namespace CK3Analyser.Core.Comparing.PreviousAttempts.Building
 {
     public class BlockComparisonBuilder
     {
         private ShadowNode Source;
         private Block Edit;
-        private NodeMatcher matcher;
+        private NodeMatcherOrig matcher;
         public List<IEditOperation> EditScript = [];
 
         public void BuildComparison(Block source, Block edit)
@@ -32,7 +34,7 @@ namespace CK3Analyser.Core.Comparing.Building
 
         public void FindMatchedNodes()
         {
-            matcher = new NodeMatcher();
+            matcher = new NodeMatcherOrig();
             matcher.MatchAllNodes(Source, Edit);
         }
 

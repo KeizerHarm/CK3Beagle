@@ -1,4 +1,5 @@
-﻿using CK3Analyser.Core.Comparing.PogingLCS;
+﻿using CK3Analyser.Core.Comparing.Domain;
+using CK3Analyser.Core.Comparing.Building;
 
 namespace CK3Analyser.Core.Comparing
 {
@@ -42,7 +43,6 @@ namespace CK3Analyser.Core.Comparing
 
             //assert
             Assert.Single(comparison.Children);
-
         }
 
         [Fact]

@@ -1,4 +1,4 @@
-﻿using CK3Analyser.Core.Comparing.PogingLCS;
+﻿using CK3Analyser.Core.Comparing.Building;
 
 namespace CK3Analyser.Core.Comparing
 {
