@@ -1,4 +1,7 @@
-﻿using CK3Analyser.Core.Domain;
+﻿using CK3Analyser.Core.Comparing;
+using CK3Analyser.Core.Comparing.Building;
+using CK3Analyser.Core.Comparing.Domain;
+using CK3Analyser.Core.Domain;
 using CK3Analyser.Core.Domain.Entities;
 using CK3Analyser.Core.Generated;
 using CK3Analyser.Core.Parsing.Antlr;
@@ -6,14 +9,14 @@ using CK3Analyser.Core.Parsing.SemanticPass;
 using CK3Analyser.Core.Resources;
 using CK3Analyser.Core.Resources.Storage;
 
-namespace CK3Analyser.Core.Comparing
+namespace CK3Analyser.Analysing.Diff.Detectors
 {
-    public class BaseComparisonTest
+    public class BaseDiffDetectorTests
     {
-        public static (ScriptFile, ScriptFile) GetTestCase(string caseName, DeclarationType? expectedDeclarationType = null)
+        public static Delta GetTestCase(string caseName, DeclarationType? expectedDeclarationType = null)
         {
-            var oldFileString = File.ReadAllText(Path.Combine(AppContext.BaseDirectory, "Comparing/Testcases", caseName, "old.txt"));
-            var newFileString = File.ReadAllText(Path.Combine(AppContext.BaseDirectory, "Comparing/Testcases", caseName, "new.txt"));
+            var oldFileString = File.ReadAllText(Path.Combine(AppContext.BaseDirectory, "Diff/Detectors/Testcases", caseName, "old.txt"));
+            var newFileString = File.ReadAllText(Path.Combine(AppContext.BaseDirectory, "Diff/Detectors/Testcases", caseName, "new.txt"));
 
             GlobalResources.AddEffects(["add_gold", "xxx", "yyy", "zzz"]);
             GlobalResources.AddTriggers(["has_gold", "or", "and", "nand", "nor", "not", "aaa", "bbb", "ccc", "ddd"]);
@@ -27,17 +30,22 @@ namespace CK3Analyser.Core.Comparing
 
             var expDeclarationType = expectedDeclarationType ?? DeclarationType.Debug;
             var parser = new AntlrParser();
+
             var vanillaParsed = new ScriptFile(oldContext, "", expDeclarationType, oldFileString);
             parser.ParseFile(vanillaParsed);
+            vanillaParsed.Accept(new SecondPassVisitor());
             oldContext.AddFile(vanillaParsed);
             new SemanticPassHandler().ExecuteSemanticPass(oldContext);
 
             var modParsed = new ScriptFile(newContext, "", expDeclarationType, newFileString);
             parser.ParseFile(modParsed);
+            modParsed.Accept(new SecondPassVisitor());
             newContext.AddFile(modParsed);
             new SemanticPassHandler().ExecuteSemanticPass(newContext);
 
-            return (vanillaParsed, modParsed);
+            var delta = new FileComparisonBuilder().BuildFileComparison(vanillaParsed, modParsed);
+
+            return delta;
         }
     }
 }

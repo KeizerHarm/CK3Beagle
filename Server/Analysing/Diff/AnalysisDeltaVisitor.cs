@@ -8,6 +8,29 @@ namespace CK3Analyser.Analysing.Diff
     {
         public List<BaseDiffDetector> Detectors { get; } = new List<BaseDiffDetector>();
 
+        //Just for testing purposes
+        public void VisitAny(Delta delta)
+        {
+            switch (delta.Kind)
+            {
+                case DeltaKind.Unchanged:
+                    VisitUnchanged(delta);
+                    break;
+                case DeltaKind.Added:
+                    VisitAdded(delta);
+                    break;
+                case DeltaKind.Deleted:
+                    VisitDeleted(delta);
+                    break;
+                case DeltaKind.Changed:
+                    VisitChanged(delta);
+                    break;
+                case DeltaKind.ChangedInChildren:
+                    VisitChangedInChildren(delta);
+                    break;
+            }
+        }
+
         public override void VisitChanged(Delta delta)
         {
             foreach (var detector in Detectors)

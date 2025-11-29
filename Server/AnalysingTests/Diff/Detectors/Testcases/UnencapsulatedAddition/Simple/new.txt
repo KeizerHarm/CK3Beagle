@@ -1,0 +1,9 @@
+test = {
+	aaa = yes
+	bbb = yes
+	ccc = no
+	ccc = yes
+	ccc = no
+	ccc = yes
+	ccc = no
+}

@@ -34,11 +34,14 @@ namespace CK3Analyser.Analysing.Diff.Detectors
             //Now to gather a sequence of all preceding additions
             var sequence = new List<Delta>() { delta };
             var prevSibling = delta.GetPrevSibling();
+            var prevNodeSibling = delta.Node.PrevSibling;
             while (prevSibling != null 
                 && prevSibling.Kind == DeltaKind.Added
-                && prevSibling.Node == delta.Node.PrevSibling)
+                && prevSibling.Node == prevNodeSibling)
             {
                 sequence.Insert(0, prevSibling);
+                prevSibling = prevSibling.GetPrevSibling();
+                prevNodeSibling = prevNodeSibling.PrevSibling;
             }
 
             var totalSize = sequence.Sum(x => x.Node.GetSize());

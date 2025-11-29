@@ -1,0 +1,11 @@
+test = {
+	aaa = yes
+	bbb = yes
+	link1 = {
+		aaa = yes
+		bbb = yes
+		ccc = yes
+		aaa = no
+		bbb = no
+	}
+}

@@ -78,6 +78,11 @@ namespace CK3Analyser.Core.Comparing.Domain
         public DeltaKind Kind;
 
         public List<Delta> Children;
+        public void AddChild(Delta delta)
+        {
+            Children.Add(delta);
+            delta.Parent = this;
+        }
 
         public void Accept(IDeltaVisitor visitor)
         {

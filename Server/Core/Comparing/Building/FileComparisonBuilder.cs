@@ -75,10 +75,10 @@ namespace CK3Analyser.Core.Comparing.Building
                 }
 
                 //If less than 1/3rd of children are matched, treat whole block as changed
-                if (relevantMatchedChildren.Count() < Math.Max(noOfSourceChildren, noOfEditChildren) / 3f)
-                {
-                    return Delta.Changed(edit, new ShadowNode(source));
-                }
+                //if (relevantMatchedChildren.Count() < Math.Max(noOfSourceChildren, noOfEditChildren) / 3f)
+                //{
+                //    return Delta.Changed(edit, new ShadowNode(source));
+                //}
 
                 var delta = BlockPropertiesAreSame(sourceBlock, editBlock)
                     ? Delta.ChangeInChildren(edit)
@@ -114,13 +114,13 @@ namespace CK3Analyser.Core.Comparing.Building
                 //If either child does not exist, then iterator went past max length and the rest of the nodes on the other are added/deleted
                 if (sourceChild == null)
                 {
-                    delta.Children.Add(Delta.Added(editChild));
+                    delta.AddChild(Delta.Added(editChild));
                     editIndex++;
                     continue;
                 }
                 if (editChild == null)
                 {
-                    delta.Children.Add(Delta.Deleted(new ShadowNode(sourceChild)));
+                    delta.AddChild(Delta.Deleted(new ShadowNode(sourceChild)));
                     sourceIndex++;
                     continue;
                 }
@@ -131,7 +131,7 @@ namespace CK3Analyser.Core.Comparing.Building
                     //Recurse to get difference
                     var childDelta = GetDelta(sourceChild, editChild, matchedChildren);
                     if (childDelta != null)
-                        delta.Children.Add(childDelta);
+                        delta.AddChild(childDelta);
 
                     sourceIndex++;
                     editIndex++;
@@ -140,22 +140,22 @@ namespace CK3Analyser.Core.Comparing.Building
                 //If source child is match but edit child not the pair, continue iterating with editChild
                 if (matchedChildrenDict.ContainsKey(sourceChild))
                 {
-                    delta.Children.Add(Delta.Deleted(new ShadowNode(sourceChild)));
+                    delta.AddChild(Delta.Deleted(new ShadowNode(sourceChild)));
                     editIndex++;
                     continue;
                 }
                 //If edit child is part of match but source child not the pair, continue iterating with sourceChild
                 if (matchedChildrenDictReversed.ContainsKey(editChild))
                 {
-                    delta.Children.Add(Delta.Added(sourceChild));
+                    delta.AddChild(Delta.Added(sourceChild));
                     sourceIndex++;
                     continue;
                 }
 
                 //If neither child is part of match, declare and continue iterating with both.
-                delta.Children.Add(Delta.Deleted(new ShadowNode(sourceChild)));
+                delta.AddChild(Delta.Deleted(new ShadowNode(sourceChild)));
                 editIndex++;
-                delta.Children.Add(Delta.Added(sourceChild));
+                delta.AddChild(Delta.Added(sourceChild));
                 sourceIndex++;
             }
 
