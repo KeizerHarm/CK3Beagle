@@ -89,7 +89,7 @@ namespace CK3Analyser.Core.Comparing
                     fileComparisons.Add(comparisonBuilder.BuildFileComparison(modFile, vanillaFile));
                 }
             });
-            await positiveProgressDelegate("Finally completed!");
+            GlobalResources.Deltas = fileComparisons;
         }
 
         public static void ClearMemoryUnusedForComparison(Context modContext)

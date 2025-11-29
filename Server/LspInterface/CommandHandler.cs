@@ -55,7 +55,8 @@ namespace CK3Analyser.LspInterface
                 try
                 {
                     var logEntries = await _orchestrator.HandleAnalysis();
-                    await SendLogs(logEntries);
+                    var diffLogEntries = await _orchestrator.HandleComparativeAnalysis();
+                    await SendLogs(logEntries.Concat(diffLogEntries));
                     _orchestrator.WrapUp();
                 }
                 catch (Exception ex)

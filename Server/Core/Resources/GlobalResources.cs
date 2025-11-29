@@ -1,4 +1,5 @@
-﻿using CK3Analyser.Core.Domain;
+﻿using CK3Analyser.Core.Comparing.Domain;
+using CK3Analyser.Core.Domain;
 using CK3Analyser.Core.Resources.Storage;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
@@ -23,6 +24,8 @@ namespace CK3Analyser.Core.Resources
         public static Configuration Configuration;
         public static SymbolTable SymbolTable;
         public static StringTable StringTable;
+
+        public static IEnumerable<Delta> Deltas;
 
         public static void AddEffects(IEnumerable<string> effects)
         {

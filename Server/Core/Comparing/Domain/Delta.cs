@@ -1,15 +1,35 @@
-﻿using CK3Analyser.Core.Domain.Entities;
+﻿using CK3Analyser.Core.Domain;
+using CK3Analyser.Core.Domain.Entities;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace CK3Analyser.Core.Comparing.Domain
 {
     public enum DeltaKind
     {
-        Unchanged, Added, Deleted, Changed, ChangeInChildren
+        Unchanged, Added, Deleted, Changed, ChangedInChildren
     }
 
     public class Delta
     {
+        public Delta Parent;
+        public Delta GetPrevSibling()
+        {
+            if (Parent == null)
+                return null;
+
+            var indexInParent = Parent.Children.IndexOf(this);
+            return Parent.Children.ElementAtOrDefault(indexInParent - 1);
+        }
+        public Delta GetNextSibling()
+        {
+            if (Parent == null)
+                return null;
+
+            var indexInParent = Parent.Children.IndexOf(this);
+            return Parent.Children.ElementAtOrDefault(indexInParent + 1);
+        }
+
         public static Delta Deleted(ShadowNode shadow)
         {
             return new Delta
@@ -32,7 +52,7 @@ namespace CK3Analyser.Core.Comparing.Domain
             return new Delta
             {
                 Node = node,
-                Kind = DeltaKind.ChangeInChildren
+                Kind = DeltaKind.ChangedInChildren
             };
         }
         public static Delta Added(Node node)
@@ -58,5 +78,27 @@ namespace CK3Analyser.Core.Comparing.Domain
         public DeltaKind Kind;
 
         public List<Delta> Children;
+
+        public void Accept(IDeltaVisitor visitor)
+        {
+            switch (Kind)
+            {
+                case DeltaKind.Unchanged:
+                    visitor.VisitUnchanged(this);
+                    break;
+                case DeltaKind.Added:
+                    visitor.VisitAdded(this);
+                    break;
+                case DeltaKind.Deleted:
+                    visitor.VisitDeleted(this);
+                    break;
+                case DeltaKind.Changed:
+                    visitor.VisitChanged(this);
+                    break;
+                case DeltaKind.ChangedInChildren:
+                    visitor.VisitChangedInChildren(this);
+                    break;
+            }
+        }
     }
 }

@@ -199,6 +199,14 @@ namespace CK3Analyser.Core.Resources
                         ScopeLink_Severity = Severity.Warning,
                         ScopeType_Severity = Severity.Warning,
                     };
+
+                UnencapsulatedAdditionSettings =
+                    new UnencapsulatedAdditionSettings
+                    {
+                        Enabled = true,
+                        Severity = Severity.Info,
+                        Threshold = 5
+                    };
             }
         }
 
@@ -297,6 +305,20 @@ namespace CK3Analyser.Core.Resources
             set
             {
                 _keywordAsScopeNameSettings = value;
+            }
+        }
+
+        private UnencapsulatedAdditionSettings? _unencapsulatedAdditionSettings;
+        public UnencapsulatedAdditionSettings UnencapsulatedAdditionSettings
+        {
+            get
+            {
+                _unencapsulatedAdditionSettings = GetSettings(_unencapsulatedAdditionSettings, "unencapsulatedAddition");
+                return _unencapsulatedAdditionSettings.Value;
+            }
+            set
+            {
+                _unencapsulatedAdditionSettings = value;
             }
         }
 

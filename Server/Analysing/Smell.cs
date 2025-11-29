@@ -33,7 +33,9 @@ namespace CK3Analyser.Analysing
 
         KeywordAsScopeName_RootOrPrev,
         KeywordAsScopeName_ScopeLink,
-        KeywordAsScopeName_ScopeType
+        KeywordAsScopeName_ScopeType,
+
+        UnencapsulatedAddition
     }
 
     public static class SmellExtensions
@@ -94,6 +96,9 @@ namespace CK3Analyser.Analysing
                     return "KASN.2";
                 case Smell.KeywordAsScopeName_ScopeType:
                     return "KASN.3";
+
+                case Smell.UnencapsulatedAddition:
+                    return "UA.1";
 
                 default:
                     throw new ArgumentException("What is that smell, that smelly smell...?");

@@ -1,4 +1,5 @@
 ﻿using CK3Analyser.Analysing.Common;
+using CK3Analyser.Analysing.Diff;
 using CK3Analyser.Analysing.Logging;
 using CK3Analyser.Core.Comparing;
 using CK3Analyser.Core.Domain;
@@ -124,13 +125,12 @@ namespace CK3Analyser.Orchestration
 
             await ComparingService.BuildContextComparison(GlobalResources.Modded, GlobalResources.Vanilla, _positiveProgressDelegate);
 
-            await _positiveProgressDelegate("Finished building comparison");
-
-            var comparativeAnalyser = new CommonAnalyser();
-            
+            await _positiveProgressDelegate("Finished building context comparisons");
+            var comparativeAnalyser = new DiffAnalyser();
+            await comparativeAnalyser.Analyse(GlobalResources.Deltas, _positiveProgressDelegate);
             return comparativeAnalyser.LogEntries;
-
         }
+
         public void WrapUp()
         {
             GlobalResources.ClearEverything();

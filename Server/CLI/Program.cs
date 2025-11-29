@@ -38,7 +38,8 @@ namespace CK3Analyser.CLI
             var logs = await orchestrator.HandleAnalysis(true);
 
             Console.WriteLine($"Found {logs.Count()} issues");
-            await orchestrator.HandleComparativeAnalysis();
+            var diffLogs = await orchestrator.HandleComparativeAnalysis();
+            Console.WriteLine($"Found {diffLogs.Count()} diff issues");
        }
     }
 }
