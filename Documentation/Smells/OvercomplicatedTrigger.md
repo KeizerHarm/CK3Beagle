@@ -3,7 +3,7 @@ This is when a trigger block grows more complicated than it needs to do a given 
 
 This smell has many different forms. Examples are given for each.
 
-## Associativity
+## OT.1: Associativity
 ANDs are true if all members are true, ORs are true if one of the members are true. An AND with as a child a second AND, or an OR with a second OR, is written [redundantly](https://en.wikipedia.org/wiki/Associative_property); the members of the child trigger can be added to the parent.
 
 <table>
@@ -24,13 +24,13 @@ AND = {
    }
 }
 </pre></td>
-      <td>```
+      <td><pre>
 AND = {
    has_trait = zealous
    has_trait = arbitrary
    has_trait = gluttonous
 }
-```</td>
+</pre></td>
     </tr>
   </tbody>
 </table>
