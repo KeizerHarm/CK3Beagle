@@ -40,7 +40,7 @@ vanilla_trigger = {
 }
 </pre>
 
-## II.1: Unexpected Type
+## `II.1`: Unexpected Type
 The whole file is indented fine... but in a different way than expected. For example, instead of by Tabs, or by quartets of spaces, it is indented with triplets of spaces. This is determined by the rule [Allowed Indentation Types](https://github.com/KeizerHarm/CK3Beagle/blob/main/Documentation/Smells/InconsistentIndentation.md#allowed-indentation-types). Besides Tabs, Two Spaces, Three Spaces and Four Spaces, the detected indentation type could also be Inconclusive. Meaning the file has a jumble of different indentations and the tool cannot tell what it's meant to be.
 
 <table>
@@ -74,7 +74,7 @@ maternal_grandparent_is_zealous_trigger = {
   </tbody>
 </table>
 
-## II.2: Inconsistency
+## `II.2`: Inconsistency
 The indentation of the file itself is coherent, except for this line or these lines. They should be corrected by being moved the right amount to the left or right, using the proper spacing characters.
 
 It's worth nothing that this smell also triggers for indentation with mixed usage of tabs and spaces. Even if the distance looks right to your monitor, it will fail in different contexts, as tabs do not have a consistent width. Get rid of all at once by mass-replacing the spaces with tabs, or vice versa.

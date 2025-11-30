@@ -13,7 +13,7 @@ Now in regular programming, any instance of a number is considered a problem. Fo
 ## Configuration
 Besides Severity, you can manage the exact list of triggers and effects which ought to use script values instead of number literals. By default, the triggers and effects are those referencing spendable currencies.
 
-## MN.1: Magic Number
+## `MN.1`: Magic Number
 <table>
   <thead>
     <tr>

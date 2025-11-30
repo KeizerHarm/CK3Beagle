@@ -4,7 +4,7 @@ CK3 doesn't reserve words, any alphanumeric string can be used as a name for a s
 ## Configuration
 The only configuration is the respective Severities of the two cases.
 
-## KSN.1: Root or Prev
+## `KSN.1`: Root or Prev
 `root` and `prev` are predefined scope links, but the way they work is a bit special; linking to the origin scope and the previous scope respectively. Some new modders are not sure how to use them, and try to save scopes under their names. That's meaningless and confusing, use any name but that.
 
 <table>
@@ -35,7 +35,7 @@ random_targeting_scheme = {
   </tbody>
 </table>
 
-## KSN.2: Scope Link
+## `KSN.2`: Scope Link
 More common than the egregious `root`/`prev` is using generic names for scopes, so generic in fact that they are already used for regular scope links. That includes `father`, `primary_heir`, `capital_province`, but also `faith` and `scope` itself. The full list is exactly the scopes in `event_targets.log`.
 
 <table>

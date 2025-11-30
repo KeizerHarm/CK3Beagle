@@ -7,7 +7,7 @@ Note that this refers only to duplication of generic, reusable script; such as t
 ## Configuration
 Besides severity, you can also configure the Minimum Size; at how many copied statements is repetition a problem?
 
-## DUP.1: Duplication
+## `DUP.1`: Duplication
 <table>
   <thead>
     <tr>

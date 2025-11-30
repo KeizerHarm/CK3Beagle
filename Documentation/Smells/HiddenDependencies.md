@@ -61,8 +61,7 @@ scripted_trigger pope_likes_dragonborn = {
 }
 </pre>
 
-
-## HD.1: Use of Root
+## `HD.1`: Use of Root
 `root` is a link to the scope for which the current effect chain started; for example, the character for which the event fired. As such, a macro using root is dependend on a larger context than just where it is invoked. Refactor, or use a parameter instead.
 <table>
   <thead>
@@ -95,7 +94,7 @@ has_reason_to_be_paranoid_trigger = {
   </tbody>
 </table>
 
-## HD.2: Use of Top-Level Prev
+## `HD.2`: Use of Top-Level Prev
 `prev` is a link to the *previous* scope; it is going to reflect back to where you *just* came from. If a macro uses `prev` to go back to a scope it itself entered earlier, that's fine, but if it uses `prev` at the *top* level - before any scope changes - then it is going to some scope entered outside of its context. That makes it dependent on where it was invoked. Use a macro instead.
 <table>
   <thead>
@@ -128,7 +127,7 @@ hates_my_guts_trigger = {
   </tbody>
 </table>
 
-## HD.3: Use of Saved Scope
+## `HD.3`: Use of Saved Scope
 Saved scopes, `scope:scopename`, are set at some point in the preceding effect chain with a `save_scope_as` effect, or sometimes they are provided by code. A scripted trigger or effect using these relies on that to have gone well. A parameter refactor makes the macro independent, and also more flexible - if you have the scope available in a context but saved under a different name, you don't have to re-save it under the name the macro needs.
 
 <table>
@@ -168,7 +167,7 @@ if = {
 }
 </pre>
 
-## HD.4: Use of Variable
+## `HD.4`: Use of Variable
 A variable, (`var:varname`, `global_var:varname` or `local_var:varname`), can be set by any part of the game, meaning it is sometimes hard to *guarantee* that it does. A scripted trigger/effect should not carelessly assume that it did.
 
 <table>

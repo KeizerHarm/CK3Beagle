@@ -4,7 +4,7 @@ This is when a trigger block grows more complicated than it needs to be. Trigger
 ## Configuration
 The only configuration is the Severity settings for each of the six cases.
 
-## OT.1: [Associativity](https://en.wikipedia.org/wiki/Associative_property)
+## `OT.1`: [Associativity](https://en.wikipedia.org/wiki/Associative_property)
 ANDs are true if all members are true, ORs are true if one of the members are true. An AND with as a child a second AND, or an OR with a second OR, is written redundantly; the members of the child trigger can be added to the parent.
 
 <table>
@@ -54,8 +54,7 @@ OR = {
   </tbody>
 </table>
 
-
-## OT.2: [Idempotence](https://en.wikipedia.org/wiki/Idempotence)
+## `OT.2`: [Idempotence](https://en.wikipedia.org/wiki/Idempotence)
 This is simply the same trigger line appearing twice in the same block. Checking the same trigger twice is not going to give you different results. The repetition is redundant and may be confusing.
 
 <table>
@@ -84,8 +83,7 @@ AND = {
   </tbody>
 </table>
 
-
-## OT.3: [Contradiction](https://en.wikipedia.org/wiki/Law_of_noncontradiction)
+## `OT.3`: [Contradiction](https://en.wikipedia.org/wiki/Law_of_noncontradiction)
 This is the mirror image of idempotence; when you check for the trigger, and its opposite, in the same block. They cannot possibly be both true, so this is equivalent to writing `always = no` in the block. Whichever line is incorrect should be removed for this to make sense.
 
 <table>
@@ -145,8 +143,7 @@ AND = {
   </tbody>
 </table>
 
-
-## OT.4: [Double Negation](https://en.wikipedia.org/wiki/Double_negation)
+## `OT.4`: [Double Negation](https://en.wikipedia.org/wiki/Double_negation)
 Some people don't take no for an answer, but for computers, saying no twice flips it back to a yes. It is confusing and often redundant to wrap a negative statement (a `some_trigger = no`, `link != value`, or `NOT/NOR/NAND = { something = yes }`) into another NOT or NOR (but not NAND). When you take this to the next level and negate _all_ children of a NOR, you can flip it into an AND with the inverses; likewise with a NAND to a NOR.
 
 <table>
@@ -210,7 +207,7 @@ OR = {
   </tbody>
 </table>
 
-## OT.5: [Distributivity](https://en.wikipedia.org/wiki/Distributive_property#Propositional_logic)
+## `OT.5`: [Distributivity](https://en.wikipedia.org/wiki/Distributive_property#Propositional_logic)
 It is common to want to describe multiple different cases in a long trigger; structuring a block like an OR with many AND members. But when each of those ANDs share a trigger (a grandchild of the original OR), when you have a repetition among all of your cases, then the entire trigger can be rewritten more compactly to check for that trigger and _then_ one of all your cases. The inverse, a shared trigger between every OR-block in an AND, is less common but the rule works the same.
 
 <table>
@@ -275,9 +272,7 @@ OR = {
   </tbody>
 </table>
 
-
-
-## OT.6: [Absorption](https://en.wikipedia.org/wiki/Absorption_law)
+## `OT.6`: [Absorption](https://en.wikipedia.org/wiki/Absorption_law)
 This describes another case of redundant repetition. An OR with an AND that contains a trigger that's already in the parent OR, is checking the same thing twice and without changing the truth of the whole statement. Move the condition up to the parent OR to simplify the trigger. This also applies for the inverse with OR and AND swapped.
 
 <table>
