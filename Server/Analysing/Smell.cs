@@ -32,9 +32,8 @@ namespace CK3BeagleServer.Analysing
 
         MagicNumber,
 
-        KeywordAsScopeName_RootOrPrev,
+        KeywordAsScopeName_RootPrevThis,
         KeywordAsScopeName_ScopeLink,
-        KeywordAsScopeName_ScopeType,
 
         UnencapsulatedAddition
     }
@@ -91,7 +90,7 @@ namespace CK3BeagleServer.Analysing
                 case Smell.MagicNumber:
                     return "MN.1";
 
-                case Smell.KeywordAsScopeName_RootOrPrev:
+                case Smell.KeywordAsScopeName_RootPrevThis:
                     return "KSN.1";
                 case Smell.KeywordAsScopeName_ScopeLink:
                     return "KSN.2";

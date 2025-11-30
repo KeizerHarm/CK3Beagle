@@ -205,7 +205,7 @@ namespace CK3BeagleServer.Core.Resources
                     new KeywordAsScopeNameSettings
                     {
                         Enabled = true,
-                        RootOrPrev_Severity = Severity.Warning,
+                        RootPrevThis_Severity = Severity.Warning,
                         ScopeLink_Severity = Severity.Warning
                     };
 

@@ -445,12 +445,12 @@
           "default": true,
           "markdownDescription": "Is checking for the smell **Keyword As Scope Name** enabled?"
         },
-        "ck3_beagle.keywordAsScopeName.rootOrPrev.severity": {
+        "ck3_beagle.keywordAsScopeName.rootPrevThis.severity": {
           "type": "string",
           "enum": [0, 1, 2, 3],
           "enumItemLabels": ["Ignored", "Info", "Warning", "Critical"],
           "default": 2,
-          "markdownDescription": "What is the severity of the smell **Keyword As Scope Name: Root/Prev**?"
+          "markdownDescription": "What is the severity of the smell **Keyword As Scope Name: Root/Prev/This**?"
         },
         "ck3_beagle.keywordAsScopeName.scopeLink.severity": {
           "type": "string",

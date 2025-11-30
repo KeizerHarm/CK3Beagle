@@ -1,0 +1,13 @@
+#Should yield four smells
+dummy_effect = {
+	save_scope_as = link
+	save_temporary_scope_as = LINK
+	save_scope_value_as = {
+		name = link
+		value = flag:what
+	}
+	save_temporary_scope_value_as = {
+		name = LINK
+		value = flag:what
+	}
+}

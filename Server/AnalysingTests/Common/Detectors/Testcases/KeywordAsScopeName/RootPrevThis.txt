@@ -1,0 +1,20 @@
+#Should yield smell
+dummy_effect = {
+	save_scope_as = root
+}
+
+#Should yield smell
+dummy_effect_2 = {
+	save_temporary_scope_value_as = {
+		name = PREV
+		value = flag:what
+	}
+}
+
+#Should yield smell
+dummy_effect_3 = {
+	save_scope_value_as = {
+		name = this
+		value = flag:what
+	}
+}

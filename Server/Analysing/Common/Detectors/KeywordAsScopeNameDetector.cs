@@ -3,13 +3,21 @@ using CK3BeagleServer.Core.Domain;
 using CK3BeagleServer.Core.Domain.Entities;
 using CK3BeagleServer.Core.Resources;
 using CK3BeagleServer.Core.Resources.DetectorSettings;
+using System.Collections.Generic;
 using System.Linq;
 
 namespace CK3BeagleServer.Analysing.Common.Detectors
 {
-    internal class KeywordAsScopeNameDetector : BaseDetector
+    public class KeywordAsScopeNameDetector : BaseDetector
     {
         private readonly KeywordAsScopeNameSettings _settings;
+
+        private Dictionary<string, string> cachedMessages = new()
+        {
+            { "root", "Saving a scope under the name 'root'; this is almost certainly a misunderstanding. Use a more specific name for clarity" },
+            { "this", "Saving a scope under the name 'this'; this is almost certainly a misunderstanding. Use a more specific name for clarity" },
+            { "prev", "Saving a scope under the name 'prev'; this is almost certainly a misunderstanding. Use a more specific name for clarity" }
+        };
 
         public KeywordAsScopeNameDetector(ILogger logger, Context context, KeywordAsScopeNameSettings settings) : base(logger, context)
         {
@@ -20,7 +28,7 @@ namespace CK3BeagleServer.Analysing.Common.Detectors
         {
             if (binaryExpression.Key == "save_scope_as" || binaryExpression.Key == "save_temporary_scope_as")
             {
-                Sniff(binaryExpression.Value, binaryExpression);
+                ValidateUsedScopeName(binaryExpression.Value, binaryExpression);
             }
         }
 
@@ -28,20 +36,26 @@ namespace CK3BeagleServer.Analysing.Common.Detectors
         {
             if (namedBlock.Key == "save_scope_value_as" || namedBlock.Key == "save_temporary_scope_value_as")
             {
-                var value = ((BinaryExpression)namedBlock.Children.FirstOrDefault(x => x is BinaryExpression binExp && binExp.Key == "name")).Value;
-                Sniff(value, namedBlock);
+                var value = namedBlock.Children
+                    .OfType<BinaryExpression>()
+                    .FirstOrDefault(x => x.Key == "name")?.Value;
+
+                ValidateUsedScopeName(value, namedBlock);
             }
         }
 
-        private void Sniff(string value, Node node)
+        private void ValidateUsedScopeName(string value, Node node)
         {
+            if (string.IsNullOrWhiteSpace(value))
+                return;
+
             var lowercaseValue = value.ToLower();
-            if (lowercaseValue == "root" || lowercaseValue == "prev")
+            if (lowercaseValue == "root" || lowercaseValue == "prev" || lowercaseValue == "this")
             {
                 logger.Log(
-                    Smell.KeywordAsScopeName_RootOrPrev,
-                    _settings.RootOrPrev_Severity,
-                    $"Saving a scope under the name {lowercaseValue}; this is almost certainly a misunderstanding. Use a more specific name for clarity",
+                    Smell.KeywordAsScopeName_RootPrevThis,
+                    _settings.RootPrevThis_Severity,
+                    cachedMessages[lowercaseValue],
                     node);
                 return;
             }
