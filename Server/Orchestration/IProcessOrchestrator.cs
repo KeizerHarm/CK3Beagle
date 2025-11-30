@@ -10,7 +10,6 @@ namespace CK3BeagleServer.Orchestration
         Task<bool> InitiateFromJson(JsonElement jsonElement);
         void InitiateFromMinimalConfig(string vanillaPath, string modPath, string logsPath);
         Task<IEnumerable<LogEntry>> HandleAnalysis(bool reportTiming = false);
-        Task<IEnumerable<LogEntry>> HandleComparativeAnalysis(bool reportTiming = false);
         void WrapUp();
     }
 }

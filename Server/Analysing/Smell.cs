@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 
 namespace CK3BeagleServer.Analysing
 {
@@ -14,8 +15,8 @@ namespace CK3BeagleServer.Analysing
         LargeUnit_Macro,
 
         OvercomplicatedTrigger_Associativity,
-        OvercomplicatedTrigger_Idempotency,
-        OvercomplicatedTrigger_Complementation,
+        OvercomplicatedTrigger_Idempotence,
+        OvercomplicatedTrigger_Contradiction,
         OvercomplicatedTrigger_DoubleNegation,
         OvercomplicatedTrigger_Distributivity,
         OvercomplicatedTrigger_Absorption,
@@ -60,17 +61,17 @@ namespace CK3BeagleServer.Analysing
                     return "LU.3";
 
                 case Smell.OvercomplicatedTrigger_Associativity:
-                    return "OB.1";
-                case Smell.OvercomplicatedTrigger_Idempotency:
-                    return "OB.2";
-                case Smell.OvercomplicatedTrigger_Complementation:
-                    return "OB.3";
+                    return "OT.1";
+                case Smell.OvercomplicatedTrigger_Idempotence:
+                    return "OT.2";
+                case Smell.OvercomplicatedTrigger_Contradiction:
+                    return "OT.3";
                 case Smell.OvercomplicatedTrigger_DoubleNegation:
-                    return "OB.4";
+                    return "OT.4";
                 case Smell.OvercomplicatedTrigger_Distributivity:
-                    return "OB.5";
+                    return "OT.5";
                 case Smell.OvercomplicatedTrigger_Absorption:
-                    return "OB.6";
+                    return "OT.6";
 
                 case Smell.NotIsNotNor:
                     return "NNR.1";
@@ -104,5 +105,54 @@ namespace CK3BeagleServer.Analysing
                     throw new ArgumentException("What is that smell, that smelly smell...?");
             }
         }
+
+        private static readonly Dictionary<Smell, string> cachedUrls = [];
+
+        public static string GetDocumentationUrl(this Smell smell)
+        {
+            if (cachedUrls.TryGetValue(smell, out var url))
+                return url;
+
+            var urlPrefix = "https://github.com/KeizerHarm/CK3Beagle/blob/main/Documentation/Smells/";
+            var smellNameParts = smell.ToString().Split('_');
+            var smellName = smellNameParts[0];
+
+            if (smellNameParts.Length == 1)
+                url = urlPrefix + smellName + ".md";
+            else
+            {
+                var smellCaseName = smellNameParts[1].ToKebabCase();
+                var smellCode = smell.GetCode().Replace(".", "").ToLower();
+                var urlFinish = "#" + smellCode + "-" + smellCaseName;
+
+                url = urlPrefix + smellName + ".md" + urlFinish;
+            }
+            cachedUrls[smell] = url;
+            return url;
+
+        }
+        public static string ToKebabCase(this string input)
+        {
+            if (string.IsNullOrEmpty(input))
+                return input;
+
+            var builder = new System.Text.StringBuilder();
+            for (int i = 0; i < input.Length; i++)
+            {
+                char c = input[i];
+                if (char.IsUpper(c))
+                {
+                    if (i > 0)
+                        builder.Append('-');
+                    builder.Append(char.ToLower(c));
+                }
+                else
+                {
+                    builder.Append(c);
+                }
+            }
+            return builder.ToString();
+        }
+
     }
 }

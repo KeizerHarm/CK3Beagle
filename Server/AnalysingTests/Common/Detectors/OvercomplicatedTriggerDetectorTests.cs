@@ -27,35 +27,35 @@ namespace CK3BeagleServer.Analysing.Common.Detectors
         }
 
         [Fact]
-        public void DetectsIdempotency()
+        public void DetectsIdempotence()
         {
             //arrange
             var logger = new Logger();
-            var testcase = GetTestCase("OvercomplicatedTrigger/Idempotency", DeclarationType.ScriptedTrigger);
-            var detector = GetDetector(logger, testcase.Context, Idempotency_severity: Severity.Critical);
+            var testcase = GetTestCase("OvercomplicatedTrigger/Idempotence", DeclarationType.ScriptedTrigger);
+            var detector = GetDetector(logger, testcase.Context, Idempotence_severity: Severity.Critical);
 
             //act
             detector.Visit(testcase);
 
             //assert
             Assert.Single(logger.LogEntries);
-            Assert.Single(logger.LogEntries, x => x.Severity == Severity.Critical && x.Smell == Smell.OvercomplicatedTrigger_Idempotency);
+            Assert.Single(logger.LogEntries, x => x.Severity == Severity.Critical && x.Smell == Smell.OvercomplicatedTrigger_Idempotence);
         }
 
         [Fact]
-        public void DetectsComplementation()
+        public void DetectsContradiction()
         {
             //arrange
             var logger = new Logger();
-            var testcase = GetTestCase("OvercomplicatedTrigger/Complementation", DeclarationType.ScriptedTrigger);
-            var detector = GetDetector(logger, testcase.Context, Complementation_severity: Severity.Critical);
+            var testcase = GetTestCase("OvercomplicatedTrigger/Contradiction", DeclarationType.ScriptedTrigger);
+            var detector = GetDetector(logger, testcase.Context, Contradiction_severity: Severity.Critical);
 
             //act
             detector.Visit(testcase);
 
             //assert
             Assert.Single(logger.LogEntries);
-            Assert.Single(logger.LogEntries, x => x.Severity == Severity.Critical && x.Smell == Smell.OvercomplicatedTrigger_Complementation);
+            Assert.Single(logger.LogEntries, x => x.Severity == Severity.Critical && x.Smell == Smell.OvercomplicatedTrigger_Contradiction);
         }
 
         [Fact]
@@ -148,8 +148,8 @@ namespace CK3BeagleServer.Analysing.Common.Detectors
             Severity DoubleNegation_severity = Severity.Warning,
             Severity Associativity_severity = Severity.Warning,
             Severity Distributivity_severity = Severity.Warning,
-            Severity Idempotency_severity = Severity.Warning,
-            Severity Complementation_severity = Severity.Warning,
+            Severity Idempotence_severity = Severity.Warning,
+            Severity Contradiction_severity = Severity.Warning,
             Severity NotIsNotNor_severity = Severity.Warning,
             Severity Absorption_severity = Severity.Warning)
         {
@@ -158,10 +158,10 @@ namespace CK3BeagleServer.Analysing.Common.Detectors
             {
                 Absorption_Severity = Absorption_severity,
                 Associativity_Severity = Associativity_severity,
-                Complementation_Severity = Complementation_severity,
+                Contradiction_Severity = Contradiction_severity,
                 Distributivity_Severity = Distributivity_severity,
                 DoubleNegation_Severity = DoubleNegation_severity,
-                Idempotency_Severity = Idempotency_severity,
+                Idempotence_Severity = Idempotence_severity,
                 NotIsNotNor_Severity = NotIsNotNor_severity
             };
 

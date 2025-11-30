@@ -144,7 +144,10 @@ function createDiagnostic(
   // Create a diagnostic for the current problem
   const diagnostic = new vscode.Diagnostic(range, smell.message, severity);
   diagnostic.source = "ck3beagle";
-  diagnostic.code = smell.key;
+  diagnostic.code = {
+    value: smell.code.value,
+    target: vscode.Uri.parse(smell.code.target)
+  };
 
   // Get related entries
   var relatedEntries : vscode.DiagnosticRelatedInformation[] = [];

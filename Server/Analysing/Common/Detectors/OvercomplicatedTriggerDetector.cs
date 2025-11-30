@@ -80,7 +80,7 @@ namespace CK3BeagleServer.Analysing.Common.Detectors
                 LogAbsorption(triggerBinExpChildren, ANDchildren, "OR with AND that includes a trigger in the parent OR");
             }
 
-            LogIdempotencyAndComplementation(namedBlock, triggerBinExpChildren);
+            LogIdempotenceAndContradiction(namedBlock, triggerBinExpChildren);
 
             if (key == "NOR")
             {
@@ -170,7 +170,7 @@ namespace CK3BeagleServer.Analysing.Common.Detectors
             }
         }
 
-        private void LogIdempotencyAndComplementation(NamedBlock namedBlock, IEnumerable<BinaryExpression> childBinaryExpressions)
+        private void LogIdempotenceAndContradiction(NamedBlock namedBlock, IEnumerable<BinaryExpression> childBinaryExpressions)
         {
             var seenKeys = new HashSet<string>();
             var seenRaws = new HashSet<string>();
@@ -198,8 +198,8 @@ namespace CK3BeagleServer.Analysing.Common.Detectors
                         "Duplicate", x));
 
                 logger.Log(
-                    Smell.OvercomplicatedTrigger_Idempotency,
-                    _settings.Idempotency_Severity,
+                    Smell.OvercomplicatedTrigger_Idempotence,
+                    _settings.Idempotence_Severity,
                     $"Duplicate trigger: {dupe}",
                     occurences.First(),
                     [.. secondaryLogEntries]
@@ -211,12 +211,12 @@ namespace CK3BeagleServer.Analysing.Common.Detectors
                 var occurences = childBinaryExpressions.Where(x => x.Key == compl);
                 var secondaryLogEntries = occurences.Skip(1).Select(
                     x => LogEntry.MinimalLogEntry(
-                        "Complementation", x));
+                        "Contradiction", x));
 
                 logger.Log(
-                    Smell.OvercomplicatedTrigger_Complementation,
-                    _settings.Complementation_Severity,
-                    $"Complementary triggers: {occurences.First().StringRepresentation} and its inverse",
+                    Smell.OvercomplicatedTrigger_Contradiction,
+                    _settings.Contradiction_Severity,
+                    $"Contradictory triggers: {occurences.First().StringRepresentation} and its inverse",
                     occurences.First(),
                     [..secondaryLogEntries]);
             }

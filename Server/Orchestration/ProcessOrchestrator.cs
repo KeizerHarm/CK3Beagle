@@ -10,6 +10,7 @@ using CK3BeagleServer.Core.Resources.Storage;
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Text.Json;
 using System.Threading.Tasks;
 
@@ -95,6 +96,17 @@ namespace CK3BeagleServer.Orchestration
 
         public async Task<IEnumerable<LogEntry>> HandleAnalysis(bool reportTiming = false)
         {
+            var logEntries = await HandleCommonAnalysis(reportTiming);
+            if (GlobalResources.Configuration.ReadVanilla)
+            {
+                var diffLogEntries = await HandleComparativeAnalysis(reportTiming);
+                logEntries = logEntries.Union(diffLogEntries);
+            }
+            return logEntries;
+        }
+
+        private async Task<IEnumerable<LogEntry>> HandleCommonAnalysis(bool reportTiming = false)
+        {
             if (GlobalResources.Configuration.VanillaFileHandling == VanillaFileHandling.IgnoreEntirely)
             {
                 ComparingService.BlacklistVanillaFilesInModContext(GlobalResources.Modded, GlobalResources.Vanilla, _positiveProgressDelegate);
@@ -117,7 +129,7 @@ namespace CK3BeagleServer.Orchestration
             return analyser.LogEntries;
         }
 
-        public async Task<IEnumerable<LogEntry>> HandleComparativeAnalysis(bool reportTiming = false)
+        private async Task<IEnumerable<LogEntry>> HandleComparativeAnalysis(bool reportTiming = false)
         {
             ComparingService.ClearMemoryUnusedForComparison(GlobalResources.Modded);
 

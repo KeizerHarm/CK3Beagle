@@ -55,8 +55,7 @@ namespace CK3BeagleServer.LspInterface
                 try
                 {
                     var logEntries = await _orchestrator.HandleAnalysis();
-                    var diffLogEntries = await _orchestrator.HandleComparativeAnalysis();
-                    await SendLogs(logEntries.Concat(diffLogEntries));
+                    await SendLogs(logEntries);
                     _orchestrator.WrapUp();
                 }
                 catch (Exception ex)
@@ -169,7 +168,11 @@ namespace CK3BeagleServer.LspInterface
                 startIndex = x.AffectedAreaStartIndex,
                 endIndex = x.AffectedAreaEndIndex,
                 message = x.Message,
-                key = x.Smell.GetCode(),
+                code = new
+                {
+                    value = x.Smell.GetCode(),
+                    target = x.Smell.GetDocumentationUrl()
+                },
                 relatedLogEntries = x.RelatedLogEntries.Select(y =>
                     new
                     {

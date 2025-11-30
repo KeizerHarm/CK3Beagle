@@ -2,8 +2,15 @@
   "name": "ck3_beagle",
   "publisher": "KeizerHarm",
   "displayName": "CK3 Beagle",
-  "description": "",
+  "description": "Static Analyser and Smell Detector for CK3 mod projects.",
+  "keywords": [ "CK3", "Crusader Kings 3", "CKIII", "Crusader Kings" ],
+  "icon": "Beagle_128px.png",
   "version": "0.0.1",
+  "preview": true,
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/KeizerHarm/CK3Beagle/"
+  },
   "engines": {
     "vscode": "^1.103.0"
   },
@@ -12,7 +19,7 @@
     "server"
   ],
   "categories": [
-    "Other"
+    "Linters", "Programming Languages"
   ],
   "activationEvents": [
     "onStartupFinished"
@@ -54,7 +61,7 @@
           "order": 0
         },
         "ck3_beagle.vanillaFileHandling": {
-          "type": "string",
+          "type": "number",
           "enum": [0, 1, 2],
           "default": 0,
           "enumItemLabels": ["Treat as regular files", "Ignore entirely", "Analyse only mod's additions to them"],
@@ -131,12 +138,12 @@
           "default": 2,
           "markdownDescription": "What is the severity of the smell **Overcomplicated Trigger: Associativity**?"
         },
-        "ck3_beagle.overcomplicatedTrigger.complementation.severity": {
+        "ck3_beagle.overcomplicatedTrigger.contradiction.severity": {
           "type": "string",
           "enum": [0, 1, 2, 3],
           "enumItemLabels": ["Ignored", "Info", "Warning", "Critical"],
           "default": 3,
-          "markdownDescription": "What is the severity of the smell **Overcomplicated Trigger: Complementation**?"
+          "markdownDescription": "What is the severity of the smell **Overcomplicated Trigger: Contradiction**?"
         },
         "ck3_beagle.overcomplicatedTrigger.distributivity.severity": {
           "type": "string",
@@ -152,12 +159,12 @@
           "default": 2,
           "markdownDescription": "What is the severity of the smell **Overcomplicated Trigger: Double Negation**?"
         },
-        "ck3_beagle.overcomplicatedTrigger.idempotency.severity": {
+        "ck3_beagle.overcomplicatedTrigger.idempotence.severity": {
           "type": "string",
           "enum": [0, 1, 2, 3],
           "enumItemLabels": ["Ignored", "Info", "Warning", "Critical"],
           "default": 2,
-          "markdownDescription": "What is the severity of the smell **Overcomplicated Trigger: Idempotency**?"
+          "markdownDescription": "What is the severity of the smell **Overcomplicated Trigger: Idempotence**?"
         },
         "ck3_beagle.overcomplicatedTrigger.notIsNotNor.severity": {
           "type": "string",

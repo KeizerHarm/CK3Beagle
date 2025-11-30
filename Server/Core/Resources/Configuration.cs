@@ -68,10 +68,10 @@ namespace CK3BeagleServer.Core.Resources
                     {
                         Absorption_Severity = Severity.Info,
                         Associativity_Severity = Severity.Warning,
-                        Complementation_Severity = Severity.Critical,
+                        Contradiction_Severity = Severity.Critical,
                         Distributivity_Severity = Severity.Info,
                         DoubleNegation_Severity = Severity.Warning,
-                        Idempotency_Severity = Severity.Warning,
+                        Idempotence_Severity = Severity.Warning,
                         NotIsNotNor_Severity = Severity.Warning
                     };
 

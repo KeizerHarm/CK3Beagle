@@ -1,6 +1,0 @@
-dummytrigger = {
-	aaa = yes
-	bbb = no
-	ccc = yes
-	aaa = yes
-}

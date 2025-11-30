@@ -1,3 +1,5 @@
+import { Uri } from "vscode";
+
 export type ServerResponse = BasicResponse | ErrorResponse | AnalysisResponse | InitialAnalysisResponse | MedianAnalysisResponse | FinalAnalysisResponse;
 
 interface BaseMessage {
@@ -54,7 +56,10 @@ export interface Smell {
   startIndex: number;
   endIndex: number;
   message: string;
-  key: string;
+  code: {
+    value: string;
+    target: string;
+  };
   relatedLogEntries: RelatedSmell[];
 }
 
