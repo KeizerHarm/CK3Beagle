@@ -1,6 +1,6 @@
 # Hidden Dependencies
 
-Even the best scripted effect is no match for a careless modder (or content designer) invoking it in the wrong place, from the wrong scope or in an environment lacking the prerequisite scopes set up (which can be saved scopes, but also `root` and `prev`). So to be safest, a macro should either avoid having any implicit needs, or should document its requirements in a comment (serving as documentation).
+Even the best scripted effect is no match for a careless modder (or content designer) invoking it in the wrong place, from the wrong scope or in an environment lacking the prerequisite setup. So to be safest, a macro should either avoid having any implicit needs, or should document its requirements in a comment (serving as documentation).
 
 ## Configuration
 This smell is highly configurable. Each of the cases below can be given their own Severity, and also their Remedies.
@@ -46,8 +46,6 @@ scripted_trigger pope_likes_you = {
 		}
 	}
 }
-
-#Events...
 </pre>
 
 #### Allowed if in White List
@@ -79,7 +77,8 @@ scripted_trigger pope_likes_dragonborn = {
 has_reason_to_be_paranoid_trigger = {
 	any_relation = {
 		type = friend
-		has_de_jure_claim_on = root  #May not be the scope this trigger runs from
+		has_de_jure_claim_on = root 
+		#May not be the scope this trigger runs from
 	}
 }
 </pre></td>
@@ -87,7 +86,8 @@ has_reason_to_be_paranoid_trigger = {
 has_reason_to_be_paranoid_trigger = {
 	any_relation = {
 		type = friend
-		has_de_jure_claim_on = prev  #Will be the exact scope this trigger runs from, this is fine
+		has_de_jure_claim_on = prev  
+		#Will be the exact scope this trigger runs from, this is fine
 	}
 }
 </pre></td>
@@ -95,7 +95,7 @@ has_reason_to_be_paranoid_trigger = {
   </tbody>
 </table>
 
-## HD.2: Use od Top-Level Prev
+## HD.2: Use of Top-Level Prev
 `prev` is a link to the *previous* scope; it is going to reflect back to where you *just* came from. If a macro uses `prev` to go back to a scope it itself entered earlier, that's fine, but if it uses `prev` at the *top* level - before any scope changes - then it is going to some scope entered outside of its context. That makes it dependent on where it was invoked. Use a macro instead.
 <table>
   <thead>
@@ -109,7 +109,8 @@ has_reason_to_be_paranoid_trigger = {
 	  <td><pre>
 hates_my_guts_trigger = {
 	opinion = {
-		target = prev #This prev is at the top level, it was used before any scope change
+		target = prev 
+		#This prev is at the top level, it was used before any scope change
 		value < -50
 	}
 }
@@ -118,6 +119,7 @@ hates_my_guts_trigger = {
 hates_my_guts_trigger = {
 	opinion = {
 		target = $HATED$
+		#Refactored to parameter
 		value < -50
 	}
 }
@@ -180,12 +182,12 @@ A variable, (`var:varname`, `global_var:varname` or `local_var:varname`), can be
 	<tr>
 	  <td><pre>
 the_seven_kingdoms_are_relieved_trigger = {
-	global_var:dracarys_is_dead = yes
+	global_var:night_king_is_dead = yes
 }
 </pre></td>
 	  <td><pre>
 the_seven_kingdoms_are_relieved_trigger = {
-	exists = global_var:dracarys_is_dead
+	exists = global_var:night_king_is_dead
 }
 </pre></td>
 	</tr>
