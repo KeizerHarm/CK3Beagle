@@ -1,6 +1,9 @@
 # Overcomplicated Trigger
 This is when a trigger block grows more complicated than it needs to be. Triggers that stack multiple layers of ANDs and ORs can often be rewritten to be flatter, and have less duplicated checking for the same triggers, making understanding and maintaining them easier.
 
+## Configuration
+The only configuration is the Severity settings for each of the six cases.
+
 ## OT.1: [Associativity](https://en.wikipedia.org/wiki/Associative_property)
 ANDs are true if all members are true, ORs are true if one of the members are true. An AND with as a child a second AND, or an OR with a second OR, is written redundantly; the members of the child trigger can be added to the parent.
 

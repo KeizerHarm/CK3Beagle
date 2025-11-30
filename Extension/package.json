@@ -226,7 +226,7 @@
           "enum": [0, 1, 2, 3],
           "enumItemLabels": ["Ignored", "Info", "Warning", "Critical"],
           "default": 1,
-          "markdownDescription": "What is the severity of the smell **Overcomplicated Trigger: Use of Prev**?"
+          "markdownDescription": "What is the severity of the smell **Overcomplicated Trigger: Use of Top-Level Prev**?"
         },
         "ck3_beagle.hiddenDependencies.useOfPrev.allowedIfInComment": {
           "type": "boolean",

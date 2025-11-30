@@ -3,7 +3,7 @@
 Well-formed indentation is not just a matter of pleasing the eye. In a language like the CK3 script, where many-levelled scoping can take your script all the way to the right of the screen, keeping an accurate count of your current 'depth' is key to putting the right amount of close-brackets at the end, and preventing errors from arising. After {, every next line should be moved to the right, except for its closing } which should move that same distance to the left again.
 
 ## Configuration
-Aside from severity for each of the sub-rules, there is configuration for:
+Aside from severity for each of the two cases, there is configuration for:
 
 ### Allowed Indentation Types
 How can your file be indented? Tabs are the most standard in CK3 vanilla at time of writing, and four-spaces also commonly used. You can allow any number of indentation types: Tabs, Four Spaces, Three Spaces, Two Spaces.
@@ -22,8 +22,7 @@ good_catholic_hof_trigger = {
 </pre>
 
 #### No Special Treatment
-A comment line needs to be correctly indented itself, but it does not move the indentation for the next lines no matter what it contains.
-A comment line that contains an opening bracket will indent its contents to the right, and one with a closing bracket will move what follows to the left. Essentially a comment is treated as a regular line.
+A comment line needs to be correctly indented itself, but it does not move the indentation for the next lines no matter what it contains. A comment line that contains an opening bracket will indent its contents to the right, and one with a closing bracket will move what follows to the left. Essentially a comment is treated as a regular line.
 <pre>
 OR = {
 	# Or should we use AND = {?
