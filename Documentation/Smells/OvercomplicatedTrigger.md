@@ -171,7 +171,7 @@ NOR = {
 }
 </pre></td>
       <td><pre>
-my_scripted_trigger = no
+my_scripted_trigger = yes
 </pre></td>
     </tr>
     <tr>
@@ -257,10 +257,6 @@ AND = {
         stress_level >= 1
         NOT = { has_trait = pilgrim }
     }
-    OR = {
-        stress_level >= 1
-        "this.reverse_opinion(title:k_papacy.holder)" < 0
-    }
 }
 </pre></td>
       <td><pre>
@@ -269,7 +265,6 @@ OR = {
     AND = {
         num_sinful_traits > 1
         NOT = { has_trait = pilgrim }
-        "this.reverse_opinion(title:k_papacy.holder)" < 0
     }
 }
 </pre></td>
