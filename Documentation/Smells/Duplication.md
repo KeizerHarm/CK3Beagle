@@ -31,7 +31,7 @@ Besides severity, you can also configure the Minimum Size; at how many copied st
         }
     }
 }
-
+<br/>
 brutally_murder_patriarch_effect = {
     title:k_orthodox.holder = {
         death = {
@@ -59,7 +59,7 @@ brutally_murder_patriarch_effect = {
 		}
 	}
 }
-
+<br/>
 brutally_murder_pope_effect = {
 	title:k_papal_state.holder = {
 		brutally_murder_christian_hof_effect = {
@@ -67,7 +67,7 @@ brutally_murder_pope_effect = {
 		}
 	}
 }
-
+<br/>
 brutally_murder_patriarch_effect = {
 	title:k_orthodox.holder = {
 		brutally_murder_christian_hof_effect = {
