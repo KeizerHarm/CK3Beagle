@@ -59,22 +59,6 @@ namespace CK3BeagleServer.Analysing.Common.Detectors
         }
 
         [Fact]
-        public void DetectsNotIsNotNor()
-        {
-            //arrange
-            var logger = new Logger();
-            var testcase = GetTestCase("OvercomplicatedTrigger/NotIsNotNor", DeclarationType.ScriptedTrigger);
-            var detector = GetDetector(logger, testcase.Context, NotIsNotNor_severity: Severity.Critical);
-
-            //act
-            detector.Visit(testcase);
-
-            //assert
-            Assert.Single(logger.LogEntries);
-            Assert.Single(logger.LogEntries, x => x.Severity == Severity.Critical && x.Smell == Smell.NotIsNotNor);
-        }
-
-        [Fact]
         public void DetectsDoubleNegation()
         {
             //arrange

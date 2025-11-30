@@ -79,5 +79,3 @@ brutally_murder_patriarch_effect = {
     </tr>
   </tbody>
 </table>
-
-

@@ -18,9 +18,7 @@ namespace CK3BeagleServer.Analysing.Common.Detectors
         private List<Node> rootUsages = [];
         private List<Node> prevUsages = [];
         private HashSet<string> usedSavedScopes = [];
-        private HashSet<string> setSavedScopes = [];
         private HashSet<string> usedVariables = [];
-        private HashSet<string> setVariables = [];
 
         private string _usedRootMsg;
         private string GetUsedRootMsg()
@@ -69,7 +67,6 @@ namespace CK3BeagleServer.Analysing.Common.Detectors
         }
 
 
-
         public HiddenDependenciesDetector(ILogger logger, Context context, HiddenDependenciesSettings settings) : base(logger, context)
         {
             _settings = settings;
@@ -102,16 +99,15 @@ namespace CK3BeagleServer.Analysing.Common.Detectors
             if (usedPrev)
                 HandleUseOfPrev(declaration, commentText);
 
-            //foreach (var scope in usedSavedScopes)
-            //{
-            //    HandleUseOfSavedScope(declaration, commentText, scope);
-            //}
+            foreach (var scope in usedSavedScopes)
+            {
+                HandleUseOfSavedScope(declaration, commentText, scope);
+            }
 
-            //foreach (var var in usedVariables)
-            //{
-            //    HandleUseOfVariables(declaration, commentText, var);
-            //}
-            
+            foreach (var var in usedVariables)
+            {
+                HandleUseOfVariables(declaration, commentText, var);
+            }
 
             thisDeclaration = null;
             usedRoot = false;
