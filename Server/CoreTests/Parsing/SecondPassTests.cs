@@ -99,7 +99,7 @@ namespace CK3BeagleServer.Core.Parsing
             Assert.Equal(2, parsedFile.Children.Count);
             Assert.Single(parsedFile.Declarations);
 
-            var accolade = parsedFile.Declarations.First().Value;
+            var accolade = parsedFile.Declarations.First();
             Assert.Equal(SymbolType.AccoladeName, accolade.SymbolType);
 
             var potential = accolade.Children.OfType<NamedBlock>().Single(x => x.Key == "potential");

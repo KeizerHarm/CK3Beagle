@@ -70,6 +70,11 @@ namespace CK3BeagleServer.Analysing.Common
                 visitor.Detectors.Add(new KeywordAsScopeNameDetector(logger, context,
                     GlobalResources.Configuration.KeywordAsScopeNameSettings));
             }
+            if (GlobalResources.Configuration.EntityKeyReuseSettings.Enabled)
+            {
+                visitor.Detectors.Add(new EntityKeyReuseDetector(logger, context,
+                    GlobalResources.Configuration.EntityKeyReuseSettings));
+            }
         }
     }
 }

@@ -3,7 +3,6 @@ using CK3BeagleServer.Core.Generated;
 using System;
 using System.Collections.Generic;
 
-
 namespace CK3BeagleServer.Core.Domain
 {
     public enum ContextType
@@ -19,6 +18,7 @@ namespace CK3BeagleServer.Core.Domain
         public string Path { get; set; }
         public ContextType Type { get; set; }
         public Dictionary<string, Declaration>[] Declarations { get; }
+        public List<Declaration> OverriddenDeclarationCopies { get; }
         public Dictionary<string, ScriptFile> Files { get; }
 
         public Context(string path, ContextType type)
@@ -28,6 +28,7 @@ namespace CK3BeagleServer.Core.Domain
             Files =  new Dictionary<string, ScriptFile>();
 
             Declarations = new Dictionary<string, Declaration>[Enum.GetValues<DeclarationType>().Length];
+            OverriddenDeclarationCopies = new List<Declaration>();
             for (int i = 0; i < Enum.GetValues<DeclarationType>().Length; i++)
             {
                 Declarations[i] = new Dictionary<string, Declaration>();
@@ -40,8 +41,29 @@ namespace CK3BeagleServer.Core.Domain
 
             foreach (var declaration in file.Declarations)
             {
-                Declarations[(int)declaration.Value.DeclarationType].Add(declaration.Key, declaration.Value);
+                AddDeclaration(declaration);
             }
+        }
+
+        private void AddDeclaration(Declaration declaration)
+        {
+            var array = Declarations[(int)declaration.DeclarationType];
+            if (array.TryGetValue(declaration.Key, out Declaration existingCopy))
+            {
+                if (string.Compare(declaration.File.RelativePath, existingCopy.File.RelativePath) > 0){
+                    OverriddenDeclarationCopies.Add(existingCopy);
+                    array[declaration.Key] = declaration;
+                }
+                else
+                {
+                    OverriddenDeclarationCopies.Add(declaration);
+                }
+            }
+            else
+            {
+                Declarations[(int)declaration.DeclarationType].Add(declaration.Key, declaration);
+            }
+            
         }
 
         /// <summary>

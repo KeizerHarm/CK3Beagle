@@ -1,0 +1,7 @@
+scripted_effect my_effect_1 = {
+	add_gold = 25
+}
+
+scripted_effect my_effect_1 = {
+	add_gold = 50
+}

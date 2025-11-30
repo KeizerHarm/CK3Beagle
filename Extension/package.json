@@ -51,7 +51,6 @@
           "type": "string",
           "default": "",
           "description": "The directory of your mod. This does not need to be filled in if your VSC setup is typical, such that the root folder of the first/only workspace folder is also your mod's root.",
-          "format": "uri",
           "order": 0
         },
         "ck3_beagle.readVanilla": {
@@ -85,7 +84,7 @@
           "description": "What is the maximum allowed size for a script file, measured in lines?"
         },
         "ck3_beagle.largeUnit.file.severity": {
-          "type": "string",
+          "type": "number",
           "enum": [0, 1, 2, 3],
           "enumItemLabels": ["Ignored", "Info", "Warning", "Critical"],
           "default": 1,
@@ -98,7 +97,7 @@
           "description": "What is the maximum allowed size for a macro trigger/effect block, e.g. a scripted trigger?"
         },
         "ck3_beagle.largeUnit.macro.severity": {
-          "type": "string",
+          "type": "number",
           "enum": [0, 1, 2, 3],
           "enumItemLabels": ["Ignored", "Info", "Warning", "Critical"],
           "default": 1,
@@ -111,7 +110,7 @@
           "description": "What is the maximum allowed size for a non-macro trigger/effect block, e.g. an event's trigger block?"
         },
         "ck3_beagle.largeUnit.nonMacroBlock.severity": {
-          "type": "string",
+          "type": "number",
           "enum": [0, 1, 2, 3],
           "enumItemLabels": ["Ignored", "Info", "Warning", "Critical"],
           "default": 1,
@@ -125,42 +124,42 @@
           "markdownDescription": "Is checking for the smell **Overcomplicated Trigger** enabled?"
         },
         "ck3_beagle.overcomplicatedTrigger.absorption.severity": {
-          "type": "string",
+          "type": "number",
           "enum": [0, 1, 2, 3],
           "enumItemLabels": ["Ignored", "Info", "Warning", "Critical"],
           "default": 1,
           "markdownDescription": "What is the severity of the smell **Overcomplicated Trigger: Absorption**?"
         },
         "ck3_beagle.overcomplicatedTrigger.associativity.severity": {
-          "type": "string",
+          "type": "number",
           "enum": [0, 1, 2, 3],
           "enumItemLabels": ["Ignored", "Info", "Warning", "Critical"],
           "default": 2,
           "markdownDescription": "What is the severity of the smell **Overcomplicated Trigger: Associativity**?"
         },
         "ck3_beagle.overcomplicatedTrigger.contradiction.severity": {
-          "type": "string",
+          "type": "number",
           "enum": [0, 1, 2, 3],
           "enumItemLabels": ["Ignored", "Info", "Warning", "Critical"],
           "default": 3,
           "markdownDescription": "What is the severity of the smell **Overcomplicated Trigger: Contradiction**?"
         },
         "ck3_beagle.overcomplicatedTrigger.distributivity.severity": {
-          "type": "string",
+          "type": "number",
           "enum": [0, 1, 2, 3],
           "enumItemLabels": ["Ignored", "Info", "Warning", "Critical"],
           "default": 1,
           "markdownDescription": "What is the severity of the smell **Overcomplicated Trigger: Distributivity**?"
         },
         "ck3_beagle.overcomplicatedTrigger.doubleNegation.severity": {
-          "type": "string",
+          "type": "number",
           "enum": [0, 1, 2, 3],
           "enumItemLabels": ["Ignored", "Info", "Warning", "Critical"],
           "default": 2,
           "markdownDescription": "What is the severity of the smell **Overcomplicated Trigger: Double Negation**?"
         },
         "ck3_beagle.overcomplicatedTrigger.idempotence.severity": {
-          "type": "string",
+          "type": "number",
           "enum": [0, 1, 2, 3],
           "enumItemLabels": ["Ignored", "Info", "Warning", "Critical"],
           "default": 2,
@@ -173,7 +172,7 @@
           "markdownDescription": "Is checking for the smell **Not Is Not Nor** enabled?"
         },
         "ck3_beagle.notIsNotNor.severity": {
-          "type": "string",
+          "type": "number",
           "enum": [0, 1, 2, 3],
           "enumItemLabels": ["Ignored", "Info", "Warning", "Critical"],
           "default": 2,
@@ -186,7 +185,7 @@
           "markdownDescription": "Is checking for the smell **Duplication** enabled?"
         },
         "ck3_beagle.duplication.severity": {
-          "type": "string",
+          "type": "number",
           "enum": [0, 1, 2, 3],
           "enumItemLabels": ["Ignored", "Info", "Warning", "Critical"],
           "default": 2,
@@ -205,7 +204,7 @@
           "markdownDescription": "Is checking for the smell **Hidden Dependencies** enabled?"
         },
         "ck3_beagle.hiddenDependencies.useOfRoot.severity": {
-          "type": "string",
+          "type": "number",
           "enum": [0, 1, 2, 3],
           "enumItemLabels": ["Ignored", "Info", "Warning", "Critical"],
           "default": 1,
@@ -227,7 +226,7 @@
           "markdownDescription": "Is using root in a macro allowed if the macro is in an event file?"
         },
         "ck3_beagle.hiddenDependencies.useOfPrev.severity": {
-          "type": "string",
+          "type": "number",
           "enum": [0, 1, 2, 3],
           "enumItemLabels": ["Ignored", "Info", "Warning", "Critical"],
           "default": 1,
@@ -249,7 +248,7 @@
           "markdownDescription": "Is using prev in a macro allowed if the macro is in an event file?"
         },
         "ck3_beagle.hiddenDependencies.useOfSavedScope.severity": {
-          "type": "string",
+          "type": "number",
           "enum": [0, 1, 2, 3],
           "enumItemLabels": ["Ignored", "Info", "Warning", "Critical"],
           "default": 1,
@@ -279,7 +278,7 @@
           "markdownDescription": "Which saved scope names are always allowed in macros?"
         },
         "ck3_beagle.hiddenDependencies.useOfVariable.severity": {
-          "type": "string",
+          "type": "number",
           "enum": [0, 1, 2, 3],
           "enumItemLabels": ["Ignored", "Info", "Warning", "Critical"],
           "default": 1,
@@ -337,14 +336,14 @@
           "markdownDescription": "Which variable names are always allowed in macros?"
         },
         "ck3_beagle.inconsistentIndentation.unexpectedType.severity": {
-          "type": "string",
+          "type": "number",
           "enum": [0, 1, 2, 3],
           "enumItemLabels": ["Ignored", "Info", "Warning", "Critical"],
           "default": 2,
           "markdownDescription": "What is the severity of the smell **Inconsistent Indentation: Unexpected Type**?"
         },
         "ck3_beagle.inconsistentIndentation.abberatingLines.severity": {
-          "type": "string",
+          "type": "number",
           "enum": [0, 1, 2, 3],
           "enumItemLabels": ["Ignored", "Info", "Warning", "Critical"],
           "default": 2,
@@ -357,7 +356,7 @@
           "markdownDescription": "Is checking for the smell **Magic Number** enabled?"
         },
         "ck3_beagle.magicNumber.severity": {
-          "type": "string",
+          "type": "number",
           "enum": [0, 1, 2, 3],
           "enumItemLabels": ["Ignored", "Info", "Warning", "Critical"],
           "default": 1,
@@ -446,14 +445,14 @@
           "markdownDescription": "Is checking for the smell **Keyword As Scope Name** enabled?"
         },
         "ck3_beagle.keywordAsScopeName.rootPrevThis.severity": {
-          "type": "string",
+          "type": "number",
           "enum": [0, 1, 2, 3],
           "enumItemLabels": ["Ignored", "Info", "Warning", "Critical"],
           "default": 2,
           "markdownDescription": "What is the severity of the smell **Keyword As Scope Name: Root/Prev/This**?"
         },
         "ck3_beagle.keywordAsScopeName.scopeLink.severity": {
-          "type": "string",
+          "type": "number",
           "enum": [0, 1, 2, 3],
           "enumItemLabels": ["Ignored", "Info", "Warning", "Critical"],
           "default": 2,
@@ -466,7 +465,7 @@
           "markdownDescription": "Is checking for the smell **Unencapsulated Addition** enabled?"
         },
         "ck3_beagle.unencapsulatedAddition.severity": {
-          "type": "string",
+          "type": "number",
           "enum": [0, 1, 2, 3],
           "enumItemLabels": ["Ignored", "Info", "Warning", "Critical"],
           "default": 2,
@@ -477,8 +476,27 @@
           "default": 5,
           "minimum": 2,
           "markdownDescription": "What is the threshold value; the minimal number of statements for **Unencapsulated Addition**?"
-        }
+        },
 
+        "ck3_beagle.entityKeyReuse.enabled": {
+          "type": "boolean",
+          "default": true,
+          "markdownDescription": "Is checking for the smell **Unencapsulated Addition** enabled?"
+        },
+        "ck3_beagle.entityKeyReuse.sameType.severity": {
+          "type": "number",
+          "enum": [0, 1, 2, 3],
+          "enumItemLabels": ["Ignored", "Info", "Warning", "Critical"],
+          "default": 3,
+          "markdownDescription": "What is the severity of the smell **Unencapsulated Addition: Same Type**?"
+        },
+        "ck3_beagle.entityKeyReuse.differentType.severity": {
+          "type": "number",
+          "enum": [0, 1, 2, 3],
+          "enumItemLabels": ["Ignored", "Info", "Warning", "Critical"],
+          "default": 2,
+          "markdownDescription": "What is the severity of the smell **Unencapsulated Addition: Different Type**?"
+        }
       }
     },
     

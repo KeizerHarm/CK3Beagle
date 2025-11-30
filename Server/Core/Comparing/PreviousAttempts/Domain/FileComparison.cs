@@ -23,13 +23,13 @@ namespace CK3BeagleServer.Core.Comparing.PreviousAttempts.Domain
             Edit = editFile;
 
             (AddedDeclarations, RemovedDeclarations, ChangedDeclarations, UntouchedDeclarations)
-                = ComparisonHelpers.SimpleListComparison(Source.Declarations.ToDictionary(), Edit.Declarations.ToDictionary(),
+                = ComparisonHelpers.SimpleListComparison(Source.Declarations.ToDictionary(k => k.Key), Edit.Declarations.ToDictionary(k => k.Key),
                     (first, second) => first.GetTrueHash() == second.GetTrueHash());
 
             _comparisonBuilder = new BlockComparisonBuilder();
-            foreach (var changedDecl in ChangedDeclarations) {
-                _comparisonBuilder.BuildComparison(Source.Declarations[changedDecl], Edit.Declarations[changedDecl]);
-            }
+            //foreach (var changedDecl in ChangedDeclarations) {
+            //    _comparisonBuilder.BuildComparison(Source.Declarations[changedDecl], Edit.Declarations[changedDecl]);
+            //}
             EditScript = _comparisonBuilder.EditScript;
             _comparisonBuilder = null;
         }

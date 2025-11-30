@@ -216,6 +216,14 @@ namespace CK3BeagleServer.Core.Resources
                         Severity = Severity.Info,
                         Threshold = 5
                     };
+
+                EntityKeyReuseSettings =
+                    new EntityKeyReuseSettings
+                    {
+                        Enabled = true,
+                        SameType_Severity = Severity.Critical,
+                        DifferentType_Severity = Severity.Warning
+                    };
             }
         }
 
@@ -342,6 +350,20 @@ namespace CK3BeagleServer.Core.Resources
             set
             {
                 _unencapsulatedAdditionSettings = value;
+            }
+        }
+
+        private EntityKeyReuseSettings? _entityKeyReuseSettings;
+        public EntityKeyReuseSettings EntityKeyReuseSettings
+        {
+            get
+            {
+                _entityKeyReuseSettings = GetSettings(_entityKeyReuseSettings, "entityKeyReuse");
+                return _entityKeyReuseSettings.Value;
+            }
+            set
+            {
+                _entityKeyReuseSettings = value;
             }
         }
 

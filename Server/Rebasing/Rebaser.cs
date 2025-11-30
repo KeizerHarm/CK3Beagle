@@ -11,7 +11,7 @@ namespace CK3BeagleServer.Rebasing
         {
             (Context old_Relevant, Context new_Relevant) = RemoveUnchanged(old, @new);
             Context rebased = new Context(Path.Combine(modded.Path, "rebased"), ContextType.ModdedRebased);
-            HandleEntityOverride(modded, old_Relevant, new_Relevant, rebased);
+            //HandleEntityOverride(modded, old_Relevant, new_Relevant, rebased);
             HandleFileOverride(modded, old_Relevant, new_Relevant, rebased);
             
             return rebased;
@@ -67,49 +67,49 @@ namespace CK3BeagleServer.Rebasing
             //}
         }
 
-        private static void HandleEntityOverride(Context modded, Context old_Relevant, Context new_Relevant, Context rebased)
-        {
-            foreach (var file in modded.Files.Where(x => !old_Relevant.Files.ContainsKey(x.Key)))
-            {
-                var moddedFile = file.Value;
-                var rebasedFile = moddedFile.Clone();
+        //private static void HandleEntityOverride(Context modded, Context old_Relevant, Context new_Relevant, Context rebased)
+        //{
+        //    foreach (var file in modded.Files.Where(x => !old_Relevant.Files.ContainsKey(x.Key)))
+        //    {
+        //        var moddedFile = file.Value;
+        //        var rebasedFile = moddedFile.Clone();
 
-                foreach (var decl in moddedFile.Declarations)
-                {
-                    var moddedDecl = decl.Value;
-                    if (old_Relevant.Declarations[(int)moddedDecl.DeclarationType].ContainsKey(decl.Key))
-                    {
-                        var oldDecl = old_Relevant.Declarations[(int)moddedDecl.DeclarationType][decl.Key];
-                        var newDecl = new_Relevant.Declarations[(int)moddedDecl.DeclarationType][decl.Key];
+        //        foreach (var decl in moddedFile.Declarations)
+        //        {
+        //            var moddedDecl = decl;
+        //            if (old_Relevant.Declarations[(int)moddedDecl.DeclarationType].ContainsKey(decl.Key))
+        //            {
+        //                var oldDecl = old_Relevant.Declarations[(int)moddedDecl.DeclarationType][decl.Key];
+        //                var newDecl = new_Relevant.Declarations[(int)moddedDecl.DeclarationType][decl.Key];
 
-                        if (oldDecl.StringRepresentation == newDecl.StringRepresentation)
-                        {
-                            Console.WriteLine($"INFO: {moddedFile.RelativePath}:{decl.Key} - Modded declaration not changed by vanilla; using modded declaration!");
-                        }
+        //                if (oldDecl.StringRepresentation == newDecl.StringRepresentation)
+        //                {
+        //                    Console.WriteLine($"INFO: {moddedFile.RelativePath}:{decl.Key} - Modded declaration not changed by vanilla; using modded declaration!");
+        //                }
 
-                        if (moddedDecl.StringRepresentation == oldDecl.StringRepresentation)
-                        {
-                            Console.WriteLine($"INFO: {moddedFile.RelativePath}:{decl.Key} - Modded version identical to old version; replaced with new version.");
-                            rebasedFile.ReplaceDeclaration(newDecl);
-                        }
-                        else if (moddedDecl.StringRepresentation == newDecl.StringRepresentation)
-                        {
-                            Console.WriteLine($"INFO: {moddedFile.RelativePath}:{decl.Key} - Modded version identical to new version; how fortunate!");
-                        }
-                        else
-                        {
-                            Console.WriteLine($"WARNING: {moddedFile.RelativePath}:{decl.Key} - CONFLICT!");
-                        }
+        //                if (moddedDecl.StringRepresentation == oldDecl.StringRepresentation)
+        //                {
+        //                    Console.WriteLine($"INFO: {moddedFile.RelativePath}:{decl.Key} - Modded version identical to old version; replaced with new version.");
+        //                    rebasedFile.ReplaceDeclaration(newDecl);
+        //                }
+        //                else if (moddedDecl.StringRepresentation == newDecl.StringRepresentation)
+        //                {
+        //                    Console.WriteLine($"INFO: {moddedFile.RelativePath}:{decl.Key} - Modded version identical to new version; how fortunate!");
+        //                }
+        //                else
+        //                {
+        //                    Console.WriteLine($"WARNING: {moddedFile.RelativePath}:{decl.Key} - CONFLICT!");
+        //                }
 
-                    }
-                    else
-                    {
-                        Console.WriteLine($"INFO: {moddedFile.RelativePath}:{decl.Key} - Modded declaration not found in vanilla changed files; no work needed!");
-                    }
-                }
-                rebased.AddFile(rebasedFile);
-            }
-        }
+        //            }
+        //            else
+        //            {
+        //                Console.WriteLine($"INFO: {moddedFile.RelativePath}:{decl.Key} - Modded declaration not found in vanilla changed files; no work needed!");
+        //            }
+        //        }
+        //        rebased.AddFile(rebasedFile);
+        //    }
+        //}
 
         private (Context old_Relevant, Context new_Relevant) RemoveUnchanged(Context old, Context @new)
         {

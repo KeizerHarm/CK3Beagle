@@ -73,11 +73,11 @@ namespace CK3BeagleServer.Core.Parsing
             parser.ParseFile(scriptfile);
             if (scriptfile.ExpectedDeclarationType == DeclarationType.ScriptedEffect)
             {
-                GlobalResources.AddEffects(scriptfile.Declarations.Keys);
+                GlobalResources.AddEffects(scriptfile.Declarations.Select(x => x.Key));
             }
             if (scriptfile.ExpectedDeclarationType == DeclarationType.ScriptedTrigger)
             {
-                GlobalResources.AddTriggers(scriptfile.Declarations.Keys);
+                GlobalResources.AddTriggers(scriptfile.Declarations.Select(x => x.Key));
             }
         }
 

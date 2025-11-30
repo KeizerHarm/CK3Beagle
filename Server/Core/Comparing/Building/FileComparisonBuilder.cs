@@ -26,7 +26,7 @@ namespace CK3BeagleServer.Core.Comparing.Building
             }
 
             (AddedDeclarations, RemovedDeclarations, ChangedDeclarations, UntouchedDeclarations)
-                = ComparisonHelpers.SimpleListComparison(SourceFile.Declarations.ToDictionary(), EditFile.Declarations.ToDictionary(),
+                = ComparisonHelpers.SimpleListComparison(SourceFile.Declarations.ToDictionary(k => k.Key), EditFile.Declarations.ToDictionary(k => k.Key),
                     (first, second) => first.GetTrueHash() == second.GetTrueHash());
 
             var initialMatches = ComparisonHelpers.GetIdenticalPairs(source.Children, edit.Children, node =>

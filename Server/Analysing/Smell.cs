@@ -35,7 +35,10 @@ namespace CK3BeagleServer.Analysing
         KeywordAsScopeName_RootPrevThis,
         KeywordAsScopeName_ScopeLink,
 
-        UnencapsulatedAddition
+        UnencapsulatedAddition,
+
+        EntityKeyReused_SameType,
+        EntityKeyReused_DifferentType
     }
 
     public static class SmellExtensions
@@ -97,6 +100,11 @@ namespace CK3BeagleServer.Analysing
 
                 case Smell.UnencapsulatedAddition:
                     return "UA.1";
+
+                case Smell.EntityKeyReused_SameType:
+                    return "EKR.1";
+                case Smell.EntityKeyReused_DifferentType:
+                    return "EKR.2";
 
                 default:
                     throw new ArgumentException("What is that smell, that smelly smell...?");

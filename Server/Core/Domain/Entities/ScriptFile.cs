@@ -10,7 +10,7 @@ namespace CK3BeagleServer.Core.Domain.Entities
         public string RelativePath;
         public string AbsolutePath;
         private string rawFileContents { get; set; }
-        public OrderedDictionary<string, Declaration> Declarations = [];
+        public List<Declaration> Declarations = [];
 
         public DeclarationType ExpectedDeclarationType;
 
@@ -41,60 +41,58 @@ namespace CK3BeagleServer.Core.Domain.Entities
 
         public void RegisterDeclaration(Declaration declaration, bool addText = false)
         {
-            //AddChild(declaration);
-            Declarations.Add(declaration.Key, declaration);
-
+            Declarations.Add(declaration);
             //if (addText)
             //{
             //    Raw += declaration.Raw;
             //}
         }
 
-        public void InsertDeclaration(Declaration newDecl, Declaration prevSibling)
-        {
-            if (!Declarations.ContainsKey(prevSibling.Key))
-            {
-                throw new Exception("Prev sibling not found upon insertion in ScriptFile!");
-            }
+        //public void InsertDeclaration(Declaration newDecl, Declaration prevSibling)
+        //{
+        //    if (!Declarations.ContainsKey(prevSibling.Key))
+        //    {
+        //        throw new Exception("Prev sibling not found upon insertion in ScriptFile!");
+        //    }
 
-            if (prevSibling.NextSibling != null) { 
-                var oldNextSibling = prevSibling.NextSibling;
-                oldNextSibling.PrevSibling = newDecl;
-            }
+        //    if (prevSibling.NextSibling != null) { 
+        //        var oldNextSibling = prevSibling.NextSibling;
+        //        oldNextSibling.PrevSibling = newDecl;
+        //    }
 
-            prevSibling.NextSibling = newDecl;
-            //Raw = Raw.Replace(prevSibling.Raw, prevSibling.Raw + newDecl.Raw);
-        }
+        //    prevSibling.NextSibling = newDecl;
+        //    //Raw = Raw.Replace(prevSibling.Raw, prevSibling.Raw + newDecl.Raw);
+        //}
 
-        public void ReplaceDeclaration(Declaration replacement)
-        {
-            if (!Declarations.TryGetValue(replacement.Key, out Declaration original))
-                return;
+        //public void ReplaceDeclaration(Declaration replacement)
+        //{
+        //    if (!Declarations.TryGetValue(replacement.Key, out Declaration original))
+        //        return;
             
-            if (original.PrevSibling != null)
-            {
-                original.PrevSibling.NextSibling = replacement;
-            }
+        //    if (original.PrevSibling != null)
+        //    {
+        //        original.PrevSibling.NextSibling = replacement;
+        //    }
             
-            if (original.NextSibling != null)
-            {
-                original.NextSibling.PrevSibling = replacement;
-            }
+        //    if (original.NextSibling != null)
+        //    {
+        //        original.NextSibling.PrevSibling = replacement;
+        //    }
 
-            var oldIndex = Declarations.IndexOf(original.Key);
-            Declarations.Remove(original.Key);
-            Declarations.Insert(oldIndex, replacement.Key, replacement);
+        //    var oldIndex = Declarations.IndexOf(original.Key);
+        //    Declarations.Remove(original.Key);
+        //    Declarations.Insert(oldIndex, replacement.Key, replacement);
 
-            //Raw = Raw.Replace(original.Raw, replacement.Raw);
-        }
+        //    //Raw = Raw.Replace(original.Raw, replacement.Raw);
+        //}
 
-        public ScriptFile Clone()
-        {
-            return new ScriptFile(Context, RelativePath, ExpectedDeclarationType, StringRepresentation)
-            {
-                Declarations = new OrderedDictionary<string, Declaration>(Declarations)
-            };
-        }
+        //public ScriptFile Clone()
+        //{
+        //    return new ScriptFile(Context, RelativePath, ExpectedDeclarationType, StringRepresentation)
+        //    {
+        //        Declarations = new OrderedDictionary<string, Declaration>(Declarations)
+        //    };
+        //}
         public override void Accept(IDomainVisitor visitor) => visitor.Visit(this);
 
 
