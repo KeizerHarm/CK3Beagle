@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace CK3Analyser.Analysing
+namespace CK3BeagleServer.Analysing
 {
     public enum Smell
     {

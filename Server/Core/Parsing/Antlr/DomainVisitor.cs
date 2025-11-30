@@ -1,9 +1,9 @@
 ﻿//using Antlr4.Runtime.Misc;
-//using CK3Analyser.Core.Domain;
-//using CK3Analyser.Core.Domain.Entities;
+//using CK3BeagleServer.Core.Domain;
+//using CK3BeagleServer.Core.Domain.Entities;
 //using System.Linq;
 
-//namespace CK3Analyser.Core.Parsing.Antlr
+//namespace CK3BeagleServer.Core.Parsing.Antlr
 //{
 //    public class DomainVisitor : CK3SourceVisitor<Node>
 //    {

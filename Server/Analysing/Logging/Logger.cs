@@ -1,8 +1,8 @@
-﻿using CK3Analyser.Core.Domain.Entities;
-using CK3Analyser.Core.Resources;
+﻿using CK3BeagleServer.Core.Domain.Entities;
+using CK3BeagleServer.Core.Resources;
 using System.Collections.Generic;
 
-namespace CK3Analyser.Analysing.Logging
+namespace CK3BeagleServer.Analysing.Logging
 {
     public class Logger : ILogger
     {

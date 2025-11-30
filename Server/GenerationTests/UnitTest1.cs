@@ -1,4 +1,4 @@
-﻿//using CK3Analyser.Generation;
+﻿//using CK3BeagleServer.Generation;
 
 //namespace GenerationTests
 //{

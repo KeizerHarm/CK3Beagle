@@ -1,15 +1,15 @@
-﻿using CK3Analyser.Core.Comparing;
-using CK3Analyser.Core.Comparing.Building;
-using CK3Analyser.Core.Comparing.Domain;
-using CK3Analyser.Core.Domain;
-using CK3Analyser.Core.Domain.Entities;
-using CK3Analyser.Core.Generated;
-using CK3Analyser.Core.Parsing.Antlr;
-using CK3Analyser.Core.Parsing.SemanticPass;
-using CK3Analyser.Core.Resources;
-using CK3Analyser.Core.Resources.Storage;
+﻿using CK3BeagleServer.Core.Comparing;
+using CK3BeagleServer.Core.Comparing.Building;
+using CK3BeagleServer.Core.Comparing.Domain;
+using CK3BeagleServer.Core.Domain;
+using CK3BeagleServer.Core.Domain.Entities;
+using CK3BeagleServer.Core.Generated;
+using CK3BeagleServer.Core.Parsing.Antlr;
+using CK3BeagleServer.Core.Parsing.SemanticPass;
+using CK3BeagleServer.Core.Resources;
+using CK3BeagleServer.Core.Resources.Storage;
 
-namespace CK3Analyser.Analysing.Diff.Detectors
+namespace CK3BeagleServer.Analysing.Diff.Detectors
 {
     public class BaseDiffDetectorTests
     {

@@ -1,5 +1,5 @@
 ﻿// Template generated code from Antlr4Templates v6.0
-namespace CK3Analyser.Core.Parsing.Antlr
+namespace CK3BeagleServer.Core.Parsing.Antlr
 {
     using Antlr4.Runtime;
     using System.IO;

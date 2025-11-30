@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 
-namespace CK3Analyser.Generation
+namespace CK3BeagleServer.Generation
 {
     public enum BlockContext
     {

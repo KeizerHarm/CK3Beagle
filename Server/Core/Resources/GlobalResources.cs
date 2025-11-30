@@ -1,11 +1,11 @@
-﻿using CK3Analyser.Core.Comparing.Domain;
-using CK3Analyser.Core.Domain;
-using CK3Analyser.Core.Resources.Storage;
+﻿using CK3BeagleServer.Core.Comparing.Domain;
+using CK3BeagleServer.Core.Domain;
+using CK3BeagleServer.Core.Resources.Storage;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace CK3Analyser.Core.Resources
+namespace CK3BeagleServer.Core.Resources
 {
     public static class GlobalResources
     {

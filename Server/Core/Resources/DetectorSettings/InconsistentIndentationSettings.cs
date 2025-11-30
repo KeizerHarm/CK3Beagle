@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Text.Json.Serialization;
 
-namespace CK3Analyser.Core.Resources.DetectorSettings
+namespace CK3BeagleServer.Core.Resources.DetectorSettings
 {
     [JsonConverter(typeof(JsonStringEnumConverter))]
     public enum IndentationType

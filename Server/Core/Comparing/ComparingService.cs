@@ -1,11 +1,11 @@
-﻿using CK3Analyser.Core.Comparing.Building;
-using CK3Analyser.Core.Comparing.Domain;
-using CK3Analyser.Core.Comparing.PreviousAttempts.Domain;
-using CK3Analyser.Core.Domain;
-using CK3Analyser.Core.Domain.Entities;
-using CK3Analyser.Core.Generated;
-using CK3Analyser.Core.Parsing;
-using CK3Analyser.Core.Resources;
+﻿using CK3BeagleServer.Core.Comparing.Building;
+using CK3BeagleServer.Core.Comparing.Domain;
+using CK3BeagleServer.Core.Comparing.PreviousAttempts.Domain;
+using CK3BeagleServer.Core.Domain;
+using CK3BeagleServer.Core.Domain.Entities;
+using CK3BeagleServer.Core.Generated;
+using CK3BeagleServer.Core.Parsing;
+using CK3BeagleServer.Core.Resources;
 using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
@@ -13,7 +13,7 @@ using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace CK3Analyser.Core.Comparing
+namespace CK3BeagleServer.Core.Comparing
 {
     public class ComparingService
     {

@@ -1,8 +1,8 @@
-﻿using CK3Analyser.Core.Domain.Entities;
+﻿using CK3BeagleServer.Core.Domain.Entities;
 using System;
 using System.Collections.Generic;
 
-namespace CK3Analyser.Core.Comparing
+namespace CK3BeagleServer.Core.Comparing
 {
     public sealed class ComparisonHelpers
     {

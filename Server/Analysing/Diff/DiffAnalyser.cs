@@ -1,13 +1,13 @@
-﻿using CK3Analyser.Analysing.Diff.Detectors;
-using CK3Analyser.Analysing.Logging;
-using CK3Analyser.Core;
-using CK3Analyser.Core.Comparing.Domain;
-using CK3Analyser.Core.Resources;
+﻿using CK3BeagleServer.Analysing.Diff.Detectors;
+using CK3BeagleServer.Analysing.Logging;
+using CK3BeagleServer.Core;
+using CK3BeagleServer.Core.Comparing.Domain;
+using CK3BeagleServer.Core.Resources;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
-namespace CK3Analyser.Analysing.Diff
+namespace CK3BeagleServer.Analysing.Diff
 {
     public class DiffAnalyser
     {

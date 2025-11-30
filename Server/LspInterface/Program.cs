@@ -1,4 +1,4 @@
-﻿using CK3Analyser.Core.Resources;
+﻿using CK3BeagleServer.Core.Resources;
 using System;
 using System.IO;
 using System.Text;
@@ -6,7 +6,7 @@ using System.Text.Json;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace CK3Analyser.LspInterface
+namespace CK3BeagleServer.LspInterface
 {
     public class Program
     {

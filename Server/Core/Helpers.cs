@@ -6,7 +6,7 @@ using System.Reflection;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace CK3Analyser.Core
+namespace CK3BeagleServer.Core
 {
     public static class Helpers
     {

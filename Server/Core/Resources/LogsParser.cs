@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.IO;
 
-namespace CK3Analyser.Core.Resources
+namespace CK3BeagleServer.Core.Resources
 {
     public static class LogsParser
     {

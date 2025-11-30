@@ -1,8 +1,8 @@
-﻿//using CK3Analyser.Core.Domain.Entities;
+﻿//using CK3BeagleServer.Core.Domain.Entities;
 //using System;
 //using System.Collections.Generic;
 
-//namespace CK3Analyser.Core.Comparing.PogingLCS
+//namespace CK3BeagleServer.Core.Comparing.PogingLCS
 //{
 //    /// <summary>
 //    /// Not actually equals, but checks if they can be considered similar enough to be treated as (a changed version of) the same node.

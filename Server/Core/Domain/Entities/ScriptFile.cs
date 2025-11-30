@@ -1,8 +1,8 @@
-﻿using CK3Analyser.Core.Generated;
+﻿using CK3BeagleServer.Core.Generated;
 using System;
 using System.Collections.Generic;
 
-namespace CK3Analyser.Core.Domain.Entities
+namespace CK3BeagleServer.Core.Domain.Entities
 {
     public class ScriptFile : Block
     {

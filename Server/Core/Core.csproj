@@ -2,7 +2,7 @@
 
   <PropertyGroup>
     <TargetFramework>net9.0</TargetFramework>
-    <RootNamespace>CK3Analyser.Core</RootNamespace>
+    <RootNamespace>CK3BeagleServer.Core</RootNamespace>
   </PropertyGroup>
 
   <ItemGroup>
@@ -15,7 +15,7 @@
 
   <ItemGroup>
     <Antlr4 Include="Parsing\Antlr\Grammar\CK3.g4">
-      <Package>CK3Analyser.Core</Package>
+      <Package>CK3BeagleServer.Core</Package>
     </Antlr4>
   </ItemGroup>
 

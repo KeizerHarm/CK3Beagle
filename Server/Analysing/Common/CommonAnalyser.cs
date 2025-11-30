@@ -1,13 +1,13 @@
-﻿using CK3Analyser.Analysing.Common.Detectors;
-using CK3Analyser.Analysing.Logging;
-using CK3Analyser.Core;
-using CK3Analyser.Core.Domain;
-using CK3Analyser.Core.Resources;
+﻿using CK3BeagleServer.Analysing.Common.Detectors;
+using CK3BeagleServer.Analysing.Logging;
+using CK3BeagleServer.Core;
+using CK3BeagleServer.Core.Domain;
+using CK3BeagleServer.Core.Resources;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
-namespace CK3Analyser.Analysing.Common
+namespace CK3BeagleServer.Analysing.Common
 {
     public class CommonAnalyser
     {

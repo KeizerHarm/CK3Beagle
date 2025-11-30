@@ -1,4 +1,4 @@
-﻿namespace CK3Analyser.Core.Comparing.Domain
+﻿namespace CK3BeagleServer.Core.Comparing.Domain
 {
     public interface IDeltaVisitor
     {

@@ -1,15 +1,15 @@
-﻿using CK3Analyser.Core.Domain;
-using CK3Analyser.Core.Domain.Entities;
-using CK3Analyser.Core.Generated;
-using CK3Analyser.Core.Parsing.SemanticPass;
-using CK3Analyser.Core.Resources;
+﻿using CK3BeagleServer.Core.Domain;
+using CK3BeagleServer.Core.Domain.Entities;
+using CK3BeagleServer.Core.Generated;
+using CK3BeagleServer.Core.Parsing.SemanticPass;
+using CK3BeagleServer.Core.Resources;
 using System;
 using System.Collections.Concurrent;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace CK3Analyser.Core.Parsing
+namespace CK3BeagleServer.Core.Parsing
 {
     public class ParsingService
     {

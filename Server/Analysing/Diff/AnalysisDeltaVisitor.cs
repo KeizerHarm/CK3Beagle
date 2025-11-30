@@ -1,8 +1,8 @@
-﻿using CK3Analyser.Analysing.Diff.Detectors;
-using CK3Analyser.Core.Comparing.Domain;
+﻿using CK3BeagleServer.Analysing.Diff.Detectors;
+using CK3BeagleServer.Core.Comparing.Domain;
 using System.Collections.Generic;
 
-namespace CK3Analyser.Analysing.Diff
+namespace CK3BeagleServer.Analysing.Diff
 {
     public class AnalysisDeltaVisitor : BaseDeltaVisitor
     {

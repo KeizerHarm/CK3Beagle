@@ -1,6 +1,6 @@
-﻿using CK3Analyser.Core.Generated;
+﻿using CK3BeagleServer.Core.Generated;
 
-namespace CK3Analyser.Core.Domain
+namespace CK3BeagleServer.Core.Domain
 {
     public static class DeclarationTypeExtensions
     {

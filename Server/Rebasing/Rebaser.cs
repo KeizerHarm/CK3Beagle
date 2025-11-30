@@ -1,9 +1,9 @@
-﻿using CK3Analyser.Core.Domain;
+﻿using CK3BeagleServer.Core.Domain;
 using System;
 using System.IO;
 using System.Linq;
 
-namespace CK3Analyser.Rebasing
+namespace CK3BeagleServer.Rebasing
 {
     public class Rebaser
     {

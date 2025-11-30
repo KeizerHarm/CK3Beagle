@@ -1,11 +1,11 @@
-﻿using CK3Analyser.Core.Domain;
-using CK3Analyser.Core.Domain.Entities;
-using CK3Analyser.Core.Generated;
+﻿using CK3BeagleServer.Core.Domain;
+using CK3BeagleServer.Core.Domain.Entities;
+using CK3BeagleServer.Core.Generated;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace CK3Analyser.Core.Comparing.Domain
+namespace CK3BeagleServer.Core.Comparing.Domain
 {
     public class ShadowNode
     {

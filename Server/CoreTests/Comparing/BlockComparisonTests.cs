@@ -1,8 +1,8 @@
-﻿//using CK3Analyser.Core.Comparing.Domain;
-//using CK3Analyser.Core.Comparing.PreviousAttempts.Domain;
-//using CK3Analyser.Core.Domain.Entities;
+﻿//using CK3BeagleServer.Core.Comparing.Domain;
+//using CK3BeagleServer.Core.Comparing.PreviousAttempts.Domain;
+//using CK3BeagleServer.Core.Domain.Entities;
 
-//namespace CK3Analyser.Core.Comparing
+//namespace CK3BeagleServer.Core.Comparing
 //{
 //    public class BlockComparisonTests : BaseComparisonTest
 //    {

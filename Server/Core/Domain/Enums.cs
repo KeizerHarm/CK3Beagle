@@ -1,4 +1,4 @@
-﻿namespace CK3Analyser.Core.Domain
+﻿namespace CK3BeagleServer.Core.Domain
 {
     /// <summary>
     /// Refers to what a block provides for its children; trigger, effect, or none. 

@@ -1,9 +1,9 @@
-﻿using CK3Analyser.Analysing.Logging;
+﻿using CK3BeagleServer.Analysing.Logging;
 using System.Collections.Generic;
 using System.Text.Json;
 using System.Threading.Tasks;
 
-namespace CK3Analyser.Orchestration
+namespace CK3BeagleServer.Orchestration
 {
     public interface IProcessOrchestrator
     {

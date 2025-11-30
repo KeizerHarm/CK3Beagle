@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 
-namespace CK3Analyser.Core.Domain.Entities
+namespace CK3BeagleServer.Core.Domain.Entities
 {
     public abstract class Block : Node
     {

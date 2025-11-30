@@ -1,19 +1,19 @@
-﻿using CK3Analyser.Analysing.Common;
-using CK3Analyser.Analysing.Diff;
-using CK3Analyser.Analysing.Logging;
-using CK3Analyser.Core.Comparing;
-using CK3Analyser.Core.Domain;
-using CK3Analyser.Core.Parsing;
-using CK3Analyser.Core.Parsing.Antlr;
-using CK3Analyser.Core.Resources;
-using CK3Analyser.Core.Resources.Storage;
+﻿using CK3BeagleServer.Analysing.Common;
+using CK3BeagleServer.Analysing.Diff;
+using CK3BeagleServer.Analysing.Logging;
+using CK3BeagleServer.Core.Comparing;
+using CK3BeagleServer.Core.Domain;
+using CK3BeagleServer.Core.Parsing;
+using CK3BeagleServer.Core.Parsing.Antlr;
+using CK3BeagleServer.Core.Resources;
+using CK3BeagleServer.Core.Resources.Storage;
 using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Text.Json;
 using System.Threading.Tasks;
 
-namespace CK3Analyser.Orchestration
+namespace CK3BeagleServer.Orchestration
 {
     public class ProcessOrchestrator : IProcessOrchestrator
     {

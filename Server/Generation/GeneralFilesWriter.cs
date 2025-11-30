@@ -1,7 +1,7 @@
 ﻿using System.Collections.Immutable;
 using System.Linq;
 
-namespace CK3Analyser.Generation
+namespace CK3BeagleServer.Generation
 {
     public static class GeneralFilesWriter
     {
@@ -11,9 +11,9 @@ namespace CK3Analyser.Generation
                 .OrderBy(x => x.ScriptKey);
 
             var str = @"
-using CK3Analyser.Core.Domain.Entities;
+using CK3BeagleServer.Core.Domain.Entities;
 
-namespace CK3Analyser.Core.Generated
+namespace CK3BeagleServer.Core.Generated
 {
     public enum DeclarationType
     {
@@ -69,15 +69,15 @@ namespace CK3Analyser.Core.Generated
             var allSchemas = schemas.SelectMany(x => x.SchemasInTree);
 
             var str = @"
-using CK3Analyser.Core.Domain.Entities;
-using CK3Analyser.Core.Domain.Symbols;
-using CK3Analyser.Core.Domain;
-using CK3Analyser.Core.Resources.Storage;
+using CK3BeagleServer.Core.Domain.Entities;
+using CK3BeagleServer.Core.Domain.Symbols;
+using CK3BeagleServer.Core.Domain;
+using CK3BeagleServer.Core.Resources.Storage;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace CK3Analyser.Core.Generated
+namespace CK3BeagleServer.Core.Generated
 {
     public enum SymbolType
     {

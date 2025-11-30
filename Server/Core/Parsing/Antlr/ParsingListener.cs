@@ -1,13 +1,13 @@
 ﻿using Antlr4.Runtime;
 using Antlr4.Runtime.Misc;
-using CK3Analyser.Core.Domain;
-using CK3Analyser.Core.Domain.Entities;
-using CK3Analyser.Core.Generated;
+using CK3BeagleServer.Core.Domain;
+using CK3BeagleServer.Core.Domain.Entities;
+using CK3BeagleServer.Core.Generated;
 using System.Collections.Generic;
 using System.Linq;
-using static CK3Analyser.Core.CK3Parser;
+using static CK3BeagleServer.Core.CK3Parser;
 
-namespace CK3Analyser.Core.Parsing.Antlr
+namespace CK3BeagleServer.Core.Parsing.Antlr
 {
     public class ParsingListener : CK3BaseListener
     {

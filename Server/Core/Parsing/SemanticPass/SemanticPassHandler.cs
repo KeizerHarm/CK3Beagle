@@ -1,8 +1,8 @@
-﻿using CK3Analyser.Core.Domain;
-using CK3Analyser.Core.Generated;
+﻿using CK3BeagleServer.Core.Domain;
+using CK3BeagleServer.Core.Generated;
 using System;
 
-namespace CK3Analyser.Core.Parsing.SemanticPass
+namespace CK3BeagleServer.Core.Parsing.SemanticPass
 {
     public class SemanticPassHandler
     {

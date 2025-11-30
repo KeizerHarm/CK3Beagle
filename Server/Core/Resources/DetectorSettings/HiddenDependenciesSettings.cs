@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace CK3Analyser.Core.Resources.DetectorSettings
+namespace CK3BeagleServer.Core.Resources.DetectorSettings
 {
     public readonly struct HiddenDependenciesSettings : IGenericSettings
     {

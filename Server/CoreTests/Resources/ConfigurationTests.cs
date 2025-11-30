@@ -1,7 +1,7 @@
-﻿using CK3Analyser.Core.Resources.DetectorSettings;
+﻿using CK3BeagleServer.Core.Resources.DetectorSettings;
 using System.Text.Json;
 
-namespace CK3Analyser.Core.Resources
+namespace CK3BeagleServer.Core.Resources
 {
     public class ConfigurationTests
     {

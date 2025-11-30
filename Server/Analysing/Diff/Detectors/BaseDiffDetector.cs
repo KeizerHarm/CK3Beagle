@@ -1,8 +1,8 @@
-﻿using CK3Analyser.Analysing.Logging;
-using CK3Analyser.Core.Comparing.Domain;
-using CK3Analyser.Core.Domain;
+﻿using CK3BeagleServer.Analysing.Logging;
+using CK3BeagleServer.Core.Comparing.Domain;
+using CK3BeagleServer.Core.Domain;
 
-namespace CK3Analyser.Analysing.Diff.Detectors
+namespace CK3BeagleServer.Analysing.Diff.Detectors
 {
     public class BaseDiffDetector
     {

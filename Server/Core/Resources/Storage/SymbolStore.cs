@@ -1,7 +1,7 @@
-﻿using CK3Analyser.Core.Domain.Symbols;
+﻿using CK3BeagleServer.Core.Domain.Symbols;
 using System.Collections.Generic;
 
-namespace CK3Analyser.Core.Resources.Storage
+namespace CK3BeagleServer.Core.Resources.Storage
 {
     public interface ISymbolStore
     {

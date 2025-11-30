@@ -5,7 +5,7 @@
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
     <IsPackable>false</IsPackable>
-    <RootNamespace>CK3Analyser.Core</RootNamespace>
+    <RootNamespace>CK3BeagleServer.Core</RootNamespace>
   </PropertyGroup>
 
   <ItemGroup>

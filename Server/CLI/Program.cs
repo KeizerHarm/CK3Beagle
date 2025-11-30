@@ -1,10 +1,10 @@
 ﻿using System;
 using System.Linq;
 using System.Threading.Tasks;
-using CK3Analyser.Core.Resources;
-using CK3Analyser.Orchestration;
+using CK3BeagleServer.Core.Resources;
+using CK3BeagleServer.Orchestration;
 
-namespace CK3Analyser.CLI
+namespace CK3BeagleServer.CLI
 {
     public class Program
     {

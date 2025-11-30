@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace CK3Analyser.Core.Domain.Entities
+namespace CK3BeagleServer.Core.Domain.Entities
 {
     public class AnonymousBlock : Block
     {

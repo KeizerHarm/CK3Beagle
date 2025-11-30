@@ -2,7 +2,7 @@
 using System;
 using System.Text.RegularExpressions;
 
-namespace CK3Analyser.Core.Domain.Entities
+namespace CK3BeagleServer.Core.Domain.Entities
 {
     public class Comment : Node
     {

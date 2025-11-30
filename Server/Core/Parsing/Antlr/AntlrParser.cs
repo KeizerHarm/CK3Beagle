@@ -1,8 +1,8 @@
 ﻿using Antlr4.Runtime;
 using Antlr4.Runtime.Tree;
-using CK3Analyser.Core.Domain.Entities;
+using CK3BeagleServer.Core.Domain.Entities;
 
-namespace CK3Analyser.Core.Parsing.Antlr
+namespace CK3BeagleServer.Core.Parsing.Antlr
 {
     public class AntlrParser : ICk3Parser
     {

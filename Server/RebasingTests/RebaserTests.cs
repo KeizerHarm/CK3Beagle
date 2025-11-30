@@ -1,9 +1,9 @@
-﻿//using CK3Analyser.Parser.Domain;
-//using CK3Analyser.Parser.Parsing.Fast;
-//using CK3Analyser.Parser.Rebasing;
-//using CK3AnalyserAntlr.Parser;
+﻿//using CK3BeagleServer.Parser.Domain;
+//using CK3BeagleServer.Parser.Parsing.Fast;
+//using CK3BeagleServer.Parser.Rebasing;
+//using CK3BeagleServerAntlr.Parser;
 
-//namespace CK3Analyser.Parser
+//namespace CK3BeagleServer.Parser
 //{
 //    public class RebaserTests
 //    {

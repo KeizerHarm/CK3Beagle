@@ -1,7 +1,7 @@
 ﻿//using System;
 //using System.Collections.Generic;
 
-//namespace CK3Analyser.Core.Comparing.Building
+//namespace CK3BeagleServer.Core.Comparing.Building
 //{
 //    public class MyersAlgorithm
 //    {

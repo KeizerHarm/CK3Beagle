@@ -1,6 +1,6 @@
-﻿using CK3Analyser.Core.Domain.Entities;
+﻿using CK3BeagleServer.Core.Domain.Entities;
 
-namespace CK3Analyser.Core
+namespace CK3BeagleServer.Core
 {
     public interface ICk3Parser
     {

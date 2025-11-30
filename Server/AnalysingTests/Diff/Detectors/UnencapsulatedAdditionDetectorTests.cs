@@ -1,10 +1,10 @@
-﻿using CK3Analyser.Analysing.Logging;
-using CK3Analyser.Core.Comparing.Domain;
-using CK3Analyser.Core.Resources;
-using CK3Analyser.Core.Generated;
-using CK3Analyser.Core.Resources.DetectorSettings;
+﻿using CK3BeagleServer.Analysing.Logging;
+using CK3BeagleServer.Core.Comparing.Domain;
+using CK3BeagleServer.Core.Resources;
+using CK3BeagleServer.Core.Generated;
+using CK3BeagleServer.Core.Resources.DetectorSettings;
 
-namespace CK3Analyser.Analysing.Diff.Detectors
+namespace CK3BeagleServer.Analysing.Diff.Detectors
 {
     public class UnencapsulatedAdditionDetectorTests : BaseDiffDetectorTests
     {

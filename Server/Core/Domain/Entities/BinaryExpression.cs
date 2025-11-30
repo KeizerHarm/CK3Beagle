@@ -1,7 +1,7 @@
-﻿using CK3Analyser.Core.Resources;
+﻿using CK3BeagleServer.Core.Resources;
 using System;
 
-namespace CK3Analyser.Core.Domain.Entities
+namespace CK3BeagleServer.Core.Domain.Entities
 {
     public class BinaryExpression : Node
     {

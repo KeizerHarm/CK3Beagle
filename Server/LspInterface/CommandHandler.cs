@@ -1,7 +1,7 @@
-﻿using CK3Analyser.Analysing.Logging;
-using CK3Analyser.Analysing;
-using CK3Analyser.Core.Resources;
-using CK3Analyser.Orchestration;
+﻿using CK3BeagleServer.Analysing.Logging;
+using CK3BeagleServer.Analysing;
+using CK3BeagleServer.Core.Resources;
+using CK3BeagleServer.Orchestration;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,7 +10,7 @@ using System.Text.Json;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace CK3Analyser.LspInterface
+namespace CK3BeagleServer.LspInterface
 {
     public class CommandHandler
     {

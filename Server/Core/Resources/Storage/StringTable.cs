@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace CK3Analyser.Core.Resources.Storage
+namespace CK3BeagleServer.Core.Resources.Storage
 {
     public class StringTable
     {

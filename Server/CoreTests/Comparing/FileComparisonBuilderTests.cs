@@ -1,7 +1,7 @@
-﻿using CK3Analyser.Core.Comparing.Building;
-using CK3Analyser.Core.Comparing.Domain;
+﻿using CK3BeagleServer.Core.Comparing.Building;
+using CK3BeagleServer.Core.Comparing.Domain;
 
-namespace CK3Analyser.Core.Comparing
+namespace CK3BeagleServer.Core.Comparing
 {
     public class FileComparisonBuilderTests : BaseComparisonTest
     {

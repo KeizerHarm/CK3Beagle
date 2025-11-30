@@ -1,5 +1,5 @@
-﻿//using CK3Analyser.Core.Comparing.Domain;
-//using CK3Analyser.Core.Domain.Entities;
+﻿//using CK3BeagleServer.Core.Comparing.Domain;
+//using CK3BeagleServer.Core.Domain.Entities;
 //using System;
 //using System.Collections.Generic;
 //using System.Diagnostics;
@@ -8,7 +8,7 @@
 //using System.Text;
 //using System.Threading.Tasks;
 
-//namespace CK3Analyser.Core.Comparing.PogingLCS
+//namespace CK3BeagleServer.Core.Comparing.PogingLCS
 //{
 
 //    public class DeltaTreeBuilder

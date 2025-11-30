@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace CK3Analyser.Analysing.Diff.Detectors
+namespace CK3BeagleServer.Analysing.Diff.Detectors
 {
     internal class UnmarkedChangeDetector
     {

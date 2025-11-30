@@ -1,9 +1,9 @@
-﻿using CK3Analyser.Analysing.Common.Detectors;
-using CK3Analyser.Core.Domain;
-using CK3Analyser.Core.Domain.Entities;
+﻿using CK3BeagleServer.Analysing.Common.Detectors;
+using CK3BeagleServer.Core.Domain;
+using CK3BeagleServer.Core.Domain.Entities;
 using System.Collections.Generic;
 
-namespace CK3Analyser.Analysing.Common
+namespace CK3BeagleServer.Analysing.Common
 {
     public sealed class AnalysisVisitor : BaseDomainVisitor
     {

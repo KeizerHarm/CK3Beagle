@@ -1,18 +1,18 @@
-﻿namespace CK3Analyser.Generation
+﻿namespace CK3BeagleServer.Generation
 {
     public class SchemaToFileTransformer
     {
         public static string SchemaToFile(Schema schema)
         {
             var str = @"
-using CK3Analyser.Core.Domain.Entities;
-using CK3Analyser.Core.Resources;
-using CK3Analyser.Core.Resources.Storage;
-using CK3Analyser.Core.Domain.Symbols;
+using CK3BeagleServer.Core.Domain.Entities;
+using CK3BeagleServer.Core.Resources;
+using CK3BeagleServer.Core.Resources.Storage;
+using CK3BeagleServer.Core.Domain.Symbols;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace CK3Analyser.Core.Generated
+namespace CK3BeagleServer.Core.Generated
 {";
             str += GetClass(schema);
             str += @"

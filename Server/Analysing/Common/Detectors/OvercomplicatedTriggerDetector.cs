@@ -1,13 +1,13 @@
-﻿using CK3Analyser.Analysing.Logging;
-using CK3Analyser.Core.Domain;
-using CK3Analyser.Core.Domain.Entities;
-using CK3Analyser.Core.Resources.DetectorSettings;
-using CK3Analyser.Core.Generated;
+﻿using CK3BeagleServer.Analysing.Logging;
+using CK3BeagleServer.Core.Domain;
+using CK3BeagleServer.Core.Domain.Entities;
+using CK3BeagleServer.Core.Resources.DetectorSettings;
+using CK3BeagleServer.Core.Generated;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace CK3Analyser.Analysing.Common.Detectors
+namespace CK3BeagleServer.Analysing.Common.Detectors
 {
     public class OvercomplicatedTriggerDetector : BaseDetector
     {

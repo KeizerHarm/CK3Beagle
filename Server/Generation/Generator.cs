@@ -1,7 +1,7 @@
 ﻿using Microsoft.CodeAnalysis;
 using System.Linq;
 
-namespace CK3Analyser.Generation
+namespace CK3BeagleServer.Generation
 {
     [Generator]
     public class Generator : IIncrementalGenerator
