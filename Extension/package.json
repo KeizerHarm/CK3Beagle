@@ -320,11 +320,6 @@
           "default": 1,
           "markdownDescription": "How should commented lines be handled?"
         },
-        "ck3_beagle.inconsistentIndentation.disregardCommentedLines": {
-          "type": "boolean",
-          "default": true,
-          "markdownDescription": "Is the indentation of comment lines even checked?"
-        },
         "ck3_beagle.inconsistentIndentation.allowedIndentationTypes": {
           "type": "array",
           "items": {
