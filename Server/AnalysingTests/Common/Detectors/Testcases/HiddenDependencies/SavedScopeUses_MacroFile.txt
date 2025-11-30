@@ -1,0 +1,32 @@
+# Declares in preceding comment
+# scopename
+# More lines 
+macro_1 = {
+	scope:scopename = { add_gold = 5 }
+}
+
+# Declares in name
+macro_2_with_scopename = {
+	scope:scopename = { add_gold = 5 }
+}
+
+# Doesnt declare
+macro_3 = {
+	scope:scopename = { add_gold = 5 }
+}
+
+# Doesnt use
+macro_4 = {
+	add_gold = 5
+}
+
+# Checks existence 1
+macro_5 = {
+	exists = scope:scopename
+	add_gold = 5
+}
+
+# Checks existence 2
+macro_5 = {
+	scope:scopename ?= { add_gold = 5 }
+}

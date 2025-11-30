@@ -112,6 +112,35 @@ namespace CK3BeagleServer.Analysing.Common.Detectors
         }
 
 
+        [Theory]
+        [InlineData(false, false, false, 3)]
+        [InlineData(false, true, false, 2)]
+        [InlineData(true, false, false, 2)]
+        [InlineData(true, true, false, 1)]
+        [InlineData(false, false, true, 0)]
+        [InlineData(false, true, true, 0)]
+        [InlineData(true, false, true, 0)]
+        [InlineData(true, true, true, 0)]
+        public void HandlesSavedScopeUses_MacroFile(bool allowIfInComment, bool allowIfInName, bool whiteListed, int numberOfExpectedErrors)
+        {
+            //arrange
+            var logger = new Logger();
+            ScriptFile testcase = GetTestCase("HiddenDependencies/RootUses_MacroFile", DeclarationType.ScriptedEffect);
+            HashSet<string> whitelist = whiteListed ? ["scopename"] : [];
+            var visitor = GetDetector(logger, testcase.Context,
+                useOfSavedScope_AllowIfInComment: allowIfInComment,
+                useOfSavedScope_AllowIfInName: allowIfInName,
+                savedScopesWhitelist: whitelist,
+                UseOfSavedScope_severity: Severity.Critical
+            );
+
+            //act
+            visitor.Visit(testcase);
+
+            //assert
+            Assert.Equal(numberOfExpectedErrors, logger.LogEntries.Where(x => x.Smell == Smell.HiddenDependencies_UseOfRoot).Count());
+        }
+
         private static AnalysisVisitor GetDetector(
             Logger logger,
             Context context,
@@ -125,12 +154,13 @@ namespace CK3BeagleServer.Analysing.Common.Detectors
             bool useOfRoot_IgnoreIfInComment = false,
             bool useOfRoot_IgnoreIfInName = false,
             bool useOfRoot_AllowInEventFile = true,
-            bool useOfSavedScope_IgnoreIfInComment = false,
-            bool useOfSavedScope_IgnoreIfInName = false,
+            bool useOfSavedScope_AllowIfInComment = false,
+            bool useOfSavedScope_AllowIfInName = false,
             bool useOfSavedScope_AllowInEventFile = true,
             bool useOfVariable_IgnoreIfInComment = false,
             bool useOfVariable_IgnoreIfInName = false,
             bool useOfVariable_AllowInEventFile = true,
+            HashSet<string>? savedScopesWhitelist = null,
             HashSet<string>? variablesWhitelist = null)
         {
             variablesWhitelist ??= new HashSet<string>();
@@ -147,8 +177,9 @@ namespace CK3BeagleServer.Analysing.Common.Detectors
                 UseOfRoot_AllowedIfInComment= useOfRoot_IgnoreIfInComment,
                 UseOfRoot_AllowedIfInName = useOfRoot_IgnoreIfInName,
                 UseOfSavedScope_AllowedIfInEventFile = useOfSavedScope_AllowInEventFile,
-                UseOfSavedScope_AllowedIfInComment = useOfSavedScope_IgnoreIfInComment,
-                UseOfSavedScope_AllowedIfInName = useOfSavedScope_IgnoreIfInName,
+                UseOfSavedScope_AllowedIfInComment = useOfSavedScope_AllowIfInComment,
+                UseOfSavedScope_AllowedIfInName = useOfSavedScope_AllowIfInName,
+                UseOfSavedScope_Whitelist = savedScopesWhitelist,
                 UseOfVariable_AllowedIfInEventFile = useOfVariable_AllowInEventFile,
                 UseOfVariable_AllowedIfInComment = useOfVariable_IgnoreIfInComment,
                 UseOfVariable_AllowedIfInName = useOfVariable_IgnoreIfInName,

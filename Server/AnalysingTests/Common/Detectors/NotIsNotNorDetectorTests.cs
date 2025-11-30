@@ -24,7 +24,6 @@ namespace CK3BeagleServer.Analysing.Common.Detectors
             Assert.Single(logger.LogEntries, x => x.Severity == Severity.Critical && x.Smell == Smell.NotIsNotNor);
         }
 
-
         private static AnalysisVisitor GetDetector(Logger logger,
             Context context,
             Severity severity = Severity.Critical)

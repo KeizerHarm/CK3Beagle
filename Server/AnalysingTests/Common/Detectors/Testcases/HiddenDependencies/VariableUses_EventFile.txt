@@ -1,0 +1,42 @@
+# Declares in preceding comment
+# varname
+# More lines 
+scripted_effect macro_1 = {
+	var:varname = { add_gold = 5 }
+}
+
+# Declares in name
+scripted_effect macro_2_with_varname = {
+	var:varname = { add_gold = 5 }
+}
+
+# Doesnt declare 1
+scripted_effect macro_3 = {
+	var:varname = { add_gold = 5 }
+}
+
+# Doesnt declare 2
+scripted_effect macro_4 = {
+	local_var:varname = { add_gold = 5 }
+}
+
+# Doesnt declare 3
+scripted_effect macro_5 = {
+	global_var:varname = { add_gold = 5 }
+}
+
+# Doesnt use
+scripted_effect macro_6 = {
+	add_gold = 5
+}
+
+# Checks existence 1
+scripted_effect macro_7 = {
+	exists = var:varname
+	add_gold = 5
+}
+
+# Checks existence 2
+scripted_effect macro_8 = {
+	var:varname ?= { add_gold = 5 }
+}

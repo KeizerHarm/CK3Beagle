@@ -4,6 +4,7 @@ using CK3BeagleServer.Core.Domain.Entities;
 using CK3BeagleServer.Core.Generated;
 using CK3BeagleServer.Core.Resources.DetectorSettings;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 
 namespace CK3BeagleServer.Analysing.Common.Detectors
@@ -18,7 +19,9 @@ namespace CK3BeagleServer.Analysing.Common.Detectors
         private List<Node> rootUsages = [];
         private List<Node> prevUsages = [];
         private HashSet<string> usedSavedScopes = [];
+        //private HashSet<string> setSavedScopes = [];
         private HashSet<string> usedVariables = [];
+        //private HashSet<string> setVariables = [];
 
         private string _usedRootMsg;
         private string GetUsedRootMsg()
@@ -34,20 +37,20 @@ namespace CK3BeagleServer.Analysing.Common.Detectors
                 + GetGenericMsg(_settings.UseOfPrev_AllowedIfInComment, _settings.UseOfPrev_AllowedIfInName);
             return _usedPrevMsg;
         }
-        private string _usedSavedScopeMsg;
-        private string GetUsedSavedScopeMsg()
-        {
-            _usedSavedScopeMsg ??= "A saved scope is used, making this macro dependent on from where it is invoked."
-                + GetGenericMsg(_settings.UseOfPrev_AllowedIfInComment, _settings.UseOfPrev_AllowedIfInName);
-            return _usedSavedScopeMsg;
-        }
-        private string _usedVariableMsg;
-        private string GetUsedVariableMsg()
-        {
-            _usedVariableMsg ??= "A variable is used, making this macro dependent on from where it is invoked."
-                + GetGenericMsg(_settings.UseOfPrev_AllowedIfInComment, _settings.UseOfPrev_AllowedIfInName);
-            return _usedVariableMsg;
-        }
+        //private string _usedSavedScopeMsg;
+        //private string GetUsedSavedScopeMsg()
+        //{
+        //    _usedSavedScopeMsg ??= "A saved scope is used, making this macro dependent on from where it is invoked."
+        //        + GetGenericMsg(_settings.UseOfPrev_AllowedIfInComment, _settings.UseOfPrev_AllowedIfInName);
+        //    return _usedSavedScopeMsg;
+        //}
+        //private string _usedVariableMsg;
+        //private string GetUsedVariableMsg()
+        //{
+        //    _usedVariableMsg ??= "A variable is used, making this macro dependent on from where it is invoked."
+        //        + GetGenericMsg(_settings.UseOfPrev_AllowedIfInComment, _settings.UseOfPrev_AllowedIfInName);
+        //    return _usedVariableMsg;
+        //}
 
         private static string GetGenericMsg(bool allowedIfInComment, bool allowedIfInName)
         {
@@ -99,15 +102,15 @@ namespace CK3BeagleServer.Analysing.Common.Detectors
             if (usedPrev)
                 HandleUseOfPrev(declaration, commentText);
 
-            foreach (var scope in usedSavedScopes)
-            {
-                HandleUseOfSavedScope(declaration, commentText, scope);
-            }
+            //foreach (var scope in usedSavedScopes)
+            //{
+            //    HandleUseOfSavedScope(declaration, commentText, scope);
+            //}
 
-            foreach (var var in usedVariables)
-            {
-                HandleUseOfVariables(declaration, commentText, var);
-            }
+            //foreach (var var in usedVariables)
+            //{
+            //    HandleUseOfVariables(declaration, commentText, var);
+            //}
 
             thisDeclaration = null;
             usedRoot = false;
@@ -118,49 +121,52 @@ namespace CK3BeagleServer.Analysing.Common.Detectors
             prevUsages = [];
         }
 
-        private void HandleUseOfSavedScope(Declaration declaration, string commentText, string scopeName)
-        {
-            if (((ScriptFile)declaration.Parent).ExpectedDeclarationType == DeclarationType.Event &&
-                _settings.UseOfSavedScope_AllowedIfInEventFile)
-                return;
+        //private void HandleUseOfSavedScope(Declaration declaration, string commentText, string scopeName)
+        //{
+        //    if (((ScriptFile)declaration.Parent).ExpectedDeclarationType == DeclarationType.Event &&
+        //        _settings.UseOfSavedScope_AllowedIfInEventFile)
+        //        return;
 
-            var isSmelly = HandleUseKeyword(scopeName, declaration, commentText, _settings.UseOfSavedScope_AllowedIfInComment, _settings.UseOfSavedScope_AllowedIfInName);
+        //    if (_settings.UseOfSavedScope_Whitelist.Contains(scopeName))
+        //        return;
 
-            if (isSmelly)
-            {
-                var msg = GetUsedSavedScopeMsg();
+        //    var isSmelly = IsThisUseSmelly(scopeName, declaration, commentText, _settings.UseOfSavedScope_AllowedIfInComment, _settings.UseOfSavedScope_AllowedIfInName);
 
-                logger.Log(
-                    Smell.HiddenDependencies_UseOfSavedScope,
-                    _settings.UseOfSavedScope_Severity,
-                    msg,
-                    declaration
-                );
-            }
-        }
+        //    if (isSmelly)
+        //    {
+        //        var msg = GetUsedSavedScopeMsg();
 
-        private void HandleUseOfVariables(Declaration declaration, string commentText, string varName)
-        {
-            if (((ScriptFile)declaration.Parent).ExpectedDeclarationType == DeclarationType.Event &&
-                _settings.UseOfVariable_AllowedIfInEventFile)
-                return;
+        //        logger.Log(
+        //            Smell.HiddenDependencies_UseOfSavedScope,
+        //            _settings.UseOfSavedScope_Severity,
+        //            msg,
+        //            declaration
+        //        );
+        //    }
+        //}
 
-            if (_settings.UseOfVariable_Whitelist.Contains(varName))
-                return;
+        //private void HandleUseOfVariables(Declaration declaration, string commentText, string varName)
+        //{
+        //    if (((ScriptFile)declaration.Parent).ExpectedDeclarationType == DeclarationType.Event &&
+        //        _settings.UseOfVariable_AllowedIfInEventFile)
+        //        return;
 
-            var isSmelly = HandleUseKeyword(varName, declaration, commentText, _settings.UseOfSavedScope_AllowedIfInComment, _settings.UseOfSavedScope_AllowedIfInName);
+        //    if (_settings.UseOfVariable_Whitelist.Contains(varName))
+        //        return;
 
-            if (isSmelly)
-            {
-                var msg = GetUsedVariableMsg();
-                logger.Log(
-                    Smell.HiddenDependencies_UseOfSavedScope,
-                    _settings.UseOfSavedScope_Severity,
-                    "Declaration uses 'var:" + varName + "'." + msg,
-                    declaration
-                );
-            }
-        }
+        //    var isSmelly = IsThisUseSmelly(varName, declaration, commentText, _settings.UseOfSavedScope_AllowedIfInComment, _settings.UseOfSavedScope_AllowedIfInName);
+
+        //    if (isSmelly)
+        //    {
+        //        var msg = GetUsedVariableMsg();
+        //        logger.Log(
+        //            Smell.HiddenDependencies_UseOfSavedScope,
+        //            _settings.UseOfSavedScope_Severity,
+        //            "Declaration uses 'var:" + varName + "'." + msg,
+        //            declaration
+        //        );
+        //    }
+        //}
 
 
         private void HandleUseOfPrev(Declaration declaration, string commentText)
@@ -169,7 +175,7 @@ namespace CK3BeagleServer.Analysing.Common.Detectors
                 _settings.UseOfPrev_AllowedIfInEventFile)
                 return;
 
-            var isSmelly = HandleUseKeyword("prev", declaration, commentText, _settings.UseOfPrev_AllowedIfInComment, _settings.UseOfPrev_AllowedIfInName);
+            var isSmelly = IsThisUseSmelly("prev", declaration, commentText, _settings.UseOfPrev_AllowedIfInComment, _settings.UseOfPrev_AllowedIfInName);
             
             if (isSmelly)
             {
@@ -191,7 +197,7 @@ namespace CK3BeagleServer.Analysing.Common.Detectors
                 _settings.UseOfRoot_AllowedIfInEventFile)
                 return;
 
-            var isSmelly = HandleUseKeyword("root", declaration, commentText, _settings.UseOfRoot_AllowedIfInComment, _settings.UseOfRoot_AllowedIfInName);
+            var isSmelly = IsThisUseSmelly("root", declaration, commentText, _settings.UseOfRoot_AllowedIfInComment, _settings.UseOfRoot_AllowedIfInName);
 
             if (isSmelly)
             {
@@ -209,7 +215,7 @@ namespace CK3BeagleServer.Analysing.Common.Detectors
             }
         }
 
-        private bool HandleUseKeyword(string keyword, Declaration declaration, string commentText, bool ignoreIfInComment, bool ignoreIfInName)
+        private bool IsThisUseSmelly(string keyword, Declaration declaration, string commentText, bool ignoreIfInComment, bool ignoreIfInName)
         {
             bool tolerate = false;
             if (ignoreIfInComment && commentText.ToLowerInvariant().Contains(keyword))
@@ -271,11 +277,16 @@ namespace CK3BeagleServer.Analysing.Common.Detectors
         {
             if (thisDeclaration == null)
                 return;
+            if (binaryExpression.Scoper == Scoper.ConditionalEqual)
+                return;
 
             var key = binaryExpression.Key.ToLowerInvariant();
+            if (key == "exists")
+                return;
             var isTopLevel = binaryExpression.Parent == thisDeclaration;
+            var value = binaryExpression.Value.ToLowerInvariant();
             AnalyseToken(key, isTopLevel, binaryExpression);
-            AnalyseToken(binaryExpression.Value.ToLowerInvariant(), isTopLevel, binaryExpression);
+            AnalyseToken(value, isTopLevel, binaryExpression);
         }
 
         private void AnalyseToken(string key, bool isTopLevel, Node node)
@@ -314,6 +325,16 @@ namespace CK3BeagleServer.Analysing.Common.Detectors
             //else if (key.StartsWith("var:"))
             //{
             //    var varname = key.Substring(4);
+            //    usedVariables.Add(varname);
+            //}
+            //else if (key.StartsWith("local_var:"))
+            //{
+            //    var varname = key.Substring(10);
+            //    usedVariables.Add(varname);
+            //}
+            //else if (key.StartsWith("global_var:"))
+            //{
+            //    var varname = key.Substring(11);
             //    usedVariables.Add(varname);
             //}
         }
