@@ -166,14 +166,19 @@
           "default": 2,
           "markdownDescription": "What is the severity of the smell **Overcomplicated Trigger: Idempotence**?"
         },
-        "ck3_beagle.overcomplicatedTrigger.notIsNotNor.severity": {
+
+        "ck3_beagle.notIsNotNor.enabled": {
+          "type": "boolean",
+          "default": true,
+          "markdownDescription": "Is checking for the smell **Not Is Not Nor** enabled?"
+        },
+        "ck3_beagle.notIsNotNor.severity": {
           "type": "string",
           "enum": [0, 1, 2, 3],
           "enumItemLabels": ["Ignored", "Info", "Warning", "Critical"],
           "default": 2,
-          "markdownDescription": "What is the severity of the smell **Overcomplicated Trigger: Not Is Not Nor**?"
+          "markdownDescription": "What is the severity of the smell **Not Is Not Nor**?"
         },
-
         
         "ck3_beagle.duplication.enabled": {
           "type": "boolean",
