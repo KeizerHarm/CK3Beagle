@@ -11,5 +11,4 @@
     <ProjectReference Include="..\Core\Core.csproj" />
     <ProjectReference Include="..\Orchestration\Orchestration.csproj" />
   </ItemGroup>
-
 </Project>

@@ -40,6 +40,11 @@ namespace CK3BeagleServer.Analysing.Common
                 visitor.Detectors.Add(new OvercomplicatedTriggerDetector(logger, context,
                     GlobalResources.Configuration.OvercomplicatedTriggerSettings));
             }
+            if (GlobalResources.Configuration.NotIsNotNorSettings.Enabled)
+            {
+                visitor.Detectors.Add(new NotIsNotNorDetector(logger, context,
+                    GlobalResources.Configuration.NotIsNotNorSettings));
+            }
             if (GlobalResources.Configuration.DuplicationSettings.Enabled)
             {
                 visitor.Detectors.Add(new DuplicationDetector(logger, context,

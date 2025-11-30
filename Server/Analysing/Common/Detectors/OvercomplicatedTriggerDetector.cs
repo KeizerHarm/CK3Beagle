@@ -104,11 +104,6 @@ namespace CK3BeagleServer.Analysing.Common.Detectors
 
             if (key == "NOT")
             {
-                if (triggerChildren.Count() > 1)
-                {
-                    LogNotIsNotNor(namedBlock);
-                }
-
                 if (AllChildrenAreNegated(triggerBlockChildren, triggerBinExpChildren))
                 {
                     LogFullDoubleNegation(namedBlock, key);
@@ -118,15 +113,6 @@ namespace CK3BeagleServer.Analysing.Common.Detectors
                     LogIncidentalDoubleNegation(triggerBlockChildren, key);
                 }
             }
-        }
-
-        private void LogNotIsNotNor(NamedBlock namedBlock)
-        {
-            logger.Log(
-                Smell.NotIsNotNor,
-                _settings.NotIsNotNor_Severity,
-                "NOT containing multiple elements",
-                namedBlock);
         }
 
         private void LogFullDoubleNegation(NamedBlock namedBlock, string key)

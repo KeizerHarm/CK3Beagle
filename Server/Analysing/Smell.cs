@@ -74,7 +74,7 @@ namespace CK3BeagleServer.Analysing
                     return "OT.6";
 
                 case Smell.NotIsNotNor:
-                    return "NNR.1";
+                    return "NNN.1";
 
                 case Smell.Duplication:
                     return "DUP.1";
@@ -92,11 +92,9 @@ namespace CK3BeagleServer.Analysing
                     return "MN.1";
 
                 case Smell.KeywordAsScopeName_RootOrPrev:
-                    return "KASN.1";
+                    return "KSN.1";
                 case Smell.KeywordAsScopeName_ScopeLink:
-                    return "KASN.2";
-                case Smell.KeywordAsScopeName_ScopeType:
-                    return "KASN.3";
+                    return "KSN.2";
 
                 case Smell.UnencapsulatedAddition:
                     return "UA.1";

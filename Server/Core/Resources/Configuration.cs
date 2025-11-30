@@ -55,6 +55,7 @@ namespace CK3BeagleServer.Core.Resources
                 LargeUnitSettings =
                     new LargeUnitSettings
                     {
+                        Enabled = true,
                         File_Severity = Severity.Info,
                         File_MaxSize = 10000,
                         Macro_Severity = Severity.Info,
@@ -66,6 +67,7 @@ namespace CK3BeagleServer.Core.Resources
                 OvercomplicatedTriggerSettings =
                     new OvercomplicatedTriggerSettings
                     {
+                        Enabled = true,
                         Absorption_Severity = Severity.Info,
                         Associativity_Severity = Severity.Warning,
                         Contradiction_Severity = Severity.Critical,
@@ -73,6 +75,13 @@ namespace CK3BeagleServer.Core.Resources
                         DoubleNegation_Severity = Severity.Warning,
                         Idempotence_Severity = Severity.Warning,
                         NotIsNotNor_Severity = Severity.Warning
+                    };
+
+                NotIsNotNorSettings =
+                    new NotIsNotNorSettings
+                    {
+                        Enabled = true,
+                        Severity = Severity.Warning
                     };
 
                 InconsistentIndentationSettings =
@@ -88,6 +97,7 @@ namespace CK3BeagleServer.Core.Resources
                 DuplicationSettings =
                     new DuplicationSettings
                     {
+                        Enabled = true,
                         Severity = Severity.Warning,
                         MinSize = 5
                     };
@@ -196,8 +206,7 @@ namespace CK3BeagleServer.Core.Resources
                     {
                         Enabled = true,
                         RootOrPrev_Severity = Severity.Warning,
-                        ScopeLink_Severity = Severity.Warning,
-                        ScopeType_Severity = Severity.Warning,
+                        ScopeLink_Severity = Severity.Warning
                     };
 
                 UnencapsulatedAdditionSettings =
@@ -235,6 +244,20 @@ namespace CK3BeagleServer.Core.Resources
             set
             {
                 _overcomplicatedTriggerSettings = value;
+            }
+        }
+
+        private NotIsNotNorSettings? _notIsNotNorSettings;
+        public NotIsNotNorSettings NotIsNotNorSettings
+        {
+            get
+            {
+                _notIsNotNorSettings = GetSettings(_notIsNotNorSettings, "notIsNotNor");
+                return _notIsNotNorSettings.Value;
+            }
+            set
+            {
+                _notIsNotNorSettings = value;
             }
         }
 
@@ -327,6 +350,7 @@ namespace CK3BeagleServer.Core.Resources
             return "Configuration: {"
                 + $"[ {nameof(LargeUnitSettings)}: {LargeUnitSettings.ToString()} ], "
                 + $"[ {nameof(OvercomplicatedTriggerSettings)}: {OvercomplicatedTriggerSettings.ToString()} ], "
+                + $"[ {nameof(NotIsNotNorSettings)}: {NotIsNotNorSettings.ToString()} ], "
                 + $"[ {nameof(DuplicationSettings)}: {DuplicationSettings.ToString()} ], "
                 + $"[ {nameof(HiddenDependenciesSettings)}: {HiddenDependenciesSettings.ToString()} ], "
                 + $"[ {nameof(InconsistentIndentationSettings)}: {InconsistentIndentationSettings.ToString()} ], "
