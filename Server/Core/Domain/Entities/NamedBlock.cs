@@ -1,6 +1,5 @@
 ﻿using CK3Analyser.Core.Resources;
 using System;
-using System.Linq;
 
 namespace CK3Analyser.Core.Domain.Entities
 {

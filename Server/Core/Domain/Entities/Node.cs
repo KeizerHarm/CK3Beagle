@@ -113,6 +113,16 @@ namespace CK3Analyser.Core.Domain.Entities
         public NodeType NodeType = NodeType.NonStatement;
         public int SemanticId = -1;
         public SymbolType SymbolType = SymbolType.Undefined;
+        public SymbolType ParentSymbolType
+        {
+            get
+            {
+                if (SymbolType != SymbolType.Undefined)
+                    return SymbolType;
+
+                return Parent?.ParentSymbolType ?? SymbolType.Undefined;
+            }
+        }
 
         public abstract void Accept(IDomainVisitor visitor);
 

@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace CK3Analyser.Core
@@ -85,6 +86,70 @@ namespace CK3Analyser.Core
                 }
             }
         }
+
+        public static async Task ParallelForEachWithProgress<T>(
+            this IEnumerable<T> source,
+            Action<T> action,
+            Func<int, Task> log,
+            int progressStepPercent = 25,
+            ParallelOptions? parallelOptions = null)
+        {
+            var collection = source as ICollection<T> ?? source.ToList();
+            int total = collection.Count;
+            if (total == 0)
+                return;
+
+            // Trivial case, slowdown of writing becomes notable
+            if (total <= 20)
+            {
+                Parallel.ForEach(collection, parallelOptions ?? new ParallelOptions(), action);
+                await log(100);
+                return;
+            }
+
+            // No logging delegate provided
+            if (log == null)
+            {
+                Parallel.ForEach(collection, parallelOptions ?? new ParallelOptions(), action);
+                return;
+            }
+
+            int nextPercent = progressStepPercent;
+            int nextThreshold = total * nextPercent / 100;
+            int index = 0;
+
+            var logTasks = new List<Task>();
+            var lockObj = new object();
+
+            Parallel.ForEach(
+                collection,
+                parallelOptions ?? new ParallelOptions(),
+                item =>
+                {
+                    action(item);
+
+                    var current = Interlocked.Increment(ref index);
+
+                    if (current >= nextThreshold)
+                    {
+                        lock (lockObj)
+                        {
+                            // Recheck inside the lock
+                            if (current >= nextThreshold)
+                            {
+                                int percent = nextPercent;
+                                logTasks.Add(Task.Run(async () => await log(percent)));
+
+                                nextPercent = Math.Min(100, nextPercent + progressStepPercent);
+                                nextThreshold = total * nextPercent / 100;
+                            }
+                        }
+                    }
+                });
+
+            await Task.WhenAll(logTasks);
+        }
+
 
         public static string GenericToString(this object obj)
         {

@@ -1,5 +1,6 @@
 ﻿using CK3Analyser.Analysing.Logging;
 using CK3Analyser.Core.Comparing.Domain;
+using CK3Analyser.Core.Domain;
 using CK3Analyser.Core.Domain.Entities;
 using CK3Analyser.Core.Resources.DetectorSettings;
 using System.Collections.Generic;
@@ -18,8 +19,12 @@ namespace CK3Analyser.Analysing.Diff.Detectors
 
         public override void VisitAdded(Delta delta)
         {
-            //Don't even start on comments
-            if (delta.Node is Comment)
+            //Don't even start on comments/declarations
+            if (delta.Node is Comment || delta.Node is Declaration)
+                return;
+
+            //Don't consider non-statement additions
+            if (delta.Node.NodeType == NodeType.NonStatement)
                 return;
 
             //We need to find a sequence of additions, so check if this is the last addition, otherwise return

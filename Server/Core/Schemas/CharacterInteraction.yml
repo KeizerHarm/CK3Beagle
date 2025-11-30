@@ -7,6 +7,7 @@ CharacterInteraction:
  should_use_extra_icon: TRIGGERBLOCK
  ignore_recipient_recieve_cooldown: TRIGGERBLOCK
  is_shown: TRIGGERBLOCK
+ is_available: TRIGGERBLOCK
  is_valid_showing_failures_only: TRIGGERBLOCK
  is_valid: TRIGGERBLOCK
  has_valid_target_showing_failures_only: TRIGGERBLOCK

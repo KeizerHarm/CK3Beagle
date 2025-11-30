@@ -22,7 +22,7 @@ namespace CK3Analyser.Core.Parsing.SemanticPass
         ];
 
         private static readonly HashSet<string> keysThatAreProbablyTriggers = [
-            "limit", "trigger", "potential", "is_shown", "is_valid"
+            "limit", "trigger", "potential", "is_shown", "is_valid", "is_available"
         ];
 
         private static NodeType DeduceNodeType(Node node, string key, bool isBinExp)

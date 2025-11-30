@@ -79,17 +79,22 @@ namespace CK3Analyser.Core.Comparing
 
             var batchSize = 50;
             var fileBatches = files.Chunk(batchSize);
-            Parallel.ForEach(fileBatches, new ParallelOptions { MaxDegreeOfParallelism = Environment.ProcessorCount }, batch =>
-            {
-                var comparisonBuilder = comparisonMaker();
-                foreach (var localFilePath in batch)
+            await Helpers.ParallelForEachWithProgress(fileBatches, batch =>
                 {
-                    var vanillaFile = vanillaContext.Files[localFilePath];
-                    var modFile = modContext.Files[localFilePath];
-                    fileComparisons.Add(comparisonBuilder.BuildFileComparison(modFile, vanillaFile));
-                }
-            });
+                    var comparisonBuilder = comparisonMaker();
+                    foreach (var localFilePath in batch)
+                    {
+                        var vanillaFile = vanillaContext.Files[localFilePath];
+                        var modFile = modContext.Files[localFilePath];
+                        fileComparisons.Add(comparisonBuilder.BuildFileComparison(modFile, vanillaFile));
+                    }
+                },
+                percent => positiveProgressDelegate($"Diff analysis {percent}% complete"),
+                parallelOptions: new ParallelOptions { MaxDegreeOfParallelism = Environment.ProcessorCount }
+            );
+            await positiveProgressDelegate("Fully complete!");
             GlobalResources.Deltas = fileComparisons;
+            var compIWant = fileComparisons.Where(x => x.Node.File.RelativePath == "events\\stress_events\\stress_threshold_events.txt").FirstOrDefault();
         }
 
         public static void ClearMemoryUnusedForComparison(Context modContext)

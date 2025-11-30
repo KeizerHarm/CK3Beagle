@@ -1,4 +1,5 @@
-﻿using CK3Analyser.Core.Domain;
+﻿using CK3Analyser.Core.Comparing.Domain;
+using CK3Analyser.Core.Domain;
 using CK3Analyser.Core.Domain.Entities;
 using CK3Analyser.Core.Generated;
 using CK3Analyser.Core.Parsing.Antlr;
@@ -38,6 +39,28 @@ namespace CK3Analyser.Core.Comparing
             new SemanticPassHandler().ExecuteSemanticPass(newContext);
 
             return (vanillaParsed, modParsed);
+        }
+
+
+        public static Delta GetDelta(DeltaKind kind, params Delta[] children) =>
+            new() { Kind = kind, Children = children.Length != 0 ? [.. children] : null };
+
+        public static void AssertDeltasEqual(Delta expected, Delta actual)
+        {
+            Assert.Equal(expected.Kind, actual.Kind);
+            if (expected.Children == null)
+            {
+                Assert.Null(actual.Children);
+            }
+            else
+            {
+                Assert.NotNull(actual.Children);
+                Assert.Equal(expected.Children.Count, actual.Children.Count);
+                for (int i = 0; i < expected.Children.Count; i++)
+                {
+                    AssertDeltasEqual(expected.Children[i], actual.Children[i]);
+                }
+            }
         }
     }
 }

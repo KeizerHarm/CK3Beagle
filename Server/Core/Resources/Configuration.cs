@@ -332,6 +332,7 @@ namespace CK3Analyser.Core.Resources
                 + $"[ {nameof(InconsistentIndentationSettings)}: {InconsistentIndentationSettings.ToString()} ], "
                 + $"[ {nameof(MagicNumberSettings)}: {MagicNumberSettings.ToString()} ], "
                 + $"[ {nameof(KeywordAsScopeNameSettings)}: {KeywordAsScopeNameSettings.ToString()} ], "
+                + $"[ {nameof(UnencapsulatedAdditionSettings)}: {UnencapsulatedAdditionSettings.ToString()} ], "
                 + $"[ {nameof(ReadVanilla)}: {ReadVanilla.ToString()} ], "
                 + $"[ {nameof(VanillaFileHandling)}: {VanillaFileHandling.ToString()} ]"
                 + "}";

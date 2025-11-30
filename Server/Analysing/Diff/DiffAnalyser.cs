@@ -3,7 +3,6 @@ using CK3Analyser.Analysing.Logging;
 using CK3Analyser.Core;
 using CK3Analyser.Core.Comparing.Domain;
 using CK3Analyser.Core.Resources;
-using CK3Analyser.Core.Resources.DetectorSettings;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
@@ -31,18 +30,7 @@ namespace CK3Analyser.Analysing.Diff
 
         private static void SetDetectors(Logger logger, AnalysisDeltaVisitor visitor)
         {
-            visitor.Detectors.Add(
-                new UnencapsulatedAdditionDetector(logger,
-                    new UnencapsulatedAdditionSettings
-                    {
-                        Severity = Severity.Info,
-                        Threshold = 5,
-                        Enabled = true
-                    }
-                ));
-
-
-            if (GlobalResources.Configuration.KeywordAsScopeNameSettings.Enabled)
+            if (GlobalResources.Configuration.UnencapsulatedAdditionSettings.Enabled)
             {
                 visitor.Detectors.Add(new UnencapsulatedAdditionDetector(logger,
                     GlobalResources.Configuration.UnencapsulatedAdditionSettings));

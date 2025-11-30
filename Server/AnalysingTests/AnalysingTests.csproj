@@ -35,4 +35,10 @@
     </None>
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Diff\Detectors\Testcases\UnencapsulatedAddition\ExtendedTest_CharacterInteraction\" />
+    <Folder Include="Diff\Detectors\Testcases\UnencapsulatedAddition\ExtendedTest_Event\" />
+    <Folder Include="Diff\Detectors\Testcases\UnmarkedChange\Simple\" />
+  </ItemGroup>
+
 </Project>

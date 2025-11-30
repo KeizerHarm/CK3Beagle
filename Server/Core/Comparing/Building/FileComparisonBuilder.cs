@@ -35,7 +35,7 @@ namespace CK3Analyser.Core.Comparing.Building
                     return decl.Key;
 
                 return node.GetTrueHash().ToString();
-            });
+            }).ToList();
 
             var initialDelta = GetDelta(SourceFile, EditFile, initialMatches);
 
@@ -67,12 +67,12 @@ namespace CK3Analyser.Core.Comparing.Building
                 }
                 //We are in a sub-block; just need to filter by matches within this block
                 var relevantMatchedChildren = matchedChildren.Where(
-                        x => sourceBlock.Children.Contains(x.Item1) && editBlock.Children.Contains(x.Item2));
+                        x => sourceBlock.Children.Contains(x.Item1) && editBlock.Children.Contains(x.Item2)).ToList();
 
-                if (relevantMatchedChildren.Count() == 0)
-                {
-                    return Delta.Changed(edit, new ShadowNode(source));
-                }
+                //if (relevantMatchedChildren.Count() == 0)
+                //{
+                //    return Delta.Changed(edit, new ShadowNode(source));
+                //}
 
                 //If less than 1/3rd of children are matched, treat whole block as changed
                 //if (relevantMatchedChildren.Count() < Math.Max(noOfSourceChildren, noOfEditChildren) / 3f)
@@ -90,10 +90,11 @@ namespace CK3Analyser.Core.Comparing.Building
             return Delta.Changed(edit, new ShadowNode(source));
         }
 
-        private void HandleNodeChildren(Block sourceBlock, Block editBlock, IEnumerable<(Node, Node)> matchedChildren, IEnumerable<(Node, Node)> relevantMatchedChildren, Delta delta)
+        private void HandleNodeChildren(Block sourceBlock, Block editBlock, IEnumerable<(Node, Node)> matchedChildren, List<(Node, Node)> relevantMatchedChildren, Delta delta)
         {
             int noOfSourceChildren = sourceBlock.Children.Count;
             int noOfEditChildren = editBlock.Children.Count;
+            HandleCaseOfIdenticalKeys(sourceBlock, editBlock, relevantMatchedChildren);
             int sourceIndex = 0;
             int editIndex = 0;
             delta.Children = [];
@@ -140,17 +141,19 @@ namespace CK3Analyser.Core.Comparing.Building
                 //If source child is match but edit child not the pair, continue iterating with editChild
                 if (matchedChildrenDict.ContainsKey(sourceChild))
                 {
-                    delta.AddChild(Delta.Deleted(new ShadowNode(sourceChild)));
+                    delta.AddChild(Delta.Added(editChild));
                     editIndex++;
                     continue;
                 }
                 //If edit child is part of match but source child not the pair, continue iterating with sourceChild
                 if (matchedChildrenDictReversed.ContainsKey(editChild))
                 {
-                    delta.AddChild(Delta.Added(sourceChild));
+                    delta.AddChild(Delta.Deleted(new ShadowNode(sourceChild)));
                     sourceIndex++;
                     continue;
                 }
+
+                //Experimental fallback - if neither child is part of a match, but they share a key, treat them as matches anyway
 
                 //If neither child is part of match, declare and continue iterating with both.
                 delta.AddChild(Delta.Deleted(new ShadowNode(sourceChild)));
@@ -161,6 +164,72 @@ namespace CK3Analyser.Core.Comparing.Building
 
             if (delta.Children.All(x => x.Kind == DeltaKind.Unchanged))
                 delta.Children = null;
+        }
+        //If both sourceBlock and editBlock's children's keys are equal and in the same order, treat them all as matched.
+        private void HandleCaseOfIdenticalKeys(Block sourceBlock, Block editBlock, List<(Node, Node)> matchedChildren)
+        {
+            List<string> sourceKeys = [];
+            foreach (var sourceChild in sourceBlock.Children)
+            {
+                if (sourceChild is NamedBlock namedBlock)
+                {
+                    sourceKeys.Add(namedBlock.Key);
+                }
+                if (sourceChild is BinaryExpression binExp)
+                {
+                    sourceKeys.Add(binExp.Key);
+                }
+            }
+            List<string> editKeys = [];
+            foreach (var editChild in editBlock.Children)
+            {
+                if (editChild is NamedBlock namedBlock)
+                {
+                    sourceKeys.Add(namedBlock.Key);
+                }
+                if (editChild is BinaryExpression binExp)
+                {
+                    sourceKeys.Add(binExp.Key);
+                }
+            }
+
+            if (sourceKeys.SequenceEqual(editKeys))
+            {
+                foreach (var sourceChild in sourceBlock.Children.OfType<BinaryExpression>())
+                {
+                    if (matchedChildren.Any(x => x.Item1 == sourceChild))
+                        continue;
+
+                    foreach (var editChild in editBlock.Children.OfType<BinaryExpression>())
+                    {
+                        if (matchedChildren.Any(x => x.Item2 == editChild))
+                            continue;
+
+                        if (sourceChild.Key == editChild.Key)
+                        {
+                            matchedChildren.Add((sourceChild, editChild));
+                            continue;
+                        }
+                    }
+                }
+                foreach (var sourceChild in sourceBlock.Children.OfType<NamedBlock>())
+                {
+                    if (matchedChildren.Any(x => x.Item1 == sourceChild))
+                        continue;
+
+                    foreach (var editChild in editBlock.Children.OfType<NamedBlock>())
+                    {
+                        if (matchedChildren.Any(x => x.Item2 == editChild))
+                            continue;
+
+                        if (sourceChild.Key == editChild.Key)
+                        {
+                            matchedChildren.Add((sourceChild, editChild));
+                            continue;
+                        }
+                    }
+                }
+            }
         }
 
         private bool BlockPropertiesAreSame(Block sourceBlock, Block editBlock)

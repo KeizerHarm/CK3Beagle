@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks.Dataflow;
 
 namespace CK3Analyser.Core.Comparing.Building
 {
@@ -79,7 +80,7 @@ namespace CK3Analyser.Core.Comparing.Building
 
             void addIfLeaf(Node node)
             {
-                if (node is not Block _)
+                if (node is not Block _ || ((Block)node).Children.Count == 0)
                 {
                     leaves.Add(node);
                 }
@@ -94,6 +95,9 @@ namespace CK3Analyser.Core.Comparing.Building
             if (sourceNode.GetType() != editNode.GetType())
                 return false;
 
+            if (sourceNode.ParentSymbolType != editNode.ParentSymbolType)
+                return false;
+
             if (editNode is Block editBlock)
                 return BlockMatches(sourceNode as Block, editBlock);
 
@@ -104,6 +108,9 @@ namespace CK3Analyser.Core.Comparing.Building
         {
             similarity = 0;
             if (sourceNode.GetType() != editNode.GetType())
+                return false;
+
+            if (sourceNode.ParentSymbolType != editNode.ParentSymbolType)
                 return false;
 
             if (editNode is Comment editComment)
@@ -118,14 +125,49 @@ namespace CK3Analyser.Core.Comparing.Building
             {
                 //Consider bin exps equal if keys are equal
                 //Test to see if it produces sane results
-                return ((BinaryExpression)sourceNode).Key == editBinExp.Key;
+                if (((BinaryExpression)sourceNode).Key == editBinExp.Key)
+                {
+                    similarity = 1;
+                    return true;
+                }
+                return false;
             }
+
+            //Blocks can be leaves if they have no children
+            if (editNode is Declaration editDeclaration)
+            {
+                if (((Declaration)sourceNode).Key == editDeclaration.Key
+                    && ((Declaration)sourceNode).DeclarationType == editDeclaration.DeclarationType)
+                {
+                    similarity = 1;
+                    return true;
+                }
+                return false;
+            }
+            if (editNode is AnonymousBlock editAnonBlock)
+            {
+                return false;
+            }
+            if (sourceNode is NamedBlock sourceNamedBlock && editNode is NamedBlock editNamedBlock)
+            {
+                if (sourceNamedBlock.Key == editNamedBlock.Key)
+                {
+                    similarity = 1;
+                    return true;
+                }
+                return false;
+            }
+
+
             throw new ArgumentException("Node type not recognised!");
         }
 
         public bool BlockMatches(Block sourceBlock, Block editBlock)
         {
             if (sourceBlock.GetType() != editBlock.GetType())
+                return false;
+
+            if (sourceBlock.ParentSymbolType != editBlock.ParentSymbolType)
                 return false;
 
             if (editBlock is Declaration editDeclaration)
@@ -137,10 +179,18 @@ namespace CK3Analyser.Core.Comparing.Building
             {
                 return ChildrenMatch(sourceBlock, editAnonBlock);
             }
-            if (editBlock is NamedBlock editNamedBlock)
+            if (sourceBlock is NamedBlock sourceNamedBlock && editBlock is NamedBlock editNamedBlock)
             {
-                return ((NamedBlock)sourceBlock).Key == editNamedBlock.Key
-                    && ChildrenMatch(sourceBlock, editNamedBlock);
+                if (sourceNamedBlock.Key != editNamedBlock.Key)
+                    return false;
+
+                var sourceDiscriminator = GetDiscriminator(sourceNamedBlock);
+
+                if (sourceDiscriminator != null && sourceDiscriminator == GetDiscriminator(editNamedBlock))
+                {
+                    return ChildrenMatch(sourceBlock, editNamedBlock, 0);
+                }
+                return ChildrenMatch(sourceBlock, editNamedBlock);
             }
             if (editBlock is ScriptFile editFile)
             {
@@ -149,17 +199,42 @@ namespace CK3Analyser.Core.Comparing.Building
             throw new ArgumentException("Node type not recognised!");
         }
 
-        private bool ChildrenMatch(Block sourceBlock, Block editBlock)
+        private static HashSet<string> AlwaysDiscriminators = [
+            "save_scope_as", "save_temporary_scope_as"
+        ];
+        private static Dictionary<string, string> DiscriminatorMap = new()
+        {
+            { "triggered_desc", "desc" },
+            { "custom_description", "text" },
+            { "custom_description_no_bullet", "text" }
+        };
+
+        private object GetDiscriminator(NamedBlock block)
+        {
+            DiscriminatorMap.TryGetValue(block.Key, out string firstKey);
+            HashSet<string> keysToLookFor =
+                firstKey != null
+                ? [firstKey, ..AlwaysDiscriminators]
+                : AlwaysDiscriminators;
+
+            return block.Children.OfType<BinaryExpression>().Where(x => keysToLookFor.Contains(x.Key))
+                .Select(x => x.Value).ToArray();
+        }
+
+        private bool ChildrenMatch(Block sourceBlock, Block editBlock, float threshold = -1)
         {
             int commonNodes = GetSharedNodes(sourceBlock, editBlock);
             var maxNoOfNodes = Math.Max(sourceBlock.Children.Count, editBlock.Children.Count);
 
-            var maxSize = Math.Max(sourceBlock.GetSize(), editBlock.GetSize());
-            if (maxSize <= 4)
+            if (threshold == -1)
             {
-                return (float)commonNodes / maxNoOfNodes >= 0.4;
+                var maxSize = Math.Max(sourceBlock.GetSize(), editBlock.GetSize());
+                threshold =
+                    maxSize <= 4
+                    ? 0.4f
+                    : 0.6f;
             }
-            return (float)commonNodes / maxNoOfNodes >= 0.6;
+            return (float)commonNodes / maxNoOfNodes >= threshold;
         }
 
         private int GetSharedNodes(Block sourceBlock, Block editBlock)

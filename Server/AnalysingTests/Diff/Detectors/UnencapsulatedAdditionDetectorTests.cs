@@ -1,6 +1,7 @@
 ﻿using CK3Analyser.Analysing.Logging;
 using CK3Analyser.Core.Comparing.Domain;
 using CK3Analyser.Core.Resources;
+using CK3Analyser.Core.Generated;
 using CK3Analyser.Core.Resources.DetectorSettings;
 
 namespace CK3Analyser.Analysing.Diff.Detectors
@@ -12,7 +13,7 @@ namespace CK3Analyser.Analysing.Diff.Detectors
         {
             //arrange
             var logger = new Logger();
-            Delta testcase = GetTestCase("UnencapsulatedAddition/Simple");
+            Delta testcase = GetTestCase("UnencapsulatedAddition/Simple", DeclarationType.ScriptedTrigger);
             var visitor = GetDetector(logger, severity: Severity.Critical, threshold: 5);
 
             //act
@@ -21,12 +22,13 @@ namespace CK3Analyser.Analysing.Diff.Detectors
             //assert
             Assert.Single(logger.LogEntries, x => x.Smell == Smell.UnencapsulatedAddition);
         }
+
         [Fact]
         public void DetectsBlockInsert()
         {
             //arrange
             var logger = new Logger();
-            Delta testcase = GetTestCase("UnencapsulatedAddition/Block");
+            Delta testcase = GetTestCase("UnencapsulatedAddition/Block", DeclarationType.ScriptedTrigger);
             var visitor = GetDetector(logger, severity: Severity.Critical, threshold: 5);
 
             //act
@@ -34,6 +36,36 @@ namespace CK3Analyser.Analysing.Diff.Detectors
 
             //assert
             Assert.Single(logger.LogEntries, x => x.Smell == Smell.UnencapsulatedAddition);
+        }
+
+        [Fact]
+        public void ExtendedTest_CharacterInteraction()
+        {
+            //arrange
+            var logger = new Logger();
+            Delta testcase = GetTestCase("UnencapsulatedAddition/ExtendedTest_CharacterInteraction", DeclarationType.CharacterInteraction);
+            var visitor = GetDetector(logger, severity: Severity.Critical, threshold: 5);
+
+            //act
+            visitor.VisitAny(testcase);
+
+            //assert
+            Assert.Empty(logger.LogEntries);
+        }
+
+        [Fact]
+        public void ExtendedTest_Event()
+        {
+            //arrange
+            var logger = new Logger();
+            Delta testcase = GetTestCase("UnencapsulatedAddition/ExtendedTest_Event", DeclarationType.Event);
+            var visitor = GetDetector(logger, severity: Severity.Critical, threshold: 5);
+
+            //act
+            visitor.VisitAny(testcase);
+
+            //assert
+            Assert.Equal(6, logger.LogEntries.Count(x => x.Smell == Smell.UnencapsulatedAddition));
         }
 
         private static AnalysisDeltaVisitor GetDetector(Logger logger,

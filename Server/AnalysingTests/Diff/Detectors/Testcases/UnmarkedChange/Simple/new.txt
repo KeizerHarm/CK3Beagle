@@ -1,0 +1,9 @@
+test = {
+	aaa = yes
+
+	#MODPREFIX got properly marked
+	aaa = no
+
+	#Did not get properly marked
+	bbb = no
+}
