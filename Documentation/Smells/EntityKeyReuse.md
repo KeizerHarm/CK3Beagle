@@ -1,4 +1,4 @@
-# Not is Not Nor
+# Entity Key Reuse
 
 It is possible to reuse keys for entity declarations; the CK3 architecture supports overrides of individual entities. But if that happens within a project, then careless copy-pasting is usually at fault, and the consequence is that someone working on one version is unaware that the second version is overriding it.
 
