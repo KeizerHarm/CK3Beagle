@@ -9,7 +9,7 @@ This smell is highly configurable. Each of the cases below can be given their ow
 If something is forbidden (like the use of `root`), when can it be allowed?
 
 #### Allowed if in Name
-If the word `root`, `prev`, the scope's name or the variable's name, are part of the macro's name, they will be allowed.
+If the word is part of the macro's name, they will be allowed.
 <pre>
 pope_likes_root = {
 	title:k_papacy.holder = {
@@ -22,7 +22,7 @@ pope_likes_root = {
 </pre>
 
 #### Allowed if in Comment
-If the word `root`, `prev`, the scope's name or the variable's name, are part of a (documentation) comment preceding the macro, they can be allowed.
+If the word is part of a (documentation) comment preceding the macro, they can be allowed.
 <pre>
 #Uses root
 pope_likes_you = {
@@ -47,7 +47,7 @@ scripted_trigger pope_likes_you = {
 	}
 }
 </pre>
-
+<!-- 
 #### Allowed if in White List
 Only relevant for the cases of Saved Scopes and Variables. You can document lists of scope names and variable names that you trust to be properly set up everywhere they are called from. In the example below, if we add `dragonborn` to the whitelist for saved scopes, the smell will not trigger.
 <pre>
@@ -59,7 +59,7 @@ scripted_trigger pope_likes_dragonborn = {
 		}
 	}
 }
-</pre>
+</pre> -->
 
 ## `HD.1`: Use of Root
 `root` is a link to the scope for which the current effect chain started; for example, the character for which the event fired. As such, a macro using root is dependend on a larger context than just where it is invoked. Refactor, or use a parameter instead.
@@ -126,7 +126,7 @@ hates_my_guts_trigger = {
 	</tr>
   </tbody>
 </table>
-
+<!-- 
 ## `HD.3`: Use of Saved Scope
 Saved scopes, `scope:scopename`, are set at some point in the preceding effect chain with a `save_scope_as` effect, or sometimes they are provided by code. A scripted trigger or effect using these relies on that to have gone well. A parameter refactor makes the macro independent, and also more flexible - if you have the scope available in a context but saved under a different name, you don't have to re-save it under the name the macro needs.
 
@@ -201,4 +201,4 @@ if = {
 	}
 	...
 }
-</pre>
+</pre> -->

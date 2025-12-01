@@ -247,66 +247,6 @@
           "default": false,
           "markdownDescription": "Is using prev in a macro allowed if the macro is in an event file?"
         },
-        "ck3_beagle.hiddenDependencies.useOfSavedScope.severity": {
-          "type": "number",
-          "enum": [0, 1, 2, 3],
-          "enumItemLabels": ["Ignored", "Info", "Warning", "Critical"],
-          "default": 1,
-          "markdownDescription": "What is the severity of the smell **Overcomplicated Trigger: Use of Saved Scope**?"
-        },
-        "ck3_beagle.hiddenDependencies.useOfSavedScope.allowedIfInComment": {
-          "type": "boolean",
-          "default": true,
-          "markdownDescription": "Is using a saved scope in a macro allowed if a preceding comment uses the name of the saved scope?"
-        },
-        "ck3_beagle.hiddenDependencies.useOfSavedScope.allowedIfInName": {
-          "type": "boolean",
-          "default": false,
-          "markdownDescription": "Is using a saved scope in a macro allowed if the macro's name uses the name of the saved scope?"
-        },
-        "ck3_beagle.hiddenDependencies.useOfSavedScope.allowedIfInEventFile": {
-          "type": "boolean",
-          "default": false,
-          "markdownDescription": "Is using a saved scope in a macro allowed if the macro is in an event file?"
-        },
-        "ck3_beagle.hiddenDependencies.useOfSavedScope.whitelist": {
-          "type": "array",
-          "items": {
-            "type": "string"
-          },
-          "default": [],
-          "markdownDescription": "Which saved scope names are always allowed in macros?"
-        },
-        "ck3_beagle.hiddenDependencies.useOfVariable.severity": {
-          "type": "number",
-          "enum": [0, 1, 2, 3],
-          "enumItemLabels": ["Ignored", "Info", "Warning", "Critical"],
-          "default": 1,
-          "markdownDescription": "What is the severity of the smell **Overcomplicated Trigger: Use of Variable**?"
-        },
-        "ck3_beagle.hiddenDependencies.useOfVariable.allowedIfInComment": {
-          "type": "boolean",
-          "default": true,
-          "markdownDescription": "Is using a variable in a macro allowed if a preceding comment uses the name of the saved scope?"
-        },
-        "ck3_beagle.hiddenDependencies.useOfVariable.allowedIfInName": {
-          "type": "boolean",
-          "default": false,
-          "markdownDescription": "Is using a variable in a macro allowed if the macro's name uses the name of the saved scope?"
-        },
-        "ck3_beagle.hiddenDependencies.useOfVariable.allowedIfInEventFile": {
-          "type": "boolean",
-          "default": false,
-          "markdownDescription": "Is using a variable in a macro allowed if the macro is in an event file?"
-        },
-        "ck3_beagle.hiddenDependencies.useOfVariable.whitelist": {
-          "type": "array",
-          "items": {
-            "type": "string"
-          },
-          "default": [],
-          "markdownDescription": "Which variable names are always allowed in macros?"
-        },
 
         "ck3_beagle.inconsistentIndentation.enabled": {
           "type": "boolean",
