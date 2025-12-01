@@ -12,7 +12,7 @@ Mods are written in the Paradox Scripting Language (dubbed PSL by me as it has n
 
 PSL is a large language, and between its many features and specifiable entities are many rule inconsistencies and eccentricities of behaviour. The largest mods are huge and even the devoted work of the teams maintaining them can sometimes leave areas of script less well than would be ideal. Often, every feature in a good mod will *work*, it will have been tested, but parsing and maintaining the script will take more time than it needs.
 
-Smells are examples of anti-patterns in script; they are ways to program in an unwieldy, less maintainable way. A good example is Overcomplicated Trigger; see _here_ for its variations.
+Smells are examples of anti-patterns in script; they are ways to program in an unwieldy, less maintainable way. A good example is Overcomplicated Trigger; see [here](https://github.com/KeizerHarm/CK3Beagle/blob/main/Documentation/Smells/OvercomplicatedTrigger.md) for its variations.
 
 ## How does the tool work?
 
