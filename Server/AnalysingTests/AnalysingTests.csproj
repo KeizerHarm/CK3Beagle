@@ -36,6 +36,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Folder Include="Common\Detectors\Testcases\MisuseOfThis\" />
     <Folder Include="Diff\Detectors\Testcases\UnencapsulatedAddition\ExtendedTest_CharacterInteraction\" />
     <Folder Include="Diff\Detectors\Testcases\UnencapsulatedAddition\ExtendedTest_Event\" />
     <Folder Include="Diff\Detectors\Testcases\UnmarkedChange\Simple\" />

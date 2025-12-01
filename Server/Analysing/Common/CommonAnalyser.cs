@@ -75,6 +75,11 @@ namespace CK3BeagleServer.Analysing.Common
                 visitor.Detectors.Add(new EntityKeyReuseDetector(logger, context,
                     GlobalResources.Configuration.EntityKeyReuseSettings));
             }
+            if (GlobalResources.Configuration.MisuseOfThisSettings.Enabled)
+            {
+                visitor.Detectors.Add(new MisuseOfThisDetector(logger, context,
+                    GlobalResources.Configuration.MisuseOfThisSettings));
+            }
         }
     }
 }

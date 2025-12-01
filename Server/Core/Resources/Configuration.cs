@@ -224,6 +224,13 @@ namespace CK3BeagleServer.Core.Resources
                         SameType_Severity = Severity.Critical,
                         DifferentType_Severity = Severity.Warning
                     };
+
+                MisuseOfThisSettings =
+                    new MisuseOfThisSettings
+                    {
+                        Enabled = true,
+                        Severity = Severity.Warning
+                    };
             }
         }
 
@@ -367,6 +374,20 @@ namespace CK3BeagleServer.Core.Resources
             }
         }
 
+        private MisuseOfThisSettings? _misuseOfThisSettings;
+        public MisuseOfThisSettings MisuseOfThisSettings
+        {
+            get
+            {
+                _misuseOfThisSettings = GetSettings(_misuseOfThisSettings, "misuseOfThis");
+                return _misuseOfThisSettings.Value;
+            }
+            set
+            {
+                _misuseOfThisSettings = value;
+            }
+        }
+
         public override string ToString()
         {
             return "Configuration: {"
@@ -379,6 +400,8 @@ namespace CK3BeagleServer.Core.Resources
                 + $"[ {nameof(MagicNumberSettings)}: {MagicNumberSettings.ToString()} ], "
                 + $"[ {nameof(KeywordAsScopeNameSettings)}: {KeywordAsScopeNameSettings.ToString()} ], "
                 + $"[ {nameof(UnencapsulatedAdditionSettings)}: {UnencapsulatedAdditionSettings.ToString()} ], "
+                + $"[ {nameof(EntityKeyReuseSettings)}: {EntityKeyReuseSettings.ToString()} ], "
+                + $"[ {nameof(MisuseOfThisSettings)}: {MisuseOfThisSettings.ToString()} ], "
                 + $"[ {nameof(ReadVanilla)}: {ReadVanilla.ToString()} ], "
                 + $"[ {nameof(VanillaFileHandling)}: {VanillaFileHandling.ToString()} ]"
                 + "}";

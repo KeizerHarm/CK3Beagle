@@ -481,21 +481,34 @@
         "ck3_beagle.entityKeyReuse.enabled": {
           "type": "boolean",
           "default": true,
-          "markdownDescription": "Is checking for the smell **Unencapsulated Addition** enabled?"
+          "markdownDescription": "Is checking for the smell **Entity Key Reuse** enabled?"
         },
         "ck3_beagle.entityKeyReuse.sameType.severity": {
           "type": "number",
           "enum": [0, 1, 2, 3],
           "enumItemLabels": ["Ignored", "Info", "Warning", "Critical"],
           "default": 3,
-          "markdownDescription": "What is the severity of the smell **Unencapsulated Addition: Same Type**?"
+          "markdownDescription": "What is the severity of the smell **Entity Key Reuse: Same Type**?"
         },
         "ck3_beagle.entityKeyReuse.differentType.severity": {
           "type": "number",
           "enum": [0, 1, 2, 3],
           "enumItemLabels": ["Ignored", "Info", "Warning", "Critical"],
           "default": 2,
-          "markdownDescription": "What is the severity of the smell **Unencapsulated Addition: Different Type**?"
+          "markdownDescription": "What is the severity of the smell **Entity Key Reuse: Different Type**?"
+        },
+
+        "ck3_beagle.misuseOfThis.enabled": {
+          "type": "boolean",
+          "default": true,
+          "markdownDescription": "Is checking for the smell **Misuse of This** enabled?"
+        },
+        "ck3_beagle.misuseOfThis.severity": {
+          "type": "number",
+          "enum": [0, 1, 2, 3],
+          "enumItemLabels": ["Ignored", "Info", "Warning", "Critical"],
+          "default": 3,
+          "markdownDescription": "What is the severity of the smell **Misuse of This**?"
         }
       }
     },

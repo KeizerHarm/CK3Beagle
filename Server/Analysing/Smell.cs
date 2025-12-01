@@ -38,7 +38,9 @@ namespace CK3BeagleServer.Analysing
         UnencapsulatedAddition,
 
         EntityKeyReused_SameType,
-        EntityKeyReused_DifferentType
+        EntityKeyReused_DifferentType,
+
+        MisuseOfThis
     }
 
     public static class SmellExtensions
@@ -105,6 +107,9 @@ namespace CK3BeagleServer.Analysing
                     return "EKR.1";
                 case Smell.EntityKeyReused_DifferentType:
                     return "EKR.2";
+
+                case Smell.MisuseOfThis:
+                    return "MT.1";
 
                 default:
                     throw new ArgumentException("What is that smell, that smelly smell...?");
