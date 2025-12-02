@@ -30,7 +30,12 @@ namespace CK3BeagleServer.Analysing.Common.Detectors
             if (!binExpChildren.Any())
                 return;
 
-            var parametersWithScopeLinks = binExpChildren.Where(x => GlobalResources.EVENTTARGETS.Contains(x.Value) && x.Value.ToLower() != "root");
+            var parametersWithScopeLinks = binExpChildren.Where(x => 
+                GlobalResources.EVENTTARGETS.Contains(x.Value) 
+                && x.Value.ToLower() != "root"
+                && x.Value.ToLower() != "yes"
+                && x.Value.ToLower() != "no"
+                );
             if (!parametersWithScopeLinks.Any())
                 return;
 

@@ -449,6 +449,19 @@
           "enumItemLabels": ["Ignored", "Info", "Warning", "Critical"],
           "default": 3,
           "markdownDescription": "What is the severity of the smell **Misuse of This**?"
+        },
+
+        "ck3_beagle.linkAsParameter.enabled": {
+          "type": "boolean",
+          "default": true,
+          "markdownDescription": "Is checking for the smell **Link as Parameter** enabled?"
+        },
+        "ck3_beagle.linkAsParameter.severity": {
+          "type": "number",
+          "enum": [0, 1, 2, 3],
+          "enumItemLabels": ["Ignored", "Info", "Warning", "Critical"],
+          "default": 3,
+          "markdownDescription": "What is the severity of the smell **Link as Parameter**?"
         }
       }
     },
