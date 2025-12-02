@@ -6,7 +6,7 @@ Note that `this ?= scope:somescope`, is not considered a misuse. That is because
 ## Configuration
 Only the Severity of this smell is configurable.
 
-## MT.1
+## `MT.1`: Misuse of This
 <table>
   <thead>
     <tr>
