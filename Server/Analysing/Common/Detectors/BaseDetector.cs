@@ -27,6 +27,5 @@ namespace CK3BeagleServer.Analysing.Common.Detectors
         public virtual void VisitAnonymousToken(AnonymousToken anonymousToken) { }
         public virtual void VisitComment(Comment comment) { }
         public virtual void Finish() { }
-
     }
 }

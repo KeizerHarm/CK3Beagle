@@ -1,5 +1,6 @@
 ﻿using CK3BeagleServer.Core.Domain.Entities;
 using CK3BeagleServer.Core.Generated;
+using CK3BeagleServer.Core.Resources;
 using System;
 using System.Collections.Generic;
 
@@ -47,6 +48,14 @@ namespace CK3BeagleServer.Core.Domain
 
         private void AddDeclaration(Declaration declaration)
         {
+            if (declaration.DeclarationType == DeclarationType.ScriptedTrigger)
+            {
+                GlobalResources.AddTriggers([declaration.Key]);
+            }
+            if (declaration.DeclarationType == DeclarationType.ScriptedEffect)
+            {
+                GlobalResources.AddEffects([declaration.Key]);
+            }
             var array = Declarations[(int)declaration.DeclarationType];
             if (array.TryGetValue(declaration.Key, out Declaration existingCopy))
             {

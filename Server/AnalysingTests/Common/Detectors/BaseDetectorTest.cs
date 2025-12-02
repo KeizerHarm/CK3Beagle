@@ -15,10 +15,9 @@ namespace CK3BeagleServer.Analysing.Common.Detectors
         {
             var stringToParse = File.ReadAllText(Path.Combine(AppContext.BaseDirectory, "Common/Detectors/Testcases", caseName + ".txt"));
 
-            GlobalResources.AddEffects(["add_gold", "xxx", "yyy", "zzz"]);
+            GlobalResources.AddEffects(["add_gold", "xxx", "yyy", "zzz", "save_scope_as", "save_temporary_scope_as"]);
             GlobalResources.AddTriggers(["has_gold", "or", "and", "nand", "nor", "not", "aaa", "bbb", "ccc", "ddd"]);
             GlobalResources.AddEventTargets(["father", "link", "link1", "link2"]);
-            GlobalResources.Lock();
             GlobalResources.SymbolTable = new SymbolTable();
             GlobalResources.StringTable = new StringTable();
 
@@ -29,6 +28,7 @@ namespace CK3BeagleServer.Analysing.Common.Detectors
             var parsedScriptFile = new ScriptFile(context, "", expDeclarationType, stringToParse);
             parser.ParseFile(parsedScriptFile);
             context.AddFile(parsedScriptFile);
+            GlobalResources.Lock();
             new SemanticPassHandler().ExecuteSemanticPass(context);
             return parsedScriptFile;
         }

@@ -1,4 +1,5 @@
 ﻿using CK3BeagleServer.Core.Generated;
+using CK3BeagleServer.Core.Resources;
 using System;
 using System.Collections.Generic;
 

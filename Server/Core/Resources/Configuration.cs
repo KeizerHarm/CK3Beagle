@@ -231,6 +231,13 @@ namespace CK3BeagleServer.Core.Resources
                         Enabled = true,
                         Severity = Severity.Warning
                     };
+
+                LinkAsParameterSettings =
+                    new LinkAsParameterSettings
+                    {
+                        Enabled = true,
+                        Severity = Severity.Critical
+                    };
             }
         }
 
@@ -388,22 +395,37 @@ namespace CK3BeagleServer.Core.Resources
             }
         }
 
+        private LinkAsParameterSettings? _linkAsParameterSettings;
+        public LinkAsParameterSettings LinkAsParameterSettings
+        {
+            get
+            {
+                _linkAsParameterSettings = GetSettings(_linkAsParameterSettings, "linkAsParameter");
+                return _linkAsParameterSettings.Value;
+            }
+            set
+            {
+                _linkAsParameterSettings = value;
+            }
+        }
+
         public override string ToString()
         {
             return "Configuration: {"
-                + $"[ {nameof(LargeUnitSettings)}: {LargeUnitSettings.ToString()} ], "
-                + $"[ {nameof(OvercomplicatedTriggerSettings)}: {OvercomplicatedTriggerSettings.ToString()} ], "
-                + $"[ {nameof(NotIsNotNorSettings)}: {NotIsNotNorSettings.ToString()} ], "
-                + $"[ {nameof(DuplicationSettings)}: {DuplicationSettings.ToString()} ], "
-                + $"[ {nameof(HiddenDependenciesSettings)}: {HiddenDependenciesSettings.ToString()} ], "
-                + $"[ {nameof(InconsistentIndentationSettings)}: {InconsistentIndentationSettings.ToString()} ], "
-                + $"[ {nameof(MagicNumberSettings)}: {MagicNumberSettings.ToString()} ], "
-                + $"[ {nameof(KeywordAsScopeNameSettings)}: {KeywordAsScopeNameSettings.ToString()} ], "
-                + $"[ {nameof(UnencapsulatedAdditionSettings)}: {UnencapsulatedAdditionSettings.ToString()} ], "
-                + $"[ {nameof(EntityKeyReuseSettings)}: {EntityKeyReuseSettings.ToString()} ], "
-                + $"[ {nameof(MisuseOfThisSettings)}: {MisuseOfThisSettings.ToString()} ], "
-                + $"[ {nameof(ReadVanilla)}: {ReadVanilla.ToString()} ], "
-                + $"[ {nameof(VanillaFileHandling)}: {VanillaFileHandling.ToString()} ]"
+                + $"[ {nameof(LargeUnitSettings)}: {LargeUnitSettings} ], "
+                + $"[ {nameof(OvercomplicatedTriggerSettings)}: {OvercomplicatedTriggerSettings} ], "
+                + $"[ {nameof(NotIsNotNorSettings)}: {NotIsNotNorSettings} ], "
+                + $"[ {nameof(DuplicationSettings)}: {DuplicationSettings} ], "
+                + $"[ {nameof(HiddenDependenciesSettings)}: {HiddenDependenciesSettings} ], "
+                + $"[ {nameof(InconsistentIndentationSettings)}: {InconsistentIndentationSettings} ], "
+                + $"[ {nameof(MagicNumberSettings)}: {MagicNumberSettings} ], "
+                + $"[ {nameof(KeywordAsScopeNameSettings)}: {KeywordAsScopeNameSettings} ], "
+                + $"[ {nameof(UnencapsulatedAdditionSettings)}: {UnencapsulatedAdditionSettings} ], "
+                + $"[ {nameof(EntityKeyReuseSettings)}: {EntityKeyReuseSettings} ], "
+                + $"[ {nameof(MisuseOfThisSettings)}: {MisuseOfThisSettings} ], "
+                + $"[ {nameof(LinkAsParameterSettings)}: {LinkAsParameterSettings} ], "
+                + $"[ {nameof(ReadVanilla)}: {ReadVanilla} ], "
+                + $"[ {nameof(VanillaFileHandling)}: {VanillaFileHandling} ]"
                 + "}";
         }
 

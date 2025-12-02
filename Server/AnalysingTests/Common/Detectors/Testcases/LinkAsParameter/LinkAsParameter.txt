@@ -1,0 +1,53 @@
+using_effect = {
+	#Remedied param usage
+	effect_that_remedies_by_saving_as_scope = { PARAM = father }
+	effect_that_remedies_by_saving_as_temp_scope = { PARAM = father }
+	effect_that_remedies_by_using_only_concatenated = { PARAM = father }
+
+	#These two are smelly
+	effect_that_remedies_but_then_uses_unsafely_anyway = { PARAM = father }
+	effect_that_doesnt_remedy = { PARAM = father }
+
+	#Not params being passed
+	effect_that_remedies_by_saving_as_scope = { PARAM = scope:father }
+	effect_that_remedies_by_saving_as_temp_scope = { PARAM = scope:father }
+	effect_that_remedies_by_using_only_concatenated = { PARAM = scope:father }
+	effect_that_remedies_but_then_uses_unsafely_anyway = { PARAM = scope:father }
+	effect_that_doesnt_remedy = { PARAM = scope:father }
+}
+
+
+effect_that_remedies_by_saving_as_scope = {
+	$PARAM$ = { save_scope_as = param }
+	scope:param = {
+		add_gold = 25
+	}
+}
+
+effect_that_remedies_by_saving_as_temp_scope = {
+	$PARAM$ = { save_temporary_scope_as = param }
+	scope:param = {
+		add_gold = 25
+	}
+}
+
+effect_that_remedies_by_using_only_concatenated = {
+	save_scope_value_as = {
+		name = param
+		value = flag:$PARAM$
+	}
+}
+
+effect_that_remedies_but_then_uses_unsafely_anyway = {
+	$PARAM$ = { save_temporary_scope_as = param }
+	add_opinion = {
+		target = $PARAM$
+		value = 25
+	}
+}
+
+effect_that_doesnt_remedy = {
+	$PARAM$ = {
+		add_gold = 25
+	}
+}

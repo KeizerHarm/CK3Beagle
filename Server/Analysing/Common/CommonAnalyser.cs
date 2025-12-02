@@ -80,6 +80,11 @@ namespace CK3BeagleServer.Analysing.Common
                 visitor.Detectors.Add(new MisuseOfThisDetector(logger, context,
                     GlobalResources.Configuration.MisuseOfThisSettings));
             }
+            if (GlobalResources.Configuration.LinkAsParameterSettings.Enabled)
+            {
+                visitor.Detectors.Add(new LinkAsParameterDetector(logger, context,
+                    GlobalResources.Configuration.LinkAsParameterSettings));
+            }
         }
     }
 }

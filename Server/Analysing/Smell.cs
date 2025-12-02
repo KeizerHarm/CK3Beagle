@@ -40,7 +40,9 @@ namespace CK3BeagleServer.Analysing
         EntityKeyReused_SameType,
         EntityKeyReused_DifferentType,
 
-        MisuseOfThis
+        MisuseOfThis,
+
+        LinkAsParameter
     }
 
     public static class SmellExtensions
@@ -111,6 +113,9 @@ namespace CK3BeagleServer.Analysing
                 case Smell.MisuseOfThis:
                     return "MT.1";
 
+                case Smell.LinkAsParameter:
+                    return "LP.1";
+
                 default:
                     throw new ArgumentException("What is that smell, that smelly smell...?");
             }
@@ -163,6 +168,5 @@ namespace CK3BeagleServer.Analysing
             }
             return builder.ToString();
         }
-
     }
 }

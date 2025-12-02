@@ -29,7 +29,8 @@ namespace CK3BeagleServer.Core.Parsing.SemanticPass
         {
             key = key.ToLowerInvariant().Split(':', '.')[0];
             var parentKey = "";
-            if (node.Parent != null && node.Parent is NamedBlock parentBlock)
+            if (node.Parent != null && node.Parent is NamedBlock parentBlock
+                && node.Parent is not Declaration)
             {
                 parentKey = parentBlock.Key;
                 if (GlobalResources.EFFECTKEYS.Contains(parentKey)
