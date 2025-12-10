@@ -71,7 +71,7 @@ namespace CK3BeagleServer.Core.Comparing
             //Run the actual comparison builder on what's left
             var fileComparisons = new ConcurrentBag<Delta>();
 
-            var comparisonMaker = () => new FileComparisonBuilder();
+            var comparisonMaker = () => new FileComparisonBuilderOld();
 
             var contextComparison = new ContextComparison(vanillaContext, modContext);
 

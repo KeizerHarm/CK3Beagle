@@ -18,7 +18,7 @@ namespace CK3BeagleServer.Core.Domain.Entities
             if (_trueHash == 0)
             {
                 var hashCode = new HashCode();
-                hashCode.Add(StringRepresentation);
+                hashCode.Add(WhitespaceAgnosticStringRepresentation);
                 _trueHash = hashCode.ToHashCode();
             }
 

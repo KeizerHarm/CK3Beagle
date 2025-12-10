@@ -41,7 +41,7 @@ namespace CK3BeagleServer.Analysing.Diff.Detectors
             newContext.AddFile(modParsed);
             new SemanticPassHandler().ExecuteSemanticPass(newContext);
 
-            var delta = new FileComparisonBuilderSansNodeMatcher().BuildFileComparison(vanillaParsed, modParsed);
+            var delta = new FileComparisonBuilder().BuildFileComparison(vanillaParsed, modParsed);
 
             return delta;
         }

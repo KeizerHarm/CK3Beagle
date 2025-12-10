@@ -14,7 +14,7 @@ namespace CK3BeagleServer.Core.Comparing
                 (var old, var @new) = GetTestCase("NoChanges");
 
                 //act
-                var comparison = new FileComparisonBuilderSansNodeMatcher().BuildFileComparison(old, @new);
+                var comparison = new FileComparisonBuilder().BuildFileComparison(old, @new);
 
                 //assert
                 Assert.Equal(DeltaKind.Unchanged, comparison.Kind);
@@ -35,7 +35,7 @@ namespace CK3BeagleServer.Core.Comparing
                                         GetDelta(DeltaKind.Changed))))));
 
                 //act
-                var comparison = new FileComparisonBuilderSansNodeMatcher().BuildFileComparison(old, @new);
+                var comparison = new FileComparisonBuilder().BuildFileComparison(old, @new);
 
                 //assert
                 AssertDeltasEqual(expectedDelta, comparison);
@@ -58,7 +58,7 @@ namespace CK3BeagleServer.Core.Comparing
                                         GetDelta(DeltaKind.Changed))))));
 
                 //act
-                var comparison = new FileComparisonBuilderSansNodeMatcher().BuildFileComparison(old, @new);
+                var comparison = new FileComparisonBuilder().BuildFileComparison(old, @new);
 
                 //assert
                 AssertDeltasEqual(expectedDelta, comparison);
@@ -75,7 +75,7 @@ namespace CK3BeagleServer.Core.Comparing
                         GetDelta(DeltaKind.Changed)));
 
                 //act
-                var comparison = new FileComparisonBuilderSansNodeMatcher().BuildFileComparison(old, @new);
+                var comparison = new FileComparisonBuilder().BuildFileComparison(old, @new);
 
                 //assert
                 AssertDeltasEqual(expectedDelta, comparison);
@@ -95,7 +95,7 @@ namespace CK3BeagleServer.Core.Comparing
                         GetDelta(DeltaKind.Added)));
 
                 //act
-                var comparison = new FileComparisonBuilderSansNodeMatcher().BuildFileComparison(old, @new);
+                var comparison = new FileComparisonBuilder().BuildFileComparison(old, @new);
 
                 //assert
                 AssertDeltasEqual(expectedDelta, comparison);
@@ -115,7 +115,7 @@ namespace CK3BeagleServer.Core.Comparing
                                         GetDelta(DeltaKind.Deleted))))));
 
                 //act
-                var comparison = new FileComparisonBuilderSansNodeMatcher().BuildFileComparison(old, @new);
+                var comparison = new FileComparisonBuilder().BuildFileComparison(old, @new);
 
                 //assert
                 AssertDeltasEqual(expectedDelta, comparison);
@@ -138,7 +138,7 @@ namespace CK3BeagleServer.Core.Comparing
                                         GetDelta(DeltaKind.Deleted))))));
 
                 //act
-                var comparison = new FileComparisonBuilderSansNodeMatcher().BuildFileComparison(old, @new);
+                var comparison = new FileComparisonBuilder().BuildFileComparison(old, @new);
 
                 //assert
                 AssertDeltasEqual(expectedDelta, comparison);
@@ -151,7 +151,7 @@ namespace CK3BeagleServer.Core.Comparing
                 (var old, var @new) = GetTestCase("Insert/LongFileManyInserts");
 
                 //act
-                var comparison = new FileComparisonBuilderSansNodeMatcher().BuildFileComparison(old, @new);
+                var comparison = new FileComparisonBuilder().BuildFileComparison(old, @new);
 
                 //assert
                 Assert.Equal(7, comparison.Children.Count);
@@ -234,7 +234,7 @@ namespace CK3BeagleServer.Core.Comparing
                                         GetDelta(DeltaKind.Deleted))))));
 
                 //act
-                var comparison = new FileComparisonBuilderSansNodeMatcher().BuildFileComparison(old, @new);
+                var comparison = new FileComparisonBuilder().BuildFileComparison(old, @new);
 
                 //assert
                 AssertDeltasEqual(expectedDelta, comparison);
@@ -257,7 +257,7 @@ namespace CK3BeagleServer.Core.Comparing
                                         GetDelta(DeltaKind.Deleted))))));
 
                 //act
-                var comparison = new FileComparisonBuilderSansNodeMatcher().BuildFileComparison(old, @new);
+                var comparison = new FileComparisonBuilder().BuildFileComparison(old, @new);
 
                 //assert
                 AssertDeltasEqual(expectedDelta, comparison);
@@ -276,7 +276,7 @@ namespace CK3BeagleServer.Core.Comparing
                                     GetDelta(DeltaKind.Deleted)))));
 
                 //act
-                var comparison = new FileComparisonBuilderSansNodeMatcher().BuildFileComparison(old, @new);
+                var comparison = new FileComparisonBuilder().BuildFileComparison(old, @new);
 
                 //assert
                 AssertDeltasEqual(expectedDelta, comparison);
@@ -304,7 +304,38 @@ namespace CK3BeagleServer.Core.Comparing
                                 GetDelta(DeltaKind.Added))));
 
                 //act
-                var comparison = new FileComparisonBuilderSansNodeMatcher().BuildFileComparison(old, @new);
+                var comparison = new FileComparisonBuilder().BuildFileComparison(old, @new);
+
+                //assert
+                AssertDeltasEqual(expectedDelta, comparison);
+            }
+
+
+            [Fact]
+            public void Imprison()
+            {
+                //arrange
+                (var old, var @new) = GetTestCase("ExtraTests/Imprison");
+                var expectedDelta =
+                    GetDelta(DeltaKind.ChangedInChildren,
+                        GetDelta(DeltaKind.ChangedInChildren,
+                            GetDelta(DeltaKind.ChangedInChildren,
+                                GetDelta(DeltaKind.Deleted),
+                                GetDelta(DeltaKind.Added),
+                                GetDelta(DeltaKind.Deleted),
+                                GetDelta(DeltaKind.Added),
+                                GetDelta(DeltaKind.Deleted),
+                                GetDelta(DeltaKind.Deleted)),
+                        GetDelta(DeltaKind.ChangedInChildren,
+                            GetDelta(DeltaKind.ChangedInChildren,
+                                GetDelta(DeltaKind.ChangedInChildren,
+                                    GetDelta(DeltaKind.Deleted),
+                                    GetDelta(DeltaKind.Added),
+                                    GetDelta(DeltaKind.Deleted)
+                                    )))));
+
+                //act
+                var comparison = new FileComparisonBuilder().BuildFileComparison(old, @new);
 
                 //assert
                 AssertDeltasEqual(expectedDelta, comparison);

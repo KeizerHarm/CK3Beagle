@@ -25,6 +25,14 @@ namespace CK3BeagleServer.Core.Domain.Entities
                 return File.GetContentSelectionString(Start.Offset, End.Offset);
             }
         }
+        public string WhitespaceAgnosticStringRepresentation
+        {
+            get
+            {
+                return File.GetContentSelectionString(Start.Offset, End.Offset).Trim()
+                    .Replace("\r\n", "\n").Replace("\r", "\n");
+            }
+        }
         public ReadOnlySpan<char> SpanRepresentation 
         {
             get
