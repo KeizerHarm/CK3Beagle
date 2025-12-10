@@ -1,19 +1,9 @@
-﻿using SharpCompress.Common;
-using System;
-using System.Text.RegularExpressions;
+﻿using System;
 
 namespace CK3BeagleServer.Core.Domain.Entities
 {
     public class Comment : Node
     {
-        private static Regex commentRegex = new Regex("^\\s*#", RegexOptions.Compiled);
-        public string RawWithoutHashtag 
-        {
-            get
-            {
-                return commentRegex.Replace(StringRepresentation, "").Trim();
-            }
-        }
         public override void Accept(IDomainVisitor visitor) => visitor.Visit(this);
 
         public override int GetDuplicationCheckingHash()
@@ -28,7 +18,7 @@ namespace CK3BeagleServer.Core.Domain.Entities
             if (_trueHash == 0)
             {
                 var hashCode = new HashCode();
-                hashCode.Add(RawWithoutHashtag);
+                hashCode.Add(StringRepresentation);
                 _trueHash = hashCode.ToHashCode();
             }
 

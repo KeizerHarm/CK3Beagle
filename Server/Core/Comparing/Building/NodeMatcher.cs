@@ -2,7 +2,6 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks.Dataflow;
 
 namespace CK3BeagleServer.Core.Comparing.Building
 {
@@ -98,6 +97,9 @@ namespace CK3BeagleServer.Core.Comparing.Building
             if (sourceNode.ParentSymbolType != editNode.ParentSymbolType)
                 return false;
 
+            if (sourceNode.GetTrueHash() == editNode.GetTrueHash())
+                return true;
+
             if (editNode is Block editBlock)
                 return BlockMatches(sourceNode as Block, editBlock);
 
@@ -115,7 +117,7 @@ namespace CK3BeagleServer.Core.Comparing.Building
 
             if (editNode is Comment editComment)
             {
-                return StringMatches(((Comment)sourceNode).RawWithoutHashtag, editComment.RawWithoutHashtag, out similarity);
+                return StringMatches(((Comment)sourceNode).StringRepresentation, editComment.StringRepresentation, out similarity);
             }
             if (editNode is AnonymousToken editToken)
             {

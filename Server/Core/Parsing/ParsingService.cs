@@ -18,7 +18,7 @@ namespace CK3BeagleServer.Core.Parsing
             foreach (var declarationType in Enum.GetValues<DeclarationType>())
             {
                 ParseAllDeclarationsOfType(parserMaker, context, declarationType);
-                await progressDelegate("Completed parsing " + declarationType.ToString());
+                await progressDelegate("Completed parsing " + declarationType.ToString() + "s");
             }
             GlobalResources.Lock();
             new SemanticPassHandler().ExecuteSemanticPass(context);
@@ -84,8 +84,9 @@ namespace CK3BeagleServer.Core.Parsing
         public static async Task ParseMacroEntities(Func<ICk3Parser> parserMaker, Context context, Func<string, Task> progressDelegate)
         {
             ParseAllDeclarationsOfType(parserMaker, context, DeclarationType.ScriptedEffect);
+            await progressDelegate("Parsed vanilla scripted effects");
             ParseAllDeclarationsOfType(parserMaker, context, DeclarationType.ScriptedTrigger);
-            await progressDelegate("Parsed vanilla macros");
+            await progressDelegate("Parsed vanilla scripted triggers");
         }
 
     }

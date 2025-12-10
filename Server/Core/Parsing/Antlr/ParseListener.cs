@@ -6,6 +6,8 @@ using System.Collections.Generic;
 using System.Linq;
 using static CK3BeagleServer.Core.CK3Parser;
 using CK3BeagleServer.Core.Domain;
+using System.Text.RegularExpressions;
+using System.Runtime.InteropServices.Marshalling;
 
 namespace CK3BeagleServer.Core.Parsing.Antlr
 {
@@ -85,11 +87,72 @@ namespace CK3BeagleServer.Core.Parsing.Antlr
             thisBlock.Peek().AddChild(comment);
         }
 
+        private readonly Regex blankLineRegex = new Regex("^\\s*\\n", RegexOptions.Multiline | RegexOptions.Compiled);
         public override void ExitComment([NotNull] CommentContext context)
         {
             ApplyRange(context, thisNonBlock);
+
+            //Comment blocks currently can include blank lines. Need to split them manually.
+            if (blankLineRegex.IsMatch(thisNonBlock.StringRepresentation))
+            {
+                var lines = thisNonBlock.StringRepresentation.Split('\n');
+
+                var currentComment = thisNonBlock;
+                var absStartPosition = thisNonBlock.Start;
+                int prevLineLength = 0;
+                int totalLength = 0;
+                for (int i = 0; i < lines.Length; i++)
+                {
+                    string line = lines[i];
+
+                    if (string.IsNullOrWhiteSpace(line))
+                    {
+                        if (currentComment != null)
+                        {
+                            var endPosition = new Position(
+                               (absStartPosition.Line + i - 1),
+                               prevLineLength,
+                               totalLength + absStartPosition.Offset
+                               );
+                            currentComment.End = endPosition;
+                            currentComment = null;
+                        }
+                    }
+                    else {
+                        if (currentComment == null)
+                        {
+                            currentComment = new Comment();
+                            thisBlock.Peek().AddChild(currentComment);
+                            var startPosition = new Position(
+                               (absStartPosition.Line + i),
+                               line.IndexOf('#'),
+                               totalLength + line.IndexOf('#') + absStartPosition.Offset
+                               );
+                            currentComment.Start = startPosition;
+                        }
+                    }
+
+                    prevLineLength = line.Length;
+                    totalLength += line.Length + 1;
+                }
+                if (currentComment != null)
+                {
+                    var line = absStartPosition.Line + lines.Length - 1;
+                    var column = prevLineLength;
+                    var offset = totalLength + 1 + absStartPosition.Offset;
+                    if (line == file.StringRepresentation.Count(x => x == '\n'))
+                    {
+                        offset -= 2;
+                    }
+
+                    var finalEndPosition = new Position(line, column, offset);
+                    currentComment.End = finalEndPosition;
+                }
+                
+
+            }
+
             thisNonBlock = null;
-            //No-op
         }
 
         private string GetTokenText(TokenChainContext context)

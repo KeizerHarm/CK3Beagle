@@ -28,6 +28,11 @@ namespace CK3BeagleServer.Core.Parsing.SemanticPass
         private static NodeType DeduceNodeType(Node node, string key, bool isBinExp)
         {
             key = key.ToLowerInvariant().Split(':', '.')[0];
+
+            if (key == "T4N_story_content_enabled_for_jito_trigger")
+            {
+
+            }
             var parentKey = "";
             if (node.Parent != null && node.Parent is NamedBlock parentBlock
                 && node.Parent is not Declaration)

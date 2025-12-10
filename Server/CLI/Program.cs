@@ -38,6 +38,6 @@ namespace CK3BeagleServer.CLI
             var logs = await orchestrator.HandleAnalysis(true);
 
             Console.WriteLine($"Found {logs.Count()} issues");
-       }
+        }
     }
 }

@@ -31,7 +31,7 @@ namespace CK3BeagleServer.Core.Resources
         {
             _effectKeys ??= new ConcurrentBag<string>();
             foreach (var effect in effects) {
-                _effectKeys.Add(effect);
+                _effectKeys.Add(effect.ToLowerInvariant());
             }
         }
 
@@ -40,7 +40,7 @@ namespace CK3BeagleServer.Core.Resources
             _triggerKeys ??= new ConcurrentBag<string>();
             foreach (var trigger in triggers)
             {
-                _triggerKeys.Add(trigger);
+                _triggerKeys.Add(trigger.ToLowerInvariant());
             }
         }
 
@@ -49,7 +49,7 @@ namespace CK3BeagleServer.Core.Resources
             _eventTargets ??= new ConcurrentBag<string>();
             foreach (var eventTarget in eventTargets)
             {
-                _eventTargets.Add(eventTarget);
+                _eventTargets.Add(eventTarget.ToLowerInvariant());
             }
         }
 

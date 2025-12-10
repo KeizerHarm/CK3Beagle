@@ -242,7 +242,7 @@ namespace CK3BeagleServer.Analysing.Common.Detectors
             var sb = new StringBuilder();
             while (prevSibling != null && prevSibling is Comment prevComment)
             {
-                sb.Insert(0, prevComment.RawWithoutHashtag + "\n");
+                sb.Insert(0, prevComment.StringRepresentation);
                 prevSibling = prevSibling.PrevSibling;
             }
             return sb.ToString();

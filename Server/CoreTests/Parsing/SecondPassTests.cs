@@ -31,12 +31,12 @@ namespace CK3BeagleServer.Core.Parsing
 
             var firstComment = parsedFile.Children[0];
             Assert.True(firstComment is Comment comment
-                && comment.RawWithoutHashtag == "Send a toast to the imprisoner if the person they captured is worth war score."
+                && comment.StringRepresentation == "# Send a toast to the imprisoner if the person they captured is worth war score.\r\n"
                 && comment.NodeType == NodeType.NonStatement);
 
             var secondComment = parsedFile.Children[2];
             Assert.True(secondComment is Comment comment2
-                && comment2.RawWithoutHashtag == "Send a toast to the primary defender if the person that was captured is worth war score (and is not them)."
+                && comment2.StringRepresentation == "# Send a toast to the primary defender if the person that was captured is worth war score (and is not them).\r\n"
                 && comment2.NodeType == NodeType.NonStatement);
 
             var firstEvent = parsedFile.Children[1];

@@ -1,5 +1,4 @@
-﻿using CK3BeagleServer.Core.Domain.Entities;
-using System;
+﻿using System;
 using System.Collections.Generic;
 
 namespace CK3BeagleServer.Core.Comparing.Building

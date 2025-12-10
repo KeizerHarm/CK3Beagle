@@ -117,6 +117,48 @@ namespace CK3BeagleServer.Core.Parsing
 
         [Theory]
         [MemberData(nameof(ParserTypesUnderTest))]
+        public void MultiComment(string parserType)
+        {
+            //arrange
+            var stringToParse = GetTestCaseContents("BlankLineSeparatedComments");
+
+            var relativePath = "";
+            var context = new Context("", ContextType.Vanilla);
+            var expectedDeclarationType = DeclarationType.Debug;
+            var parser = GetParser(parserType);
+
+            var expectedScriptFile = new ScriptFile(context, relativePath, expectedDeclarationType, stringToParse);
+            var expectedComment1 = new Comment()
+            {
+                Start = new Position(0, 0, 0),
+                End = new Position(2, 19, 50)
+            };
+            var expectedComment2 = new Comment()
+            {
+                Start = new Position(4, 0, 52),
+                End = new Position(4, 17, 70)
+            };
+            var expectedComment3 = new Comment()
+            {
+                Start = new Position(6, 0, 72),
+                End = new Position(6, 15, 87)
+            };
+            
+            expectedScriptFile.AddChild(expectedComment1);
+            expectedScriptFile.AddChild(expectedComment2);
+            expectedScriptFile.AddChild(expectedComment3);
+
+            var actualScriptFile = new ScriptFile(context, relativePath, expectedDeclarationType, stringToParse);
+
+            //act
+            parser.ParseFile(actualScriptFile);
+
+            //assert
+            AssertNodesEqual(expectedScriptFile, actualScriptFile);
+        }
+
+        [Theory]
+        [MemberData(nameof(ParserTypesUnderTest))]
         public void MultilineBlock(string parserType)
         {
             //arrange

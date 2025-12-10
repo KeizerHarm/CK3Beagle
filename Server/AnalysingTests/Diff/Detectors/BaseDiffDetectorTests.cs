@@ -19,7 +19,7 @@ namespace CK3BeagleServer.Analysing.Diff.Detectors
             var newFileString = File.ReadAllText(Path.Combine(AppContext.BaseDirectory, "Diff/Detectors/Testcases", caseName, "new.txt"));
 
             GlobalResources.AddEffects(["add_gold", "xxx", "yyy", "zzz", "else_if", "if", "trigger_event"]);
-            GlobalResources.AddTriggers(["has_gold", "or", "and", "nand", "nor", "not", "aaa", "bbb", "ccc", "ddd", "has_primary_title", "is_adult", "T4N_story_content_enabled_for_jito_trigger"]);
+            GlobalResources.AddTriggers(["has_gold", "or", "and", "nand", "nor", "not", "aaa", "bbb", "ccc", "ddd", "has_primary_title", "is_adult", "t4n_story_content_enabled_for_jito_trigger"]);
             GlobalResources.AddEventTargets(["father", "link1", "link2"]);
             GlobalResources.Lock();
             GlobalResources.SymbolTable = new SymbolTable();
@@ -41,7 +41,7 @@ namespace CK3BeagleServer.Analysing.Diff.Detectors
             newContext.AddFile(modParsed);
             new SemanticPassHandler().ExecuteSemanticPass(newContext);
 
-            var delta = new FileComparisonBuilder().BuildFileComparison(vanillaParsed, modParsed);
+            var delta = new FileComparisonBuilderSansNodeMatcher().BuildFileComparison(vanillaParsed, modParsed);
 
             return delta;
         }

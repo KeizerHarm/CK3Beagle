@@ -71,6 +71,8 @@ namespace CK3BeagleServer.LspInterface
 
         private async Task SendLogs(IEnumerable<LogEntry> logEntries)
         {
+            var summary = GetSummary(logEntries);
+
             //Send all in one go
             if (logEntries.Count() < 2000)
             {
@@ -79,7 +81,7 @@ namespace CK3BeagleServer.LspInterface
                     type = "analysis",
                     payload = new
                     {
-                        summary = $"Found {logEntries.Where(x => x.Severity > Severity.Debug).Count()} issues",
+                        summary = summary,
                         smells = logEntries.Select(LogEntryToReport)
                     }
                 };
@@ -93,7 +95,7 @@ namespace CK3BeagleServer.LspInterface
                 type = "analysis_initial",
                 payload = new
                 {
-                    message = $"Found {logEntries.Where(x => x.Severity > Severity.Debug).Count()} issues, transmitting in chunks"
+                    message = summary + ": transmitting in chunks"
                 }
             };
             await _program.SendMessageAsync(initialResponse);
@@ -155,6 +157,14 @@ namespace CK3BeagleServer.LspInterface
                 }
             };
             await _program.SendMessageAsync(finalResponse);
+        }
+
+        private string GetSummary(IEnumerable<LogEntry> logEntries)
+        {
+            var histogram = logEntries.GroupBy(l => l.Smell);
+            var summary = "Found " + logEntries.Count() + " issues. ";
+            summary += string.Join("; ", histogram.Select(x => $"{x.Key.GetCode()}: {x.Count()}"));
+            return summary;
         }
 
         private static object LogEntryToReport(LogEntry x)

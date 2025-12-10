@@ -19,8 +19,8 @@ namespace CK3BeagleServer.Analysing.Diff.Detectors
 
         public override void VisitAdded(Delta delta)
         {
-            //Don't even start on comments/declarations
-            if (delta.Node is Comment || delta.Node is Declaration)
+            //Don't even start on declarations
+            if (delta.Node is Declaration)
                 return;
 
             //Don't consider non-statement additions

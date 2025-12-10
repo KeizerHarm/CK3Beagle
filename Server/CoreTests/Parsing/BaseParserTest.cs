@@ -60,7 +60,7 @@ namespace CK3BeagleServer.Core.Parsing
 
         private void AssertCommentsEqual(Comment expected, Comment actual)
         {
-            Assert.Equal(expected.RawWithoutHashtag, actual.RawWithoutHashtag);
+            Assert.Equal(expected.StringRepresentation, actual.StringRepresentation);
         }
 
         private void AssertBlocksEqual(Block expected, Block actual)

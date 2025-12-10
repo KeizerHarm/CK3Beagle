@@ -1,5 +1,6 @@
 ﻿using CK3BeagleServer.Core.Domain;
 using CK3BeagleServer.Core.Domain.Entities;
+using Microsoft.VisualBasic;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -82,6 +83,29 @@ namespace CK3BeagleServer.Core.Comparing.Domain
         {
             Children.Add(delta);
             delta.Parent = this;
+        }
+
+        public override string ToString()
+        {
+            var key = "";
+            if (Node != null)
+            {
+                if (Node is BinaryExpression binExp)
+                    key = binExp.Key;
+                if (Node is NamedBlock namedBlock)
+                    key = namedBlock.Key;
+                if (Node is AnonymousToken token)
+                    key = token.Value;
+                if (Node is Comment comment)
+                    key = comment.StringRepresentation;
+                if (Node is AnonymousBlock block)
+                    key = "<block>";
+            }
+            else
+            {
+                key = Shadow.StringRepresentation;
+            }
+            return "{ " + Kind + ": '" + key + "' }";
         }
 
         public void Accept(IDeltaVisitor visitor)
