@@ -15,7 +15,7 @@ namespace CK3BeagleServer.LspInterface
     public class CommandHandler
     {
         private readonly Program _program;
-        private readonly IProcessOrchestrator _orchestrator;
+        private readonly ProcessOrchestrator _orchestrator;
 
         async Task positiveProgressDelegate(string msg)
         {
@@ -39,21 +39,11 @@ namespace CK3BeagleServer.LspInterface
             {
                 await _program.SendMessageAsync(_program.GetBasicMessage("pong"));
             }
-            else if (commandType == "settings")
-            {
-                try
-                {
-                    await _orchestrator.InitiateFromJson(payload);
-                }
-                catch(Exception ex)
-                {
-                    await _program.SendMessageAsync(_program.GetErrorMessage(ex.ToString()));
-                }
-            }
             else if (commandType == "analyse")
             {
                 try
                 {
+                    await _orchestrator.InitiateFromJson(payload);
                     var logEntries = await _orchestrator.HandleAnalysis();
                     await SendLogs(logEntries);
                     _orchestrator.WrapUp();
@@ -162,7 +152,7 @@ namespace CK3BeagleServer.LspInterface
         private string GetSummary(IEnumerable<LogEntry> logEntries)
         {
             var histogram = logEntries.GroupBy(l => l.Smell);
-            var summary = "Found " + logEntries.Count() + " issues. ";
+            var summary = "Found " + logEntries.Where(x => x.Severity > Severity.Debug).Count() + " issues. ";
             summary += string.Join("; ", histogram.Select(x => $"{x.Key.GetCode()}: {x.Count()}"));
             return summary;
         }

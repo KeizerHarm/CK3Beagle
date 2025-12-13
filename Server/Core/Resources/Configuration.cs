@@ -19,39 +19,18 @@ namespace CK3BeagleServer.Core.Resources
 
     public class Configuration
     {
-        private readonly JsonElement _rawSettings;
+        public readonly JsonElement RawSettings;
         public bool ReadVanilla { get; set; }
         public VanillaFileHandling VanillaFileHandling { get; set; }
 
-        public Configuration(JsonElement rawSettings)
+        public Configuration(JsonElement rawSettings, bool useDefault = false)
         {
-            _rawSettings = rawSettings;
-            HandleGlobalSettings();
-        }
-
-        private void HandleGlobalSettings()
-        {
-            ReadVanilla = false;
-            if (_rawSettings.ValueKind != JsonValueKind.Undefined && _rawSettings.TryGetProperty("readVanilla", out var readVanilla))
-            {
-                ReadVanilla = readVanilla.GetBoolean();
-            }
-
-            VanillaFileHandling = VanillaFileHandling.TreatAsRegularFiles;
-            if (_rawSettings.ValueKind != JsonValueKind.Undefined && _rawSettings.TryGetProperty("vanillaFileHandling", out var vanillaFileHandling))
-            {
-                VanillaFileHandling = (VanillaFileHandling)vanillaFileHandling.GetInt32();
-                if (VanillaFileHandling == VanillaFileHandling.AnalyseModsAdditions)
-                    ReadVanilla = true;
-            }
-        }
-
-        public Configuration(bool useDefault = false)
-        {
-            _rawSettings = new JsonElement();
+            RawSettings = rawSettings;
             if (useDefault)
             {
-                HandleGlobalSettings();
+                ReadVanilla = false;
+                VanillaFileHandling = VanillaFileHandling.TreatAsRegularFiles;
+
                 LargeUnitSettings =
                     new LargeUnitSettings
                     {
@@ -131,7 +110,7 @@ namespace CK3BeagleServer.Core.Resources
                     {
                         Enabled = true,
                         Severity = Severity.Info,
-                        KeysToConsider = 
+                        KeysToConsider =
                             ["reserved_gold",
                             "short_term_gold",
                             "war_chest_gold",
@@ -238,6 +217,27 @@ namespace CK3BeagleServer.Core.Resources
                         Enabled = true,
                         Severity = Severity.Critical
                     };
+            }
+            else
+            {
+                BuildSettings();
+            }
+
+        }
+
+        public void BuildSettings()
+        {
+            if (RawSettings.ValueKind != JsonValueKind.Undefined && RawSettings.TryGetProperty("readVanilla", out var readVanilla))
+            {
+                ReadVanilla = readVanilla.GetBoolean();
+            }
+
+            VanillaFileHandling = VanillaFileHandling.TreatAsRegularFiles;
+            if (RawSettings.ValueKind != JsonValueKind.Undefined && RawSettings.TryGetProperty("vanillaFileHandling", out var vanillaFileHandling))
+            {
+                VanillaFileHandling = (VanillaFileHandling)vanillaFileHandling.GetInt32();
+                if (VanillaFileHandling == VanillaFileHandling.AnalyseModsAdditions)
+                    ReadVanilla = true;
             }
         }
 
@@ -435,7 +435,7 @@ namespace CK3BeagleServer.Core.Resources
             if (backingfield.HasValue)
                 return backingfield;
 
-            if (_rawSettings.TryGetProperty(key, out var settings))
+            if (RawSettings.TryGetProperty(key, out var settings))
             {
                 var transformed = Pretransform(settings);
                 backingfield = JsonSerializer.Deserialize<T>(transformed);

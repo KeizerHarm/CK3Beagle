@@ -9,14 +9,13 @@ using CK3BeagleServer.Core.Resources;
 using CK3BeagleServer.Core.Resources.Storage;
 using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
 using System.Text.Json;
 using System.Threading.Tasks;
 
 namespace CK3BeagleServer.Orchestration
 {
-    public class ProcessOrchestrator : IProcessOrchestrator
+    public class ProcessOrchestrator
     {
         Func<string, Task> _positiveProgressDelegate;
         Func<string, Task> _negativeProgressDelegate;
@@ -29,59 +28,15 @@ namespace CK3BeagleServer.Orchestration
 
         public async Task<bool> InitiateFromJson(JsonElement json)
         {
-            GlobalResources.ClearEverything();
-
-            (bool success, string vanillaPath) = await GetFolderAndCheckExists(json, "vanillaCk3Path");
-
+            bool success = GlobalResources.Initiate(json, out string message);
             if (!success)
             {
+                await _negativeProgressDelegate(message);
                 return false;
             }
 
-            (success, string logsFolderPath) = await GetFolderAndCheckExists(json, "logsFolderPath");
-
-            if (!success)
-            {
-                return false;
-            }
-
-            var modPath = json.GetProperty("modPath").GetString();
-            if (!string.IsNullOrWhiteSpace(modPath) && !Directory.Exists(modPath))
-            {
-                await _negativeProgressDelegate("ModPath setting points to a non-existent directory");
-                return false;
-            }
-
-            if (string.IsNullOrWhiteSpace(modPath))
-                modPath = json.GetProperty("environmentPath").GetString();
-
-            LogsParser.ParseLogs(logsFolderPath);
-
-            GlobalResources.Vanilla = new Context(vanillaPath, ContextType.Vanilla);
-            GlobalResources.Modded = new Context(modPath, ContextType.Modded);
-
-            GlobalResources.Configuration = new Configuration(json);
-            GlobalResources.SymbolTable = new SymbolTable();
-            GlobalResources.StringTable = new StringTable();
-
-            await _positiveProgressDelegate("Settings loaded succesfully: " + GlobalResources.Configuration.ToString());
+            await _positiveProgressDelegate(message);
             return true;
-
-            async Task<(bool, string)> GetFolderAndCheckExists(JsonElement json, string folderName)
-            {
-                var folderPath = json.GetProperty(folderName).GetString();
-                if (string.IsNullOrEmpty(folderPath))
-                {
-                    await _negativeProgressDelegate($"Missing {folderName} setting");
-                    return (false, null);
-                }
-                if (!Directory.Exists(folderPath))
-                {
-                    await _negativeProgressDelegate($"{folderName} setting points to a non-existent directory");
-                    return (false, null);
-                }
-                return (true, folderPath);
-            }
         }
 
         public void InitiateFromMinimalConfig(string vanillaPath, string modPath, string logsPath)
@@ -89,7 +44,7 @@ namespace CK3BeagleServer.Orchestration
             LogsParser.ParseLogs(logsPath);
             GlobalResources.Vanilla = new Context(vanillaPath, ContextType.Vanilla);
             GlobalResources.Modded = new Context(modPath, ContextType.Modded);
-            GlobalResources.Configuration = new Configuration(true);
+            GlobalResources.Configuration = new Configuration(new JsonElement(), true);
             GlobalResources.SymbolTable = new SymbolTable();
             GlobalResources.StringTable = new StringTable();
         }
@@ -143,7 +98,7 @@ namespace CK3BeagleServer.Orchestration
 
         public void WrapUp()
         {
-            GlobalResources.ClearEverything();
+            GlobalResources.ClearButKeepConfig();
             GC.Collect(GC.MaxGeneration, GCCollectionMode.Forced, blocking: true, compacting: true);
             GC.WaitForPendingFinalizers();
         }

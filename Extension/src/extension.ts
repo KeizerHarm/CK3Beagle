@@ -1,15 +1,12 @@
 import vscode = require('vscode');
 import { ServerResponse, Smell, RelatedSmell } from './messages';
-import { startServer, shutDownServer, readMessage, sendMessage, transmitSettings } from './server_logic';
+import { startServer, shutDownServer, readMessage, sendMessage } from './server_logic';
 
 export async function activate(context: vscode.ExtensionContext) {
   context.subscriptions.push(vscode.commands.registerCommand('ck3_beagle.ping', ping));
   context.subscriptions.push(vscode.commands.registerCommand('ck3_beagle.analyse', () => analyse(false)));
   context.subscriptions.push(vscode.commands.registerCommand('ck3_beagle.analyse_append', () => analyse(true)));
   await startServer(context);
-  var settings = getSettings();
-  knownSettings = JSON.stringify(getSettings());
-  await transmitSettings(settings);
 }
 
 export async function deactivate(): Promise<void> {
@@ -33,17 +30,9 @@ function getSettings() {
   return allSettings;
 }
 
-var knownSettings: string;
 async function analyse(keepPrevErrors: boolean){
-  // var currentSettings = getSettings();
-  // // var currentSettingsSerialised = JSON.stringify(currentSettings);
-  // // if (knownSettings !== currentSettingsSerialised){
-  // //   knownSettings = currentSettingsSerialised;
-  // //   await transmitSettings(currentSettings);
-  // // }
-  // await transmitSettings(currentSettings);
-
-  sendMessage({ command: 'analyse' });
+  var settings = getSettings();
+  sendMessage({ command: 'analyse', payload: settings });
 
   while (true) {
     const response = (await readMessage()) as ServerResponse;

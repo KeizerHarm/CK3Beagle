@@ -44,17 +44,6 @@ export function sendMessage(obj: any) {
   proc.stdin?.write(content);
 }
 
-export async function transmitSettings(settings: any) {
-  const message = { command: 'settings', payload: settings };
-  sendMessage(message);
-  const response = (await readMessage()) as ServerResponse;
-  if (response.type === 'error'){
-    vscode.window.showErrorMessage(response.payload.message);
-  } else if (response.type === 'basic') {
-    console.log(response.payload.message);
-  }
-}
-
 function getServerExe(context: vscode.ExtensionContext) {
   // const serverExe = process.platform === 'win32'
   //   ? 'LspInterface.exe'

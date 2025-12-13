@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Reflection;
+using System.Text.Json;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -183,6 +185,23 @@ namespace CK3BeagleServer.Core
 
             return string.Join(", ",
                 values.Select(kvp => kvp.Key + "=" + FormatValue(kvp.Value)));
+        }
+
+        public static (bool, string) GetFolderAndCheckExists(JsonElement json, string folderName, out string message)
+        {
+            message = "";
+            var folderPath = json.GetProperty(folderName).GetString();
+            if (string.IsNullOrEmpty(folderPath))
+            {
+                message = $"Missing {folderName} setting";
+                return (false, null);
+            }
+            if (!Directory.Exists(folderPath))
+            {
+                message = $"{folderName} setting points to a non-existent directory";
+                return (false, null);
+            }
+            return (true, folderPath);
         }
 
     }

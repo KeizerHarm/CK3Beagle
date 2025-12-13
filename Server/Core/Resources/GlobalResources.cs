@@ -3,13 +3,14 @@ using CK3BeagleServer.Core.Domain;
 using CK3BeagleServer.Core.Resources.Storage;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
+using System.Text.Json;
 
 namespace CK3BeagleServer.Core.Resources
 {
     public static class GlobalResources
     {
-
         private static ConcurrentBag<string> _effectKeys;
         private static ConcurrentBag<string> _triggerKeys;
         private static ConcurrentBag<string> _eventTargets;
@@ -26,6 +27,55 @@ namespace CK3BeagleServer.Core.Resources
         public static StringTable StringTable;
 
         public static IEnumerable<Delta> Deltas;
+
+        public static bool Initiate(JsonElement json, out string message)
+        {
+            message = "";
+            if (Configuration?.RawSettings != null && Configuration.RawSettings.Equals(json))
+            {
+                message = "Settings unchanged, continuing with same configuration";
+                ClearButKeepConfig();
+                return true;
+            }
+
+            ClearEverything();
+
+            (bool success, string vanillaPath) = Helpers.GetFolderAndCheckExists(json, "vanillaCk3Path", out message);
+
+            if (!success)
+            {
+                return false;
+            }
+
+            (success, string logsFolderPath) = Helpers.GetFolderAndCheckExists(json, "logsFolderPath", out message);
+
+            if (!success)
+            {
+                return false;
+            }
+
+            var modPath = json.GetProperty("modPath").GetString();
+            if (!string.IsNullOrWhiteSpace(modPath) && !Directory.Exists(modPath))
+            {
+                message = "ModPath setting points to a non-existent directory";
+                return false;
+            }
+
+            if (string.IsNullOrWhiteSpace(modPath))
+                modPath = json.GetProperty("environmentPath").GetString();
+
+            LogsParser.ParseLogs(logsFolderPath);
+
+            Vanilla = new Context(vanillaPath, ContextType.Vanilla);
+            Modded = new Context(modPath, ContextType.Modded);
+
+            Configuration = new Configuration(json);
+            SymbolTable = new SymbolTable();
+            StringTable = new StringTable();
+
+            message = "Settings loaded succesfully: " + Configuration.ToString();
+            return true;
+        }
 
         public static void AddEffects(IEnumerable<string> effects)
         {
@@ -66,8 +116,15 @@ namespace CK3BeagleServer.Core.Resources
 
         public static void ClearEverything()
         {
+            Configuration = null;
+            ClearButKeepConfig();
+        }
+
+        public static void ClearButKeepConfig()
+        {
             Vanilla = null;
             Modded = null;
+            VanillaModIntersect = [];
 
             _effectKeys = null;
             _triggerKeys = null;
@@ -76,9 +133,10 @@ namespace CK3BeagleServer.Core.Resources
             TRIGGERKEYS = null;
             EVENTTARGETS = null;
 
-            Configuration = null;
             SymbolTable = null;
             StringTable = null;
+
+            Deltas = null;
         }
     }
 }
