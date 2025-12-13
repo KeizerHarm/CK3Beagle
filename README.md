@@ -18,8 +18,17 @@ Smells are examples of anti-patterns in script; they are ways to program in an u
 
 ...
 
-## Rules!
+## Configuration!
 
 Smells are often subjective and so this tool is _highly_ configurable. Every individual smell check can be enabled or disabled, and almost all have configurable threshold values. Just how many lines of script do you need to write before that scripted effect should be split into more logical parts? You decide!
 
+...
+
 To help come up with the rules appropriate for your situation, here's a handy Rule Preset finder. Simply drop the preset into your VSC configuration, fire the tool and see what it has to report.
+
+(soon)
+
+## Credits:
+
+* Thumbnail by [Artsy Allie](https://artistree.io/artsyallie).
+
