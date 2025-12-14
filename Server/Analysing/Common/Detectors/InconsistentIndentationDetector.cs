@@ -26,7 +26,7 @@ namespace CK3BeagleServer.Analysing.Common.Detectors
 
             if (lines.Count  == 0) return;
 
-            logger.Log(Smell.None, Severity.Debug, "Detected indentation type " + detectedIndentationType, scriptFile);
+            //logger.Log(Smell.None, Severity.Debug, "Detected indentation type " + detectedIndentationType, scriptFile);
 
             if (!_settings.AllowedIndentationTypes.Contains(detectedIndentationType))
             {

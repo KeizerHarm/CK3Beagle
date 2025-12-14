@@ -37,8 +37,8 @@ namespace CK3BeagleServer.Analysing
 
         UnencapsulatedAddition,
 
-        EntityKeyReused_SameType,
-        EntityKeyReused_DifferentType,
+        EntityKeyReuse_SameType,
+        EntityKeyReuse_DifferentType,
 
         MisuseOfThis,
 
@@ -105,9 +105,9 @@ namespace CK3BeagleServer.Analysing
                 case Smell.UnencapsulatedAddition:
                     return "UA.1";
 
-                case Smell.EntityKeyReused_SameType:
+                case Smell.EntityKeyReuse_SameType:
                     return "EKR.1";
-                case Smell.EntityKeyReused_DifferentType:
+                case Smell.EntityKeyReuse_DifferentType:
                     return "EKR.2";
 
                 case Smell.MisuseOfThis:

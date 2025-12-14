@@ -8,25 +8,25 @@ namespace CK3BeagleServer.Analysing.Common.Detectors
 {
     public class InconsistentIndentationDetectorTests : BaseDetectorTest
     {
-        [Theory]
-        [InlineData("InconsistentIndentation/ConsistentTabs", IndentationType.Tab)]
-        [InlineData("InconsistentIndentation/ConsistentFourSpaces", IndentationType.FourSpaces)]
-        [InlineData("InconsistentIndentation/ConsistentThreeSpaces", IndentationType.ThreeSpaces)]
-        [InlineData("InconsistentIndentation/ConsistentTwoSpaces", IndentationType.TwoSpaces)]
-        public void DetectsUsedType(string file, IndentationType expectedDetectedType)
-        {
-            //arrange
-            var logger = new Logger();
-            ScriptFile testcase = GetTestCase(file);
-            var visitor = GetDetector(logger, testcase.Context, expectedIndentationTypes: [expectedDetectedType]);
+        //[Theory]
+        //[InlineData("InconsistentIndentation/ConsistentTabs", IndentationType.Tab)]
+        //[InlineData("InconsistentIndentation/ConsistentFourSpaces", IndentationType.FourSpaces)]
+        //[InlineData("InconsistentIndentation/ConsistentThreeSpaces", IndentationType.ThreeSpaces)]
+        //[InlineData("InconsistentIndentation/ConsistentTwoSpaces", IndentationType.TwoSpaces)]
+        //public void DetectsUsedType(string file, IndentationType expectedDetectedType)
+        //{
+        //    //arrange
+        //    var logger = new Logger();
+        //    ScriptFile testcase = GetTestCase(file);
+        //    var visitor = GetDetector(logger, testcase.Context, expectedIndentationTypes: [expectedDetectedType]);
 
-            //act
-            visitor.Visit(testcase);
+        //    //act
+        //    visitor.Visit(testcase);
 
-            //assert
-            Assert.Single(logger.LogEntries);
-            Assert.Single(logger.LogEntries, x => x.Severity == Severity.Debug && x.Message.Contains(expectedDetectedType.ToString()));
-        }
+        //    //assert
+        //    Assert.Single(logger.LogEntries);
+        //    Assert.Single(logger.LogEntries, x => x.Severity == Severity.Debug && x.Message.Contains(expectedDetectedType.ToString()));
+        //}
 
         [Fact]
         public void DetectsUnexpectedType()

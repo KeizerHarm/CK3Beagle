@@ -41,7 +41,7 @@ namespace CK3BeagleServer.Analysing.Common.Detectors
         private void LogDifferentTypeReuse(Declaration decl1, Declaration decl2)
         {
             var secondReport = LogEntry.MinimalLogEntry("Other instance", decl1);
-            var logEntry = new LogEntry(Smell.EntityKeyReused_DifferentType, _settings.DifferentType_Severity,
+            var logEntry = new LogEntry(Smell.EntityKeyReuse_DifferentType, _settings.DifferentType_Severity,
                 "Two declarations use the same key", decl2);
             logger.Log(logEntry, secondReport);
         }
@@ -60,7 +60,7 @@ namespace CK3BeagleServer.Analysing.Common.Detectors
             }
 
             var otherReports = overriddenCopies.Select(x => LogEntry.MinimalLogEntry("Earlier instance", x)).ToArray();
-            var logEntry = new LogEntry(Smell.EntityKeyReused_SameType, _settings.SameType_Severity, msg, declaration);
+            var logEntry = new LogEntry(Smell.EntityKeyReuse_SameType, _settings.SameType_Severity, msg, declaration);
             logger.Log(logEntry, otherReports);
         }
     }

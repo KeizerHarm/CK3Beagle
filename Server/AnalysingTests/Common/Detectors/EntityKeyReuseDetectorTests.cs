@@ -21,7 +21,7 @@ namespace CK3BeagleServer.Analysing.Common.Detectors
 
             //assert
             Assert.Single(logger.LogEntries);
-            Assert.Single(logger.LogEntries, x => x.Smell == Smell.EntityKeyReused_SameType);
+            Assert.Single(logger.LogEntries, x => x.Smell == Smell.EntityKeyReuse_SameType);
         }
 
         [Fact]
@@ -37,7 +37,7 @@ namespace CK3BeagleServer.Analysing.Common.Detectors
 
             //assert
             Assert.Single(logger.LogEntries);
-            Assert.Single(logger.LogEntries, x => x.Smell == Smell.EntityKeyReused_DifferentType);
+            Assert.Single(logger.LogEntries, x => x.Smell == Smell.EntityKeyReuse_DifferentType);
         }
 
         private static AnalysisVisitor GetDetector(Logger logger,
