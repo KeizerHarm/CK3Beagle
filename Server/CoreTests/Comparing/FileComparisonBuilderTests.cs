@@ -340,6 +340,22 @@ namespace CK3BeagleServer.Core.Comparing
                 //assert
                 AssertDeltasEqual(expectedDelta, comparison);
             }
+
+            [Fact]
+            public void DuplicatedItem()
+            {
+                //arrange
+                (var old, var @new) = GetTestCase("ExtraTests/DuplicatedItem");
+                var expectedDelta =
+                    GetDelta(DeltaKind.ChangedInChildren,
+                        GetDelta(DeltaKind.Added));
+
+                //act
+                var comparison = new FileComparisonBuilder().BuildFileComparison(old, @new);
+
+                //assert
+                AssertDeltasEqual(expectedDelta, comparison);
+            }
         }
     }
 }

@@ -43,9 +43,12 @@ namespace CK3BeagleServer.LspInterface
             {
                 try
                 {
-                    await _orchestrator.InitiateFromJson(payload);
-                    var logEntries = await _orchestrator.HandleAnalysis();
-                    await SendLogs(logEntries);
+                    var success = await _orchestrator.InitiateFromJson(payload);
+                    if (success)
+                    {
+                        var logEntries = await _orchestrator.HandleAnalysis();
+                        await SendLogs(logEntries);
+                    }
                     _orchestrator.WrapUp();
                 }
                 catch (Exception ex)

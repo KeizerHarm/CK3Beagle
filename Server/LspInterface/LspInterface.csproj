@@ -11,4 +11,12 @@
     <ProjectReference Include="..\Core\Core.csproj" />
     <ProjectReference Include="..\Orchestration\Orchestration.csproj" />
   </ItemGroup>
+  
+  <PropertyGroup Condition="'$(RuntimeIdentifier)' == 'win-x64'">
+    <AssemblyName>beagle_windows</AssemblyName>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(RuntimeIdentifier)' == 'linux-x64'">
+    <AssemblyName>beagle_linux</AssemblyName>
+  </PropertyGroup>
 </Project>

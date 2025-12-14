@@ -1,0 +1,34 @@
+#add_random_skill_point_effect
+
+add_random_skill_point_effect = {
+	random_list = {
+		1 = { add_diplomacy_skill = 1 }
+		1 = { add_intrigue_skill = 1 }
+		1 = { add_learning_skill = 1 }
+		1 = { add_martial_skill = 1 }
+		1 = { add_prowess_skill = 1 }
+		1 = { add_stewardship_skill = 1 }
+	}
+}
+
+add_random_five_skill_points_effect = {
+	random_list = {
+		1 = { add_diplomacy_skill = 5 }
+		1 = { add_intrigue_skill = 5 }
+		1 = { add_learning_skill = 5 }
+		1 = { add_martial_skill = 5 }
+		1 = { add_prowess_skill = 5 }
+		1 = { add_stewardship_skill = 5 }
+	}
+}
+
+add_random_five_skill_points_effect = {
+	random_list = {
+		1 = { add_diplomacy_skill = 5 }
+		1 = { add_intrigue_skill = 5 }
+		1 = { add_learning_skill = 5 }
+		1 = { add_martial_skill = 5 }
+		1 = { add_prowess_skill = 5 }
+		1 = { add_stewardship_skill = 5 }
+	}
+}

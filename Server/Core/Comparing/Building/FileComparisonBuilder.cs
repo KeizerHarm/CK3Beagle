@@ -12,10 +12,10 @@ namespace CK3BeagleServer.Core.Comparing.Building
     {
         private ScriptFile SourceFile;
         private ScriptFile EditFile;
-        public HashSet<string> AddedDeclarations;
-        public HashSet<string> ChangedDeclarations;
-        public HashSet<string> RemovedDeclarations;
-        public HashSet<string> UntouchedDeclarations;
+        //public HashSet<string> AddedDeclarations;
+        //public HashSet<string> ChangedDeclarations;
+        //public HashSet<string> RemovedDeclarations;
+        //public HashSet<string> UntouchedDeclarations;
         private readonly MixedComparer _hashComparer = new();
         private readonly KeyBasedNodeComparer _keyComparer = new();
 
@@ -29,9 +29,9 @@ namespace CK3BeagleServer.Core.Comparing.Building
                 return Delta.Unchanged(edit);
             }
 
-            (AddedDeclarations, RemovedDeclarations, ChangedDeclarations, UntouchedDeclarations)
-                = ComparisonHelpers.SimpleListComparison(SourceFile.Declarations.ToDictionary(k => k.Key), EditFile.Declarations.ToDictionary(k => k.Key),
-                    (first, second) => first.GetTrueHash() == second.GetTrueHash());
+            //(AddedDeclarations, RemovedDeclarations, ChangedDeclarations, UntouchedDeclarations)
+            //    = ComparisonHelpers.SimpleListComparison(SourceFile.Declarations.ToDictionary(k => k.Key), EditFile.Declarations.ToDictionary(k => k.Key),
+            //        (first, second) => first.GetTrueHash() == second.GetTrueHash());
 
             var initialDelta = GetDelta(SourceFile, EditFile);
 

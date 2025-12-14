@@ -1,4 +1,6 @@
 *.pdb
+*.vsix
+*.code-workspace
 
 # Logs
 logs
@@ -141,3 +143,5 @@ dist
 vite.config.js.timestamp-*
 vite.config.ts.timestamp-*
 .vite/
+
+

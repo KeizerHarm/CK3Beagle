@@ -1,11 +1,11 @@
 {
-  "name": "ck3_beagle",
+  "name": "ck3beagle",
   "publisher": "KeizerHarm",
   "displayName": "CK3 Beagle",
   "description": "Static Analyser and Smell Detector for CK3 mod projects.",
   "keywords": [ "CK3", "Crusader Kings 3", "CKIII", "Crusader Kings" ],
   "icon": "Beagle_128px.png",
-  "version": "0.0.1",
+  "version": "0.0.3",
   "preview": true,
   "repository": {
     "type": "git",
@@ -14,10 +14,6 @@
   "engines": {
     "vscode": "^1.103.0"
   },
-  "files": [
-    "out",
-    "server"
-  ],
   "categories": [
     "Linters", "Programming Languages"
   ],

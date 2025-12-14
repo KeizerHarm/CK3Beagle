@@ -39,6 +39,7 @@
 
 
   <ItemGroup>
+    <Folder Include="Comparing\Testcases\ExtraTests\DuplicatedItem\" />
     <Folder Include="Comparing\Testcases\ExtraTests\Scripted Effect\" />
   </ItemGroup>
 

@@ -2,7 +2,7 @@ import * as vscode from 'vscode';
 import { spawn } from 'child_process';
 import * as path from 'path';
 import { ChildProcess } from 'child_process';
-import { ServerResponse } from './messages';
+import * as fs from 'fs';
 
 export var proc: ChildProcess;
 export let readBuffer = Buffer.alloc(0);
@@ -45,15 +45,25 @@ export function sendMessage(obj: any) {
 }
 
 function getServerExe(context: vscode.ExtensionContext) {
-  // const serverExe = process.platform === 'win32'
-  //   ? 'LspInterface.exe'
-  //   : './MyLangServer'; // for Linux/macOS
-  const serverPath = context.asAbsolutePath(path.join('server', 'LspInterface.exe'));
+  var serverFile = '';
+  if (process.platform === 'win32'){
+    serverFile = 'beagle_windows.exe';
+  }
+  else if (process.platform === 'linux'){
+    serverFile = 'beagle_linux';
+  } else {
+    throw new Error(`Unsupported platform: ${process.platform}`);
+  }
+  const serverPath = context.asAbsolutePath(path.join('server', serverFile));
+
+  if (process.platform === 'linux'){
+    fs.chmodSync(serverPath, 0o755);
+  }
   return serverPath;
 }
 
 function createServerProcess(serverPath: string) {
-  proc = spawn(serverPath, ['--max-old-space-size=4096'], {
+  proc = spawn(serverPath, {
     stdio: ['pipe', 'pipe', 'inherit'],
     windowsHide: true
   });
