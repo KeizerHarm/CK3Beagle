@@ -5,7 +5,7 @@
   "description": "Static Analyser and Smell Detector for CK3 mod projects.",
   "keywords": [ "CK3", "Crusader Kings 3", "CKIII", "Crusader Kings" ],
   "icon": "Beagle_128px.png",
-  "version": "0.0.3",
+  "version": "0.0.4",
   "preview": true,
   "repository": {
     "type": "git",
@@ -29,7 +29,6 @@
           "type": "string",
           "default": "C:\\Program Files (x86)\\Steam\\steamapps\\common\\Crusader Kings III\\game",
           "description": "The installation directory of your CK3 game.",
-          "format": "uri",
           "pattern": ".*\\game",
           "patternErrorMessage": "The path should end in '\\game'.",
           "order": 0
@@ -38,7 +37,6 @@
           "type": "string",
           "default": "C:\\Users\\[USERNAME]\\Documents\\Paradox Interactive\\Crusader Kings III\\logs",
           "description": "The directory where your game's generated logs are stored. Generate them using the in-game console command.",
-          "format": "uri",
           "pattern": ".*\\logs",
           "patternErrorMessage": "The path should end in '\\logs'.",
           "order": 0

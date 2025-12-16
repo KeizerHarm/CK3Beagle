@@ -190,19 +190,34 @@ namespace CK3BeagleServer.Core
         public static (bool, string) GetFolderAndCheckExists(JsonElement json, string folderName, out string message)
         {
             message = "";
-            var folderPath = json.GetProperty(folderName).GetString();
-            if (string.IsNullOrEmpty(folderPath))
+            var rawfolderPath = json.GetProperty(folderName).GetString();
+            if (string.IsNullOrEmpty(rawfolderPath))
             {
                 message = $"Missing {folderName} setting";
                 return (false, null);
             }
-            if (!Directory.Exists(folderPath))
+            var realFolderPath = GetProperPath(rawfolderPath);
+            if (!Directory.Exists(realFolderPath))
             {
-                message = $"{folderName} setting points to a non-existent directory";
+                message = $"The folder '{rawfolderPath}' for setting '{folderName}' either does not exist or VSC does not have permission to read it"; ;
                 return (false, null);
             }
-            return (true, folderPath);
+            return (true, realFolderPath);
         }
 
+        public static string GetProperPath(string path)
+        {
+            if (string.IsNullOrEmpty(path))
+                return path;
+
+            //*nix compatibility
+            if (path.StartsWith("~/"))
+                return Path.Combine(
+                    Environment.GetFolderPath(Environment.SpecialFolder.UserProfile),
+                    path.Substring(2)
+                );
+
+            return path;
+        }
     }
 }

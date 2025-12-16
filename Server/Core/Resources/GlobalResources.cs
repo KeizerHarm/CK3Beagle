@@ -55,7 +55,7 @@ namespace CK3BeagleServer.Core.Resources
             }
 
             var modPath = json.GetProperty("modPath").GetString();
-            if (!string.IsNullOrWhiteSpace(modPath) && !Directory.Exists(modPath))
+            if (!string.IsNullOrWhiteSpace(modPath) && !Directory.Exists(Helpers.GetProperPath(modPath)))
             {
                 message = "ModPath setting points to a non-existent directory";
                 return false;
