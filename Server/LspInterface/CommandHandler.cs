@@ -37,7 +37,7 @@ namespace CK3BeagleServer.LspInterface
         {
             if (commandType == "ping")
             {
-                await _program.SendMessageAsync(_program.GetBasicMessage("pong"));
+                await _program.SendMessageAsync(_program.GetBasicMessage("Pong - server is working!"));
             }
             else if (commandType == "analyse")
             {
@@ -47,6 +47,23 @@ namespace CK3BeagleServer.LspInterface
                     if (success)
                     {
                         var logEntries = await _orchestrator.HandleAnalysis();
+                        await SendLogs(logEntries);
+                    }
+                    _orchestrator.WrapUp();
+                }
+                catch (Exception ex)
+                {
+                    await _program.SendMessageAsync(_program.GetErrorMessage(ex.ToString()));
+                }
+            }
+            else if (commandType == "partial_analyse")
+            {
+                try
+                {
+                    var success = await _orchestrator.InitiatePartialFromJson(payload);
+                    if (success)
+                    {
+                        var logEntries = await _orchestrator.HandleAnalysis(isPartialRun: true);
                         await SendLogs(logEntries);
                     }
                     _orchestrator.WrapUp();

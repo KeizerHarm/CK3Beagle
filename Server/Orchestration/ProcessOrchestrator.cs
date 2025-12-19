@@ -9,6 +9,7 @@ using CK3BeagleServer.Core.Resources;
 using CK3BeagleServer.Core.Resources.Storage;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text.Json;
 using System.Threading.Tasks;
@@ -39,6 +40,50 @@ namespace CK3BeagleServer.Orchestration
             return true;
         }
 
+        public async Task<bool> InitiatePartialFromJson(JsonElement json)
+        {
+            bool success = GlobalResources.Initiate(json, out string message, true);
+            if (!success)
+            {
+                await _negativeProgressDelegate(message);
+                return false;
+            }
+            success = GetEditedFiles(json, out var files);
+            if (!success)
+            {
+                await _negativeProgressDelegate("Issue parsing partial files");
+                return false;
+            }
+            GlobalResources.Modded.Whitelist = [.. files];
+
+            await _positiveProgressDelegate(message);
+            return true;
+        }
+
+        private bool GetEditedFiles(JsonElement json, out string[] files)
+        {
+            files = null;
+            var exists = json.TryGetProperty("editedFiles", out var filesValue);
+            if (exists)
+            {
+                var absoluteFiles = filesValue.Deserialize<string[]>();
+                files = absoluteFiles.Select(x => Path.GetRelativePath(GlobalResources.Modded.Path, x)).ToArray();
+                return true;
+            }
+            return false;
+        }
+
+        public async Task<IEnumerable<LogEntry>> HandleAnalysis(bool reportTiming = false, bool isPartialRun = false)
+        {
+            var logEntries = await HandleCommonAnalysis(reportTiming, isPartialRun);
+            if (GlobalResources.Configuration.ReadVanilla && !isPartialRun)
+            {
+                var diffLogEntries = await HandleComparativeAnalysis(reportTiming);
+                logEntries = logEntries.Union(diffLogEntries);
+            }
+            return logEntries;
+        }
+
         public void InitiateFromMinimalConfig(string vanillaPath, string modPath, string logsPath)
         {
             LogsParser.ParseLogs(logsPath);
@@ -47,32 +92,35 @@ namespace CK3BeagleServer.Orchestration
             GlobalResources.Configuration = new Configuration(new JsonElement(), true);
             GlobalResources.SymbolTable = new SymbolTable();
             GlobalResources.StringTable = new StringTable();
+            GlobalResources.VanillaModIntersect = [];
         }
 
-        public async Task<IEnumerable<LogEntry>> HandleAnalysis(bool reportTiming = false)
+        public void InitiatePartialFromMinimalConfig(string vanillaPath, string modPath, string logsPath, params string[] absEditedFiles)
         {
-            var logEntries = await HandleCommonAnalysis(reportTiming);
-            if (GlobalResources.Configuration.ReadVanilla)
-            {
-                var diffLogEntries = await HandleComparativeAnalysis(reportTiming);
-                logEntries = logEntries.Union(diffLogEntries);
-            }
-            return logEntries;
+            GlobalResources.Vanilla = new Context(vanillaPath, ContextType.Vanilla);
+            GlobalResources.Modded = new Context(modPath, ContextType.Modded);
+            GlobalResources.Configuration = new Configuration(new JsonElement(), true);
+            GlobalResources.VanillaModIntersect = [];
+            var files = absEditedFiles.Select(x => Path.GetRelativePath(GlobalResources.Modded.Path, x)).ToArray();
+
+            GlobalResources.Modded.Whitelist = [.. files];
         }
 
-        private async Task<IEnumerable<LogEntry>> HandleCommonAnalysis(bool reportTiming = false)
+        private async Task<IEnumerable<LogEntry>> HandleCommonAnalysis(bool reportTiming = false, bool isPartialRun = false)
         {
             if (GlobalResources.Configuration.VanillaFileHandling == VanillaFileHandling.IgnoreEntirely)
             {
                 ComparingService.BlacklistVanillaFilesInModContext(GlobalResources.Modded, GlobalResources.Vanilla, _positiveProgressDelegate);
             }
 
-            await ParsingService.ParseMacroEntities(() => new AntlrParser(), GlobalResources.Vanilla, _positiveProgressDelegate);
-
-            await ParsingService.ParseAllEntities(() => new AntlrParser(), GlobalResources.Modded, _positiveProgressDelegate);
+            if (!isPartialRun)
+            {
+                await ParsingService.ParseMacroEntities(() => new AntlrParser(), GlobalResources.Vanilla, _positiveProgressDelegate);
+            }
+            await ParsingService.ParseAllEntities(() => new AntlrParser(), GlobalResources.Modded, _positiveProgressDelegate, isPartialRun);
             await _positiveProgressDelegate("Mod parsing complete!");
 
-            if (GlobalResources.Configuration.ReadVanilla || GlobalResources.Configuration.VanillaFileHandling == VanillaFileHandling.AnalyseModsAdditions)
+            if (!isPartialRun && (GlobalResources.Configuration.ReadVanilla || GlobalResources.Configuration.VanillaFileHandling == VanillaFileHandling.AnalyseModsAdditions))
             {
                 await ComparingService.ParseVanillaModIntersect(() => new AntlrParser(), GlobalResources.Modded, GlobalResources.Vanilla, _positiveProgressDelegate);
             }

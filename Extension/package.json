@@ -5,7 +5,7 @@
   "description": "Static Analyser and Smell Detector for CK3 mod projects.",
   "keywords": [ "CK3", "Crusader Kings 3", "CKIII", "Crusader Kings" ],
   "icon": "Beagle_128px.png",
-  "version": "0.0.4",
+  "version": "0.0.5",
   "preview": true,
   "repository": {
     "type": "git",
@@ -473,10 +473,10 @@
         "shortTitle": "Analyse"
       },
       {
-        "command": "ck3_beagle.analyse_append",
+        "command": "ck3_beagle.partial_analyse",
         "category": "CK3 Beagle",
-        "title": "Start Beagle Analysis but Keep Existing Errors",
-        "shortTitle": "Analyse - Append"
+        "title": "Start Partial Beagle Analysis (only analyse edited files)",
+        "shortTitle": "Analyse - Partial"
       }
     ]
   },

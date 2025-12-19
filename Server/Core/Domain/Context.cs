@@ -18,9 +18,9 @@ namespace CK3BeagleServer.Core.Domain
     {
         public string Path { get; set; }
         public ContextType Type { get; set; }
-        public Dictionary<string, Declaration>[] Declarations { get; }
-        public List<Declaration> OverriddenDeclarationCopies { get; }
-        public Dictionary<string, ScriptFile> Files { get; }
+        public Dictionary<string, Declaration>[] Declarations { get; private set; }
+        public List<Declaration> OverriddenDeclarationCopies { get; private set; }
+        public Dictionary<string, ScriptFile> Files { get; private set; }
 
         public Context(string path, ContextType type)
         {
@@ -78,12 +78,25 @@ namespace CK3BeagleServer.Core.Domain
         /// <summary>
         /// Marks the files that 'shouldn't' be parsed for this context.
         /// </summary>
-        internal HashSet<string> Blacklist { get; } = [];
+        public HashSet<string> Blacklist { get; set; } = [];
 
         /// <summary>
         /// If set, marks the files that 'should' be parsed for this context - everything else shouldn't.
         /// </summary>
-        internal HashSet<string> Whitelist { get; } = [];
+        public HashSet<string> Whitelist { get; set; } = [];
 
+        public void ClearParsedData()
+        {
+            Files = new Dictionary<string, ScriptFile>();
+
+            Declarations = new Dictionary<string, Declaration>[Enum.GetValues<DeclarationType>().Length];
+            OverriddenDeclarationCopies = new List<Declaration>();
+            for (int i = 0; i < Enum.GetValues<DeclarationType>().Length; i++)
+            {
+                Declarations[i] = new Dictionary<string, Declaration>();
+            }
+            Blacklist = [];
+            Whitelist = [];
+        }
     }
 }

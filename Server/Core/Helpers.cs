@@ -196,7 +196,7 @@ namespace CK3BeagleServer.Core
                 message = $"Missing {folderName} setting";
                 return (false, null);
             }
-            var realFolderPath = GetProperPath(rawfolderPath);
+            var realFolderPath = ExtendPath(rawfolderPath);
             if (!Directory.Exists(realFolderPath))
             {
                 message = $"The folder '{rawfolderPath}' for setting '{folderName}' either does not exist or VSC does not have permission to read it"; ;
@@ -205,7 +205,7 @@ namespace CK3BeagleServer.Core
             return (true, realFolderPath);
         }
 
-        public static string GetProperPath(string path)
+        public static string ExtendPath(string path)
         {
             if (string.IsNullOrEmpty(path))
                 return path;
@@ -218,6 +218,22 @@ namespace CK3BeagleServer.Core
                 );
 
             return path;
+        }
+
+        public static string NormalizePath(string path)
+        {
+            if (string.IsNullOrEmpty(path))
+                return path;
+
+            if (Environment.OSVersion.Platform == PlatformID.Unix)
+            {
+                return Path.GetFullPath(new Uri(path).LocalPath)
+                      .TrimEnd(Path.DirectorySeparatorChar, Path.AltDirectorySeparatorChar);
+            }
+
+            return Path.GetFullPath(new Uri(path).LocalPath)
+                       .TrimEnd(Path.DirectorySeparatorChar, Path.AltDirectorySeparatorChar)
+                       .ToUpperInvariant();
         }
     }
 }

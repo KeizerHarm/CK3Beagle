@@ -1,11 +1,15 @@
 import vscode = require('vscode');
 import { ServerResponse, Smell, RelatedSmell } from './messages';
 import { startServer, shutDownServer, readMessage, sendMessage } from './server_logic';
+import { TextDocument, Uri } from 'vscode';
 
 export async function activate(context: vscode.ExtensionContext) {
+  let { workspace } = require("vscode");
   context.subscriptions.push(vscode.commands.registerCommand('ck3_beagle.ping', ping));
-  context.subscriptions.push(vscode.commands.registerCommand('ck3_beagle.analyse', () => analyse(false)));
-  context.subscriptions.push(vscode.commands.registerCommand('ck3_beagle.analyse_append', () => analyse(true)));
+  context.subscriptions.push(vscode.commands.registerCommand('ck3_beagle.analyse', () => analyse()));
+  context.subscriptions.push(vscode.commands.registerCommand('ck3_beagle.partial_analyse', () => partial_analyse()));
+  context.subscriptions.push(workspace.onDidSaveTextDocument((e: TextDocument) => handleFileSave(e)));
+  savedFiles = [];
   await startServer(context);
 }
 
@@ -23,6 +27,13 @@ async function ping() {
   }
 }
 
+var savedFiles: Uri[];
+function handleFileSave(e: TextDocument){
+  if (e.fileName.endsWith('.txt')){
+    savedFiles.push(e.uri);
+  }
+}
+
 function getSettings() {
   const configuration = vscode.workspace.getConfiguration('ck3_beagle');
   const otherData = { environmentPath: vscode.workspace.workspaceFolders[0].uri.fsPath };
@@ -30,9 +41,35 @@ function getSettings() {
   return allSettings;
 }
 
-async function analyse(keepPrevErrors: boolean){
+async function partial_analyse(){
+  if (savedFiles.length === 0){
+    vscode.window.showInformationMessage('You triggered a partial analysis but there\'s no edited files - run a full analysis instead!');
+    return;
+  }
+
+  const diagnosticCollection = getDiagnosticCollection();
+  savedFiles.forEach(file => {
+    diagnosticCollection.set(file, []);
+  });
+
+  var filePaths : string[];
+  filePaths = savedFiles.map(f => f.fsPath);
   var settings = getSettings();
-  sendMessage({ command: 'analyse', payload: settings });
+
+  var payload = {
+    editedFiles: filePaths,
+    ...settings
+  };
+  var message = { command: 'partial_analyse', payload };
+  await analyse(message);
+}
+
+async function analyse(message: any = null){
+  if (!message){
+    var settings = getSettings();
+    message = { command: 'analyse', payload: settings };
+  }
+  sendMessage(message);
 
   while (true) {
     const response = (await readMessage()) as ServerResponse;
@@ -51,9 +88,8 @@ async function analyse(keepPrevErrors: boolean){
       continue;
     }
     if (response.type === 'analysis_median') {
-      //vscode.window.showInformationMessage(response.payload.message);
       console.log('Got chunk!');
-      processSmells(response.payload.smells, true);
+      processSmells(response.payload.smells);
     }
     if (response.type === 'analysis_final') {
       vscode.window.showInformationMessage(response.payload.message);
@@ -62,7 +98,7 @@ async function analyse(keepPrevErrors: boolean){
 
     if (response.type === 'analysis') {
       vscode.window.showInformationMessage(response.payload.summary);
-      processSmells(response.payload.smells, keepPrevErrors);
+      processSmells(response.payload.smells);
       return;
     }
   }
@@ -70,16 +106,13 @@ async function analyse(keepPrevErrors: boolean){
 
 let globalDiagnosticCollection: vscode.DiagnosticCollection;
 
-function processSmells(smells: Smell[], keepPrevErrors: boolean) {
+function processSmells(smells: Smell[]) {
   const diagnosticsByFile = new Map<string, vscode.Diagnostic[]>();
   smells.forEach(smell => {
     smellToDiagnostic(smell, diagnosticsByFile);
   });
 
   const diagnosticCollection = getDiagnosticCollection();
-  if (!keepPrevErrors) {
-    diagnosticCollection.clear();
-  }
   for (const [filePath, diagnostics] of diagnosticsByFile) {
     const fileUri = vscode.Uri.file(filePath);
     diagnosticCollection.set(fileUri, diagnostics);

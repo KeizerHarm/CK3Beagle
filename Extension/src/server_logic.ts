@@ -88,17 +88,23 @@ async function handleServerData(chunk: Buffer) {
 
   while (true) {
     const headerEnd = readBuffer.indexOf('\r\n\r\n');
-    if (headerEnd === -1) break;
+    if (headerEnd === -1) {
+      break;
+    }
 
     const header = readBuffer.subarray(0, headerEnd).toString('ascii');
     const match = header.match(/Content-Length:\s*(\d+)/i);
-    if (!match) break;
+    if (!match) {
+      break;
+    }
 
     const contentLength = parseInt(match[1], 10);
     const bodyStart = headerEnd + 4;
     const totalLength = bodyStart + contentLength;
 
-    if (readBuffer.length < totalLength) break;
+    if (readBuffer.length < totalLength) {
+      break;
+    }
 
 
     const body = readBuffer.subarray(bodyStart, totalLength);

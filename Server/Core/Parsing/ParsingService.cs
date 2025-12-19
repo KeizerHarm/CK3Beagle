@@ -13,12 +13,14 @@ namespace CK3BeagleServer.Core.Parsing
 {
     public class ParsingService
     {
-        public static async Task ParseAllEntities(Func<ICk3Parser> parserMaker, Context context, Func<string, Task> progressDelegate = null)
+        public static async Task ParseAllEntities(Func<ICk3Parser> parserMaker, Context context, Func<string, Task> progressDelegate = null, bool isPartialRun = false)
         {
             foreach (var declarationType in Enum.GetValues<DeclarationType>())
             {
                 ParseAllDeclarationsOfType(parserMaker, context, declarationType);
-                await progressDelegate("Completed parsing " + declarationType.ToString() + "s");
+                if (!isPartialRun) {
+                    await progressDelegate("Completed parsing " + declarationType.ToString() + "s");
+                }
             }
             GlobalResources.Lock();
             new SemanticPassHandler().ExecuteSemanticPass(context);
@@ -33,6 +35,9 @@ namespace CK3BeagleServer.Core.Parsing
             {
                 string[] files = Directory.GetFiles(entityHome, "*.txt", SearchOption.AllDirectories)
                     .Where(x => Filter(context, Path.GetRelativePath(context.Path, x))).ToArray();
+
+                if (files.Length == 0)
+                    return;
 
                 var batchSize = 50;
                 var fileBatches = files.Chunk(batchSize);
@@ -84,9 +89,9 @@ namespace CK3BeagleServer.Core.Parsing
         public static async Task ParseMacroEntities(Func<ICk3Parser> parserMaker, Context context, Func<string, Task> progressDelegate)
         {
             ParseAllDeclarationsOfType(parserMaker, context, DeclarationType.ScriptedEffect);
-            await progressDelegate("Parsed vanilla scripted effects");
+            await progressDelegate("Parsed vanilla Scripted Effects");
             ParseAllDeclarationsOfType(parserMaker, context, DeclarationType.ScriptedTrigger);
-            await progressDelegate("Parsed vanilla scripted triggers");
+            await progressDelegate("Parsed vanilla Scripted Triggers");
         }
 
     }

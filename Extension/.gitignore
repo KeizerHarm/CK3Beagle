@@ -1,6 +1,7 @@
 *.pdb
 *.vsix
 *.code-workspace
+server/
 
 # Logs
 logs

@@ -38,6 +38,11 @@ namespace CK3BeagleServer.CLI
             var logs = await orchestrator.HandleAnalysis(true);
 
             Console.WriteLine($"Found {logs.Count()} issues");
+
+            orchestrator = new ProcessOrchestrator(posProgressDelegate, negProgressDelegate);
+            orchestrator.InitiatePartialFromMinimalConfig(VanillaPath, ModdedPath, LogsFolder, "C:\\Users\\Harm\\Documents\\Paradox Interactive\\Crusader Kings III\\mod\\T4N-CK3\\T4N\\common\\scripted_effects\\00_court_position_effects.txt");
+            var newLogs = await orchestrator.HandleAnalysis(isPartialRun: true);
+            Console.WriteLine($"Found {newLogs.Count()} issues on partial run");
         }
     }
 }

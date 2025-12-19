@@ -20,7 +20,7 @@ namespace CK3BeagleServer.Core.Resources
 
         public static Context Vanilla;
         public static Context Modded;
-        public static HashSet<string> VanillaModIntersect = [];
+        public static HashSet<string> VanillaModIntersect;
 
         public static Configuration Configuration;
         public static SymbolTable SymbolTable;
@@ -28,13 +28,21 @@ namespace CK3BeagleServer.Core.Resources
 
         public static IEnumerable<Delta> Deltas;
 
-        public static bool Initiate(JsonElement json, out string message)
+        public static bool Initiate(JsonElement json, out string message, bool isPartialRun = false)
         {
             message = "";
-            if (Configuration?.RawSettings != null && Configuration.RawSettings.Equals(json))
+            if ((Configuration?.RawSettings != null && Configuration.RawSettings.Equals(json)))
             {
                 message = "Settings unchanged, continuing with same configuration";
                 ClearButKeepConfig();
+                return true;
+            }
+
+            if (isPartialRun)
+            {
+                message = "Updated configuration for partial run!";
+                ClearButKeepConfig();
+                Configuration = new Configuration(json);
                 return true;
             }
 
@@ -55,7 +63,7 @@ namespace CK3BeagleServer.Core.Resources
             }
 
             var modPath = json.GetProperty("modPath").GetString();
-            if (!string.IsNullOrWhiteSpace(modPath) && !Directory.Exists(Helpers.GetProperPath(modPath)))
+            if (!string.IsNullOrWhiteSpace(modPath) && !Directory.Exists(Helpers.ExtendPath(modPath)))
             {
                 message = "ModPath setting points to a non-existent directory";
                 return false;
@@ -72,6 +80,7 @@ namespace CK3BeagleServer.Core.Resources
             Configuration = new Configuration(json);
             SymbolTable = new SymbolTable();
             StringTable = new StringTable();
+            VanillaModIntersect = [];
 
             message = "Settings loaded succesfully: " + Configuration.ToString();
             return true;
@@ -105,37 +114,47 @@ namespace CK3BeagleServer.Core.Resources
 
         public static void Lock()
         {
-            EFFECTKEYS = _effectKeys.ToHashSet() ?? new HashSet<string>();
-            TRIGGERKEYS = _triggerKeys?.ToHashSet() ?? new HashSet<string>();
-            EVENTTARGETS = _eventTargets?.ToHashSet() ?? new HashSet<string>();
-
+            var existingEffects = _effectKeys?.ToHashSet() ?? [];
+            if (EFFECTKEYS != null)
+                EFFECTKEYS = [.. EFFECTKEYS.Union(existingEffects)];
+            else
+                EFFECTKEYS = existingEffects;
             _effectKeys = null;
+
+            var existingTriggers = _triggerKeys?.ToHashSet() ?? [];
+            if (TRIGGERKEYS != null)
+                TRIGGERKEYS = [.. TRIGGERKEYS.Union(existingTriggers)];
+            else
+                TRIGGERKEYS = existingTriggers;
             _triggerKeys = null;
+
+            var existingEventTargets = _eventTargets?.ToHashSet() ?? [];
+            if (EVENTTARGETS != null)
+                EVENTTARGETS = [.. EVENTTARGETS.Union(existingEventTargets)];
+            else
+                EVENTTARGETS = existingEventTargets;
             _eventTargets = null;
         }
 
         public static void ClearEverything()
         {
-            Configuration = null;
             ClearButKeepConfig();
+            Configuration = null;
+            SymbolTable = null;
+            StringTable = null;
+            _effectKeys = null;
+            _triggerKeys = null;
+            EFFECTKEYS = null;
+            TRIGGERKEYS = null;
         }
 
         public static void ClearButKeepConfig()
         {
-            Vanilla = null;
-            Modded = null;
-            VanillaModIntersect = [];
-
-            _effectKeys = null;
-            _triggerKeys = null;
+            Vanilla?.ClearParsedData();
+            Modded?.ClearParsedData();
+            VanillaModIntersect = null;
             _eventTargets = null;
-            EFFECTKEYS = null;
-            TRIGGERKEYS = null;
             EVENTTARGETS = null;
-
-            SymbolTable = null;
-            StringTable = null;
-
             Deltas = null;
         }
     }
