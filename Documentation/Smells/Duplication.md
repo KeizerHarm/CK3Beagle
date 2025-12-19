@@ -1,4 +1,4 @@
-# Large Unit
+# Duplication
 
 Script is duplicated when it appears twice or more, doing the same thing to something. It poses an obvious problem for maintenance; if two events in two different contexts need to ensure they are dealing with a faith that forbids alcohol, and they use the same hard-written enumeration of faiths for it, then whenever an expansion (or a mod) adds another teetotaler religion, that implementer will need to find all of those triggers and update all of them. Good luck keeping that straight! Extracting the duplicated parts to macros is how you prevent duplication and ease maintenance a whole lot.
 
