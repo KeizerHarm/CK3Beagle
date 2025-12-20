@@ -28,7 +28,7 @@ namespace CK3BeagleServer.Core.Resources
             RawSettings = rawSettings;
             if (useDefault)
             {
-                ReadVanilla = false;
+                ReadVanilla = true;
                 VanillaFileHandling = VanillaFileHandling.TreatAsRegularFiles;
 
                 LargeUnitSettings =

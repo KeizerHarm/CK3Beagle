@@ -62,6 +62,7 @@ async function partial_analyse(){
   };
   var message = { command: 'partial_analyse', payload };
   await analyse(message);
+  savedFiles = [];
 }
 
 async function analyse(message: any = null){

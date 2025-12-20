@@ -33,7 +33,7 @@ namespace CK3BeagleServer.CLI
             var orchestrator = new ProcessOrchestrator(posProgressDelegate, negProgressDelegate);
             orchestrator.InitiateFromMinimalConfig(VanillaPath, ModdedPath, LogsFolder);
             GlobalResources.Configuration.ReadVanilla = true;
-            GlobalResources.Configuration.VanillaFileHandling = VanillaFileHandling.AnalyseModsAdditions;
+            GlobalResources.Configuration.VanillaFileHandling = VanillaFileHandling.IgnoreEntirely;
 
             var logs = await orchestrator.HandleAnalysis(true);
 
