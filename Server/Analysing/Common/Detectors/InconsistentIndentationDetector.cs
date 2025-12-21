@@ -193,7 +193,7 @@ namespace CK3BeagleServer.Analysing.Common.Detectors
             var detectedIndentationType = IndentationType.Inconclusive;
             foreach (var indentationType in Enum.GetValues<IndentationType>())
             {
-                if (linesThatWorkForIndentationTypes[(int)indentationType] >= relevantLineCount * 2 / 3)
+                if (linesThatWorkForIndentationTypes[(int)indentationType] >= relevantLineCount * 3 / 5)
                 {
                     detectedIndentationType = indentationType;
                 }
