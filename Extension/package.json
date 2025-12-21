@@ -5,7 +5,7 @@
   "description": "Static Analyser and Smell Detector for CK3 mod projects.",
   "keywords": [ "CK3", "Crusader Kings 3", "CKIII", "Crusader Kings" ],
   "icon": "Beagle_128px.png",
-  "version": "0.0.6",
+  "version": "0.0.7",
   "preview": true,
   "repository": {
     "type": "git",
@@ -66,6 +66,13 @@
           "order": 1
         },
         
+        "ck3_beagle.verboseErrors": {
+          "type": "boolean",
+          "default": false,
+          "markdownDescription": "Turn on to display all errors as messages.",
+          "order": 2
+        },
+
         "ck3_beagle.duplication.enabled": {
           "type": "boolean",
           "default": true,

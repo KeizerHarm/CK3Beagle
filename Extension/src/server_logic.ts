@@ -7,8 +7,16 @@ import * as fs from 'fs';
 export var proc: ChildProcess;
 export let readBuffer = Buffer.alloc(0);
 
+let logError: (msg: string) => void = () => {};
 
 export async function startServer(context: vscode.ExtensionContext) {
+  const verbose = vscode.workspace.getConfiguration('ck3_beagle').get('verboseErrors');
+  if (verbose) {
+    logError = (msg) => vscode.window.showErrorMessage(msg);
+  } else {
+    logError = (msg) => console.error(msg);
+  }
+
   try {
     vscode.window.showInformationMessage('Attempting to start server');
     let serverPath = getServerExe(context);
@@ -16,12 +24,11 @@ export async function startServer(context: vscode.ExtensionContext) {
     vscode.window.showInformationMessage('Started server');
   }
   catch (err) {
-    vscode.window.showInformationMessage('Error starting server!');
-    console.error('Error:', err);
+    logError('Error starting server! ' + err.toString());
     proc.stdin?.end();
 
     await new Promise((resolve) => proc.on('exit', resolve));
-    console.log('Service stopped.');
+    vscode.window.showInformationMessage('Stopped server');
     process.exit(1);
   }
 }
@@ -69,7 +76,11 @@ function createServerProcess(serverPath: string) {
   });
 
   proc.stderr?.on('data', (data) => {
-    console.error('[server err]', data.toString());
+    logError('SERVER ERROR - ' + data.toString());
+  });
+  
+  proc.on('error', (err) => {
+    logError('Failed to start server: ' + err.message);
   });
 
   proc.on('exit', (code) => {
@@ -115,8 +126,8 @@ async function handleServerData(chunk: Buffer) {
       const message = JSON.parse(body.toString('utf8'));
       messages.push(message);
     } catch (err) {
-      console.error('Error parsing message:', err);
-      console.error(body.toString('utf8'));
+      logError('Error parsing message:' + err.toString());
+      logError(body.toString('utf8'));
     }
     if (contentLength > LARGE_MESSAGE_THRESHOLD) {
       await new Promise(r => setTimeout(r, 1000));
