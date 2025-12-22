@@ -85,6 +85,7 @@ async function analyse(message: any = null){
     }
 
     if (response.type === 'analysis_initial') {
+      getDiagnosticCollection().clear();
       vscode.window.showInformationMessage(response.payload.message);
       continue;
     }
@@ -98,6 +99,7 @@ async function analyse(message: any = null){
     }
 
     if (response.type === 'analysis') {
+      getDiagnosticCollection().clear();
       vscode.window.showInformationMessage(response.payload.summary);
       processSmells(response.payload.smells);
       return;
