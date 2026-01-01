@@ -86,7 +86,7 @@ namespace CK3BeagleServer.Core.Comparing
                     {
                         var vanillaFile = vanillaContext.Files[localFilePath];
                         var modFile = modContext.Files[localFilePath];
-                        fileComparisons.Add(comparisonBuilder.BuildFileComparison(modFile, vanillaFile));
+                        fileComparisons.Add(comparisonBuilder.BuildFileComparison(vanillaFile, modFile));
                     }
                 },
                 percent => positiveProgressDelegate($"Diff analysis {percent}% complete"),

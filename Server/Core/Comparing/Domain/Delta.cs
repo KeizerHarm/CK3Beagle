@@ -85,6 +85,23 @@ namespace CK3BeagleServer.Core.Comparing.Domain
             delta.Parent = this;
         }
 
+        public string ToTreeString(int indent = 0)
+        {
+            string thisDelta = "{ " + Kind + " }\n";
+            if (indent != 0)
+            {
+                thisDelta = new string('\t', indent) + "└" + thisDelta;
+            }
+            if (Children != null)
+            {
+                foreach (var child in Children)
+                {
+                    thisDelta += child.ToTreeString(indent + 1);
+                }
+            }
+            return thisDelta;
+        }
+
         public override string ToString()
         {
             var key = "";
@@ -100,12 +117,16 @@ namespace CK3BeagleServer.Core.Comparing.Domain
                     key = comment.StringRepresentation;
                 if (Node is AnonymousBlock block)
                     key = "<block>";
+                return "{ " + Kind + ": '" + key + "' }";
+            }
+            else if (Shadow != null)
+            {
+                return "{ " + Kind + ": '" + Shadow.StringRepresentation + "' }";
             }
             else
             {
-                key = Shadow.StringRepresentation;
+                return "{ " + Kind + " }";
             }
-            return "{ " + Kind + ": '" + key + "' }";
         }
 
         public void Accept(IDeltaVisitor visitor)

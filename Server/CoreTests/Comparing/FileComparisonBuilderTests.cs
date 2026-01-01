@@ -286,7 +286,7 @@ namespace CK3BeagleServer.Core.Comparing
         public class ExtraTests : FileComparisonBuilderTests
         {
             [Fact]
-            public void Event()
+            public void CharacterInteraction()
             {
                 //arrange
                 (var old, var @new) = GetTestCase("ExtraTests/CharacterInteraction");
@@ -302,6 +302,62 @@ namespace CK3BeagleServer.Core.Comparing
                             GetDelta(DeltaKind.ChangedInChildren,
                                 GetDelta(DeltaKind.Deleted),
                                 GetDelta(DeltaKind.Added))));
+
+                //act
+                var comparison = new FileComparisonBuilder().BuildFileComparison(old, @new);
+
+                //assert
+                AssertDeltasEqual(expectedDelta, comparison);
+            }
+
+            [Fact]
+            public void Event()
+            {
+                //arrange
+                (var old, var @new) = GetTestCase("ExtraTests/Event");
+                var expectedDelta =
+                    GetDelta(DeltaKind.ChangedInChildren,
+                        GetDelta(DeltaKind.ChangedInChildren,
+                            GetDelta(DeltaKind.ChangedInChildren,
+                                GetDelta(DeltaKind.ChangedInChildren,
+                                    GetDelta(DeltaKind.Added),
+                                    GetDelta(DeltaKind.Added),
+                                    GetDelta(DeltaKind.Added)),
+                                GetDelta(DeltaKind.ChangedInChildren,
+                                    GetDelta(DeltaKind.Added),
+                                    GetDelta(DeltaKind.Added),
+                                    GetDelta(DeltaKind.Added)),
+                                GetDelta(DeltaKind.ChangedInChildren,
+                                    GetDelta(DeltaKind.Added),
+                                    GetDelta(DeltaKind.Added),
+                                    GetDelta(DeltaKind.Added)),
+                                GetDelta(DeltaKind.ChangedInChildren,
+                                    GetDelta(DeltaKind.Added),
+                                    GetDelta(DeltaKind.Added),
+                                    GetDelta(DeltaKind.Added)),
+                                GetDelta(DeltaKind.ChangedInChildren,
+                                    GetDelta(DeltaKind.Added),
+                                    GetDelta(DeltaKind.Added),
+                                    GetDelta(DeltaKind.Added)),
+                                GetDelta(DeltaKind.ChangedInChildren,
+                                    GetDelta(DeltaKind.Added),
+                                    GetDelta(DeltaKind.Added),
+                                    GetDelta(DeltaKind.Added))
+                                )),
+                        GetDelta(DeltaKind.ChangedInChildren,
+                            GetDelta(DeltaKind.ChangedInChildren,
+                                GetDelta(DeltaKind.ChangedInChildren,
+                                    GetDelta(DeltaKind.ChangedInChildren,
+                                        GetDelta(DeltaKind.Deleted),
+                                        GetDelta(DeltaKind.Added)))),
+                            GetDelta(DeltaKind.ChangedInChildren,
+                                GetDelta(DeltaKind.Deleted),
+                                GetDelta(DeltaKind.Added),
+                                GetDelta(DeltaKind.Deleted),
+                                GetDelta(DeltaKind.ChangedInChildren,
+                                    GetDelta(DeltaKind.ChangedInChildren,
+                                        GetDelta(DeltaKind.Deleted),
+                                        GetDelta(DeltaKind.Added))))));
 
                 //act
                 var comparison = new FileComparisonBuilder().BuildFileComparison(old, @new);
@@ -349,6 +405,78 @@ namespace CK3BeagleServer.Core.Comparing
                 var expectedDelta =
                     GetDelta(DeltaKind.ChangedInChildren,
                         GetDelta(DeltaKind.Added));
+
+                //act
+                var comparison = new FileComparisonBuilder().BuildFileComparison(old, @new);
+
+                //assert
+                AssertDeltasEqual(expectedDelta, comparison);
+            }
+
+            [Fact]
+            public void ScriptedEffect()
+            {
+                //arrange
+                (var old, var @new) = GetTestCase("ExtraTests/ScriptedEffect");
+                var expectedDelta =
+                    GetDelta(DeltaKind.ChangedInChildren,
+                        GetDelta(DeltaKind.ChangedInChildren,
+                            GetDelta(DeltaKind.ChangedInChildren,
+                                GetDelta(DeltaKind.ChangedInChildren,
+                                    GetDelta(DeltaKind.Changed))),
+                            GetDelta(DeltaKind.Deleted)));
+
+                //act
+                var comparison = new FileComparisonBuilder().BuildFileComparison(old, @new);
+
+                //assert
+                AssertDeltasEqual(expectedDelta, comparison);
+            }
+
+            [Fact]
+            public void ScriptedEffect2()
+            {
+                //arrange
+                (var old, var @new) = GetTestCase("ExtraTests/ScriptedEffect2");
+                var expectedDelta =
+                    GetDelta(DeltaKind.ChangedInChildren,
+                        GetDelta(DeltaKind.ChangedInChildren,
+                            GetDelta(DeltaKind.ChangedInChildren,
+                                GetDelta(DeltaKind.Added),
+                                GetDelta(DeltaKind.Added),
+                                GetDelta(DeltaKind.Added),
+                                GetDelta(DeltaKind.Added),
+                                GetDelta(DeltaKind.Added),
+                                GetDelta(DeltaKind.Added),
+                                GetDelta(DeltaKind.Added),
+                                GetDelta(DeltaKind.Added),
+                                GetDelta(DeltaKind.Added),
+                                GetDelta(DeltaKind.Added),
+                                GetDelta(DeltaKind.Added),
+                                GetDelta(DeltaKind.Added),
+                                GetDelta(DeltaKind.Added),
+                                GetDelta(DeltaKind.Added),
+                                GetDelta(DeltaKind.Added),
+                                GetDelta(DeltaKind.Added),
+                                GetDelta(DeltaKind.Added),
+                                GetDelta(DeltaKind.Added),
+                                GetDelta(DeltaKind.Added),
+                                GetDelta(DeltaKind.Added),
+                                GetDelta(DeltaKind.Added),
+                                GetDelta(DeltaKind.Added),
+                                GetDelta(DeltaKind.Added),
+                                GetDelta(DeltaKind.Added),
+                                GetDelta(DeltaKind.Added),
+                                GetDelta(DeltaKind.Added),
+                                GetDelta(DeltaKind.Added),
+                                GetDelta(DeltaKind.Added),
+                                GetDelta(DeltaKind.Added),
+                                GetDelta(DeltaKind.Added),
+                                GetDelta(DeltaKind.Added),
+                                GetDelta(DeltaKind.Added),
+                                GetDelta(DeltaKind.Added),
+                                GetDelta(DeltaKind.Added)
+                                )));
 
                 //act
                 var comparison = new FileComparisonBuilder().BuildFileComparison(old, @new);

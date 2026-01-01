@@ -15,8 +15,8 @@ namespace CK3BeagleServer.CLI
         }
 
         private static string VanillaPath = @"C:\Program Files (x86)\Steam\steamapps\common\Crusader Kings III\game";
-        //private static string ModdedPath = @"C:\Users\Harm\Documents\Paradox Interactive\Crusader Kings III\mod\T4N-CK3\T4N";
-        private static string ModdedPath = @"C:\Users\Harm\Downloads\testmod";
+        private static string ModdedPath = @"C:\Users\Harm\Documents\Paradox Interactive\Crusader Kings III\mod\T4N-CK3\T4N";
+        //private static string ModdedPath = @"C:\Users\Harm\Downloads\testmod";
         private static string LogsFolder = @"C:\Users\Harm\Documents\Paradox Interactive\Crusader Kings III\logs";
 
         private async Task Go()
@@ -37,6 +37,8 @@ namespace CK3BeagleServer.CLI
             var logs = await orchestrator.HandleAnalysis(true);
 
             Console.WriteLine($"Found {logs.Count()} issues");
+            var dupErrors = logs.Where(x => x.Smell == Analysing.Smell.Duplication).ToArray();
+            Console.WriteLine(dupErrors.Count());
 
             orchestrator = new ProcessOrchestrator(posProgressDelegate, negProgressDelegate);
             orchestrator.InitiatePartialFromMinimalConfig(VanillaPath, ModdedPath, LogsFolder, "C:\\Users\\Harm\\Documents\\Paradox Interactive\\Crusader Kings III\\mod\\T4N-CK3\\T4N\\common\\scripted_effects\\00_court_position_effects.txt");

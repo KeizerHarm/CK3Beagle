@@ -47,6 +47,8 @@ namespace CK3BeagleServer.Core.Comparing
 
         public static void AssertDeltasEqual(Delta expected, Delta actual)
         {
+            Assert.Equal(expected.ToTreeString(), actual.ToTreeString());
+
             Assert.Equal(expected.Kind, actual.Kind);
             if (expected.Children == null)
             {

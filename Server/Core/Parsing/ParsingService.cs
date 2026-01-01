@@ -92,6 +92,8 @@ namespace CK3BeagleServer.Core.Parsing
             await progressDelegate("Parsed vanilla Scripted Effects");
             ParseAllDeclarationsOfType(parserMaker, context, DeclarationType.ScriptedTrigger);
             await progressDelegate("Parsed vanilla Scripted Triggers");
+            GlobalResources.Lock();
+            new SemanticPassHandler().ExecuteSemanticPass(context);
         }
 
     }

@@ -18,7 +18,7 @@ namespace CK3BeagleServer.Analysing.Diff.Detectors
             var oldFileString = File.ReadAllText(Path.Combine(AppContext.BaseDirectory, "Diff/Detectors/Testcases", caseName, "old.txt"));
             var newFileString = File.ReadAllText(Path.Combine(AppContext.BaseDirectory, "Diff/Detectors/Testcases", caseName, "new.txt"));
 
-            GlobalResources.AddEffects(["add_gold", "xxx", "yyy", "zzz", "else_if", "if", "trigger_event"]);
+            GlobalResources.AddEffects(["add_gold", "xxx", "yyy", "zzz", "else_if", "if", "trigger_if", "trigger_event"]);
             GlobalResources.AddTriggers(["has_gold", "or", "and", "nand", "nor", "not", "aaa", "bbb", "ccc", "ddd", "has_primary_title", "is_adult", "t4n_story_content_enabled_for_jito_trigger"]);
             GlobalResources.AddEventTargets(["father", "link1", "link2"]);
             GlobalResources.Lock();
