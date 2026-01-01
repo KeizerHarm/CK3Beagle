@@ -1,16 +1,20 @@
 import vscode = require('vscode');
-import { ServerResponse, Smell, RelatedSmell } from './messages';
-import { startServer, shutDownServer, readMessage, sendMessage } from './server_logic';
+import { ServerResponse, Smell, RelatedSmell, AnalysisMessage } from './messages';
+import { shutDownServer, readMessage, sendMessage } from './server_logic';
 import { TextDocument, Uri } from 'vscode';
+import { initExtension } from './init_logic';
+import * as path from "path";
 
+var savedFiles: Uri[];
 export async function activate(context: vscode.ExtensionContext) {
+  savedFiles = [];
   let { workspace } = require("vscode");
   context.subscriptions.push(vscode.commands.registerCommand('ck3_beagle.ping', ping));
   context.subscriptions.push(vscode.commands.registerCommand('ck3_beagle.analyse', () => analyse()));
   context.subscriptions.push(vscode.commands.registerCommand('ck3_beagle.partial_analyse', () => partial_analyse()));
+  context.subscriptions.push(vscode.commands.registerCommand('ck3_beagle.analyse_context_menu', (dirUri: vscode.Uri) => analyse_context_menu(dirUri)));
   context.subscriptions.push(workspace.onDidSaveTextDocument((e: TextDocument) => handleFileSave(e)));
-  savedFiles = [];
-  await startServer(context);
+  await initExtension(context);
 }
 
 export async function deactivate(): Promise<void> {
@@ -27,7 +31,6 @@ async function ping() {
   }
 }
 
-var savedFiles: Uri[];
 function handleFileSave(e: TextDocument){
   if (e.fileName.endsWith('.txt')){
     savedFiles.push(e.uri);
@@ -39,6 +42,13 @@ function getSettings() {
   const otherData = { environmentPath: vscode.workspace.workspaceFolders[0].uri.fsPath };
   const allSettings = { ...configuration, ...otherData };
   return allSettings;
+}
+
+async function analyse_context_menu(dirUri: vscode.Uri){
+  var settings = getSettings();
+  settings.environmentPath = dirUri.fsPath;
+  var message = { command: 'analyse', payload: settings };
+  await analyse(message);
 }
 
 async function partial_analyse(){
@@ -62,10 +72,10 @@ async function partial_analyse(){
   };
   var message = { command: 'partial_analyse', payload };
   await analyse(message);
-  savedFiles = [];
 }
 
-async function analyse(message: any = null){
+async function analyse(message: AnalysisMessage = null){
+  savedFiles = [];
   if (!message){
     var settings = getSettings();
     message = { command: 'analyse', payload: settings };
@@ -85,7 +95,7 @@ async function analyse(message: any = null){
     }
 
     if (response.type === 'analysis_initial') {
-      getDiagnosticCollection().clear();
+      clearSmellsInFolder(message.payload.environmentPath);
       vscode.window.showInformationMessage(response.payload.message);
       continue;
     }
@@ -99,7 +109,7 @@ async function analyse(message: any = null){
     }
 
     if (response.type === 'analysis') {
-      getDiagnosticCollection().clear();
+      clearSmellsInFolder(message.payload.environmentPath);
       vscode.window.showInformationMessage(response.payload.summary);
       processSmells(response.payload.smells);
       return;
@@ -108,6 +118,18 @@ async function analyse(message: any = null){
 }
 
 let globalDiagnosticCollection: vscode.DiagnosticCollection;
+
+function clearSmellsInFolder(environPath: string){
+  let environmentPath = path.resolve(environPath);
+  environmentPath = environmentPath.endsWith(path.sep) ? environmentPath : environmentPath + path.sep;
+  var diagCollection = getDiagnosticCollection();
+  diagCollection.forEach((uri: Uri) => {
+    var diagPath = path.resolve(uri.fsPath);
+    if (diagPath === environPath || diagPath.startsWith(environmentPath)){
+      diagCollection.set(uri, undefined);
+    }
+  });
+}
 
 function processSmells(smells: Smell[]) {
   const diagnosticsByFile = new Map<string, vscode.Diagnostic[]>();

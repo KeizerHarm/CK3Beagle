@@ -6,6 +6,13 @@ interface BaseMessage {
   type: string;
 }
 
+export interface AnalysisMessage {
+  command: string;
+  payload: {
+    environmentPath: string;
+  }
+}
+
 interface BasicResponse extends BaseMessage {
   type: 'basic';
   payload: {

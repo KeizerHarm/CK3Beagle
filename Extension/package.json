@@ -18,7 +18,7 @@
     "Linters", "Programming Languages"
   ],
   "activationEvents": [
-    "onStartupFinished"
+    "workspaceContains:*.mod"
   ],
   "main": "./out/extension.js",
   "contributes": {
@@ -533,8 +533,25 @@
         "category": "CK3 Beagle",
         "title": "Start Partial Analysis (only analyse edited files)",
         "shortTitle": "Analyse - Partial"
+      },
+      {
+        "command": "ck3_beagle.analyse_context_menu",
+        "category": "CK3 Beagle",
+        "title": "🐶 Start Beagle Analysis",
+        "shortTitle": "Analyse"
       }
-    ]
+    ],
+
+    "menus": {
+      "explorer/context": [
+        {
+          "when": "explorerResourceIsFolder && resourcePath in ck3beagle.modRootFolders",
+          "command": "ck3_beagle.analyse_context_menu",
+          "group": "ck3_beagle"
+          
+        }
+      ]
+    }
   },
   "scripts": {
     "vscode:prepublish": "npm run compile",
