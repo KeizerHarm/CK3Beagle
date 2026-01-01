@@ -79,6 +79,7 @@ async function analyse(message: AnalysisMessage = null){
   if (!message){
     var settings = getSettings();
     message = { command: 'analyse', payload: settings };
+    getDiagnosticCollection().clear();
   }
   sendMessage(message);
 
@@ -95,7 +96,6 @@ async function analyse(message: AnalysisMessage = null){
     }
 
     if (response.type === 'analysis_initial') {
-      clearSmellsInFolder(message.payload.environmentPath);
       vscode.window.showInformationMessage(response.payload.message);
       continue;
     }
@@ -109,7 +109,6 @@ async function analyse(message: AnalysisMessage = null){
     }
 
     if (response.type === 'analysis') {
-      clearSmellsInFolder(message.payload.environmentPath);
       vscode.window.showInformationMessage(response.payload.summary);
       processSmells(response.payload.smells);
       return;

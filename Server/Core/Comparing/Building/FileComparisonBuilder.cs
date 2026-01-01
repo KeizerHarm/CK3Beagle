@@ -16,7 +16,7 @@ namespace CK3BeagleServer.Core.Comparing.Building
         //public HashSet<string> ChangedDeclarations;
         //public HashSet<string> RemovedDeclarations;
         //public HashSet<string> UntouchedDeclarations;
-        private readonly MixedComparer _hashComparer = new();
+        private readonly MixedComparer _mixedComparer = new();
         private readonly KeyBasedNodeComparer _keyComparer = new();
 
         public Delta BuildFileComparison(ScriptFile source, ScriptFile edit)
@@ -149,7 +149,7 @@ namespace CK3BeagleServer.Core.Comparing.Building
             var trueHashBasedLcs = LcsCalculator.ComputeLcs(
                 CollectionsMarshal.AsSpan(sourceChildren),
                 CollectionsMarshal.AsSpan(editChildren),
-                _hashComparer);
+                _mixedComparer);
 
             var sourceKeys = sourceChildren.OfType<NamedBlock>().Select(x => x.Key).ToList();
             sourceKeys.AddRange(sourceChildren.OfType<BinaryExpression>().Select(x => x.Key));
@@ -163,7 +163,7 @@ namespace CK3BeagleServer.Core.Comparing.Building
             }
             else
             {
-                combinedMatches = LcsToMatches(sourceChildren, editChildren, trueHashBasedLcs, _hashComparer);
+                combinedMatches = LcsToMatches(sourceChildren, editChildren, trueHashBasedLcs, _mixedComparer);
             }
             return combinedMatches;
         }
@@ -192,8 +192,8 @@ namespace CK3BeagleServer.Core.Comparing.Building
             int editSublistStartIndex = 0;
             foreach (var matchedNode in trueHashBasedLcs)
             {
-                var sourceListMatchPos = FindNextInstance(sourceChildren, matchedNode, sourceSublistStartIndex, _hashComparer);
-                var editListMatchPos = FindNextInstance(editChildren, matchedNode, editSublistStartIndex, _hashComparer);
+                var sourceListMatchPos = FindNextInstance(sourceChildren, matchedNode, sourceSublistStartIndex, _mixedComparer);
+                var editListMatchPos = FindNextInstance(editChildren, matchedNode, editSublistStartIndex, _mixedComparer);
 
                 var sourceSublistLength = sourceListMatchPos - sourceSublistStartIndex + 1;
                 var editSublistLength = editListMatchPos - editSublistStartIndex + 1;
