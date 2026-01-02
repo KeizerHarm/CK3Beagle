@@ -53,6 +53,21 @@ namespace CK3BeagleServer.Analysing.Diff.Detectors
             Assert.Empty(logger.LogEntries);
         }
 
+        //[Fact]
+        //public void ExtendedTest_NewScriptedEffect()
+        //{
+        //    //arrange
+        //    var logger = new Logger();
+        //    Delta testcase = GetTestCase("UnencapsulatedAddition/NewScriptedEffect", DeclarationType.CharacterInteraction);
+        //    var visitor = GetDetector(logger, severity: Severity.Critical, threshold: 3);
+
+        //    //act
+        //    visitor.VisitAny(testcase);
+
+        //    //assert
+        //    Assert.Empty(logger.LogEntries);
+        //}
+
         [Fact]
         public void ExtendedTest_Event()
         {
