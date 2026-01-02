@@ -21,6 +21,11 @@ namespace CK3BeagleServer.Analysing.Common.Detectors
 
             if (IsNumeric(binaryExpression.Value))
             {
+                //Don't count 0 or 1 as magic numbers.
+                var parsed = float.Parse(binaryExpression.Value);
+                if (parsed == 0 || parsed == 1)
+                    return;
+
                 logger.Log(
                     Smell.MagicNumber,
                     _settings.Severity,

@@ -86,7 +86,7 @@ namespace CK3BeagleServer.Orchestration
 
         public void InitiateFromMinimalConfig(string vanillaPath, string modPath, string logsPath)
         {
-            LogsParser.ParseLogs(logsPath);
+            DocsParser.ParseDocs(logsPath, out string _);
             GlobalResources.Vanilla = new Context(vanillaPath, ContextType.Vanilla);
             GlobalResources.Modded = new Context(modPath, ContextType.Modded);
             GlobalResources.Configuration = new Configuration(new JsonElement(), true);

@@ -49,14 +49,18 @@ namespace CK3BeagleServer.Core.Resources
             ClearEverything();
 
             (bool success, string vanillaPath) = Helpers.GetFolderAndCheckExists(json, "vanillaCk3Path", out message);
-
             if (!success)
             {
                 return false;
             }
 
-            (success, string logsFolderPath) = Helpers.GetFolderAndCheckExists(json, "logsFolderPath", out message);
+            (success, string docsFolderPath) = Helpers.GetFolderAndCheckExists(json, "docsFolderPath", out message);
+            if (!success)
+            {
+                return false;
+            }
 
+            success = DocsParser.ParseDocs(docsFolderPath, out message);
             if (!success)
             {
                 return false;
@@ -72,7 +76,6 @@ namespace CK3BeagleServer.Core.Resources
             if (string.IsNullOrWhiteSpace(modPath))
                 modPath = json.GetProperty("environmentPath").GetString();
 
-            LogsParser.ParseLogs(logsFolderPath);
 
             Vanilla = new Context(vanillaPath, ContextType.Vanilla);
             Modded = new Context(modPath, ContextType.Modded);
