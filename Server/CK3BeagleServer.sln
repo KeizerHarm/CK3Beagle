@@ -9,7 +9,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Analysing", "Analysing\Anal
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Rebasing", "Rebasing\Rebasing.csproj", "{F7124A41-ECB7-4BFF-B1F4-E6F879A4F05D}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CLI", "CLI\CLI.csproj", "{A402CC9A-CAC7-4E70-B739-0858C88FD302}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TestInterface", "TestInterface\TestInterface.csproj", "{A402CC9A-CAC7-4E70-B739-0858C88FD302}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RebasingTests", "RebasingTests\RebasingTests.csproj", "{00A82CEF-8A97-4D7A-ACE2-18643C62796F}"
 EndProject

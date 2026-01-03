@@ -3,7 +3,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using CK3BeagleServer.Orchestration;
 
-namespace CK3BeagleServer.CLI
+namespace CK3BeagleServer.TestInterface
 {
     public class Program
     {
