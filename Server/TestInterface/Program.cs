@@ -14,8 +14,8 @@ namespace CK3BeagleServer.TestInterface
         }
 
         private static string VanillaPath = @"C:\Program Files (x86)\Steam\steamapps\common\Crusader Kings III\game";
-        private static string ModdedPath = @"C:\Users\Harm\Documents\Paradox Interactive\Crusader Kings III\mod\TestUAMod";
-        //private static string ModdedPath = @"C:\Users\Harm\Downloads\testmod";
+        //private static string ModdedPath = @"C:\Users\Harm\Documents\Paradox Interactive\Crusader Kings III\mod\TestUAMod";
+        private static string ModdedPath = @"C:\Program Files (x86)\Steam\steamapps\workshop\content\1158310\3367924326";
         private static string LogsFolder = @"C:\Users\Harm\Documents\Paradox Interactive\Crusader Kings III\logs";
 
         private async Task Go()
@@ -33,7 +33,7 @@ namespace CK3BeagleServer.TestInterface
             var orchestrator = new ProcessOrchestrator(posProgressDelegate, negProgressDelegate);
             orchestrator.InitiateFromMinimalConfig(VanillaPath, ModdedPath, LogsFolder);
 
-            var logs = await orchestrator.HandleAnalysis(true);
+            var logs = await orchestrator.HandleAnalysis();
 
             Console.WriteLine($"Found {logs.Count()} issues");
             var uaErrors = logs.Where(x => x.Smell == Analysing.Smell.UnencapsulatedAddition).ToArray();

@@ -31,6 +31,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "3. Core", "3. Core", "{F298
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Orchestration", "Orchestration\Orchestration.csproj", "{87B5262D-3405-4BEC-A797-4700A68B1EE8}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CLInterface", "CLInterface\CLInterface.csproj", "{38DE83AC-2EF2-41C3-8E5C-0EC3A1CA33C7}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -81,6 +83,10 @@ Global
 		{87B5262D-3405-4BEC-A797-4700A68B1EE8}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{87B5262D-3405-4BEC-A797-4700A68B1EE8}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{87B5262D-3405-4BEC-A797-4700A68B1EE8}.Release|Any CPU.Build.0 = Release|Any CPU
+		{38DE83AC-2EF2-41C3-8E5C-0EC3A1CA33C7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{38DE83AC-2EF2-41C3-8E5C-0EC3A1CA33C7}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{38DE83AC-2EF2-41C3-8E5C-0EC3A1CA33C7}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{38DE83AC-2EF2-41C3-8E5C-0EC3A1CA33C7}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -97,6 +103,7 @@ Global
 		{4DF3DED6-A155-42C2-B32B-48490D388DF1} = {51C810FA-CB38-4121-844E-E90B767A8891}
 		{B96A2495-8393-4C9F-8999-68E25826E8BB} = {02EA681E-C7D8-13C7-8484-4AC65E1B71E8}
 		{87B5262D-3405-4BEC-A797-4700A68B1EE8} = {51C810FA-CB38-4121-844E-E90B767A8891}
+		{38DE83AC-2EF2-41C3-8E5C-0EC3A1CA33C7} = {02EA681E-C7D8-13C7-8484-4AC65E1B71E8}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {CF39BC03-4E17-4728-A63A-D848AC11704F}

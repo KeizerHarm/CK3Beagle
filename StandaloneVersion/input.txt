@@ -1,0 +1,187 @@
+{
+  "vanillaCk3Path": "C:\\Program Files (x86)\\Steam\\steamapps\\common\\Crusader Kings III\\game",
+  "docsFolderPath": "C:\\Users\\[USER]\\Documents\\Paradox Interactive\\Crusader Kings III\\logs",
+  "modPath": "",
+  "environmentPath": "",
+  "readVanilla": false,
+  "vanillaFileHandling": 0,
+  "verboseErrors": false,
+  "duplication": {
+    "enabled": true,
+    "severity": 2,
+    "minSize": 5
+  },
+  "entityKeyReuse": {
+    "enabled": true,
+    "sameType": {
+      "severity": 3
+    },
+    "differentType": {
+      "severity": 2
+    }
+  },
+  "hiddenDependencies": {
+    "enabled": true,
+    "useOfRoot": {
+      "severity": 1,
+      "allowedIfInComment": true,
+      "allowedIfInName": true,
+      "allowedIfInEventFile": false
+    },
+    "useOfPrev": {
+      "severity": 1,
+      "allowedIfInComment": true,
+      "allowedIfInName": true,
+      "allowedIfInEventFile": false
+    }
+  },
+  "inconsistentIndentation": {
+    "enabled": true,
+    "commentHandling": 1,
+    "allowedIndentationTypes": [
+      "Tab",
+      "Four Spaces"
+    ],
+    "unexpectedType": {
+      "severity": 2
+    },
+    "abberatingLines": {
+      "severity": 2
+    }
+  },
+  "keywordAsScopeName": {
+    "enabled": true,
+    "rootPrevThis": {
+      "severity": 2
+    },
+    "scopeLink": {
+      "severity": 2
+    }
+  },
+  "largeUnit": {
+    "enabled": true,
+    "file": {
+      "severity": 1,
+      "maxSize": 10000
+    },
+    "macro": {
+      "severity": 1,
+      "maxSize": 50
+    },
+    "nonMacroBlock": {
+      "severity": 1,
+      "maxSize": 50
+    }
+  },
+  "linkAsParameter": {
+    "enabled": true,
+    "severity": 3
+  },
+  "magicNumber": {
+    "enabled": true,
+    "severity": 1,
+    "keysToConsider": [
+      "reserved_gold",
+      "short_term_gold",
+      "war_chest_gold",
+      "add_gold",
+      "add_long_term_gold",
+      "add_reserved_gold",
+      "add_short_term_gold",
+      "add_treasury_or_gold",
+      "add_war_chest_gold",
+      "remove_long_term_gold",
+      "remove_reserved_gold",
+      "remove_short_term_gold",
+      "remove_treasury_or_gold",
+      "remove_war_chest_gold",
+      "invest_gold",
+      "prestige",
+      "add_prestige",
+      "add_prestige_and_experience",
+      "add_prestige_experience",
+      "add_prestige_no_experience",
+      "dynasty_prestige",
+      "add_dynasty_prestige",
+      "piety",
+      "add_piety",
+      "add_piety_and_experience",
+      "add_piety_experience",
+      "add_piety_no_experience",
+      "stress",
+      "add_stress",
+      "dread",
+      "add_dread",
+      "tyranny",
+      "add_tyranny",
+      "influence",
+      "change_influence",
+      "change_influence_and_experience",
+      "change_influence_experience",
+      "change_influence_no_experience",
+      "provisions",
+      "change_provisions",
+      "herd",
+      "change_herd",
+      "barter_goods",
+      "add_barter_goods",
+      "remove_barter_goods",
+      "merit",
+      "change_merit",
+      "change_merit_and_experience",
+      "change_merit_experience",
+      "change_merit_no_experience",
+      "treasury",
+      "long_term_treasury",
+      "long_term_treasury_or_gold",
+      "reserved_treasury",
+      "reserved_treasury_or_gold",
+      "short_term_treasury",
+      "short_term_treasury_or_gold",
+      "war_chest_treasury",
+      "war_chest_treasury_or_gold",
+      "add_treasury",
+      "add_treasury_or_gold",
+      "remove_treasury",
+      "remove_treasury_or_gold",
+      "remove_long_term_treasury",
+      "remove_reserved_treasury",
+      "remove_short_term_treasury",
+      "remove_war_chest_treasury"
+    ]
+  },
+  "misuseOfThis": {
+    "enabled": true,
+    "severity": 3
+  },
+  "notIsNotNor": {
+    "enabled": true,
+    "severity": 2
+  },
+  "overcomplicatedTrigger": {
+    "enabled": true,
+    "absorption": {
+      "severity": 1
+    },
+    "associativity": {
+      "severity": 2
+    },
+    "contradiction": {
+      "severity": 3
+    },
+    "distributivity": {
+      "severity": 1
+    },
+    "doubleNegation": {
+      "severity": 2
+    },
+    "idempotence": {
+      "severity": 2
+    }
+  },
+  "unencapsulatedAddition": {
+    "enabled": true,
+    "severity": 2,
+    "threshold": 5
+  }
+}

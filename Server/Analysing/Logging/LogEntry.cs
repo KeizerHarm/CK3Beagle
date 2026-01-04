@@ -82,7 +82,7 @@ namespace CK3BeagleServer.Analysing.Logging
 
         public readonly string Print()
         {
-            return $"{Severity.ToString().ToUpper()}: {Smell.GetCode()} - \"{Message}\" at {Location}";
+            return $"{Severity.ToString().ToUpper()}: {Smell.GetCode()} - \"{Message}\" at {Location}: {AffectedAreaStartLine}:{AffectedAreaStartIndex} to {AffectedAreaEndLine}:{AffectedAreaEndIndex}";
         }
     }
 }
