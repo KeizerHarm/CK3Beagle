@@ -1,5 +1,5 @@
 AccoladeName:
- HOME: "common\\accolade_names"
+ HOME: "common|accolade_names"
  option*:
   trigger: TRIGGERBLOCK
  potential: TRIGGERBLOCK

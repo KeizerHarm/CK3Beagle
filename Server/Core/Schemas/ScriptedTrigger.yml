@@ -1,3 +1,3 @@
 ScriptedTrigger:
- HOME: "common\\scripted_triggers"
+ HOME: "common|scripted_triggers"
  CONTENTS: TRIGGERBLOCK

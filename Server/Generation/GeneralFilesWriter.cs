@@ -12,6 +12,7 @@ namespace CK3BeagleServer.Generation
 
             var str = @"
 using CK3BeagleServer.Core.Domain.Entities;
+using System.IO;
 
 namespace CK3BeagleServer.Core.Generated
 {
@@ -30,7 +31,7 @@ namespace CK3BeagleServer.Core.Generated
     {
         public static string GetEntityHome(this DeclarationType declarationType)
         {
-            return declarationType switch
+            var basePath = declarationType switch
             {
                 DeclarationType.Debug => ""test""";
 
@@ -43,6 +44,7 @@ namespace CK3BeagleServer.Core.Generated
             str += @",
                 _ => """",
             };
+            return Path.Combine(basePath.Split('|'));
         }
 
         public static int ConstructDeclarationSymbol(this DeclarationType type, Declaration node)

@@ -1,5 +1,5 @@
 CharacterInteraction:
- HOME: "common\\character_interactions"
+ HOME: "common|character_interactions"
  override_background*:
   trigger: TRIGGERBLOCK
  is_highlighted: TRIGGERBLOCK

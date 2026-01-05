@@ -31,7 +31,8 @@ namespace CK3BeagleServer.Analysing.Diff.Detectors
             var nextSibling = delta.GetNextSibling();
             if (   nextSibling != null 
                 && nextSibling.Kind == DeltaKind.Added 
-                && delta.Node.NextSibling == nextSibling.Node) {
+                && delta.Node.NextSibling == nextSibling.Node
+                && nextSibling.Node is not Comment){ 
                 return;
             }
 
