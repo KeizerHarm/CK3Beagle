@@ -106,7 +106,6 @@ AND = {
 AND = {
    has_trait = zealous
    has_trait = arbitrary
-   NOT = { has_trait = zealous }
 }
 </pre></td>
     </tr>

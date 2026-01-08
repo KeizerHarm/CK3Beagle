@@ -5,6 +5,7 @@ using CK3BeagleServer.Core.Domain;
 using CK3BeagleServer.Core.Domain.Entities;
 using CK3BeagleServer.Core.Generated;
 using CK3BeagleServer.Core.Parsing;
+using CK3BeagleServer.Core.Parsing.SemanticPass;
 using CK3BeagleServer.Core.Resources;
 using System;
 using System.Collections.Concurrent;
@@ -61,6 +62,8 @@ namespace CK3BeagleServer.Core.Comparing
                 ParsingService.ParseAllDeclarationsOfType(parserMaker, vanillaContext, declarationType);
                 await progressDelegate("Completed parsing vanilla " + declarationType.ToString());
             }
+            GlobalResources.Lock();
+            new SemanticPassHandler().ExecuteSemanticPass(vanillaContext);
 
             await progressDelegate("Parsed all vanilla entities from files intersecting with mod");
         }
