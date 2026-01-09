@@ -76,9 +76,9 @@ namespace CK3BeagleServer.Core.Comparing.Building
             int sourceIndex = 0;
             int editIndex = 0;
             delta.Children = [];
+            Dictionary<Node, Node> matchedChildrenDict = combinedMatches.ToDictionary(k => k.Item1, v => v.Item2);
+            Dictionary<Node, Node> matchedChildrenDictReversed = combinedMatches.ToDictionary(k => k.Item2, v => v.Item1);
 
-            var matchedChildrenDict = combinedMatches.ToDictionary(k => k.Item1, v => v.Item2);
-            var matchedChildrenDictReversed = combinedMatches.ToDictionary(k => k.Item2, v => v.Item1);
             while (sourceIndex < noOfSourceChildren || editIndex < noOfEditChildren)
             {
                 var sourceChild =
@@ -179,6 +179,7 @@ namespace CK3BeagleServer.Core.Comparing.Building
                 var editListMatchPos = FindNextInstance(editChildren, matchedNode, editSublistStartIndex, hashComparer);
 
                 matches.Add((sourceChildren[sourceListMatchPos], editChildren[editListMatchPos]));
+
                 sourceSublistStartIndex = sourceListMatchPos + 1;
                 editSublistStartIndex = editListMatchPos + 1;
             }
@@ -220,6 +221,15 @@ namespace CK3BeagleServer.Core.Comparing.Building
         {
             var sourceSublistLength = sourceLastIndexToConsider - sourceSublistStartIndex + 1;
             var editSublistLength = editLastIndexToConsider - editSublistStartIndex + 1;
+
+            if (sourceSublistLength != editSublistLength)
+            {
+                //With current design, it is impossible for this to be hit when there's not two identical sequences of keys
+                //If the lists are of unequal lengths, something has gone wrong. Return without making any matches.
+                //Better to miss matches than to overmatch (and cause an exception later on)
+                return;
+            }
+
             var sourceSublist = sourceChildren.GetRange(sourceSublistStartIndex, sourceSublistLength);
             var editSublist = editChildren.GetRange(editSublistStartIndex, editSublistLength);
 

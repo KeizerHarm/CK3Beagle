@@ -15,7 +15,7 @@ namespace CK3BeagleServer.TestInterface
 
         private static string VanillaPath = @"C:\Program Files (x86)\Steam\steamapps\common\Crusader Kings III\game";
         //private static string ModdedPath = @"C:\Users\Harm\Documents\Paradox Interactive\Crusader Kings III\mod\TestUAMod";
-        private static string ModdedPath = @"C:\Program Files (x86)\Steam\steamapps\workshop\content\1158310\3367924326";
+        private static string ModdedPath = @"C:\Program Files (x86)\Steam\steamapps\workshop\content\1158310\2962333032";
         private static string LogsFolder = @"C:\Users\Harm\Documents\Paradox Interactive\Crusader Kings III\logs";
 
         private async Task Go()
