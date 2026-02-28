@@ -81,7 +81,7 @@ namespace CK3BeagleServer.Core.Comparing.Building
                 //}
 
                 var delta = BlockPropertiesAreSame(sourceBlock, editBlock)
-                    ? Delta.ChangeInChildren(edit)
+                    ? Delta.ChangedInChildren(edit)
                     : Delta.Changed(edit, new ShadowNode(source));
                 HandleNodeChildren(sourceBlock, editBlock, matchedChildren, relevantMatchedChildren, delta);
 

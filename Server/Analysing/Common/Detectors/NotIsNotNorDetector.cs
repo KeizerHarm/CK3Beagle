@@ -18,7 +18,7 @@ namespace CK3BeagleServer.Analysing.Common.Detectors
 
         public override void EnterNamedBlock(NamedBlock namedBlock)
         {
-            if (namedBlock.Key != "NOT")
+            if (!namedBlock.Key.Equals("NOT", StringComparison.OrdinalIgnoreCase))
                 return;
 
             if (namedBlock.Children.Where(x => x.NodeType == NodeType.Trigger).Count() > 1)

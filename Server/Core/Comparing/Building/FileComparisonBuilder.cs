@@ -12,10 +12,6 @@ namespace CK3BeagleServer.Core.Comparing.Building
     {
         private ScriptFile SourceFile;
         private ScriptFile EditFile;
-        //public HashSet<string> AddedDeclarations;
-        //public HashSet<string> ChangedDeclarations;
-        //public HashSet<string> RemovedDeclarations;
-        //public HashSet<string> UntouchedDeclarations;
         private readonly MixedComparer _mixedComparer = new();
         private readonly KeyBasedNodeComparer _keyComparer = new();
 
@@ -28,10 +24,6 @@ namespace CK3BeagleServer.Core.Comparing.Building
             {
                 return Delta.Unchanged(edit);
             }
-
-            //(AddedDeclarations, RemovedDeclarations, ChangedDeclarations, UntouchedDeclarations)
-            //    = ComparisonHelpers.SimpleListComparison(SourceFile.Declarations.ToDictionary(k => k.Key), EditFile.Declarations.ToDictionary(k => k.Key),
-            //        (first, second) => first.GetTrueHash() == second.GetTrueHash());
 
             var initialDelta = GetDelta(SourceFile, EditFile);
 
@@ -55,7 +47,7 @@ namespace CK3BeagleServer.Core.Comparing.Building
                 }
 
                 var delta = BlockPropertiesAreSame(sourceBlock, editBlock)
-                    ? Delta.ChangeInChildren(edit)
+                    ? Delta.ChangedInChildren(edit)
                     : Delta.Changed(edit, new ShadowNode(source));
                 HandleNodeChildren(sourceBlock, editBlock, delta);
 

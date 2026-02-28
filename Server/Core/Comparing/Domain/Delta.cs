@@ -1,6 +1,4 @@
-﻿using CK3BeagleServer.Core.Domain;
-using CK3BeagleServer.Core.Domain.Entities;
-using Microsoft.VisualBasic;
+﻿using CK3BeagleServer.Core.Domain.Entities;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -48,7 +46,7 @@ namespace CK3BeagleServer.Core.Comparing.Domain
                 Kind = DeltaKind.Changed
             };
         }
-        public static Delta ChangeInChildren(Node node)
+        public static Delta ChangedInChildren(Node node)
         {
             return new Delta
             {
